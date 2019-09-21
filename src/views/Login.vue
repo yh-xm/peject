@@ -151,7 +151,6 @@ export default {
                 }
               })
               .catch(function(error) {
-               
                 _this.$message({
                   showClose: true,
                   message: "用户名或密码错误，请重新输入!",
@@ -239,11 +238,12 @@ export default {
   background-image: url("../../public/background.jpg");
   background-size: cover;
   .From {
-    min-width: 250px;
+    
     margin: auto;
     border: 1px solid transparent;
-    width: 550px;
-    height: 320px;
+    // width: 450px;
+    height: 300px;
+    min-width: 250px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -251,7 +251,7 @@ export default {
     box-shadow: #4a93d8 1px 1px 8px 10px;
     border-radius: 5px;
     background-color: #d8ecf5;
-    padding: 20px 0px;
+    padding: 20px 20px;
 
     #line {
       margin: 0 auto;
