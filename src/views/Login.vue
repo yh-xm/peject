@@ -242,8 +242,8 @@ export default {
     min-width: 250px;
     margin: auto;
     border: 1px solid transparent;
-    width: 38%;
-    height: 48%;
+    width: 550px;
+    height: 320px;
     position: absolute;
     left: 50%;
     top: 50%;
