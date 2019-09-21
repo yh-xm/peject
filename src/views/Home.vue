@@ -113,7 +113,7 @@ export default {
       user: {},
       langen:"中文",
       base: [
-        //导航栏数据
+        //导航栏数据测试
         { name:"base.r1", url: "/ClassManage" },
         { name: "base.r2", url: "/StudentManage" },
         { name: "base.r3", url: "/TeacherManage" },
