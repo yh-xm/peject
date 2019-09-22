@@ -1,6 +1,6 @@
 <template>
 <div id="StudentManage">
-    学生管理
+    学生管理4444444444444
 </div>
 </template>
 <script>
