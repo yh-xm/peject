@@ -117,6 +117,7 @@ export default {
         { name:"base.r1", url: "/ClassManage" },
         { name: "base.r2", url: "/StudentManage" },
         { name: "base.r3", url: "/TeacherManage" },
+         { name: "base.r5", url: "/UserManage" },
         { name: "base.r4", url: "/ModifyPassword" }
       ],
       test: [

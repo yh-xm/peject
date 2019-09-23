@@ -1,6 +1,6 @@
 <template>
 <div id="TeacherManage">
-    用户管理
+    用户角色
 </div>
 </template>
 <script>

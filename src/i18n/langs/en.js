@@ -11,7 +11,8 @@ module.exports = {
         r1:"ClassManage",
         r2:"StudentManage",
         r3:"TeacherManage",
-        r4:"ModifyPassword"
+        r4:"ModifyPassword",
+        r5:"UserManage"
     },
     test:{
       title:"Basic data",
