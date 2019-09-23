@@ -1,6 +1,6 @@
 <template>
 <div id="ClassManage">
-    班级管理
+    班级管理李志桐      
 </div>
 </template>
 <script>
