@@ -1,7 +1,7 @@
 <template>
 <div id="MakeTestPaper">
     老师出卷
-    {{$t('base.r1')}}5555555
+    {{$t('base.r1')}}5555555666666
 </div>
 </template>
 <script>
