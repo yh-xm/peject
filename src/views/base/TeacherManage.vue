@@ -41,17 +41,19 @@
               <el-input v-model="ruleForm.pass"></el-input>
             </el-form-item>
 
-            <el-form-item label="性别" prop="sex">
-              <el-radio v-model="sex" label="1">男</el-radio>
-              <el-radio v-model="sex" label="2">女</el-radio>
+            <el-form-item label="性别" prop="resource">
+              <el-radio-group v-model="ruleForm.sex">
+                <el-radio label="男"></el-radio>
+                <el-radio label="女"></el-radio>
+              </el-radio-group>
             </el-form-item>
 
             <el-form-item label="角色" prop="TypeName">
               <el-select v-model="ruleForm.TypeName" placeholder="请选择">
-                <el-option label="管理员" value="Administrator"></el-option>
-                <el-option label="老师" value="teacher"></el-option>
-                <el-option label="业务" value="Professionalwork"></el-option>
-                <el-option label="市场" value="market"></el-option>
+                <el-option label="管理员" value="1"></el-option>
+                <el-option label="老师" value="2"></el-option>
+                <el-option label="业务" value="3"></el-option>
+                <el-option label="市场" value="4"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -101,15 +103,17 @@ export default {
    */
   data() {
     return {
-      sex: "1", //性别单选
       radio: "1", //角色单选
       tableData: [], //表格渲染数据
       dialogTableVisible: false,
       dialogFormVisible: false,
       formLabelWidth: "120px",
       ruleForm: {
-        name: "",
-        TypeName: []
+        name: "", //用户名称
+        mobile: "", //手机号
+        pass: "", //密码
+        sex: "男", //性别
+        TypeName: "" //角色
       },
       rules: {
         name: [
@@ -164,7 +168,7 @@ export default {
            * tableData等于回调函数返回的res（值）
            */
           _this.tableData = res.data;
-          console.log(_this.tableData);
+          // console.log(_this.tableData);
         },
         function() {
           console.log("请求失败处理");
@@ -193,15 +197,20 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
         center: true
-      }).then(() => {
-        this.$message({
-          type: "success",
-          message: "删除成功!"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+          this.tableData.splice(index, 1);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
-        this.tableData.splice(index, 1);
-      });
-
-      // this.open();
     },
 
     cancel() {
@@ -214,32 +223,31 @@ export default {
     },
     addClose() {
       //添加确认
-      this.dialogFormVisible = false;
-      this.$message({
-        type: "success",
-        message: "添加成功!"
+      var _this = this;
+      // let name = _this.ruleForm.name;
+      console.log(_this.ruleForm.name);
+      console.log(_this.ruleForm.mobile);
+      console.log(_this.ruleForm.sex);
+      console.log(_this.ruleForm.pass);
+      console.log(_this.ruleForm.TypeName);
+      this.axios({
+        method: "post",
+        url: "/api/User/AddTeacher",
+        data: {
+          userName: _this.ruleForm.name, //用户名，不能为空
+          userMobile: _this.ruleForm.mobile, //手机号，长度11位
+          userSex: _this.ruleForm.sex, //性别，男|女
+          userPassword: _this.ruleForm.pass, //密码，长度6~18
+          userUserTypeId: _this.ruleForm.TypeName //用户角色编号
+        }
+      }).then(function(res) {
+        console.log(res);
       });
-    },
-    // 删除弹框
-    open() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+      this.dialogFormVisible = false;
+      // _this.$message({
+      //     type: "success",
+      //     message: "添加成功!"
+      //   });
     }
   },
 
