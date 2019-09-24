@@ -116,7 +116,7 @@ export default {
           ) {
             this.axios
               .get(
-                `/api/OAuth/authenticate?stuMobile=${this.numberValidateForm.username}&stuPassword=${this.numberValidateForm.passworld}`
+                `/api/OAuth/authenticate?userMobile=${this.numberValidateForm.username}&userPassword=${this.numberValidateForm.passworld}`
               )
               .then(function(r) {
                 if (r.status == "200") {

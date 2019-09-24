@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-axios.defaults.baseURL='http://192.168.1.188';// 默认访问接口路径
+axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
 
 axios.interceptors.request.use(config=>{
   config.headers['Authorization'] = sessionStorage.getItem('tkon'); //默认请求携带tkon
@@ -45,7 +45,7 @@ axios.interceptors.response.use(response=>{
 },error=>{
  var url = error.config.url.toLocaleLowerCase();
  if(error.response.status === 401 && ! url.endsWith("oauth/authenticate")){ //过期登录
-  console.log(1111)
+  // console.log(1111)
    router.replace({
      name:'login',
      query: {
