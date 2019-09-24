@@ -112,10 +112,7 @@ export default {
         mobile: "", //手机号
         pass: "", //密码
         sex: "男", //性别
-        TypeName: "", //角色
-        title: "",
-        addFlag: false, //添加弹框确认按钮
-        editFlag: false //修改弹框确认按钮
+        TypeName: "" //角色
       },
       rules: {
         name: [
@@ -152,7 +149,11 @@ export default {
           //角色
           { required: true, message: "请选择用户角色", trigger: "blur" }
         ]
-      }
+      },
+      title: "", //对话框标题
+      addFlag: false, //添加弹框确认按钮
+      editFlag: false, //修改弹框确认按钮
+      uid: "" //id
     };
   },
   //   这里定义方法
@@ -192,9 +193,11 @@ export default {
       this.title = "编辑用户信息";
       this.editFlag = true;
       this.addFlag = false;
-      let uid = (index, row.userUid);
-      console.log(uid);
-      console.log(index, row);
+      this.uid = (index, row.userUid); //ID
+      this.ruleForm.name = row.userName; //NAME
+      this.ruleForm.mobile = row.userMobile; //POHE
+      this.ruleForm.pass = row.userPassword; //PASSWORD
+      this.ruleForm.TypeName = row.userTypeTypeName; //ROLE
     },
     // 删除用户信息
     handleDelete(index, row) {
@@ -225,7 +228,6 @@ export default {
                   type: "error",
                   message: "删除失败!"
                 });
-                _this.reload();
               }
             );
         })
@@ -234,8 +236,8 @@ export default {
             type: "info",
             message: "已取消删除"
           });
-          // this.reload();
         });
+        this.reload();
     },
     cancel() {
       //取消
@@ -263,7 +265,6 @@ export default {
         }
       }).then(
         function(res) {
-          console.log(res.data);
           console.log("新增请求成功处理");
           var code = res.data.code;
           if (code == "1") {
@@ -271,7 +272,6 @@ export default {
               type: "success",
               message: "添加成功!"
             });
-            _this.reload();
           }
         },
         function() {
@@ -280,9 +280,9 @@ export default {
             type: "error",
             message: "添加失败"
           });
-          this.reload();
         }
       );
+       _this.reload();
       this.dialogFormVisible = false;
     },
     /**
@@ -290,11 +290,35 @@ export default {
      */
     edit() {
       let _this = this;
-      _this.$message({
-        type: "success",
-        message: "修改成功!"
-      });
-      
+      let name = this.ruleForm.name; //用户名，不能为空
+      let mobile = this.ruleForm.mobile; //手机号，长度11位
+      let sex = this.ruleForm.sex; //性别，男|女
+      let pass = this.ruleForm.pass; //密码，长度6~18
+      let TypeName = this.ruleForm.TypeName; //用户角色编号
+      let uid = this.uid; //id
+      this.axios({
+        method: "post",
+        url: "http://192.168.1.188:12/api/User/ModifyTeacher",
+        data: {
+          userUid: uid, //要修改的用户标识符
+          userName: name, //修改名称
+          userMobile: mobile, //要修改的手机号，11位手机号
+          userSex: sex, //要修改的性别，男|女
+          userUserTypeId: TypeName, //角色
+          userPassword: pass //密码
+        }
+      }).then(
+        function(res) {
+          console.log(res);
+          _this.$message({
+            type: "success",
+            message: "修改成功!"
+          });
+        },
+        function() {
+          console.log("修改请求失败处理");
+        }
+      );
       _this.dialogFormVisible = false;
       _this.reload();
     },
@@ -316,6 +340,15 @@ export default {
      */
     this.getUserInfo();
   }
+  // beforeUpdate(){
+  //   this.canAdd();
+  //   this.handleEdit();
+  //   this.handleDelete();
+  // },
+  // updated(){
+  //   this.edit();
+  //   this.addClose();
+  // }
 };
 </script>
 
