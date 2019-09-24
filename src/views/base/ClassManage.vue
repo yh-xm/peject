@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <!-- 面包屑导航 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }" @click="howo">首页</el-breadcrumb-item>
           <el-breadcrumb-item>班级管理</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -48,11 +48,13 @@
             label-width="100px"
             class="demo-ruleForm"
           >
+          <!-- 班级名称框 -->
             <el-form-item label="班级名称" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
+                <!-- 专业课程下拉框 -->
             <el-form-item label="专业课程" prop="region">
-              <el-select v-model="ruleForm.region" placeholder="请选择">
+              <el-select v-model="ruleForm.region" :placeholder="region">
                 <el-option
                   v-for="(inte,index) in course"
                   :key="index"
@@ -61,8 +63,9 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            <!-- 授课老师下拉框 -->
             <el-form-item label="授课老师" prop="usName">
-              <el-select v-model="ruleForm.usName" placeholder="请选择">
+              <el-select v-model="ruleForm.usName" :placeholder="usName">
                 <el-option
                   v-for="(inte,index) in teacher"
                   :key="index"
@@ -72,6 +75,7 @@
               </el-select>
             </el-form-item>
           </el-form>
+          <!-- 弹出框的确定取消按钮 -->
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="submitForm('ruleForm')" v-if="stunewly">添加</el-button>
             <el-button type="primary" @click="amend('ruleForm')" v-if="stuamend">修改</el-button>
@@ -117,23 +121,26 @@ export default {
       stunewly: true, //新增按钮
       stuamend: true, //修改按钮
 
-      region: "", //修改课程编号
-      usName: "", //修改老师编号
+      region: "", //修改课程的显示
+      usName: "", //修改老师的显示
       classId: "" //要修改的班级主键
     };
   },
   methods: {
+    howo(){
+      console.log
+    },
     // 修改弹出框并赋值
     handleEdit(index, row) {
       this.dialogFormVisible = true;
       this.stunewly = false;
       this.stuamend = true;
-      this.ruleForm.name = row.className;
-      this.ruleForm.region = row.courseName;
-      this.ruleForm.usName = row.userName;
-      this.region = row.classCourseId;
-      this.usName = row.classTeacherId;
+      this.ruleForm.name = row.className;//点击赋值给输入框
+      this.region= row.courseName;
+      this.usName= row.userName
       this.classId = row.classId;
+       this.ruleForm.region= row.classCourseId
+     this.ruleForm.usName= row.classTeacherId
     },
     // 点击修改修改
     amend(formName) {
@@ -146,8 +153,8 @@ export default {
             data: {
               classId: _this.classId,
               className: _this.ruleForm.name,
-              classCourseId: _this.region,
-              classTeacherId: _this.usName
+              classCourseId: _this.ruleForm.region,
+              classTeacherId: _this.ruleForm.usName
             }
           }).then(function(data) {
             if (data.data.code == "1") {
@@ -202,8 +209,10 @@ export default {
       this.stunewly = true;
       this.stuamend = false;
       this.ruleForm.name = "";
-      this.ruleForm.region = "";
-      this.ruleForm.usName = "";
+      this.region="请选择";
+      this.usName="请选择"
+      this.ruleForm.region= "";
+     this.ruleForm.usName=""
     },
     //点击新增班级
     submitForm(formName) {
@@ -269,12 +278,11 @@ export default {
         type: "warning"
       });
     },
-    // 分装的axios 用来调用刷新
+    // 分装的axios班级信息用来调用刷新
     overall() {
       var _this = this;
       this.axios.get("/api/Class/GetAllClass").then(function(data) {
         var stu = data.data;
-        console.log(data.data);
         for (const key in stu) {
           stu[key].classCreateTime = new Date(
             stu[key].classCreateTime
@@ -287,12 +295,12 @@ export default {
   created() {
     this.overall();
     var _this = this;
+    //获取授课老师信息
     this.axios.get("/api/User/GetTeachers").then(function(data) {
-      // console.log(data.data)
       _this.teacher = data.data;
     });
+    //获取课程信息
     this.axios.get("/api/Class/GetAllCourse").then(function(data) {
-      console.log(data.data);
       _this.course = data.data;
     });
   }
@@ -300,6 +308,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 新增按钮
 .newly {
   width: 70%;
   margin: 0px auto;
@@ -307,9 +316,13 @@ export default {
   text-align: left;
   font-size: 17px;
 }
+
+// 表格
 /deep/.el-table {
   margin: 0px auto;
 }
+
+// 弹出框
 /deep/.el-form-item {
   div {
     width: 300px;
