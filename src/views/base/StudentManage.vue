@@ -63,7 +63,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="add(form)" v-show="show1">添加</el-button>
+            <el-button type="primary" @click="add()" v-show="show1">添加</el-button>
             <el-button type="primary" @click="update()" v-show="show2">修改</el-button>
           </div>
         </el-dialog>
@@ -130,7 +130,6 @@ export default {
         }
       }, 1000)
     }
-
     var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/
     var validatePhone = (rule, value, callback) => {
       setTimeout(() => {
