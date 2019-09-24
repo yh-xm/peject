@@ -31,6 +31,7 @@ export default(
                 path: '/TestInfo',
                 name: 'TestInfo',
                 component: TestInfo,
+                redirect: '/MultipleChoice',
                 children: [{
                     path: '/MultipleChoice',
                     name: 'MultipleChoice',

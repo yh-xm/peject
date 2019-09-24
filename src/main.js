@@ -22,7 +22,7 @@ Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
     if(to.path == '/login' ){
     next();
-    }else if(sessionStorage.stuUid){
+    }else if(sessionStorage.uid){
       next()
     }else{
         next({ path: '/login',query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-axios.defaults.baseURL='http://192.168.1.188';// 默认访问接口路径
+axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
 
 axios.interceptors.request.use(config=>{
   config.headers['Authorization'] = sessionStorage.getItem('tkon'); //默认请求携带tkon

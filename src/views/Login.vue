@@ -116,7 +116,7 @@ export default {
           ) {
             this.axios
               .get(
-                `/api/OAuth/authenticate?stuMobile=${this.numberValidateForm.username}&stuPassword=${this.numberValidateForm.passworld}`
+                `/api/OAuth/authenticate?userMobile=${this.numberValidateForm.username}&userPassword=${this.numberValidateForm.passworld}`
               )
               .then(function(r) {
                 if (r.status == "200") {
@@ -126,7 +126,7 @@ export default {
                       _this.clearCookie();
                   }
                   sessionStorage.tkon = "Bearer"+" "+r.data.access_token; //获取tkon
-                  sessionStorage.stuUid = r.data.profile.stuUid;
+                  sessionStorage.uid = r.data.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
              
