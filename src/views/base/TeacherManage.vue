@@ -2,7 +2,8 @@
   <div id="TeacherManage">
     <!-- Breadcrumb 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>首页</el-breadcrumb-item>
+      <!-- :to="{ path: '/' }" -->
       <el-breadcrumb-item>基础数据</el-breadcrumb-item>
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
     </el-breadcrumb>
@@ -13,12 +14,14 @@
       <div slot="header" class="clearfix">
         <!-- 添加对话框 -->
         <!-- Form -->
-        <el-button type="text" @click="canAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
+        <el-button type="text" @click="canAdd()" class="el-icon-circle-plus-outline">
+          新增用户
+          </el-button>
         <el-dialog
           title="新增用户信息"
           :rules="rules"
           :visible.sync="dialogFormVisible"
-          center="true"
+          center
           width="30%"
         >
           <!-- 嵌套的表单 -->
@@ -41,7 +44,7 @@
               <el-input v-model="ruleForm.pass"></el-input>
             </el-form-item>
 
-            <el-form-item label="性别" prop="resource">
+            <el-form-item label="性别" prop="sex">
               <el-radio-group v-model="ruleForm.sex">
                 <el-radio label="男"></el-radio>
                 <el-radio label="女"></el-radio>
@@ -51,8 +54,8 @@
             <el-form-item label="角色" prop="TypeName">
               <el-select v-model="ruleForm.TypeName" placeholder="请选择">
                 <el-option label="管理员" value="1"></el-option>
-                <el-option label="老师" value="2"></el-option>
-                <el-option label="业务" value="3"></el-option>
+                <el-option label="老师" value="57"></el-option>
+                <el-option label="业务" value="82"></el-option>
                 <el-option label="市场" value="4"></el-option>
               </el-select>
             </el-form-item>
@@ -75,14 +78,12 @@
       <div>
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column type="index" :index="indexMethod"></el-table-column>
+          <el-table-column type="index"></el-table-column>
+          <!-- :index="indexMethod" -->
           <el-table-column label="用户名称" prop="userName"></el-table-column>
           <el-table-column label="手机号" prop="userMobile"></el-table-column>
           <el-table-column label="密码" prop="userPassword"></el-table-column>
           <el-table-column label="性别" prop="userSex"></el-table-column>
-
-          <el-radio v-model="sex" label="1">男</el-radio>
-          <el-radio v-model="sex" label="2">女</el-radio>
           <el-table-column label="角色名称" prop="userTypeTypeName"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -107,7 +108,6 @@ export default {
       tableData: [], //表格渲染数据
       dialogTableVisible: false,
       dialogFormVisible: false,
-      formLabelWidth: "120px",
       ruleForm: {
         name: "", //用户名称
         mobile: "", //手机号
@@ -148,7 +148,7 @@ export default {
         ],
         TypeName: [
           //角色
-          { required: true, message: "请输入用户角色", trigger: "blur" }
+          { required: true, message: "请选择用户角色", trigger: "blur" }
         ]
       }
     };
@@ -171,7 +171,7 @@ export default {
           // console.log(_this.tableData);
         },
         function() {
-          console.log("请求失败处理");
+          console.log("数据请求失败处理");
         }
       );
     },
@@ -183,15 +183,13 @@ export default {
     },
     // 编辑用户信息
     handleEdit(index, row) {
-      this.dialogFormVisible = true;
+      // this.dialogFormVisible = true;
       console.log(index, row);
     },
     // 删除用户信息
     handleDelete(index, row) {
-      console.log(index); //下标
-      console.log(row); //当前行数据
+      let uid = (index, row.userUid);
       let _this = this;
-
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -199,20 +197,32 @@ export default {
         center: true
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-          this.tableData.splice(index, 1);
+          _this.axios
+            .post("http://192.168.1.188:12/api/User/RemoveTeacher?uid=" + uid)
+            .then(
+              function(res) {
+                console.log(res);
+                // console.log(res.data);
+                if (res.status === 200) {
+                  _this.$message({
+                    type: "success",
+                    message: "删除成功!"
+                  });
+                  _this.tableData.splice(index, 1);
+                }
+              },
+              function() {
+                console.log("删除请求失败处理");
+              }
+            );
         })
         .catch(() => {
-          this.$message({
+          _this.$message({
             type: "info",
             message: "已取消删除"
           });
         });
     },
-
     cancel() {
       //取消
       this.dialogFormVisible = false;
@@ -224,15 +234,9 @@ export default {
     addClose() {
       //添加确认
       var _this = this;
-      // let name = _this.ruleForm.name;
-      console.log(_this.ruleForm.name);
-      console.log(_this.ruleForm.mobile);
-      console.log(_this.ruleForm.sex);
-      console.log(_this.ruleForm.pass);
-      console.log(_this.ruleForm.TypeName);
       this.axios({
         method: "post",
-        url: "/api/User/AddTeacher",
+        url: "http://192.168.1.188:12/api/User/AddTeacher",
         data: {
           userName: _this.ruleForm.name, //用户名，不能为空
           userMobile: _this.ruleForm.mobile, //手机号，长度11位
@@ -240,14 +244,27 @@ export default {
           userPassword: _this.ruleForm.pass, //密码，长度6~18
           userUserTypeId: _this.ruleForm.TypeName //用户角色编号
         }
-      }).then(function(res) {
-        console.log(res);
-      });
+      }).then(
+        function(res) {
+          console.log(res.data);
+          console.log("新增请求成功处理");
+          var code = res.data.code;
+          if (code == "1") {
+            _this.$message({
+              type: "success",
+              message: "添加成功!"
+            });
+          }
+        },
+        function() {
+          console.log(删除请求失败处理);
+          this.$message({
+            type: "error",
+            message: "添加失败"
+          });
+        }
+      );
       this.dialogFormVisible = false;
-      // _this.$message({
-      //     type: "success",
-      //     message: "添加成功!"
-      //   });
     }
   },
 
