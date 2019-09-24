@@ -2,8 +2,7 @@
   <div id="TeacherManage">
     <!-- Breadcrumb 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item>首页</el-breadcrumb-item>
-      <!-- :to="{ path: '/' }" -->
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>基础数据</el-breadcrumb-item>
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
     </el-breadcrumb>
@@ -12,13 +11,38 @@
     <el-card class="box-card">
       <!-- 角色导航 -->
       <div slot="header" class="clearfix">
+        <el-button type="text" @click="canAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
+        <el-radio v-model="radio" label="1">全部</el-radio>
+        <el-radio v-model="radio" label="2">管理员</el-radio>
+        <el-radio v-model="radio" label="3">老师</el-radio>
+        <el-radio v-model="radio" label="4">业务</el-radio>
+        <el-radio v-model="radio" label="5">市场</el-radio>
+      </div>
+      <!-- 角色导航结束 -->
+      <div>
+        <!-- 表格 -->
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column type="index"></el-table-column>
+          <!-- :index="indexMethod" -->
+          <el-table-column label="用户名称" prop="userName"></el-table-column>
+          <el-table-column label="手机号" prop="userMobile"></el-table-column>
+          <el-table-column label="密码" prop="userPassword"></el-table-column>
+          <el-table-column label="性别" prop="userSex"></el-table-column>
+          <el-table-column label="角色名称" prop="userTypeTypeName"></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 表格结束 -->
+      </div>
+      <div>
         <!-- 添加对话框 -->
         <!-- Form -->
-        <el-button type="text" @click="canAdd()" class="el-icon-circle-plus-outline">
-          新增用户
-          </el-button>
         <el-dialog
-          title="新增用户信息"
+          :title="title"
           :rules="rules"
           :visible.sync="dialogFormVisible"
           center
@@ -63,36 +87,11 @@
           <!-- 嵌套的表单结束 -->
           <div slot="footer" class="dialog-footer">
             <el-button @click="cancel()">取 消</el-button>
-            <el-button type="primary" @click="addClose()">添 加</el-button>
+            <el-button type="primary" @click="addClose()" v-show="addFlag">添 加</el-button>
+            <el-button type="primary" @click="edit()" v-show="editFlag">修 改</el-button>
           </div>
         </el-dialog>
         <!-- 添加对话框结束 -->
-
-        <el-radio v-model="radio" label="1">全部</el-radio>
-        <el-radio v-model="radio" label="2">管理员</el-radio>
-        <el-radio v-model="radio" label="3">老师</el-radio>
-        <el-radio v-model="radio" label="4">业务</el-radio>
-        <el-radio v-model="radio" label="5">市场</el-radio>
-      </div>
-      <!-- 角色导航结束 -->
-      <div>
-        <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column type="index"></el-table-column>
-          <!-- :index="indexMethod" -->
-          <el-table-column label="用户名称" prop="userName"></el-table-column>
-          <el-table-column label="手机号" prop="userMobile"></el-table-column>
-          <el-table-column label="密码" prop="userPassword"></el-table-column>
-          <el-table-column label="性别" prop="userSex"></el-table-column>
-          <el-table-column label="角色名称" prop="userTypeTypeName"></el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- 表格结束 -->
       </div>
     </el-card>
   </div>
@@ -107,13 +106,16 @@ export default {
       radio: "1", //角色单选
       tableData: [], //表格渲染数据
       dialogTableVisible: false,
-      dialogFormVisible: false,
+      dialogFormVisible: false, //对话框
       ruleForm: {
         name: "", //用户名称
         mobile: "", //手机号
         pass: "", //密码
         sex: "男", //性别
-        TypeName: "" //角色
+        TypeName: "", //角色
+        title: "",
+        addFlag: false, //添加弹框确认按钮
+        editFlag: false //修改弹框确认按钮
       },
       rules: {
         name: [
@@ -180,10 +182,18 @@ export default {
      */
     canAdd() {
       this.dialogFormVisible = true;
+      this.title = "新增用户信息";
+      this.addFlag = true;
+      this.editFlag = false;
     },
     // 编辑用户信息
     handleEdit(index, row) {
-      // this.dialogFormVisible = true;
+      this.dialogFormVisible = true;
+      this.title = "编辑用户信息";
+      this.editFlag = true;
+      this.addFlag = false;
+      let uid = (index, row.userUid);
+      console.log(uid);
       console.log(index, row);
     },
     // 删除用户信息
@@ -201,8 +211,6 @@ export default {
             .post("http://192.168.1.188:12/api/User/RemoveTeacher?uid=" + uid)
             .then(
               function(res) {
-                console.log(res);
-                // console.log(res.data);
                 if (res.status === 200) {
                   _this.$message({
                     type: "success",
@@ -213,6 +221,11 @@ export default {
               },
               function() {
                 console.log("删除请求失败处理");
+                _this.$message({
+                  type: "error",
+                  message: "删除失败!"
+                });
+                _this.reload();
               }
             );
         })
@@ -221,6 +234,7 @@ export default {
             type: "info",
             message: "已取消删除"
           });
+          // this.reload();
         });
     },
     cancel() {
@@ -231,6 +245,9 @@ export default {
         message: "已取消"
       });
     },
+    /**
+     * 新增用户信息
+     */
     addClose() {
       //添加确认
       var _this = this;
@@ -254,17 +271,41 @@ export default {
               type: "success",
               message: "添加成功!"
             });
+            _this.reload();
           }
         },
         function() {
-          console.log(删除请求失败处理);
+          console.log(添加请求失败处理);
           this.$message({
             type: "error",
             message: "添加失败"
           });
+          this.reload();
         }
       );
       this.dialogFormVisible = false;
+    },
+    /**
+     * 编辑用户信息
+     */
+    edit() {
+      let _this = this;
+      _this.$message({
+        type: "success",
+        message: "修改成功!"
+      });
+      
+      _this.dialogFormVisible = false;
+      _this.reload();
+    },
+
+    reload() {
+      //伪刷新
+      var _this = this;
+      _this.$router.push("/");
+      setTimeout(() => {
+        _this.$router.push("/TeacherManage");
+      }, 100);
     }
   },
 
