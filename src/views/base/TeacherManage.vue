@@ -12,11 +12,11 @@
       <!-- 角色导航 -->
       <div slot="header" class="clearfix">
         <el-button type="text" @click="canAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
-        <el-radio v-model="radio" label="1">全部</el-radio>
-        <el-radio v-model="radio" label="2">管理员</el-radio>
-        <el-radio v-model="radio" label="3">老师</el-radio>
-        <el-radio v-model="radio" label="4">业务</el-radio>
-        <el-radio v-model="radio" label="5">市场</el-radio>
+        <el-radio v-model="radio" label="1" @click.native="getAll()">全部</el-radio>
+        <el-radio v-model="radio" label="2" @click.native="getAdmin()">管理员</el-radio>
+        <el-radio v-model="radio" label="3" @click.native="getTeach()">老师</el-radio>
+        <el-radio v-model="radio" label="4" @click.native="getBus()">业务</el-radio>
+        <el-radio v-model="radio" label="5" @click.native="getMarket()">市场</el-radio>
       </div>
       <!-- 角色导航结束 -->
       <div>
@@ -56,31 +56,31 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="用户名称" prop="name">
-              <el-input v-model="ruleForm.name"></el-input>
+            <el-form-item label="用户名称" prop="userName">
+              <el-input v-model="ruleForm.userName"></el-input>
             </el-form-item>
 
-            <el-form-item label="手机号" prop="mobile">
-              <el-input v-model="ruleForm.mobile"></el-input>
+            <el-form-item label="手机号" prop="userMobile">
+              <el-input v-model="ruleForm.userMobile"></el-input>
             </el-form-item>
 
-            <el-form-item label="密码" prop="pass">
-              <el-input v-model="ruleForm.pass"></el-input>
+            <el-form-item label="密码" prop="userPassword">
+              <el-input v-model="ruleForm.userPassword"></el-input>
             </el-form-item>
 
-            <el-form-item label="性别" prop="sex">
-              <el-radio-group v-model="ruleForm.sex">
+            <el-form-item label="性别" prop="userSex">
+              <el-radio-group v-model="ruleForm.userSex">
                 <el-radio label="男"></el-radio>
                 <el-radio label="女"></el-radio>
               </el-radio-group>
             </el-form-item>
-
-            <el-form-item label="角色" prop="TypeName">
-              <el-select v-model="ruleForm.TypeName" placeholder="请选择">
+            <el-form-item label="角色" prop="userUserTypeId">
+              <!-- userUserTypeId -->
+              <el-select v-model="ruleForm.userUserTypeId" placeholder="请选择">
                 <el-option label="管理员" value="1"></el-option>
-                <el-option label="老师" value="57"></el-option>
+                <el-option label="老师" value="190"></el-option>
                 <el-option label="业务" value="82"></el-option>
-                <el-option label="市场" value="4"></el-option>
+                <el-option label="市场" value="187"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -108,14 +108,15 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false, //对话框
       ruleForm: {
-        name: "", //用户名称
-        mobile: "", //手机号
-        pass: "", //密码
-        sex: "男", //性别
-        TypeName: "" //角色
+        uid: "", //id
+        userName: "", //用户名称
+        userMobile: "", //手机号
+        userPassword: "", //密码
+        userSex: "男", //性别
+        userUserTypeId: "" //角色id
       },
       rules: {
-        name: [
+        userName: [
           //姓名
           { required: true, message: "请输入用户名称", trigger: "blur" },
           {
@@ -125,7 +126,7 @@ export default {
             trigger: "blur"
           }
         ],
-        mobile: [
+        userMobile: [
           //手机号
           { required: true, message: "请输入手机号", trigger: "blur" },
           {
@@ -135,7 +136,7 @@ export default {
             trigger: "blur"
           }
         ],
-        pass: [
+        userPassword: [
           //密码
           { required: true, message: "请输入密码", trigger: "blur" },
           {
@@ -145,19 +146,40 @@ export default {
             trigger: "blur"
           }
         ],
-        TypeName: [
+        TypeId: [
           //角色
           { required: true, message: "请选择用户角色", trigger: "blur" }
         ]
       },
       title: "", //对话框标题
       addFlag: false, //添加弹框确认按钮
-      editFlag: false, //修改弹框确认按钮
-      uid: "" //id
+      editFlag: false //修改弹框确认按钮
     };
   },
   //   这里定义方法
   methods: {
+    //根据角色过滤显示
+    getAll(){
+      //全部
+      console.log("all")
+    },
+    getAdmin() {
+      // 管理员
+      console.log(this.tableData);
+      console.log(this.tableData[0].userTypeTypeName);
+    },
+    getTeach(){//老师
+
+      console.log("laoshi")
+    },
+     getBus(){//业务
+
+      console.log("yw")
+    },
+    getMarket(){//市场
+      console.log("shichang")
+
+    },
     /**
      * 渲染---获取用户信息
      */
@@ -171,33 +193,11 @@ export default {
            * tableData等于回调函数返回的res（值）
            */
           _this.tableData = res.data;
-          // console.log(_this.tableData);
         },
         function() {
           console.log("数据请求失败处理");
         }
       );
-    },
-    /**
-     * 新增用户信息
-     */
-    canAdd() {
-      this.dialogFormVisible = true;
-      this.title = "新增用户信息";
-      this.addFlag = true;
-      this.editFlag = false;
-    },
-    // 编辑用户信息
-    handleEdit(index, row) {
-      this.dialogFormVisible = true;
-      this.title = "编辑用户信息";
-      this.editFlag = true;
-      this.addFlag = false;
-      this.uid = (index, row.userUid); //ID
-      this.ruleForm.name = row.userName; //NAME
-      this.ruleForm.mobile = row.userMobile; //POHE
-      this.ruleForm.pass = row.userPassword; //PASSWORD
-      this.ruleForm.TypeName = row.userTypeTypeName; //ROLE
     },
     // 删除用户信息
     handleDelete(index, row) {
@@ -220,6 +220,7 @@ export default {
                     message: "删除成功!"
                   });
                   _this.tableData.splice(index, 1);
+                  // this.reload();
                 }
               },
               function() {
@@ -237,7 +238,6 @@ export default {
             message: "已取消删除"
           });
         });
-        this.reload();
     },
     cancel() {
       //取消
@@ -250,6 +250,18 @@ export default {
     /**
      * 新增用户信息
      */
+    canAdd() {
+      this.dialogFormVisible = true;
+      this.title = "新增用户信息";
+      this.addFlag = true;
+      this.editFlag = false;
+      // 清空赋值
+      this.ruleForm = {};
+      this.ruleForm.userSex = "男";
+    },
+    /**
+     * 新增用户信息
+     */
     addClose() {
       //添加确认
       var _this = this;
@@ -257,11 +269,11 @@ export default {
         method: "post",
         url: "http://192.168.1.188:12/api/User/AddTeacher",
         data: {
-          userName: _this.ruleForm.name, //用户名，不能为空
-          userMobile: _this.ruleForm.mobile, //手机号，长度11位
-          userSex: _this.ruleForm.sex, //性别，男|女
-          userPassword: _this.ruleForm.pass, //密码，长度6~18
-          userUserTypeId: _this.ruleForm.TypeName //用户角色编号
+          userName: _this.ruleForm.userName, //用户名，不能为空
+          userMobile: _this.ruleForm.userMobile, //手机号，长度11位
+          userSex: _this.ruleForm.userSex, //性别，男|女
+          userPassword: _this.ruleForm.userPassword, //密码，长度6~18
+          userUserTypeId: _this.ruleForm.userUserTypeId //用户角色编号
         }
       }).then(
         function(res) {
@@ -282,30 +294,34 @@ export default {
           });
         }
       );
-       _this.reload();
+      _this.reload();
       this.dialogFormVisible = false;
+    },
+    // 编辑用户信息
+    handleEdit(index, row) {
+      this.dialogFormVisible = true;
+      this.title = "编辑用户信息";
+      this.editFlag = true;
+      this.addFlag = false;
+      // 修改赋值
+      this.ruleForm = Object.assign({}, row);
+      // console.log(row);
     },
     /**
      * 编辑用户信息
      */
     edit() {
       let _this = this;
-      let name = this.ruleForm.name; //用户名，不能为空
-      let mobile = this.ruleForm.mobile; //手机号，长度11位
-      let sex = this.ruleForm.sex; //性别，男|女
-      let pass = this.ruleForm.pass; //密码，长度6~18
-      let TypeName = this.ruleForm.TypeName; //用户角色编号
-      let uid = this.uid; //id
       this.axios({
         method: "post",
         url: "http://192.168.1.188:12/api/User/ModifyTeacher",
         data: {
-          userUid: uid, //要修改的用户标识符
-          userName: name, //修改名称
-          userMobile: mobile, //要修改的手机号，11位手机号
-          userSex: sex, //要修改的性别，男|女
-          userUserTypeId: TypeName, //角色
-          userPassword: pass //密码
+          userUid: _this.ruleForm.userUid, //要修改的用户标识符
+          userName: _this.ruleForm.userName, //用户名，不能为空
+          userMobile: _this.ruleForm.userMobile, //手机号，长度11位
+          userSex: _this.ruleForm.userSex, //性别，男|女
+          userPassword: _this.ruleForm.userPassword, //密码，长度6~18
+          userUserTypeId: _this.ruleForm.userUserTypeId //角色id
         }
       }).then(
         function(res) {
@@ -340,15 +356,6 @@ export default {
      */
     this.getUserInfo();
   }
-  // beforeUpdate(){
-  //   this.canAdd();
-  //   this.handleEdit();
-  //   this.handleDelete();
-  // },
-  // updated(){
-  //   this.edit();
-  //   this.addClose();
-  // }
 };
 </script>
 
