@@ -168,7 +168,11 @@ export default {
             .then(res => {
               console.log(res);
               if (res.data.message == "添加成功") {
+                
+                 res.data.data.tpqQuestion.tpqId= res.data.data.tpqId
+                    res.data.data.tpqQuestion.score = parseInt(_this.dynamicValidateFormThird.onum)
                 _this.$parent.pageInfo[0].bodys.push(res.data.data.tpqQuestion);
+                console.log(res.data.data.tpqQuestion.tpqId)
                 _this.$parent.pageInfo[0].nowAdd =
                   parseInt(_this.$parent.pageInfo[0].nowAdd) + 1;
                 _this.$parent.pageInfo[0].nowScroe =

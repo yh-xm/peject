@@ -104,7 +104,10 @@ export default {
               console.log(res);
               if (res.data.message == "添加成功") {
                 res.data.data.tpqQuestion.questionTypeId = 2;
+                   res.data.data.tpqQuestion.tpqId= res.data.data.tpqId
+                                 res.data.data.tpqQuestion.score = parseInt(tpqScore)
                 this.$parent.pageInfo[1].bodys.push(res.data.data.tpqQuestion);
+
                 this.$parent.pageInfo = [...this.$parent.pageInfo];
                 this.$parent.pageInfo[1].nowAdd =
                   parseInt(this.$parent.pageInfo[2].nowAdd) + 1;

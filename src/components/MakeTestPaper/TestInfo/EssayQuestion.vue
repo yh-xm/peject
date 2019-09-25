@@ -64,6 +64,8 @@ export default {
         .then(res => {
           console.log(res);
           if (res.data.message == "添加成功") {
+            res.data.data.tpqQuestion.tpqId= res.data.data.tpqId
+                 res.data.data.tpqQuestion.score =parseInt(this.$refs[formName].model.onum)
             this.$parent.pageInfo[2].bodys.push(res.data.data.tpqQuestion);
             this.$parent.pageInfo = [...this.$parent.pageInfo];
             this.$parent.pageInfo[2].nowAdd =
