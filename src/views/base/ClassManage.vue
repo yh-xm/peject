@@ -19,7 +19,7 @@
         <!-- 班级表格 -->
         <el-table
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-          style="width: 80%">
+          style="width: 100%">
           <el-table-column type="index" label="#"></el-table-column>
           <el-table-column label="班级名称" prop="className"></el-table-column>
           <el-table-column label="授课老师" prop="userName"></el-table-column>
@@ -76,8 +76,8 @@
           </el-form>
           <!-- 弹出框的确定取消按钮 -->
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm('ruleForm')" v-if="stunewly">添加</el-button>
-            <el-button type="primary" @click="amend('ruleForm')" v-if="stuamend">修改</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')" v-show="stunewly">添加</el-button>
+            <el-button type="primary" @click="amend('ruleForm')" v-show="stuamend">修改</el-button>
             <el-button @click="dialogFormVisible = false">取 消</el-button>
           </div>
         </el-dialog>
@@ -87,6 +87,7 @@
 </template>
 <script>
 export default {
+  
   data() {
     return {
       tableData: [], //接收向后台请求的数据用于渲染
@@ -134,6 +135,7 @@ export default {
     },
     // 点击修改修改
     amend(formName) {
+    
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -147,7 +149,7 @@ export default {
               className: _this.ruleForm.name,
               classCourseId: _this.ruleForm.region,
               classTeacherId: _this.ruleForm.usName
-            }
+            } 
           }).then(function(data) {
             //deta 接收的值为 1 时修改成功， -1 为异常，0 为没有改变
             if (data.data.code == "1") {
@@ -303,7 +305,6 @@ export default {
 <style lang="less" scoped>
 // 新增按钮
 .newly {
-  width: 80%;
   margin: 0px auto;
   border-bottom: 1px solid #ebeef5;
   text-align: left;
