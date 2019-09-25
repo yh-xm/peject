@@ -241,9 +241,9 @@ export default {
     
     margin: auto;
     border: 1px solid transparent;
-    // width: 450px;
-    height: 300px;
-    min-width: 250px;
+    width: 500px;
+    height: 350px;
+    min-width: 300px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -251,7 +251,7 @@ export default {
     box-shadow: #4a93d8 1px 1px 8px 10px;
     border-radius: 5px;
     background-color: #d8ecf5;
-    padding: 20px 20px;
+    padding: 50px 20px;
 
     #line {
       margin: 0 auto;
