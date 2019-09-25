@@ -40,7 +40,7 @@
         </el-table>
         <!-- 弹出框 -->
         <!-- Form -->
-        <el-dialog title="新增班级信息" :visible.sync="dialogFormVisible">
+        <el-dialog :title="title" :visible.sync="dialogFormVisible">
           <el-form
             :model="ruleForm"
             :rules="rules"
@@ -90,6 +90,7 @@ export default {
   
   data() {
     return {
+      title:"",//弹出框标题
       tableData: [], //接收向后台请求的数据用于渲染
       teacher: [], //接收后台传过来的老师信息
       course: [], //接收后台传过来的课程信息
@@ -132,6 +133,7 @@ export default {
       this.classId = row.classId; //获取的班级主键赋值
       this.ruleForm.region = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
       this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
+      this.title="修改班级信息"
     },
     // 点击修改修改
     amend(formName) {
@@ -208,6 +210,7 @@ export default {
       this.ruleForm.name = ""; //点击获取的班级名字赋值给输入框
       this.ruleForm.region = ""; //清除修改时赋的值
       this.ruleForm.usName = ""; //清除修改时赋的值
+      this.title="新增班级信息"
     },
     //点击新增班级
     submitForm(formName) {
