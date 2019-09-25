@@ -75,12 +75,8 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="角色" prop="userUserTypeId">
-              <!-- userUserTypeId -->
-              <el-select v-model="ruleForm.userUserTypeId" placeholder="请选择">
-                <el-option label="管理员" value="1"></el-option>
-                <el-option label="老师" value="190"></el-option>
-                <el-option label="业务" value="82"></el-option>
-                <el-option label="市场" value="187"></el-option>
+              <el-select v-model="ruleForm.userUserTypeId" :placeholder="ruleForm.selectName">
+               <el-option v-for="(item,index) in roles" :key="index" :label="item.roleName" :value="item.roleId"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -104,16 +100,24 @@ export default {
   data() {
     return {
       radio: "1", //角色单选
-      tableData: [], //表格渲染数据
+      tableData: [], //赋值
+      comData: [], //表格渲染数据
       dialogTableVisible: false,
       dialogFormVisible: false, //对话框
+      roles: [
+        { roleName: "管理员", roleId: "1" },
+        { roleName: "老师", roleId: "190" },
+        { roleName: "业务", roleId: "212" },
+        { roleName: "市场", roleId: "213" }
+      ], //角色
       ruleForm: {
         uid: "", //id
         userName: "", //用户名称
         userMobile: "", //手机号
         userPassword: "", //密码
         userSex: "男", //性别
-        userUserTypeId: "" //角色id
+        userUserTypeId: "", //角色id
+        selectName: "请选择" //弹框下拉框角色
       },
       rules: {
         userName: [
@@ -159,37 +163,46 @@ export default {
   //   这里定义方法
   methods: {
     //根据角色过滤显示
-    getAll(){
+    getAll() {
       //全部
-      console.log("all")
+      // console.log("all")
+      this.getUserInfo();
     },
     getAdmin() {
       // 管理员
       let _this = this;
-      var filterArray = _this.tableData.filter(function(item,index,array){
-        return item.userTypeTypeName == "管理员";
-      })
-      console.log(filterArray);//[]
+      let filterArray = _this.comData.filter(function(item, index, array) {
+        return item.userUserTypeId == "1";
+      });
+      console.log(filterArray); //[]
       _this.tableData = filterArray;
-
-      
-
-
-
-
-
     },
-    getTeach(){//老师
-
-      console.log("laoshi")
+    getTeach() {
+      //老师
+      let _this = this;
+      let filterArray = _this.comData.filter(function(item, index, array) {
+        return item.userUserTypeId == "190";
+      });
+      console.log(filterArray); //[]
+      _this.tableData = filterArray;
     },
-     getBus(){//业务
-
-      console.log("yw")
+    getBus() {
+      //业务
+      let _this = this;
+      let filterArray = _this.comData.filter(function(item, index, array) {
+        return item.userUserTypeId == "212";
+      });
+      console.log(filterArray); //[]
+      _this.tableData = filterArray;
     },
-    getMarket(){//市场
-      console.log("shichang");
-
+    getMarket() {
+      //市场
+      let _this = this;
+      let filterArray = _this.comData.filter(function(item, index, array) {
+        return item.userUserTypeId == "213";
+      });
+      console.log(filterArray); //[]
+      _this.tableData = filterArray;
     },
     /**
      * 渲染---获取用户信息
@@ -203,7 +216,8 @@ export default {
           /**
            * tableData等于回调函数返回的res（值）
            */
-          _this.tableData = res.data;
+          _this.comData = res.data; //公共的
+          _this.tableData = res.data; //赋值的
         },
         function() {
           console.log("数据请求失败处理");
@@ -316,7 +330,8 @@ export default {
       this.addFlag = false;
       // 修改赋值
       this.ruleForm = Object.assign({}, row);
-      // console.log(row);
+      this.ruleForm.selectName = row.userTypeTypeName;
+      console.log(row);
     },
     /**
      * 编辑用户信息
