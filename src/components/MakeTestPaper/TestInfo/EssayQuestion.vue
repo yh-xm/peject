@@ -34,17 +34,17 @@ export default {
   data() {
     return {
       dynamicValidateForm: {
-        onum: 5,
-        value: "",
-        title: ""
+        onum: 5, //默认分数
+        value: "", //答案
+        title: "" //题目
       }
     };
   },
   methods: {
-    resetForm(formName) {
+    resetForm(formName) {  //重置表单
       this.$refs[formName].resetFields();
     },
-    submitForm(formName) {
+    submitForm(formName) { //提交表单
       var tpqPaperId = sessionStorage.testPaperId;
       var aqAnswer = this.$refs[formName].model.value;
       var tpqScore = this.$refs[formName].model.onum;
@@ -71,6 +71,12 @@ export default {
             this.$parent.pageInfo[2].nowScroe =
               parseInt(this.$parent.pageInfo[2].nowScroe) +
               parseInt(this.$refs[formName].model.onum);
+            this.$message({
+              type: "success",
+              message: "添加成功!"
+            });
+            this.resetForm("dynamicValidateForm");
+            this.dynamicValidateForm.value = "";
           }
         });
     }
@@ -79,7 +85,6 @@ export default {
 </script>
 <style lang="less" scoped>
 #EssayQuestion {
-  border: 1px solid green;
   text-align: left;
 }
 </style>

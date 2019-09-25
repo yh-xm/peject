@@ -2,8 +2,8 @@
   <div id="MultipleChoice">
     <div class="Mult-Content">
       <el-form
-        :model="dynamicValidateForm"
-        ref="dynamicValidateForm"
+        :model="dynamicValidateFormThird"
+        ref="dynamicValidateFormThird"
         label-width="100px"
         class="demo-dynamic"
       >
@@ -14,16 +14,16 @@
       { required: true, message: '请输入题干', trigger: 'blur' }
     ]"
         >
-          <el-input type="textarea" v-model="dynamicValidateForm.title" :rows="1"></el-input>
+          <el-input type="textarea" v-model="dynamicValidateFormThird.title" :rows="1"></el-input>
         </el-form-item>
 
         <el-form-item
-          v-for="(domain, index) in dynamicValidateForm.domains"
+          v-for="(domain, index) in dynamicValidateFormThird.domains"
           :key="domain.key"
           :prop="'domains.' + index + '.value'"
         >
           <el-checkbox-group
-            v-model="dynamicValidateForm.checked"
+            v-model="dynamicValidateFormThird.checked"
             :min="0"
             :max="2"
             @change="fnchange"
@@ -40,16 +40,16 @@
           ></el-button>
         </el-form-item>
         <el-form-item label="分值">
-          <el-input-number v-model="dynamicValidateForm.onum" :min="1" :max="5" label="描述文字"></el-input-number>
+          <el-input-number v-model="dynamicValidateFormThird.onum" :min="1" :max="5" label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item>
-          <el-button round @click="resetForm('dynamicValidateForm')">重置</el-button>
+          <el-button round @click="resetForm('dynamicValidateFormThird')">重置</el-button>
           <el-button type="info" round @click="addDomain">新增选项</el-button>
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
-            @click="submitForm('dynamicValidateForm')"
+            @click="submitForm('dynamicValidateFormThird')"
           >保存题目</el-button>
         </el-form-item>
       </el-form>
@@ -60,44 +60,49 @@
 export default {
   data() {
     return {
-      dynamicValidateForm: {
-        checked: [],
-        onum: 2,
-        nowAdd: 4,
-        domains: [],
-        optionsActive: ["A、", "B、", "C、", "D、", "E、"],
-        title: ""
+      dynamicValidateFormThird: {
+        //表单
+        checked: [], //选中的多选按钮
+        onum: 2, //默认分数
+        nowAdd: 4, //默认添加个数
+        domains: [], //选项
+        optionsActive: ["A、", "B、", "C、", "D、", "E、"], //对应字母
+        title: "" //题目
       }
     };
   },
   methods: {
     resetForm(formName) {
+      //重置表单
       this.$refs[formName].resetFields();
     },
     removeDomain(item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item);
+      //删除选项
+      var index = this.dynamicValidateFormThird.domains.indexOf(item);
       if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
-        this.dynamicValidateForm.nowAdd--;
-        for (let i in this.dynamicValidateForm.domains) {
-          this.dynamicValidateForm.domains[
+        this.dynamicValidateFormThird.domains.splice(index, 1);
+        this.dynamicValidateFormThird.nowAdd--;
+        for (let i in this.dynamicValidateFormThird.domains) {
+          this.dynamicValidateFormThird.domains[
             i
-          ].options = this.dynamicValidateForm.optionsActive[i];
+          ].options = this.dynamicValidateFormThird.optionsActive[i];
         }
       }
     },
     addDomain() {
-      if (this.dynamicValidateForm.nowAdd < 5) {
-        this.dynamicValidateForm.nowAdd++;
-        this.dynamicValidateForm.domains.push({
+      //添加选项
+      if (this.dynamicValidateFormThird.nowAdd < 5) {
+        this.dynamicValidateFormThird.nowAdd++;
+        this.dynamicValidateFormThird.domains.push({
           value: "",
-          options: this.dynamicValidateForm.optionsActive[
-            this.dynamicValidateForm.nowAdd - 1
+          options: this.dynamicValidateFormThird.optionsActive[
+            this.dynamicValidateFormThird.nowAdd - 1
           ]
         });
       }
     },
     fninit() {
+      //重置
       var arr = [
         {
           value: "",
@@ -116,13 +121,13 @@ export default {
           options: "D、"
         }
       ];
-      this.dynamicValidateForm.domains = arr;
-      this.dynamicValidateForm.checked = [];
-      this.dynamicValidateForm.nowAdd = 4;
-      this.dynamicValidateForm.title = "";
-      // this.resetForm("dynamicValidateForm");
+      this.dynamicValidateFormThird.domains = arr;
+      this.dynamicValidateFormThird.checked = [];
+      this.dynamicValidateFormThird.nowAdd = 4;
+      this.dynamicValidateFormThird.title = "";
     },
     submitForm(formName) {
+      //提交表单
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -133,9 +138,11 @@ export default {
           for (const key in this.$refs[formName].model.domains) {
             if (
               this.$refs[formName].model.domains[key].options ==
-              this.dynamicValidateForm.checked[this.dynamicValidateForm.checked.length-1]
-              ||    this.$refs[formName].model.domains[key].options ==
-              this.dynamicValidateForm.checked[0]
+                this.dynamicValidateFormThird.checked[
+                  this.dynamicValidateFormThird.checked.length - 1
+                ] ||
+              this.$refs[formName].model.domains[key].options ==
+                this.dynamicValidateFormThird.checked[0]
             ) {
               arrs.push({
                 cqOption: this.$refs[formName].model.domains[key].value,
@@ -166,9 +173,13 @@ export default {
                   parseInt(_this.$parent.pageInfo[0].nowAdd) + 1;
                 _this.$parent.pageInfo[0].nowScroe =
                   parseInt(_this.$parent.pageInfo[0].nowScroe) +
-                  parseInt(_this.dynamicValidateForm.onum);
+                  parseInt(_this.dynamicValidateFormThird.onum);
                 _this.$parent.pageInfo = [..._this.$parent.pageInfo];
                 _this.fninit();
+                this.$message({
+                  type: "success",
+                  message: "添加成功!"
+                });
               }
             });
         } else {
@@ -177,9 +188,11 @@ export default {
         }
       });
     },
-    fnchange(v) {
-      this.dynamicValidateForm.checked = v;
-      this.dynamicValidateForm.checked = [...this.dynamicValidateForm.checked];
+    fnchange(v) { //多选变化
+      this.dynamicValidateFormThird.checked = v;
+      this.dynamicValidateFormThird.checked = [
+        ...this.dynamicValidateFormThird.checked
+      ];
       console.log(v);
     }
   },
@@ -190,7 +203,6 @@ export default {
 </script>
 <style lang="less" scoped>
 #MultipleChoice {
-  border: blue solid 1px;
   display: flex;
   margin-top: 20px;
   .Mult-Content {

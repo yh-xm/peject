@@ -2,7 +2,7 @@
   <div>
     <div class="essat-content">
       {{nowIndex2+1}}、
-      <el-form :model="nowOption" ref="dynamicValidateForm" class="demo-dynamic">
+      <el-form :model="nowOption" ref="dynamicValidateFormfore" class="demo-dynamic">
         <el-form-item prop="title">
           <el-input
             type="textarea"
@@ -11,6 +11,7 @@
             :disabled="odisabled"
           ></el-input>
         </el-form-item>
+
         <el-form-item label="参考答案">
           <el-input v-model="nowOption.answerQuestion.aqAnswer" :disabled="odisabled"></el-input>
         </el-form-item>
@@ -34,7 +35,7 @@ export default {
       oldOption: [],
       odisabled: true,
       oshow: false,
-      dynamicValidateForm: {
+      dynamicValidateFormfore: {
         value: "",
         title: ""
       }
@@ -113,12 +114,12 @@ export default {
   created() {
     this.oldOption = JSON.parse(JSON.stringify(this.searchList2));
     this.nowOption = this.searchList2;
+    this.nowOption
   }
 };
 </script>
 <style lang="less" scoped>
 .essat-content {
-  border: 1px solid green;
   text-align: left;
   .el-form-item__content {
     display: flex;

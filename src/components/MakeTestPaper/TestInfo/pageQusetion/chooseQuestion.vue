@@ -3,7 +3,7 @@
     <div class="Mult-Content">
       <el-form
         :model="nowOption"
-        ref="dynamicValidateForm"
+        ref="dynamicValidateFormfive"
         label-width="100px"
         class="demo-dynamic"
       >
@@ -119,6 +119,7 @@ export default {
       this.nowOption.chooseQuestion.splice(index, 1);
     },
     fnremoveChoose() {
+      console.log(this.nowOption)
       this.axios
         .post(
           `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${this.nowOption.questionId}`
@@ -153,7 +154,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .MultipleChoice {
-  border: blue solid 1px;
   display: flex;
   margin-top: 20px;
   .Mult-Content {
@@ -174,6 +174,7 @@ export default {
         .el-row {
           margin-left: 10px;
         }
+        
       }
     }
   }

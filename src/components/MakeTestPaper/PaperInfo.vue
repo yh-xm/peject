@@ -80,7 +80,6 @@ export default {
 </script>
 <style lang="less" scoped>
 #PaperInfo {
-  border: 1px solid red;
   display: flex;
   .from {
     width: 50%;
