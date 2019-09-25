@@ -75,8 +75,13 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="角色" prop="userUserTypeId">
-              <el-select v-model="ruleForm.userUserTypeId" :placeholder="ruleForm.selectName">
-               <el-option v-for="(item,index) in roles" :key="index" :label="item.roleName" :value="item.roleId"></el-option>
+              <el-select v-model="ruleForm.userUserTypeId" placeholder="请选择">
+                <el-option
+                  v-for="(item,index) in roles"
+                  :key="index"
+                  :label="item.roleName"
+                  :value="item.roleId"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -98,6 +103,28 @@ export default {
    *  这里存储数据
    */
   data() {
+    //用户密码正则
+    let validcodePass = (rule, value, callback) => {
+      let reg = /^([0-9]|[a-zA-Z]){6,18}$/;
+      if (!reg.test(value)) {
+        callback(new Error("账号必须是由6-18位数字或字母"));
+      } else {
+        callback();
+      }
+    };
+    // 用户手机号正则
+    let validMobile = (rule, value, callback) => {
+      if (value.trim() == "") {
+        callback();
+      } else {
+        let reg = /1[0-9]{10}/;
+        if (!reg.test(value)) {
+          callback(new Error("手机号错误"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
       radio: "1", //角色单选
       tableData: [], //赋值
@@ -105,10 +132,11 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false, //对话框
       roles: [
+        //弹框角色
         { roleName: "管理员", roleId: "1" },
         { roleName: "老师", roleId: "190" },
-        { roleName: "业务", roleId: "212" },
-        { roleName: "市场", roleId: "213" }
+        { roleName: "业务", roleId: "234" },
+        { roleName: "市场", roleId: "235" }
       ], //角色
       ruleForm: {
         uid: "", //id
@@ -116,8 +144,7 @@ export default {
         userMobile: "", //手机号
         userPassword: "", //密码
         userSex: "男", //性别
-        userUserTypeId: "", //角色id
-        selectName: "请选择" //弹框下拉框角色
+        userUserTypeId: "" //角色id
       },
       rules: {
         userName: [
@@ -134,9 +161,7 @@ export default {
           //手机号
           { required: true, message: "请输入手机号", trigger: "blur" },
           {
-            min: 11,
-            max: 11,
-            message: "长度在 11 个字符",
+            validator: validMobile,
             trigger: "blur"
           }
         ],
@@ -144,24 +169,25 @@ export default {
           //密码
           { required: true, message: "请输入密码", trigger: "blur" },
           {
-            min: 6,
-            max: 18,
-            message: "长度在 6 到 18 个字符",
+            validator: validcodePass,
             trigger: "blur"
           }
         ],
-        TypeId: [
+        userUserTypeId: [
           //角色
           { required: true, message: "请选择用户角色", trigger: "blur" }
         ]
       },
       title: "", //对话框标题
       addFlag: false, //添加弹框确认按钮
-      editFlag: false //修改弹框确认按钮
+      editFlag: false, //修改弹框确认按钮
+      rowTypeId: "" //编辑角色id
     };
   },
   //   这里定义方法
   methods: {
+    //提交验证
+    submitForm(ruleForm) {},
     //根据角色过滤显示
     getAll() {
       //全部
@@ -190,7 +216,7 @@ export default {
       //业务
       let _this = this;
       let filterArray = _this.comData.filter(function(item, index, array) {
-        return item.userUserTypeId == "212";
+        return item.userUserTypeId == "234";
       });
       console.log(filterArray); //[]
       _this.tableData = filterArray;
@@ -199,7 +225,7 @@ export default {
       //市场
       let _this = this;
       let filterArray = _this.comData.filter(function(item, index, array) {
-        return item.userUserTypeId == "213";
+        return item.userUserTypeId == "235";
       });
       console.log(filterArray); //[]
       _this.tableData = filterArray;
@@ -207,7 +233,7 @@ export default {
     /**
      * 渲染---获取用户信息
      */
-    getUserInfo: function() {
+    getUserInfo() {
       /**
        * 发送get请求*/
       let _this = this; //保存this
@@ -290,37 +316,46 @@ export default {
     addClose() {
       //添加确认
       var _this = this;
-      this.axios({
-        method: "post",
-        url: "http://192.168.1.188:12/api/User/AddTeacher",
-        data: {
-          userName: _this.ruleForm.userName, //用户名，不能为空
-          userMobile: _this.ruleForm.userMobile, //手机号，长度11位
-          userSex: _this.ruleForm.userSex, //性别，男|女
-          userPassword: _this.ruleForm.userPassword, //密码，长度6~18
-          userUserTypeId: _this.ruleForm.userUserTypeId //用户角色编号
-        }
-      }).then(
-        function(res) {
-          console.log("新增请求成功处理");
-          var code = res.data.code;
-          if (code == "1") {
-            _this.$message({
-              type: "success",
-              message: "添加成功!"
-            });
-          }
-        },
-        function() {
-          console.log(添加请求失败处理);
-          this.$message({
-            type: "error",
-            message: "添加失败"
-          });
-        }
-      );
-      _this.reload();
-      this.dialogFormVisible = false;
+      // this.$refs[formName].validate(valid => {
+      //   if (valid) {
+          this.axios({
+            method: "post",
+            url: "http://192.168.1.188:12/api/User/AddTeacher",
+            data: {
+              userName: _this.ruleForm.userName, //用户名，不能为空
+              userMobile: _this.ruleForm.userMobile, //手机号，长度11位
+              userSex: _this.ruleForm.userSex, //性别，男|女
+              userPassword: _this.ruleForm.userPassword, //密码，长度6~18
+              userUserTypeId: _this.ruleForm.userUserTypeId //用户角色编号
+            }
+          }).then(
+            function(res) {
+              console.log("新增请求成功处理");
+              var code = res.data.code;
+              if (code == "1") {
+                _this.$message({
+                  type: "success",
+                  message: "添加成功!"
+                });
+              }
+            },
+            function() {
+              console.log(添加请求失败处理);
+              this.$message({
+                type: "error",
+                message: "添加失败"
+              });
+            }
+          );
+        this.dialogFormVisible = false;
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+
+      // });
+        _this.getUserInfo();
+
     },
     // 编辑用户信息
     handleEdit(index, row) {
@@ -330,13 +365,13 @@ export default {
       this.addFlag = false;
       // 修改赋值
       this.ruleForm = Object.assign({}, row);
-      this.ruleForm.selectName = row.userTypeTypeName;
       console.log(row);
     },
     /**
      * 编辑用户信息
      */
     edit() {
+      // this.ruleForm.userUserTypeId = this.rowTypeId;
       let _this = this;
       this.axios({
         method: "post",
@@ -362,16 +397,7 @@ export default {
         }
       );
       _this.dialogFormVisible = false;
-      _this.reload();
-    },
-
-    reload() {
-      //伪刷新
-      var _this = this;
-      _this.$router.push("/");
-      setTimeout(() => {
-        _this.$router.push("/TeacherManage");
-      }, 100);
+      _this.getUserInfo();
     }
   },
 
