@@ -1,6 +1,6 @@
 <template>
 <div id="TestPaperManage">
-    试卷管理
+    试卷管理wwwwwww
 </div>
 </template>
 <script>
