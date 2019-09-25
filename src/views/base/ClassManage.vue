@@ -4,7 +4,8 @@
       <div slot="header" class="clearfix">
         <!-- 面包屑导航 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }" @click="howo">首页</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+           <el-breadcrumb-item>基础数据</el-breadcrumb-item>
           <el-breadcrumb-item>班级管理</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -18,15 +19,14 @@
         <!-- 班级表格 -->
         <el-table
           :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-          style="width: 70%"
-        >
+          style="width: 80%">
           <el-table-column type="index" label="#"></el-table-column>
           <el-table-column label="班级名称" prop="className"></el-table-column>
           <el-table-column label="授课老师" prop="userName"></el-table-column>
           <el-table-column label="专业" prop="courseName"></el-table-column>
           <el-table-column label="班级人数" prop="classStudents"></el-table-column>
           <el-table-column label="开班日期" prop="classCreateTime"></el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
@@ -46,15 +46,14 @@
             :rules="rules"
             ref="ruleForm"
             label-width="100px"
-            class="demo-ruleForm"
-          >
-          <!-- 班级名称框 -->
+            class="demo-ruleForm">
+            <!-- 弹出框 班级名称框 -->
             <el-form-item label="班级名称" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-                <!-- 专业课程下拉框 -->
+            <!-- 弹出框 专业课程下拉框 -->
             <el-form-item label="专业课程" prop="region">
-              <el-select v-model="ruleForm.region" :placeholder="region">
+              <el-select v-model="ruleForm.region" placeholder="请选择">
                 <el-option
                   v-for="(inte,index) in course"
                   :key="index"
@@ -63,9 +62,9 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <!-- 授课老师下拉框 -->
+            <!-- 弹出框 授课老师下拉框 -->
             <el-form-item label="授课老师" prop="usName">
-              <el-select v-model="ruleForm.usName" :placeholder="usName">
+              <el-select v-model="ruleForm.usName" placeholder="请选择">
                 <el-option
                   v-for="(inte,index) in teacher"
                   :key="index"
@@ -86,7 +85,6 @@
     </el-card>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -96,6 +94,7 @@ export default {
       course: [], //接收后台传过来的课程信息
       search: "",
       dialogFormVisible: false, //用于判断是否弹出弹出框
+        classId: "", //修改的班级主键
       ruleForm: {
         //新增的参数
         name: "", //班级名
@@ -105,49 +104,42 @@ export default {
       rules: {
         //表单验证
         name: [
-          //验证班级名字
+          //表单验证班级名字
           { required: true, message: "请输入班级名称", trigger: "blur" },
           { min: 1, trigger: "blur" }
         ],
         region: [
-          //验证课程
+          //表单验证课程
           { required: true, message: "请选择课程", trigger: "change" }
         ],
         usName: [
-          //验证老师
+          //表单验证授课老师
           { required: true, message: "请选择老师", trigger: "change" }
         ]
       },
       stunewly: true, //新增按钮
       stuamend: true, //修改按钮
-
-      region: "", //修改课程的显示
-      usName: "", //修改老师的显示
-      classId: "" //要修改的班级主键
     };
   },
   methods: {
-    howo(){
-      console.log
-    },
     // 修改弹出框并赋值
     handleEdit(index, row) {
-      this.dialogFormVisible = true;
-      this.stunewly = false;
-      this.stuamend = true;
-      this.ruleForm.name = row.className;//点击赋值给输入框
-      this.region= row.courseName;
-      this.usName= row.userName
-      this.classId = row.classId;
-       this.ruleForm.region= row.classCourseId
-     this.ruleForm.usName= row.classTeacherId
+      this.dialogFormVisible = true; //当为true时弹出弹出框
+      this.stunewly = false; //弹出框的新增按钮为false时销毁
+      this.stuamend = true; //弹出框的修改按钮按钮为true时销毁
+      this.ruleForm.name = row.className; //点击获取的班级名字赋值给输入框
+      this.classId = row.classId; //获取的班级主键赋值
+      this.ruleForm.region = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
+      this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
     },
     // 点击修改修改
     amend(formName) {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          //判断输入框是否为空
           this.axios({
+            //修改axios
             method: "post",
             url: "/api/Class/ModifyClass",
             data: {
@@ -157,6 +149,7 @@ export default {
               classTeacherId: _this.ruleForm.usName
             }
           }).then(function(data) {
+            //deta 接收的值为 1 时修改成功， -1 为异常，0 为没有改变
             if (data.data.code == "1") {
               _this.open4();
             } else if (data.data.code == "-1") {
@@ -164,9 +157,9 @@ export default {
             } else if (data.data.code == "0") {
               _this.open();
             }
-            _this.overall();
+            _this.overall(); //调用封装好的渲染方法用来做实时刷新
           });
-          this.dialogFormVisible = false;
+          this.dialogFormVisible = false; //关闭弹出框
         } else {
           //输入框为空时执行
           return false;
@@ -183,9 +176,11 @@ export default {
         center: true
       })
         .then(() => {
+          //删除axios
           _this
             .axios("/api/Class/RemoveClass?classId=" + row.classId)
             .then(function(data) {
+              //deta 接收的值为 1 时删除成功， -1 为异常表示不能删除，0 为没有改变
               if (data.data.code == "1") {
                 _this.open5();
               } else if (data.data.code == "-1") {
@@ -205,21 +200,19 @@ export default {
     },
     //点击弹出新增班级
     newly() {
-      this.dialogFormVisible = true;
-      this.stunewly = true;
-      this.stuamend = false;
-      this.ruleForm.name = "";
-      this.region="请选择";
-      this.usName="请选择"
-      this.ruleForm.region= "";
-     this.ruleForm.usName=""
+      this.dialogFormVisible = true; //当为true时弹出弹出框
+      this.stunewly = true; //弹出框的新增按钮为true时销毁
+      this.stuamend = false; //弹出框的修改按钮按钮为false时销毁
+      this.ruleForm.name = ""; //点击获取的班级名字赋值给输入框
+      this.ruleForm.region = ""; //清除修改时赋的值
+      this.ruleForm.usName = ""; //清除修改时赋的值
     },
     //点击新增班级
     submitForm(formName) {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.axios({
+          this.axios({ //新增的axis
             method: "post",
             url: "/api/Class/AddClass",
             data: {
@@ -228,6 +221,7 @@ export default {
               classTeacherId: _this.ruleForm.usName
             }
           }).then(function(data) {
+            //deta 接收的值为 1 时新增成功， -1 为异常，0 为没有改变
             if (data.data.code == "1") {
               _this.open2();
             } else if (data.data.code == "-1") {
@@ -284,16 +278,15 @@ export default {
       this.axios.get("/api/Class/GetAllClass").then(function(data) {
         var stu = data.data;
         for (const key in stu) {
-          stu[key].classCreateTime = new Date(
-            stu[key].classCreateTime
-          ).toLocaleDateString(); //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
+          //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
+          stu[key].classCreateTime = new Date(stu[key].classCreateTime).toLocaleDateString(); 
         }
         _this.tableData = stu;
       });
     }
   },
   created() {
-    this.overall();
+    this.overall(); //调用封装渲染axios
     var _this = this;
     //获取授课老师信息
     this.axios.get("/api/User/GetTeachers").then(function(data) {
@@ -310,18 +303,20 @@ export default {
 <style lang="less" scoped>
 // 新增按钮
 .newly {
-  width: 70%;
+  width: 80%;
   margin: 0px auto;
   border-bottom: 1px solid #ebeef5;
   text-align: left;
   font-size: 17px;
+  /deep/.el-button{
+    font-weight:bold ;
+  }
 }
 
 // 表格
 /deep/.el-table {
   margin: 0px auto;
 }
-
 // 弹出框
 /deep/.el-form-item {
   div {
