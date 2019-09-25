@@ -165,8 +165,28 @@ export default {
     },
     getAdmin() {
       // 管理员
-      console.log(this.tableData);
-      console.log(this.tableData[0].userTypeTypeName);
+      let _this = this;
+      // for (const item in _this.tableData) { 
+      //   // console.log(_this.tableData[item].userTypeTypeName)
+      //   if(_this.tableData[item].userTypeTypeName == "管理员"){
+      //     console.log(_this.tableData[item].userTypeTypeName);
+      //     // return
+      //   }
+      var filterArray = _this.tableData.filter(function(item,index,array){
+        // return item == "管理员";
+        // console.log(item);//当前行内容
+        // console.log(index);//下标
+        // console.log(array);//次数为数组长度，输出数组长度个数组
+        return item.userTypeTypeName == "管理员";
+      })
+      console.log(filterArray);//[]
+
+      _this.tableData = filterArray;
+
+
+
+
+
     },
     getTeach(){//老师
 
