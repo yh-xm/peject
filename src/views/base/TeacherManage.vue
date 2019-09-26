@@ -103,6 +103,11 @@ export default {
    *  这里存储数据
    */
   data() {
+    //用户名称
+    let validUser = (rule,value,callback) => {
+      
+    };
+
     //用户密码正则
     let validcodePass = (rule, value, callback) => {
       let reg = /^([0-9]|[a-zA-Z]){6,18}$/;
@@ -127,8 +132,8 @@ export default {
     };
     return {
       radio: "1", //角色单选
-      tableData: [], //赋值
-      comData: [], //表格渲染数据
+      tableData: [], //表格渲染数据 赋值
+      comData: [], //表格渲染数据 引用
       dialogTableVisible: false,
       dialogFormVisible: false, //对话框
       roles: [
