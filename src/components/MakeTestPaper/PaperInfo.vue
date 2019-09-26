@@ -73,7 +73,6 @@ export default {
   created() {
     this.axios.get(`/api/Class/GetAllCourse`).then(res => {
       this.ruleForm.options = res.data;
-      console.log(this.ruleForm.options);
     });
   }
 };

@@ -80,12 +80,13 @@ export default {
       //删除选项
       var index = this.dynamicValidateFormThird.domains.indexOf(item);
       if (index !== -1) {
-        this.dynamicValidateFormThird.domains.splice(index, 1);
-        this.dynamicValidateFormThird.nowAdd--;
+        this.dynamicValidateFormThird.domains.splice(index, 1); //删除选项
+        this.dynamicValidateFormThird.nowAdd--; //选项个数减少
         for (let i in this.dynamicValidateFormThird.domains) {
           this.dynamicValidateFormThird.domains[
             i
           ].options = this.dynamicValidateFormThird.optionsActive[i];
+          //选中
         }
       }
     },
@@ -166,15 +167,20 @@ export default {
               }
             })
             .then(res => {
-              console.log(res);
+       
               if (res.data.message == "添加成功") {
-                _this.$parent.pageInfo[0].bodys.push(res.data.data.tpqQuestion);
+                res.data.data.tpqQuestion.tpqId = res.data.data.tpqId; //传递题目Id
+                res.data.data.tpqQuestion.score = parseInt(  //传递题目分数
+                  _this.dynamicValidateFormThird.onum
+                );
+              
+                _this.$parent.pageInfo[0].bodys.push(res.data.data.tpqQuestion);  //题目信息
                 _this.$parent.pageInfo[0].nowAdd =
-                  parseInt(_this.$parent.pageInfo[0].nowAdd) + 1;
+                  parseInt(_this.$parent.pageInfo[0].nowAdd) + 1;//题目个数
                 _this.$parent.pageInfo[0].nowScroe =
                   parseInt(_this.$parent.pageInfo[0].nowScroe) +
                   parseInt(_this.dynamicValidateFormThird.onum);
-                _this.$parent.pageInfo = [..._this.$parent.pageInfo];
+                _this.$parent.pageInfo = [..._this.$parent.pageInfo];//题目分数
                 _this.fninit();
                 this.$message({
                   type: "success",
@@ -188,12 +194,12 @@ export default {
         }
       });
     },
-    fnchange(v) { //多选变化
+    fnchange(v) {
+      //多选变化
       this.dynamicValidateFormThird.checked = v;
       this.dynamicValidateFormThird.checked = [
         ...this.dynamicValidateFormThird.checked
       ];
-      console.log(v);
     }
   },
   created() {

@@ -62,24 +62,23 @@ export default {
   data() {
     return {
       title: "", //题目
-      dynamicValidateFormSecond: { 
+      dynamicValidateFormSecond: {
         domains: [] //填空
       },
       IndexArr: [] //填空下标位置
     };
   },
   methods: {
-    submitForm(formName) { //提交表单
+    submitForm(formName) {
+      //提交表单
       this.$refs[formName].validate(valid => {
         if (valid) {
           var tpqPaperId = sessionStorage.testPaperId;
           var tpqScore = 0;
           var fillQuestion = [];
           var domains = this.$refs[formName].model.domains;
-          console.log(domains);
           for (const key in domains) {
             tpqScore += parseInt(domains[key].onum);
-            console.log(domains[key].value);
             fillQuestion.push({
               fqOrder: key,
               fqAnswer: domains[key].value,
@@ -101,10 +100,11 @@ export default {
               }
             })
             .then(res => {
-              console.log(res);
               if (res.data.message == "添加成功") {
                 res.data.data.tpqQuestion.questionTypeId = 2;
-                this.$parent.pageInfo[1].bodys.push(res.data.data.tpqQuestion);
+                res.data.data.tpqQuestion.tpqId = res.data.data.tpqId; //传递题目Id
+                res.data.data.tpqQuestion.score = parseInt(tpqScore); //传递题目分数
+                this.$parent.pageInfo[1].bodys.push(res.data.data.tpqQuestion); //题目信息
                 this.$parent.pageInfo = [...this.$parent.pageInfo];
                 this.$parent.pageInfo[1].nowAdd =
                   parseInt(this.$parent.pageInfo[2].nowAdd) + 1;
@@ -115,8 +115,8 @@ export default {
                   type: "success",
                   message: "添加成功!"
                 });
-                this.resetForm("dynamicValidateFormSecond")
-                this.title=""
+                this.resetForm("dynamicValidateFormSecond");
+                this.title = "";
               }
             });
         } else {
@@ -125,16 +125,19 @@ export default {
         }
       });
     },
-    resetForm(formName) { // 重置表单
+    resetForm(formName) {
+      // 重置表单
       this.$refs[formName].resetFields();
-    }, 
-    addDomain() { //插入填空
+    },
+    addDomain() {
+      //插入填空
       var index = this.getCursortPosition(document.getElementById("textarea"));
       this.title = this.title.split("");
       this.title.splice(index, 0, "＿");
       this.title = this.title.join("");
     },
-    getCursortPosition(element) { //获取文本域的光标
+    getCursortPosition(element) {
+      //获取文本域的光标
       var CaretPos = 0;
       if (document.selection) {
         //支持IE
@@ -148,7 +151,8 @@ export default {
       return CaretPos;
     }
   },
-  watch: { //监听题目变化
+  watch: {
+    //监听题目变化
     title: function(n, o) {
       var oindex = 0;
       var nindex = 0;

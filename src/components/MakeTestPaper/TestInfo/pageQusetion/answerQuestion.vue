@@ -87,10 +87,23 @@ export default {
     fnremoveChoose() {
       this.axios
         .post(
-          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${this.nowOption.questionId}`
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${this.nowOption.tpqId}`
         )
         .then(res => {
-          console.log(res);
+          if (res.data.message == "删除成功") {
+            this.$parent.$parent.pageInfo[2].bodys.splice(this.nowIndex, 1);
+            this.$parent.$parent.pageInfo[2].nowAdd =
+              parseInt(this.$parent.$parent.pageInfo[2].nowAdd) - 1;
+            this.$parent.$parent.pageInfo[2].nowScroe -= parseInt(
+              this.nowOption.score
+            );
+            this.$parent.$parent.pageInfo = [...this.$parent.$parent.pageInfo];
+            
+          } 
+                this.$message({
+              type: "success",
+              message: res.data.message
+            });
         });
     },
     fncheckbox(x) {
@@ -114,7 +127,7 @@ export default {
   created() {
     this.oldOption = JSON.parse(JSON.stringify(this.searchList2));
     this.nowOption = this.searchList2;
-    this.nowOption
+    this.nowOption;
   }
 };
 </script>

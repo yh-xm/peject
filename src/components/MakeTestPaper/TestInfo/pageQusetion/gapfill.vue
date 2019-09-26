@@ -1,5 +1,5 @@
 <template>
-  <div class="GapFilling">
+  <div class="gapFilling">
     <div class="gapContent">
       <el-form
         :model="dynamicValidateFormSecond"
@@ -107,7 +107,6 @@ export default {
       this.oshow = !this.oshow;
       this.title = this.nowOption.questionTitle;
       this.dynamicValidateFormSecond.domains = [];
-      console.log(this.nowOption);
       for (const key in this.nowOption.fillQuestion) {
         this.dynamicValidateFormSecond.domains.push({
           value: this.nowOption.fillQuestion[key].fqAnswer,
@@ -122,8 +121,6 @@ export default {
           var nowOption = this.nowOption;
           var domains = this.$refs[formName].model.domains;
           var oldarr = this.oldOption.fillQuestion;
-          console.log(domains.length);
-          console.log(oldarr.length);
           var len = domains.length - oldarr.length;
           if (domains.length > oldarr.length) {
             for (let i = 0; i < len; i++) {
@@ -142,7 +139,6 @@ export default {
               });
             }
           }
-          console.log(fillQuestion);
           if (fillQuestion.length == 0) {
             this.$message({
               type: "warning",
@@ -178,7 +174,6 @@ export default {
               } else {
                 var data = res.data + "}]}}";
                 data = eval("(" + data + ")");
-                console.log(data);
                 this.nowOption = JSON.parse(JSON.stringify(data.data));
                 this.odisabled = !this.odisabled;
                 this.oshow = !this.oshow;
@@ -217,6 +212,28 @@ export default {
         //支持firefox
         CaretPos = element.selectionStart;
       return CaretPos;
+    },
+    fnremoveChoose() {
+      console.log(this.nowOption);
+      this.axios
+        .post(
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${this.nowOption.tpqId}`
+        )
+        .then(res => {
+          if (res.data.message == "删除成功") {
+            this.$parent.$parent.pageInfo[1].bodys.splice(this.nowIndex, 1);
+            this.$parent.$parent.pageInfo[1].nowAdd =
+              parseInt(this.$parent.$parent.pageInfo[1].nowAdd) - 1;
+            this.$parent.$parent.pageInfo[1].nowScroe -= parseInt(
+              this.nowOption.score
+            );
+            this.$parent.$parent.pageInfo = [...this.$parent.$parent.pageInfo];
+          }
+          this.$message({
+            type: "success",
+            message: res.data.message
+          });
+        });
     }
   },
   watch: {
@@ -280,7 +297,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.GapFilling {
+.gapFilling {
   display: flex;
   margin-top: 20px;
   .gapContent {
