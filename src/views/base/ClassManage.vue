@@ -91,7 +91,7 @@ export default {
   data() {
     return {
       title:"",//弹出框标题
-      tableData: [], //接收向后台请求的数据用于渲染
+      tableData: [], //接收向后台请求的数据用渲染
       teacher: [], //接收后台传过来的老师信息
       course: [], //接收后台传过来的课程信息
       search: "",
