@@ -9,21 +9,24 @@
     <!-- Breadcrumb 面包屑 结束 -->
     <!-- 卡片 -->
     <el-card class="box-card">
-      <!-- 角色导航 -->
       <div slot="header" class="clearfix">
-        <el-button type="text" @click="canAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
-        <el-radio v-model="radio" label="1" @click.native="getAll()">全部</el-radio>
-        <el-radio v-model="radio" label="2" @click.native="getAdmin()">管理员</el-radio>
-        <el-radio v-model="radio" label="3" @click.native="getTeach()">老师</el-radio>
-        <el-radio v-model="radio" label="4" @click.native="getBus()">业务</el-radio>
-        <el-radio v-model="radio" label="5" @click.native="getMarket()">市场</el-radio>
+        <!-- 新增用户按钮 -->
+        <el-button type="text" @click="handleAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
+        <!-- 新增用户按钮 -->
+        <!-- 角色导航 -->
+        <el-radio v-model="filtRadio" label="1">全部</el-radio>
+        <el-radio
+          v-for="(item,index) in roles"
+          :key="index"
+          v-model="filtRadio"
+          :label="item.userTypeTypeName"
+        >{{item.userTypeTypeName}}</el-radio>
+        <!-- 角色导航结束 -->
       </div>
-      <!-- 角色导航结束 -->
       <div>
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%">
           <el-table-column type="index"></el-table-column>
-          <!-- :index="indexMethod" -->
           <el-table-column label="用户名称" prop="userName"></el-table-column>
           <el-table-column label="手机号" prop="userMobile"></el-table-column>
           <el-table-column label="密码" prop="userPassword"></el-table-column>
@@ -38,6 +41,7 @@
         </el-table>
         <!-- 表格结束 -->
       </div>
+
       <div>
         <!-- 添加对话框 -->
         <!-- Form -->
@@ -75,8 +79,6 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="角色" prop="userUserTypeId">
-              <!-- userTypeTypeName -->
-              <!-- userUserTypeId -->
               <el-select v-model="ruleForm.userUserTypeId" placeholder="请选择">
                 <el-option
                   v-for="(item,index) in roles"
@@ -90,8 +92,8 @@
           <!-- 嵌套的表单结束 -->
           <div slot="footer" class="dialog-footer">
             <el-button @click="cancel()">取 消</el-button>
-            <el-button type="primary" @click="addClose()" v-show="addFlag">添 加</el-button>
-            <el-button type="primary" @click="edit()" v-show="editFlag">修 改</el-button>
+            <el-button type="primary" @click="addClose()" v-show="flag ==! true ">添 加</el-button>
+            <el-button type="primary" @click="editColse()" v-show="flag == true">修 改</el-button>
           </div>
         </el-dialog>
         <!-- 添加对话框结束 -->
@@ -102,7 +104,7 @@
 <script>
 export default {
   /**
-   *  这里存储数据
+   *  data里面存储数据
    */
   data() {
     //用户密码正则
@@ -128,27 +130,25 @@ export default {
       }
     };
     return {
-      radio: "1", //角色单选
-      tableData: [], //表格渲染数据 赋值
-      comData: [], //表格渲染数据 引用
-      dialogTableVisible: false,
-      dialogFormVisible: false, //对话框
-      roles: [
-        //弹框角色
-        { roleName: "管理员", roleId: "1" },
-        { roleName: "老师", roleId: "190" },
-        { roleName: "业务", roleId: "234" },
-        { roleName: "市场", roleId: "235" }
-      ], //角色
+      filtRadio: "1", //初始化过滤角色导航按钮选中
+      filtLabel: "", //初始化过滤角色导航label值
+      filtName: "", //初始化过滤角色导航名
+      tableData: [], //初始化获取的所有用户信息
+      roles: [], //初始化获取的所有的角色
+      title:"",//对话框标题
+      flag:false,//对话框确认按钮隐藏显示
+      dialogFormVisible:false,//对话框隐藏显示
+      // 获取表单信息
       ruleForm: {
-        uid: "", //id
+        userUid: "", //id
         userName: "", //用户名称
         userMobile: "", //手机号
         userPassword: "", //密码
         userSex: "", //性别
-        userTypeTypeName:"",//角色称号
+        userTypeTypeName: "", //角色称号
         userUserTypeId: "" //角色id
       },
+      //表单失焦验证
       rules: {
         userName: [
           //姓名
@@ -175,246 +175,142 @@ export default {
             validator: validcodePass,
             trigger: "blur"
           }
-        ],
-        userUserTypeId: [
-          //角色
-          { required: true, message: "请选择用户角色", trigger: "blur" }
         ]
       },
-      title: "", //对话框标题
-      addFlag: false, //添加弹框确认按钮
-      editFlag: false, //修改弹框确认按钮
-      rowTypeId: "" //编辑角色id
+
     };
   },
-  //   这里定义方法
+  /**
+   * methods{}里面定义方法
+   * */
+
   methods: {
-    //提交验证
-    submitForm(ruleForm) {},
-    //根据角色过滤显示
-    getAll() {
-      //全部
-      // console.log("all")
-      this.getUserInfo();
-    },
-    getAdmin() {
-      // 管理员
-      let _this = this;
-      let filterArray = _this.comData.filter(function(item, index, array) {
-        return item.userUserTypeId == "1";
-      });
-      console.log(filterArray); //[]
-      _this.tableData = filterArray;
-    },
-    getTeach() {
-      //老师
-      let _this = this;
-      let filterArray = _this.comData.filter(function(item, index, array) {
-        return item.userUserTypeId == "190";
-      });
-      console.log(filterArray); //[]
-      _this.tableData = filterArray;
-    },
-    getBus() {
-      //业务
-      let _this = this;
-      let filterArray = _this.comData.filter(function(item, index, array) {
-        return item.userUserTypeId == "234";
-      });
-      console.log(filterArray); //[]
-      _this.tableData = filterArray;
-    },
-    getMarket() {
-      //市场
-      let _this = this;
-      let filterArray = _this.comData.filter(function(item, index, array) {
-        return item.userUserTypeId == "235";
-      });
-      console.log(filterArray); //[]
-      _this.tableData = filterArray;
-    },
     /**
-     * 渲染---获取用户信息
+     * 方法说明
+     * @method 方法名
+     * @for 所属类名
+     * @param {参数类型} 参数名 参数说明
+     * @return {返回值类型} 返回值说明
+     * @param {参数类型} 参数名 参数说明
      */
-    getUserInfo() {
-      /**
-       * 发送get请求*/
-      let _this = this; //保存this
-      this.axios.get("http://192.168.1.188:12/api/User/GetTeachers").then(
+
+    /**
+     * @method getRole
+     * @for 引用
+     * 获取所有角色--- 可调用
+     * */
+    getRole() {
+      let _this = this; //保存this对象
+      _this.axios.get("/api/UserType/GetUserRoles").then(
         function(res) {
-          /**
-           * tableData等于回调函数返回的res（值）
-           */
-          _this.comData = res.data; //公共的
-          _this.tableData = res.data; //赋值的
+          // console.log(res);
+          _this.roles = res.data;
         },
         function() {
           console.log("数据请求失败处理");
         }
       );
     },
-    // 删除用户信息
-    handleDelete(index, row) {
-      let uid = (index, row.userUid);
-      let _this = this;
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true
-      })
-        .then(() => {
-          _this.axios
-            .post("http://192.168.1.188:12/api/User/RemoveTeacher?uid=" + uid)
-            .then(
-              function(res) {
-                if (res.status === 200) {
-                  _this.$message({
-                    type: "success",
-                    message: "删除成功!"
-                  });
-                  _this.tableData.splice(index, 1);
-                  // this.reload();
-                }
-              },
-              function() {
-                console.log("删除请求失败处理");
-                _this.$message({
-                  type: "error",
-                  message: "删除失败!"
-                });
-              }
-            );
-        })
-        .catch(() => {
-          _this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
-    cancel() {
-      //取消
-      this.dialogFormVisible = false;
-      this.$message({
-        type: "info",
-        message: "已取消"
-      });
-    },
     /**
-     * 新增用户信息
+     * @method getUserInfo
+     * @for 引用
+     * 渲染---获取用户信息 可调用
      */
-    canAdd() {
-      this.dialogFormVisible = true;
-      this.title = "新增用户信息";
-      this.addFlag = true;
-      this.editFlag = false;
-      // 清空赋值
-      this.ruleForm = {};
-      console.log(this.ruleForm)
-      this.ruleForm.userSex = "男";
-      
-    },
-    /**
-     * 新增用户信息
-     */
-    addClose() {
-      //添加确认
-      var _this = this;
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-          this.axios({
-            method: "post",
-            url: "http://192.168.1.188:12/api/User/AddTeacher",
-            data: {
-              userName: _this.ruleForm.userName, //用户名，不能为空
-              userMobile: _this.ruleForm.userMobile, //手机号，长度11位
-              userSex: _this.ruleForm.userSex, //性别，男|女
-              userPassword: _this.ruleForm.userPassword, //密码，长度6~18
-              userUserTypeId: _this.ruleForm.userUserTypeId,//用户角色编号
-              userTypeTypeName:_this.ruleForm.userTypeTypeName//角色称号
-            }
-          }).then(
-            function(res) {
-              console.log("新增请求成功处理");
-              var code = res.data.code;
-              if (code == "1") {
-                _this.$message({
-                  type: "success",
-                  message: "添加成功!"
-                });
-              }
-            },
-            function() {
-              console.log(添加请求失败处理);
-              this.$message({
-                type: "error",
-                message: "添加失败"
-              });
-            }
-          );
-        this.dialogFormVisible = false;
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-
-      // });
-        _this.getUserInfo();
-
-    },
-    // 编辑用户信息
-    handleEdit(index, row) {
-      this.dialogFormVisible = true;
-      this.title = "编辑用户信息";
-      this.editFlag = true;
-      this.addFlag = false;
-      // 修改赋值
-      this.ruleForm = Object.assign({}, row);
-      console.log(row);
-      console.log(this.ruleForm);
-    },
-    /**
-     * 编辑用户信息
-     */
-    edit() {
-      // this.ruleForm.userUserTypeId = this.rowTypeId;
-      let _this = this;
-      this.axios({
-        method: "post",
-        url: "http://192.168.1.188:12/api/User/ModifyTeacher",
-        data: {
-          userUid: _this.ruleForm.userUid, //要修改的用户标识符
-          userName: _this.ruleForm.userName, //用户名，不能为空
-          userMobile: _this.ruleForm.userMobile, //手机号，长度11位
-          userSex: _this.ruleForm.userSex, //性别，男|女
-          userPassword: _this.ruleForm.userPassword, //密码，长度6~18
-          userTypeTypeName:_this.ruleForm.userTypeTypeName,//角色称号
-          userUserTypeId: _this.ruleForm.userUserTypeId //角色id
-        }
-      }).then(
+    getUserInfo() {
+      // 发送get请求
+      let _this = this; //保存this对象
+      _this.axios.get("/api/User/GetTeachers").then(
         function(res) {
+          //tableData等于回调函数返回的res（值）
           console.log(res);
-          _this.$message({
-            type: "success",
-            message: "修改成功!"
-          });
+          _this.tableData = res.data;
         },
         function() {
-          console.log("修改请求失败处理");
+          console.log("数据请求失败处理");
         }
       );
+    },
+    /**
+     * @method handleDelete
+     * @param  index {Integer} 点击行数据所在下标
+     * @param row {Array} 点击行数据所在行数据
+     * 删除所在行的数
+     * */
+    handleDelete(index, row) {
+      console.log(index, row);
+    },
+
+    /**
+     * @method handleAdd
+     * 触发添加用户信息
+     * */
+    handleAdd() {
+      let _this = this;
+      _this.flag =! true;
+      _this.title = "添加用户信息";
+
+
+
+      _this.dialogFormVisible = true;
+    },
+    /**
+     * @method addClose
+     * 确认添加用户信息
+     * */
+    addClose() {
+      let _this = this;
+
+
+
+
+
+
+
+
       _this.dialogFormVisible = false;
-      _this.getUserInfo();
+    },
+      /**
+     * @method handleEdit
+     * @param  index {Integer} 点击行数据所在下标
+     * @param row {Array} 点击行数据所在行数据
+     * 修改所在行数据
+     * */
+    handleEdit(index, row) {
+      console.log(index,row);
+      let _this = this;
+      _this.flag = true;
+      _this.title = "编辑用户信息";
+
+
+
+      _this.dialogFormVisible = true;
+    },
+    /**
+     * @method editClose
+     * 确认修改用户信息
+     * */
+    editColse() {
+      console.log("确认修改");
+      let _this = this;
+      _this.dialogFormVisible = false;
+    },
+
+    /**
+     * @method cancel
+     * 取消/关闭对话框
+     * */
+    cancel(){
+      let _this = this;
+      _this.dialogFormVisible = false;
     }
   },
-
-  //这里写钩子函数
+  /**
+   * 定义钩子函数
+   * */
   mounted() {
-    /**
-     * 调用---获取用户信息方法
-     */
-    this.getUserInfo();
+    let _this = this; //保存this对象
+    _this.getUserInfo();
+    _this.getRole();
   }
 };
 </script>
@@ -441,7 +337,6 @@ li {
           font-size: 14px;
         }
         /deep/.el-input--suffix {
-          // width: 330px;
           width: 100%;
         }
       }
