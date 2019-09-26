@@ -1,9 +1,4 @@
 <template>
-<<<<<<< HEAD
-<div id="TeacherManage">
-    用户管理
-</div>
-=======
   <div id="TeacherManage">
     <!-- Breadcrumb 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -101,7 +96,6 @@
       </div>
     </el-card>
   </div>
->>>>>>> cy
 </template>
 <script>
 export default {
