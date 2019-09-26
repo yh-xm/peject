@@ -437,4 +437,4 @@ export default {
 /deep/.el-table_1_column_8 {
   text-align: center;
 }
-</style>
+</style> 
