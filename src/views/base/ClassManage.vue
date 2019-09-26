@@ -127,8 +127,8 @@ export default {
     // 修改弹出框并赋值
     handleEdit(index, row) {
       this.dialogFormVisible = true; //当为true时弹出弹出框
-      this.stunewly = false; //弹出框的新增按钮为false时销毁
-      this.stuamend = true; //弹出框的修改按钮按钮为true时销毁
+      this.stunewly = false; //弹出框的新增按钮为false时
+      this.stuamend = true; //弹出框的修改按钮按钮为true时
       this.ruleForm.name = row.className; //点击获取的班级名字赋值给输入框
       this.classId = row.classId; //获取的班级主键赋值
       this.ruleForm.region = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
