@@ -46,6 +46,7 @@
             :rules="rules"
             ref="ruleForm"
             label-width="100px"
+            center
             class="demo-ruleForm">
             <!-- 弹出框 班级名称框 -->
             <el-form-item label="班级名称" prop="name">
@@ -70,7 +71,6 @@
                   :key="index"
                   :label="inte.userName"
                   :value="inte.userId"
-                  center
                 ></el-option>
               </el-select>
             </el-form-item>
