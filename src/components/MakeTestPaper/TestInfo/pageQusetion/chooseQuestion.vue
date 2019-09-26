@@ -124,14 +124,20 @@ export default {
           `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${this.nowOption.tpqId}`
         )
         .then(res => {
-        console.log(this.nowOption)
-         this.$parent.$parent.pageInfo[0].bodys.splice(this.nowIndex,1)
-         this.$parent.$parent.pageInfo[0].bodys.nowAdd=parseInt(this.$parent.$parent.pageInfo[0].bodys.nowAdd)-1;
-          this.$parent.$parent.pageInfo[0].bodys.nowScroe -= parseInt(this.nowOption.score)
-          this.$parent.$parent.pageInfo = [...this.$parent.$parent.pageInfo]
-          // if(res.message=="删除成功"){
-          //   console.log(.)
-          // }
+          if (res.data.message == "删除成功") {
+            this.$parent.$parent.pageInfo[0].bodys.splice(this.nowIndex, 1);
+            this.$parent.$parent.pageInfo[0].nowAdd =
+              parseInt(this.$parent.$parent.pageInfo[0].nowAdd) - 1;
+            this.$parent.$parent.pageInfo[0].nowScroe -= parseInt(
+              this.nowOption.score
+            );
+            this.$parent.$parent.pageInfo = [...this.$parent.$parent.pageInfo];
+          }
+            this.$message({
+              type: "success",
+              message: res.data.message
+            });
+          
         });
     },
     fncheckbox(x) {
@@ -180,7 +186,6 @@ export default {
         .el-row {
           margin-left: 10px;
         }
-        
       }
     }
   }

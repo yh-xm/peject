@@ -41,28 +41,28 @@ export default {
   methods:{
       goback(){ //上一步
     var data = this.data;
-    sessionStorage.pageInfo = JSON.stringify(data)
+    sessionStorage.pageInfo = JSON.stringify(data) //完整试卷信息
  this.$parent.$parent.active = 1;
- this.$router.push({name:'TestInfo'})
+ this.$router.push({name:'TestInfo'}) //返回升一级路由
 
       }
   },
   created() { //获取试卷信息
     var pageId = sessionStorage.testPaperId;
-    var chooseScore = 0;
-    var answerScore = 0;
-    var gapfillScore = 0;
+    var chooseScore = 0; //选择题分数
+    var answerScore = 0; //问答题分数
+    var gapfillScore = 0;//填空题分数
     this.axios.get(`/api/TestPaper/GetTestPaper?id=${pageId}`).then(res => {
       var data = res.data;
       this.data = data;
       for (const key in data.questions) {
-        if (data.questions[key].tpqQuestion.questionTypeId == "1") {
+        if (data.questions[key].tpqQuestion.questionTypeId == "1") {  //选择题
           chooseScore += data.questions[key].tpqScore;
         }
-        if (data.questions[key].tpqQuestion.fillQuestion.length != 0) {
+        if (data.questions[key].tpqQuestion.fillQuestion.length != 0) {//填空题
           gapfillScore += data.questions[key].tpqScore;
         }
-        if (data.questions[key].tpqQuestion.answerQuestion != null) {
+        if (data.questions[key].tpqQuestion.answerQuestion != null) {//问答题
           answerScore += data.questions[key].tpqScore;
         }
       }

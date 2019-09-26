@@ -52,18 +52,17 @@ export default {
   data() {
     return {
       radio: 3, //选项
-      pageInfo: [], //题目信息
+      pageInfo: [] //题目信息
     };
   },
   methods: {
-    changeInfo(v) { //改变路由
+    changeInfo(v) {
+      //改变路由
       switch (v) {
         case 0:
           this.$router.push({ name: "MultipleChoice" });
-          console.log(this);
           break;
         case 1:
-          console.log(this);
           this.$router.push({ name: "GapFilling" });
           break;
         case 2:
@@ -71,13 +70,15 @@ export default {
           break;
       }
     },
-    fnover() { //完成制作
+    fnover() {
+      //完成制作
       this.$router.push({ name: "MakeOver" });
       this.$parent.$parent.active = 2;
     }
   },
   computed: {
-    sumSoce() { //算总分
+    sumSoce() {
+      //算总分
       var sum = 0;
       for (let i in this.pageInfo) {
         sum += this.pageInfo[i].nowScroe;
@@ -103,21 +104,22 @@ export default {
         break;
     }
 
-    if (sessionStorage.pageInfo) { //上一步还原
-      var data = JSON.parse(sessionStorage.pageInfo);
-      console.log(data);
-      console.log(this.pageInfo);
-      this.pageInfo = [{}, {}, {}];
+    if (sessionStorage.pageInfo) {
+      //上一步还原
+      var data = JSON.parse(sessionStorage.pageInfo); //获取
+      this.pageInfo = [{}, {}, {}]; //初始化
       for (let i = 0; i < this.pageInfo.length; i++) {
         this.pageInfo[i].bodys = [];
         this.pageInfo[i].nowAdd = 0;
         this.pageInfo[i].nowScroe = 0;
-      }
-
-      for (const key in data.questions) {
         this.pageInfo[1].typeName = "填空题";
         this.pageInfo[0].typeName = "选择题";
         this.pageInfo[2].typeName = "问答题";
+      }
+
+      for (const key in data.questions) {
+        //题目分类
+
         if (data.questions[key].tpqQuestion.questionTypeId == "1") {
           this.pageInfo[0].bodys.push(data.questions[key].tpqQuestion);
           this.pageInfo[0].nowAdd += 1;
@@ -138,15 +140,14 @@ export default {
         }
       }
       this.pageInfo = [...this.pageInfo];
-      console.log(this.pageInfo);
     } else {
       this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
+        //接口初始化
         this.pageInfo = res.data;
         for (let i in this.pageInfo) {
           this.pageInfo[i].bodys = [];
           this.pageInfo[i].nowAdd = 0;
           this.pageInfo[i].nowScroe = 0;
-          console.log(this.pageInfo);
         }
       });
     }

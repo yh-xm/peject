@@ -41,10 +41,12 @@ export default {
     };
   },
   methods: {
-    resetForm(formName) {  //重置表单
+    resetForm(formName) {
+      //重置表单
       this.$refs[formName].resetFields();
     },
-    submitForm(formName) { //提交表单
+    submitForm(formName) {
+      //提交表单
       var tpqPaperId = sessionStorage.testPaperId;
       var aqAnswer = this.$refs[formName].model.value;
       var tpqScore = this.$refs[formName].model.onum;
@@ -62,17 +64,18 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
           if (res.data.message == "添加成功") {
-            res.data.data.tpqQuestion.tpqId= res.data.data.tpqId
-                 res.data.data.tpqQuestion.score =parseInt(this.$refs[formName].model.onum)
-            this.$parent.pageInfo[2].bodys.push(res.data.data.tpqQuestion);
+            res.data.data.tpqQuestion.tpqId = res.data.data.tpqId;  //传递题目Id
+            res.data.data.tpqQuestion.score = parseInt(
+              this.$refs[formName].model.onum  //传递题目分数
+            );
+            this.$parent.pageInfo[2].bodys.push(res.data.data.tpqQuestion); //题目信息
             this.$parent.pageInfo = [...this.$parent.pageInfo];
             this.$parent.pageInfo[2].nowAdd =
-              parseInt(this.$parent.pageInfo[2].nowAdd) + 1;
+              parseInt(this.$parent.pageInfo[2].nowAdd) + 1;//题目个数
             this.$parent.pageInfo[2].nowScroe =
               parseInt(this.$parent.pageInfo[2].nowScroe) +
-              parseInt(this.$refs[formName].model.onum);
+              parseInt(this.$refs[formName].model.onum);//题目分数
             this.$message({
               type: "success",
               message: "添加成功!"
