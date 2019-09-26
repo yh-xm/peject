@@ -196,11 +196,15 @@ export default {
         desc: ""
       },
       addRules: {
-        // 校验手机号码，主要通过validator来指定验证器名称
+        // 校验班级名，主要通过validator来指定验证器名称
         classId2: [{ required: true, validator: validateClassName, trigger: "blur" }],
+        // 校验学生名，主要通过validator来指定验证器名称
         stuName: [{ required: true, validator: validateName, trigger: "blur" }],
+        // 校验生日，主要通过validator来指定验证器名称
         born: [{ required: true, validator: validateBorn, trigger: "blur" }],
+        // 校验手机号码，主要通过validator来指定验证器名称
         phone: [{ required: true, validator: validatePhone, trigger: "blur" }],
+        // 校验手机密码，主要通过validator来指定验证器名称
         password: [{ required: true, validator: validatepassWord, trigger: "blur" }]
       },
       formLabelWidth: "140px"
