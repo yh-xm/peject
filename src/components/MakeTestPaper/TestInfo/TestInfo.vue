@@ -19,7 +19,7 @@
       <el-card class="box-card" v-for="(item,index) in pageInfo" :key="index">
         <div slot="header" class="clearfix">
           <span>
-            一、{{item.typeName}}（本题共{{item.nowAdd}}道小题，共
+            {{index+1}}、{{item.typeName}}（本题共{{item.nowAdd}}道小题，共
             <el-tag type="danger" effect="dark" size="small">{{item.nowScroe}}/{{sumSoce}}</el-tag>分）
           </span>
         </div>
@@ -119,6 +119,7 @@ export default {
 
       for (const key in data.questions) {
         //题目分类
+        
 
         if (data.questions[key].tpqQuestion.questionTypeId == "1") {
           this.pageInfo[0].bodys.push(data.questions[key].tpqQuestion);
@@ -127,7 +128,9 @@ export default {
           this.pageInfo[0].typeId = 1;
         }
         if (data.questions[key].tpqQuestion.fillQuestion.length != 0) {
+         data.questions[key].tpqQuestion.questionTypeId =2
           this.pageInfo[1].bodys.push(data.questions[key].tpqQuestion);
+        
           this.pageInfo[1].nowAdd += 1;
           this.pageInfo[1].nowScroe += parseInt(data.questions[key].tpqScore);
           this.pageInfo[1].typeId = 2;
@@ -140,6 +143,7 @@ export default {
         }
       }
       this.pageInfo = [...this.pageInfo];
+      console.log(this.pageInfo)
     } else {
       this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
         //接口初始化

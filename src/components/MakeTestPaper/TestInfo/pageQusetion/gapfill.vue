@@ -41,7 +41,6 @@
         <el-form-item label="题目预览" style="display:flex;flex-wrap:wrap;">
           <el-row v-for="(item,index) in title" :key="index">
             <span v-if="item!='＿'">{{item}}</span>
-
             <el-input
               v-if="item=='＿'"
               :key="index"
@@ -174,6 +173,8 @@ export default {
               } else {
                 var data = res.data + "}]}}";
                 data = eval("(" + data + ")");
+                data.data.tpqQuestion.tpqId = res.data.data.tpqId; //传递题目Id
+                data.data.tpqQuestion.score = parseInt(tpqScore); //传递题目分数
                 this.nowOption = JSON.parse(JSON.stringify(data.data));
                 this.odisabled = !this.odisabled;
                 this.oshow = !this.oshow;
@@ -256,6 +257,8 @@ export default {
           nindexArr.push(key);
         }
       }
+           this.IndexArr = narr;
+           console.log(this.IndexArr)
       if (this.odisabled) {
         if (nindexArr.length > oindexArr.length) {
           for (const key in this.nowOption.fillQuestion) {
@@ -286,7 +289,7 @@ export default {
       if (nindexArr.length == 0) {
         this.dynamicValidateFormSecond.domains = [];
       }
-      this.IndexArr = narr;
+ 
     }
   },
   created() {
