@@ -127,7 +127,6 @@ export default {
   created() {
     this.oldOption = JSON.parse(JSON.stringify(this.searchList2));
     this.nowOption = this.searchList2;
-    this.nowOption;
   }
 };
 </script>

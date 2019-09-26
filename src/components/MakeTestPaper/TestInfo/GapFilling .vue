@@ -101,13 +101,15 @@ export default {
             })
             .then(res => {
               if (res.data.message == "添加成功") {
+               
                 res.data.data.tpqQuestion.questionTypeId = 2;
                 res.data.data.tpqQuestion.tpqId = res.data.data.tpqId; //传递题目Id
                 res.data.data.tpqQuestion.score = parseInt(tpqScore); //传递题目分数
                 this.$parent.pageInfo[1].bodys.push(res.data.data.tpqQuestion); //题目信息
+                 console.log(this.$parent.pageInfo[1].bodys)
                 this.$parent.pageInfo = [...this.$parent.pageInfo];
                 this.$parent.pageInfo[1].nowAdd =
-                  parseInt(this.$parent.pageInfo[2].nowAdd) + 1;
+                  parseInt(this.$parent.pageInfo[1].nowAdd) + 1;
                 this.$parent.pageInfo[1].nowScroe =
                   parseInt(this.$parent.pageInfo[1].nowScroe) +
                   parseInt(tpqScore);

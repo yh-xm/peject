@@ -100,6 +100,7 @@ export default {
         })
         .then(res => {
           if (res.data.message == "修改成功") {
+            
             this.oldOption = JSON.parse(JSON.stringify(this.nowOption));
             this.odisabled = !this.odisabled;
             this.oshow = !this.oshow;

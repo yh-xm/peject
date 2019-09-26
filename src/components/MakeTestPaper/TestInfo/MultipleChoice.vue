@@ -173,7 +173,6 @@ export default {
                 res.data.data.tpqQuestion.score = parseInt(  //传递题目分数
                   _this.dynamicValidateFormThird.onum
                 );
-              
                 _this.$parent.pageInfo[0].bodys.push(res.data.data.tpqQuestion);  //题目信息
                 _this.$parent.pageInfo[0].nowAdd =
                   parseInt(_this.$parent.pageInfo[0].nowAdd) + 1;//题目个数
