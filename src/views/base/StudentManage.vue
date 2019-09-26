@@ -24,7 +24,7 @@
         :title="titleMap[dialogStatus]" 
         :visible.sync="dialogFormVisible"
         width="40%">
-          <el-form :model="form" :rules="addRules">
+          <el-form :model="form" :rules="addRules" ref="form">
             <el-form-item label="*班级" :label-width="formLabelWidth">
               <el-select v-model="classId" placeholder="请选择" @change="res(classId)">
               <el-option
@@ -63,8 +63,8 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="add()" v-show="show1">添加</el-button>
-            <el-button type="primary" @click="update()" v-show="show2">修改</el-button>
+            <el-button type="primary" @click="add('form')" v-show="show1">添加</el-button>
+            <el-button type="primary" @click="update('form')" v-show="show2">修改</el-button>
           </div>
         </el-dialog>
       </div>
@@ -202,9 +202,9 @@ export default {
       this.form.radio=''
     },
     
-    add(){//新增
-    // this.$ref.ruleForm2.validate((valid)=>{
-    //   if (valid) {
+    add(ruleForm){//新增
+    this.$refs[ruleForm].validate((valid)=>{
+      if (valid) {
         this.dialogFormVisible=false
       // this.res(classId)
       let params = {//发送请求 
@@ -236,8 +236,8 @@ export default {
               })
           }
         })
-    //   }
-    // })
+      }
+    })
       
     },
     handleEdit(index,row) {//编辑
@@ -256,7 +256,9 @@ export default {
     this.form.classId=row.classId//
       // console.log(row.classId);
     },
-    update(){//修改
+    update(ruleForm){//修改
+    this.$refs[ruleForm].validate((valid)=>{
+      if (valid) {
       var _this=this
       _this.dialogFormVisible=false
       _this.axios({
@@ -286,8 +288,10 @@ export default {
               type:"warning",
               message:"修改失败！"
               })
-          }
-        })
+            }
+         })
+       }
+     })
     },
     handleDelete(index1,row1) {//删除学生
       console.log(row1);

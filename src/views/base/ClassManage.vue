@@ -1,14 +1,13 @@
 <template>
   <div id="ClassManage">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
         <!-- 面包屑导航 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
            <el-breadcrumb-item>基础数据</el-breadcrumb-item>
           <el-breadcrumb-item>班级管理</el-breadcrumb-item>
         </el-breadcrumb>
-      </div>
+      <!-- 卡片 -->
+    <el-card class="box-card">
       <div>
         <!-- 新增 -->
         <div class="newly">
@@ -306,6 +305,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+/deep/.el-breadcrumb{
+margin-bottom: 20px;
+}
+
 // 新增按钮
 .newly {
   margin: 0px auto;
