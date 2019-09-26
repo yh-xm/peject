@@ -75,6 +75,8 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="角色" prop="userUserTypeId">
+              <!-- userTypeTypeName -->
+              <!-- userUserTypeId -->
               <el-select v-model="ruleForm.userUserTypeId" placeholder="请选择">
                 <el-option
                   v-for="(item,index) in roles"
@@ -143,7 +145,8 @@ export default {
         userName: "", //用户名称
         userMobile: "", //手机号
         userPassword: "", //密码
-        userSex: "男", //性别
+        userSex: "", //性别
+        userTypeTypeName:"",//角色称号
         userUserTypeId: "" //角色id
       },
       rules: {
@@ -308,7 +311,9 @@ export default {
       this.editFlag = false;
       // 清空赋值
       this.ruleForm = {};
+      console.log(this.ruleForm)
       this.ruleForm.userSex = "男";
+      
     },
     /**
      * 新增用户信息
@@ -326,7 +331,8 @@ export default {
               userMobile: _this.ruleForm.userMobile, //手机号，长度11位
               userSex: _this.ruleForm.userSex, //性别，男|女
               userPassword: _this.ruleForm.userPassword, //密码，长度6~18
-              userUserTypeId: _this.ruleForm.userUserTypeId //用户角色编号
+              userUserTypeId: _this.ruleForm.userUserTypeId,//用户角色编号
+              userTypeTypeName:_this.ruleForm.userTypeTypeName//角色称号
             }
           }).then(
             function(res) {
@@ -366,6 +372,7 @@ export default {
       // 修改赋值
       this.ruleForm = Object.assign({}, row);
       console.log(row);
+      console.log(this.ruleForm);
     },
     /**
      * 编辑用户信息
@@ -382,6 +389,7 @@ export default {
           userMobile: _this.ruleForm.userMobile, //手机号，长度11位
           userSex: _this.ruleForm.userSex, //性别，男|女
           userPassword: _this.ruleForm.userPassword, //密码，长度6~18
+          userTypeTypeName:_this.ruleForm.userTypeTypeName,//角色称号
           userUserTypeId: _this.ruleForm.userUserTypeId //角色id
         }
       }).then(
