@@ -103,11 +103,6 @@ export default {
    *  这里存储数据
    */
   data() {
-    //用户名称
-    let validUser = (rule,value,callback) => {
-      
-    };
-
     //用户密码正则
     let validcodePass = (rule, value, callback) => {
       let reg = /^([0-9]|[a-zA-Z]){6,18}$/;
