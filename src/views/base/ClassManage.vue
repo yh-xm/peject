@@ -40,13 +40,12 @@
         </el-table>
         <!-- 弹出框 -->
         <!-- Form -->
-        <el-dialog :title="title" :visible.sync="dialogFormVisible">
+        <el-dialog :title="title" :visible.sync="dialogFormVisible" center>
           <el-form
             :model="ruleForm"
             :rules="rules"
             ref="ruleForm"
             label-width="100px"
-            center
             class="demo-ruleForm">
             <!-- 弹出框 班级名称框 -->
             <el-form-item label="班级名称" prop="name">
