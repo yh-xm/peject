@@ -205,8 +205,8 @@ export default {
     //点击弹出新增班级
     newly() {
       this.dialogFormVisible = true; //当为true时弹出弹出框
-      this.stunewly = true; //弹出框的新增按钮为true时销毁
-      this.stuamend = false; //弹出框的修改按钮按钮为false时销毁
+      this.stunewly = true; //弹出框的新增按钮为true
+      this.stuamend = false; //弹出框的修改按钮按钮为false时
       this.ruleForm.name = ""; //点击获取的班级名字赋值给输入框
       this.ruleForm.region = ""; //清除修改时赋的值
       this.ruleForm.usName = ""; //清除修改时赋的值
