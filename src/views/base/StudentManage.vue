@@ -376,10 +376,8 @@ export default {
       // console.log(res)//班级编号
       _this.axios.get(`/api/Student/GetClassStudent?classId=${res}`).then(r => {
         _this.tableData = r.data;
-        _this.classId = r.data[0].classId; //报错是因为没有数据
-        _this.classId2 = r.data[0].classId;
-        _this.public();
-        // _this.form.class=r.data[0].className
+        _this.classId =_this.classId2 = r.data[0].classId; //报错是因为没有数据
+        // _this.public();
         //  console.log(r.data)//班级所有学生
       });
     },
