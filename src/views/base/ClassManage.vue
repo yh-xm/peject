@@ -323,6 +323,9 @@ export default {
 }
 // 弹出框
 /deep/.el-form-item {
+  span{
+    text-align: center;
+  }
   div {
     width: 300px;
     .el-input.el-input--suffix {
