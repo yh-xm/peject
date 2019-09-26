@@ -46,6 +46,7 @@
             :rules="rules"
             ref="ruleForm"
             label-width="100px"
+            center
             class="demo-ruleForm">
             <!-- 弹出框 班级名称框 -->
             <el-form-item label="班级名称" prop="name">
@@ -91,7 +92,7 @@ export default {
   data() {
     return {
       title:"",//弹出框标题
-      tableData: [], //接收向后台请求的数据用于渲染
+      tableData: [], //接收向后台请求的数据用渲染
       teacher: [], //接收后台传过来的老师信息
       course: [], //接收后台传过来的课程信息
       search: "",
@@ -127,8 +128,8 @@ export default {
     // 修改弹出框并赋值
     handleEdit(index, row) {
       this.dialogFormVisible = true; //当为true时弹出弹出框
-      this.stunewly = false; //弹出框的新增按钮为false时销毁
-      this.stuamend = true; //弹出框的修改按钮按钮为true时销毁
+      this.stunewly = false; //弹出框的新增按钮为false时
+      this.stuamend = true; //弹出框的修改按钮按钮为true时
       this.ruleForm.name = row.className; //点击获取的班级名字赋值给输入框
       this.classId = row.classId; //获取的班级主键赋值
       this.ruleForm.region = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
@@ -205,8 +206,8 @@ export default {
     //点击弹出新增班级
     newly() {
       this.dialogFormVisible = true; //当为true时弹出弹出框
-      this.stunewly = true; //弹出框的新增按钮为true时销毁
-      this.stuamend = false; //弹出框的修改按钮按钮为false时销毁
+      this.stunewly = true; //弹出框的新增按钮为true
+      this.stuamend = false; //弹出框的修改按钮按钮为false时
       this.ruleForm.name = ""; //点击获取的班级名字赋值给输入框
       this.ruleForm.region = ""; //清除修改时赋的值
       this.ruleForm.usName = ""; //清除修改时赋的值
@@ -323,6 +324,9 @@ export default {
 }
 // 弹出框
 /deep/.el-form-item {
+  span{
+    text-align: center;
+  }
   div {
     width: 300px;
     .el-input.el-input--suffix {
