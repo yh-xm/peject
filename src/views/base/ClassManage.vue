@@ -70,6 +70,7 @@
                   :key="index"
                   :label="inte.userName"
                   :value="inte.userId"
+                  center
                 ></el-option>
               </el-select>
             </el-form-item>
