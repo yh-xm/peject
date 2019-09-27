@@ -309,8 +309,8 @@ export default {
    * */
   mounted() {
     let _this = this; //保存this对象
-    _this.getUserInfo();
-    _this.getRole();
+    _this.getUserInfo();//用户信息
+    _this.getRole();//用户角色
   }
 };
 </script>
