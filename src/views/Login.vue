@@ -95,7 +95,7 @@ export default {
             trigger: "blur"
           },
           {
-            min: 6,
+            min: 3,
             max: 18,
             message: "长度在 1 到 18个字符",
             trigger: "blur"
@@ -119,21 +119,24 @@ export default {
                 `/api/OAuth/authenticate?userMobile=${this.numberValidateForm.username}&userPassword=${this.numberValidateForm.passworld}`
               )
               .then(function(r) {
-                if (r.status == "200") {
+                console.log(r)
+                if (r.status == "200") {  
                   if(_this.lenrnPsw == true){
                     _this.setCookie(_this.numberValidateForm.username, _this.numberValidateForm.passworld,7)
                   }else{
                       _this.clearCookie();
                   }
                   sessionStorage.tkon = "Bearer"+" "+r.data.access_token; //获取tkon
-                  sessionStorage.uid = r.data.profile.userUid;
+                  sessionStorage.userId = r.data.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
              
                   if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);
+        
                     let redirect = _this.$route.query.redirect;
+                                console.log(redirect)
                     _this.$router.push({
                       path: redirect
                     });
