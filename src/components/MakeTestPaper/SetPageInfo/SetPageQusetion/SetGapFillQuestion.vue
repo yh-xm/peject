@@ -2,8 +2,8 @@
   <div class="gapFilling">
     <div class="gapContent">
       <el-form
-        :model="dynamicValidateFormSecond"
-        ref="dynamicValidateFormSecond"
+        :model="AddGapFillQuestion"
+        ref="AddGapFillQuestion"
         label-width="100px"
         class="demo-dynamic"
       >
@@ -26,7 +26,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          v-for="(domain, index) in dynamicValidateFormSecond.domains"
+          v-for="(domain, index) in AddGapFillQuestion.domains"
           :key="domain.key"
           :prop="'domains.' + index + '.value'"
         >
@@ -38,39 +38,31 @@
             :disabled="odisabled"
           ></el-input>
         </el-form-item>
-        <el-form-item label="题目预览" style="display:flex;flex-wrap:wrap;">
+        <el-form-item label="题目预览" class="view-options">
           <el-row v-for="(item,index) in title" :key="index">
             <span v-if="item!='＿'">{{item}}</span>
             <el-input
               v-if="item=='＿'"
               :key="index"
-              v-model="dynamicValidateFormSecond.domains[IndexArr[index]].value"
+              v-model="AddGapFillQuestion.domains[IndexArr[index]].value"
               class="ShowDaAn"
               disabled
             ></el-input>
-            <span v-if="item=='＿'">(</span>
-            <el-input
-              v-if="item=='＿'"
-              :key="item"
-              v-model="dynamicValidateFormSecond.domains[IndexArr[index]].onum"
-              class="ShowFen"
-              disabled
-            ></el-input>
-            <span v-if="item=='＿'">分)</span>
+            <span v-if="item=='＿'">({{AddGapFillQuestion.domains[IndexArr[index]].onum}}分)</span>
           </el-row>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" plain @click.prevent="fnchange">编辑</el-button>
+          <el-button type="primary" plain @click.prevent="compile">编辑</el-button>
           <el-row v-show="oshow">
-            <el-button round @click.prevent="fnout" size="small">取消</el-button>
+            <el-button round @click.prevent="out" size="small">取消</el-button>
             <el-button
               type="primary"
               plain
-              @click.prevent="submitForm('dynamicValidateFormSecond')"
+              @click.prevent="submitForm('AddGapFillQuestion')"
               size="small"
             >保存修改</el-button>
-            <el-button type="danger" plain @click.prevent="fnremoveChoose" size="small">删除题目</el-button>
+            <el-button type="danger" plain @click.prevent="removeChoose" size="small">删除题目</el-button>
           </el-row>
         </el-form-item>
       </el-form>
@@ -86,28 +78,28 @@ export default {
       oldOption: [],
       odisabled: true,
       oshow: false,
-      dynamicValidateFormSecond: {
+      AddGapFillQuestion: {
         domains: []
       },
       IndexArr: []
     };
   },
   props: {
-    searchList3: Object,
+    AddGapFillQuestionList: Object,
     nowIndex3: Number
   },
   methods: {
-    fnchange() {
+    compile() {
       this.odisabled = !this.odisabled;
       this.oshow = !this.oshow;
     },
-    fnout() {
+    out() {
       this.odisabled = !this.odisabled;
       this.oshow = !this.oshow;
       this.title = this.nowOption.questionTitle;
-      this.dynamicValidateFormSecond.domains = [];
+      this.AddGapFillQuestion.domains = [];
       for (const key in this.nowOption.fillQuestion) {
-        this.dynamicValidateFormSecond.domains.push({
+        this.AddGapFillQuestion.domains.push({
           value: this.nowOption.fillQuestion[key].fqAnswer,
           onum: this.nowOption.fillQuestion[key].fillQuestionScore[0].fqsScore
         });
@@ -156,9 +148,9 @@ export default {
             })
             .then(res => {
               if (res.data.message == "数据没有变化") {
-                this.dynamicValidateFormSecond.domains = [];
+                this.AddGapFillQuestion.domains = [];
                 for (const key in this.nowOption.fillQuestion) {
-                  this.dynamicValidateFormSecond.domains.push({
+                  this.AddGapFillQuestion.domains.push({
                     value: this.nowOption.fillQuestion[key].fqAnswer,
                     onum: this.nowOption.fillQuestion[key].fillQuestionScore[0]
                       .fqsScore
@@ -173,9 +165,7 @@ export default {
               } else {
                 var data = res.data + "}]}}";
                 data = eval("(" + data + ")");
-                data.data.tpqQuestion.tpqId = res.data.data.tpqId; //传递题目Id
-                data.data.tpqQuestion.score = parseInt(tpqScore); //传递题目分数
-                this.nowOption = JSON.parse(JSON.stringify(data.data));
+                this.oldOption = JSON.parse(JSON.stringify(data.data));
                 this.odisabled = !this.odisabled;
                 this.oshow = !this.oshow;
                 this.$message({
@@ -214,7 +204,7 @@ export default {
         CaretPos = element.selectionStart;
       return CaretPos;
     },
-    fnremoveChoose() {
+    removeChoose() {
       console.log(this.nowOption);
       this.axios
         .post(
@@ -222,19 +212,21 @@ export default {
         )
         .then(res => {
           if (res.data.message == "删除成功") {
-            this.$parent.$parent.pageInfo[1].bodys.splice(this.nowIndex, 1);
-            this.$parent.$parent.pageInfo[1].nowAdd =
-              parseInt(this.$parent.$parent.pageInfo[1].nowAdd) - 1;
-            this.$parent.$parent.pageInfo[1].nowScroe -= parseInt(
-              this.nowOption.score
-            );
-            this.$parent.$parent.pageInfo = [...this.$parent.$parent.pageInfo];
+
           }
           this.$message({
             type: "success",
             message: res.data.message
           });
         });
+    },
+    init(){
+          // console.log(this.AddGapFillQuestionList)
+    this.oldOption = JSON.parse(
+      JSON.stringify(this.AddGapFillQuestionList.tpqQuestion)
+    );
+    this.nowOption = this.AddGapFillQuestionList.tpqQuestion;
+    this.title = this.nowOption.questionTitle;
     }
   },
   watch: {
@@ -257,45 +249,104 @@ export default {
           nindexArr.push(key);
         }
       }
-           this.IndexArr = narr;
-           console.log(this.IndexArr)
-      if (this.odisabled) {
-        if (nindexArr.length > oindexArr.length) {
+      this.IndexArr = narr; // 获取最新的分割题目数组
+      var textindex = this.getCursortPosition(
+        //获取文本下标
+        document.getElementById("textarea"+this.nowIndex3)
+      );
+      if (nindexArr.length > oindexArr.length) {
+        //如果添加填空
+        if (this.odisabled == true) {
           for (const key in this.nowOption.fillQuestion) {
-            this.dynamicValidateFormSecond.domains.push({
+            this.AddGapFillQuestion.domains.push({
               value: this.nowOption.fillQuestion[key].fqAnswer,
               onum: this.nowOption.fillQuestion[key].fillQuestionScore[0]
                 .fqsScore
             });
           }
-        }
-      } else {
-        var textindex = this.getCursortPosition(
-          document.getElementById("textarea" + this.nowIndex3)
-        );
-        if (nindexArr.length > oindexArr.length) {
-          this.dynamicValidateFormSecond.domains.splice(textindex, 0, {
-            value: "",
-            onum: 2
-          });
+        } else {
+          if (
+            nindexArr.length - oindexArr.length > 1 ||
+            narr.length - oarr.length > 1
+          ) {
+            //一次性复制粘贴填空
+
+            var max = 0;
+            for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
+              //添加多少填空
+              for (let x in oindexArr) {
+                if (
+                  textindex - (narr.length - oarr.length) < //添加填空的位置
+                  parseInt(oindexArr[x])
+                ) {
+                  this.AddGapFillQuestion.domains.splice(
+                    oarr[parseInt(oindexArr[x])],
+                    0,
+                    {
+                      value: "",
+                      onum: 2
+                    }
+                  );
+                  console.log(this.AddGapFillQuestion.domains);
+                  break;
+                } else {
+                  max++;
+                }
+              }
+              if (max == oindexArr.length) {
+                //往后添加空格
+                this.AddGapFillQuestion.domains.push({
+                  value: "",
+                  onum: 2
+                });
+                max = 0;
+              }
+            }
+          } else {
+            console.log(222);
+            console.log(textindex)
+            this.AddGapFillQuestion.domains.splice(narr[textindex], 0, {
+              //按按钮操作添填空
+              value: "",
+              onum: 2
+            });
+          }
         }
       }
       if (nindexArr.length < oindexArr.length) {
-        var textindex = this.getCursortPosition(
-          document.getElementById("textarea" + this.nowIndex3)
-        );
-        this.dynamicValidateFormSecond.domains.splice(oarr[textindex], 1);
+        //填空减少了
+              
+      if (
+         oindexArr.length - nindexArr.length > 1 ||
+          oarr.length - narr.length > 1
+        ) {    //一次性删除多个填空
+          var delteArr =  oarr.splice(textindex,oarr.length-narr.length)
+            for(let i in  delteArr){
+              if(!isNaN(delteArr[i])){
+                if(i==0){
+                      this.AddGapFillQuestion.domains.splice(delteArr[i],1)
+                }else{
+                  console.log(delteArr[i])
+                  delteArr[i]-=1;
+                  console.log(delteArr[i])
+                   this.AddGapFillQuestion.domains.splice(delteArr[i],1)
+                }            
+              }
+            }
+        } else {
+       this.AddGapFillQuestion.domains.splice(oarr[textindex], 1);
+        }
+
       }
       if (nindexArr.length == 0) {
-        this.dynamicValidateFormSecond.domains = [];
+        //填空为0
+        this.AddGapFillQuestion.domains = [];
       }
- 
     }
   },
-  created() {
-    this.oldOption = JSON.parse(JSON.stringify(this.searchList3));
-    this.nowOption = this.searchList3;
-    this.title = this.nowOption.questionTitle;
+  created() {},
+  mounted() {
+    this.init();
   }
 };
 </script>
@@ -306,6 +357,12 @@ export default {
   .gapContent {
     width: 95%;
     margin: auto;
+    .view-options {
+      display: flex;
+      /deep/ .el-form-item__content {
+        flex-wrap: wrap;
+      }
+    }
     .el-form-item {
       /deep/ .el-form-item__content {
         display: flex;

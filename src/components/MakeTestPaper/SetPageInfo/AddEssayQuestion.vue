@@ -1,28 +1,34 @@
 <template>
   <div id="EssayQuestion">
     <div class="essat-content">
+      <!-- 表单 -->
       <el-form
-        :model="dynamicValidateForm"
-        ref="dynamicValidateForm"
+        :model="AddEssayQuestion"
+        ref="AddEssayQuestion"
         label-width="100px"
         class="demo-dynamic"
       >
         <el-form-item prop="title" label="题干">
-          <el-input type="textarea" v-model="dynamicValidateForm.title" :rows="1"></el-input>
+          <!-- 填写题目 -->
+          <el-input type="textarea" v-model="AddEssayQuestion.title" :rows="1"></el-input>
         </el-form-item>
+        <!-- 参考答案 -->
         <el-form-item label="参考答案">
-          <el-input v-model="dynamicValidateForm.value"></el-input>
+          <el-input v-model="AddEssayQuestion.value"></el-input>
         </el-form-item>
+        <!-- 分值 -->
         <el-form-item label="分值">
-          <el-input-number v-model="dynamicValidateForm.onum" :min="1" :max="5" label="描述文字"></el-input-number>
+          <el-input-number v-model="AddEssayQuestion.onum" :min="1" :max="5" label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item>
-          <el-button round @click="resetForm('dynamicValidateForm')">重置</el-button>
+          <!-- 重置 -->
+          <el-button round @click="resetForm('AddEssayQuestion')">重置</el-button>
+          <!-- 新增题目 -->
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
-            @click="submitForm('dynamicValidateForm')"
+            @click="submitForm('AddEssayQuestion')"
           >新增题目</el-button>
         </el-form-item>
       </el-form>
@@ -33,7 +39,7 @@
 export default {
   data() {
     return {
-      dynamicValidateForm: {
+      AddEssayQuestion: {
         onum: 5, //默认分数
         value: "", //答案
         title: "" //题目
@@ -41,17 +47,26 @@ export default {
     };
   },
   methods: {
+     /**
+     * 重置表单
+     * @param {object} formName 当前表单
+     */
     resetForm(formName) {
-      //重置表单
       this.$refs[formName].resetFields();
     },
+      /**
+     * 新增题目
+     *  {Number} userId 识别用户Id
+     * @param {object} formName 点击当前表单
+     * 
+     */
     submitForm(formName) {
-      //提交表单
+      var _this = this;
       var tpqPaperId = sessionStorage.testPaperId;
-      var aqAnswer = this.$refs[formName].model.value;
-      var tpqScore = this.$refs[formName].model.onum;
-      var title = this.$refs[formName].model.title;
-      this.axios
+      var aqAnswer = _this.$refs[formName].model.value;
+      var tpqScore = _this.$refs[formName].model.onum;
+      var title = _this.$refs[formName].model.title;
+      _this.axios
         .post(`/api/TestPaper/AddQuestionToTestPaper`, {
           tpqPaperId: tpqPaperId, //试卷主键编号
           tpqScore: tpqScore, //分值
@@ -65,23 +80,15 @@ export default {
         })
         .then(res => {
           if (res.data.message == "添加成功") {
-            res.data.data.tpqQuestion.tpqId = res.data.data.tpqId;  //传递题目Id
-            res.data.data.tpqQuestion.score = parseInt(
-              this.$refs[formName].model.onum  //传递题目分数
-            );
-            this.$parent.pageInfo[2].bodys.push(res.data.data.tpqQuestion); //题目信息
-            this.$parent.pageInfo = [...this.$parent.pageInfo];
-            this.$parent.pageInfo[2].nowAdd =
-              parseInt(this.$parent.pageInfo[2].nowAdd) + 1;//题目个数
-            this.$parent.pageInfo[2].nowScroe =
-              parseInt(this.$parent.pageInfo[2].nowScroe) +
-              parseInt(this.$refs[formName].model.onum);//题目分数
-            this.$message({
+      _this.$parent.$parent.pageInfo[2].bodys.push(res.data.data) //改变父组件的问答题的试卷信息
+       _this.$parent.$parent.pageInfo[2].nowAdd+=1; //改变父组件的问答题的问题个数
+        _this.$parent.$parent.pageInfo[2].nowScroe+=parseInt(res.data.data.tpqScore)//改变父组件的问答题的分数
+     _this.$parent.$parent.pageInfo = [..._this.$parent.$parent.pageInfo] //解构渲染
+            _this.$message({
               type: "success",
               message: "添加成功!"
             });
-            this.resetForm("dynamicValidateForm");
-            this.dynamicValidateForm.value = "";
+            _this.resetForm("AddEssayQuestion"); //重置表单
           }
         });
     }

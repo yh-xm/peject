@@ -122,7 +122,7 @@ export default {
       ],
       test: [
         //导航栏数据
-        { name: "test.r1", url: "/paperInfo" },
+        { name: "test.r1", url: "/MakeTestPaper" },
         { name: "test.r2", url: "/TestPaperManage" },
         { name: "test.r3", url: "/TestSetter" },
         { name: "test.r4", url: "/ViewTestPaper" },

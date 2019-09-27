@@ -43,7 +43,6 @@ export default {
     var data = this.data;
     sessionStorage.pageInfo = JSON.stringify(data) //完整试卷信息
  this.$parent.$parent.active = 1;
- this.$router.push({name:'TestInfo'}) //返回升一级路由
 
       }
   },

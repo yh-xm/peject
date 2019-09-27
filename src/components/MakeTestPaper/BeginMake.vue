@@ -1,11 +1,13 @@
 <template>
   <div id="PaperInfo">
+    <!-- 表单 -->
     <div class="from">
+      <!-- 填写试卷名称 -->
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <el-form-item label="试卷名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
-
+        <!-- 选择课程名称 -->
         <el-form-item label="课程名称" prop="region">
           <el-select v-model="ruleForm.region" placeholder="请选择课程">
             <el-option
@@ -16,7 +18,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
+        <!-- 进行下一步操作 -->
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">下一步</el-button>
         </el-form-item>
@@ -29,38 +31,44 @@ export default {
   data() {
     return {
       ruleForm: {
-        name: "",
-        myoptions: [],
-        region: ""
+        name: "", //试卷名称
+        region: "" //获取下拉选中的课程Id
       },
       rules: {
         name: [
-          { required: true, message: "请输入试卷名称", trigger: "blur" },
+          { required: true, message: "请输入试卷名称", trigger: "blur" }, //对应验证信息
           { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
         ],
         region: [
-          { required: true, message: "请选择课程名称", trigger: "change" }
+          { required: true, message: "请选择课程名称", trigger: "change" } //对应验证信息
         ]
       }
     };
   },
   methods: {
+    /**
+     * 添加试卷
+     *  {Number} userId 识别用户Id
+     * @param {object} formName 点击当前表单
+     * 
+     */
     submitForm(formName) {
-      var uid = sessionStorage.uid;
-      this.$refs[formName].validate(valid => {
-        var tpCourseId = this.$refs[formName].model.region;
-        var name = this.$refs[formName].model.name;
+      var _this = this;
+      var userId = sessionStorage.userId; //当前老师的唯一标识符
+      _this.$refs[formName].validate(valid => {
+        var tpCourseId = _this.$refs[formName].model.region; //获取下拉选中的课程Id
+        var name = _this.$refs[formName].model.name; //试卷名称
         if (valid) {
-          this.axios
-            .post(`/api/TestPaper/MakeTestPaper?uid=${uid}`, {
-              tpTitle: name,
-              tpCourseId: tpCourseId
+          _this.axios
+            .post(`/api/TestPaper/MakeTestPaper?uid=${userId}`, {
+              //对应接口传递信息
+              tpTitle: name, //要添加的试卷名称
+              tpCourseId: tpCourseId //选中的课程Id
             })
             .then(res => {
               if (res.data.message == "添加成功") {
-                this.$router.push({ name: "TestInfo" });
-                this.$parent.$parent.active = 1;
-                sessionStorage.testPaperId = res.data.data.testPaperId;
+                _this.$parent.$parent.active = 1; //下一步操作
+                sessionStorage.testPaperId = res.data.data.testPaperId; //临时存储试卷Id
               }
             });
         } else {
@@ -68,12 +76,20 @@ export default {
           return false;
         }
       });
+    },
+    /**
+     * 获取下拉列表科目信息
+     *  {object} ruleForm  当前表单对象
+     */
+    getOptions() {
+      var _this = this;
+      _this.axios.get(`/api/Class/GetAllCourse`).then(res => {
+        _this.ruleForm.options = res.data; //获取下拉列表
+      });
     }
   },
   created() {
-    this.axios.get(`/api/Class/GetAllCourse`).then(res => {
-      this.ruleForm.options = res.data;
-    });
+    this.getOptions(); //初始化下拉列表
   }
 };
 </script>
