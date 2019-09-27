@@ -23,7 +23,7 @@
         <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
           <el-form :model="form" :rules="addRules" ref="form">
             <el-form-item label="班级" :label-width="formLabelWidth" prop="classId2">
-              <el-select v-model="classId2" placeholder="请选择" @change="resClassName(classId2)">
+              <el-select v-model.trim="classId2" placeholder="请选择" @change="resClassName(classId2)">
                 <el-option
                   v-for="item in options"
                   :key="item.classId"
@@ -33,16 +33,16 @@
               </el-select>
             </el-form-item>
             <el-form-item label="学生名称" :label-width="formLabelWidth" prop="stuName">
-              <el-input v-model="form.stuName" autocomplete="true"></el-input>
+              <el-input v-model.trim="form.stuName" autocomplete="true"></el-input>
             </el-form-item>
             <el-form-item label="生日" :label-width="formLabelWidth" prop="born">
               <div class="block" style="width:160px">
                 <span class="demonstration"></span>
                 <el-date-picker v-model="form.born" type="date" placeholder="选择日期"></el-date-picker>
               </div>
-            </el-form-item>
+            </el-form-item> 
             <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model="form.phone" autocomplete="true"></el-input>
+              <el-input v-model.trim="form.phone" autocomplete="true"></el-input>
             </el-form-item>
             <el-form-item label="*性别" :label-width="formLabelWidth" prop="radio">
               <template>
@@ -51,7 +51,7 @@
               </template>
             </el-form-item>
             <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
-              <el-input v-model="form.password" autocomplete="true"></el-input>
+              <el-input v-model.trim="form.password" autocomplete="true" type="password"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -63,22 +63,22 @@
       </div>
       <div class="main">
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column label="#" width="80">
+          <el-table-column label="#" width="100">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{scope.$index+1}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="班级名称" width="130">
+          <el-table-column label="班级名称" width="110">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.className }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="学生姓名" width="130">
+          <el-table-column label="学生姓名" width="110">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="性别" width="80">
+          <el-table-column label="性别" width="100">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuSex }}</span>
             </template>
@@ -88,17 +88,17 @@
               <span style="margin-left: 10px">{{ scope.row.stuMobile }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="出生日期" width="200" style="text-align:center">
+          <el-table-column label="出生日期" width="210" style="text-align:center">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuBirthDay }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="年龄" width="80" style="padding-left: 60px;">
+          <el-table-column label="年龄" width="120" style="padding-left: 60px;">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuAge }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="180">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
@@ -110,7 +110,6 @@
   </div>
 </template>
 <script>
-import { METHODS } from "http";
 export default {
   data() {
     var validateClassName = (rule, value, callback) => {
@@ -156,11 +155,11 @@ export default {
     };
 
 
-    var passWord = /^[a-zA-Z0-9]{3,9}$/;
+    var passWord = /^[a-zA-Z0-9]{6,18}$/;
     var validatepassWord = (rule, value, callback) => {
       setTimeout(() => {
         if (!passWord.test(value)) {
-          callback(new Error("密码为3-9位字符"));
+          callback(new Error("密码为6-18位字符"));
         } else {
           callback();
         }
@@ -186,14 +185,10 @@ export default {
         class: "", //班级编号
         stuName: "", //学生姓名
         stuClassId: "",
-        born: "", //生日
+        born: new Date(), //生日
         phone: "",
         radio: "男", //男女默认值
         password: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
       },
       addRules: {
         // 校验班级名，主要通过validator来指定验证器名称
@@ -210,6 +205,18 @@ export default {
       formLabelWidth: "140px"
     };
   },
+  // filters:{
+  //   /**
+  //    * 使用formatId管道过滤器对时间的格式进行初始化
+  //    * @param value {Array} 所有学员的信息
+  //   */
+  //   formatId:function(form){
+  //     var _this = this;
+  //        form.born =  new Date(form.born).toLocaleDateString();
+  //     console.log(form)
+  //     return form
+  //   }
+  // },
   methods: {
     addEquipment() {//新增学生
       var _this = this;
@@ -304,8 +311,8 @@ export default {
       _this.$refs[ruleForm].validate(valid => {
         if (valid) {
           _this.dialogFormVisible = false;
-          _this.axios
-            .post("/api/Student/ModifyStudent", {
+          _this.axios.post("/api/Student/ModifyStudent",
+             {
               stuUid: _this.form.stuUid, // 要修改学生的唯一标识符
               stuName: _this.form.stuName, //学生姓名
               stuBirthDay: new Date(_this.form.born), //生日
@@ -404,7 +411,7 @@ export default {
     border: 1px solid #ccc;
     margin-top: 30px;
     .StudentSelect {
-      width: 100%;
+      width:97%;
       height: 70px;
       border-bottom: 1px solid #ccc;
       line-height: 70px;

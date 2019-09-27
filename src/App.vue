@@ -10,24 +10,10 @@
       return {
         isRouterAlive: true
       }
-    },
-    // provide(){ //提供
-    //   return {
-    //     reload: this.reload
-    //   }
-    // },
-    // methods: {
-    //   reload(){
-    //     this.isRouterAlive = false
-    //     this.$nextTick( function () {
-    //       this.isRouterAlive = true
-    //     })
-    //   }
-    // }
+    }
   }
 </script>
-
-<style lang="less">
+<style lang="less" scoped>
 * {
   margin: 0px;
   padding: 0px;
