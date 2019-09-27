@@ -16,8 +16,8 @@
         <!-- 角色导航 -->
         <el-radio v-model="filtRadio" label="1">全部</el-radio>
         <el-radio
-          v-for="(item,index) in roles"
-          :key="index"
+          v-for="item in roles"
+          :key="item.userTypeTypeName"
           v-model="filtRadio"
           :label="item.userTypeTypeName"
         >{{item.userTypeTypeName}}</el-radio>
@@ -78,13 +78,17 @@
                 <el-radio label="女"></el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="角色" prop="userUserTypeId">
-              <el-select v-model="ruleForm.userUserTypeId" placeholder="请选择">
+            <el-form-item label="角色" prop="userTypeTypeName">
+              <el-select
+                v-model="ruleForm.userTypeTypeName"
+                @change="select(ruleForm.userTypeTypeName)"
+                placeholder="请选择"
+              >
                 <el-option
-                  v-for="(item,index) in roles"
-                  :key="index"
-                  :label="item.roleName"
-                  :value="item.roleId"
+                  v-for="item in roles"
+                  :key="item.userTypeId"
+                  :label="item.userTypeTypeName"
+                  :value="item.userTypeId"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -135,18 +139,17 @@ export default {
       filtName: "", //初始化过滤角色导航名
       tableData: [], //初始化获取的所有用户信息
       roles: [], //初始化获取的所有的角色
-      title:"",//对话框标题
-      flag:false,//对话框确认按钮隐藏显示
-      dialogFormVisible:false,//对话框隐藏显示
+      title: "", //对话框标题
+      flag: false, //对话框确认按钮隐藏显示
+      dialogFormVisible: false, //对话框隐藏显示
       // 获取表单信息
       ruleForm: {
-        userUid: "", //id
+        // userUid: "", //id
         userName: "", //用户名称
         userMobile: "", //手机号
         userPassword: "", //密码
-        userSex: "", //性别
-        userTypeTypeName: "", //角色称号
-        userUserTypeId: "" //角色id
+        userSex: "男", //性别
+        userTypeTypeName: "" //角色称号
       },
       //表单失焦验证
       rules: {
@@ -176,8 +179,7 @@ export default {
             trigger: "blur"
           }
         ]
-      },
-
+      }
     };
   },
   /**
@@ -203,6 +205,8 @@ export default {
       let _this = this; //保存this对象
       _this.axios.get("/api/UserType/GetUserRoles").then(
         function(res) {
+          //roles等于回调函数返回的res（值）
+
           // console.log(res);
           _this.roles = res.data;
         },
@@ -238,20 +242,61 @@ export default {
      * */
     handleDelete(index, row) {
       console.log(index, row);
+      let uid = (index, row.userUid);
+      let _this = this;
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          _this.axios.post("api/User/RemoveTeacher?uid=" + uid).then(
+            function(res) {
+              if (res.status === 200) {
+                _this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                _this.tableData.splice(index, 1);
+                // this.reload();
+              }
+            },
+            function() {
+              console.log("删除请求失败处理");
+              _this.$message({
+                type: "error",
+                message: "删除失败!"
+              });
+            }
+          );
+        })
+        .catch(() => {
+          _this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
-
+    /**
+     * @method select
+     * 下拉框改变事件
+     * 选中值发生变化时触发
+     * @return 目前的选中值
+     *
+     * */
+    select(e) {
+      console.log(e);
+    },
     /**
      * @method handleAdd
      * 触发添加用户信息
      * */
     handleAdd() {
       let _this = this;
-      _this.flag =! true;
-      _this.title = "添加用户信息";
-
-
-
-      _this.dialogFormVisible = true;
+      _this.dialogFormVisible = true; //打开对话框
+      _this.title = "添加用户信息"; //改变对话框标题
+      _this.flag = !true; //显示添加按钮
     },
     /**
      * @method addClose
@@ -259,31 +304,50 @@ export default {
      * */
     addClose() {
       let _this = this;
-
-
-
-
-
-
-
-
-      _this.dialogFormVisible = false;
+      // console.log(_this.ruleForm.userName);
+      //调用添加接口
+      this.axios({
+        method: "post",
+        url: "api/User/AddTeacher",
+        data: {
+          userName: _this.ruleForm.userName, //用户名，不能为空
+          userMobile: _this.ruleForm.userMobile, //手机号，长度11位
+          userSex: _this.ruleForm.userSex, //性别，男|女
+          userPassword: _this.ruleForm.userPassword, //密码，长度6~18
+          userUserTypeId: _this.ruleForm.userTypeTypeName //用户角色编号
+        }
+      }).then(
+        function(res) {
+          console.log(res.data);
+          if (res.data.code == "1") {
+            _this.$message({
+              type: "success",
+              message: "添加成功!"
+            });
+          }
+        },
+        function() {
+          console.log("数据请求失败处理");
+          _this.$message({
+            type: "error",
+            message: "添加失败"
+          });
+        }
+      );
+      _this.dialogFormVisible = false; //关闭对话框
     },
-      /**
+    /**
      * @method handleEdit
      * @param  index {Integer} 点击行数据所在下标
      * @param row {Array} 点击行数据所在行数据
      * 修改所在行数据
      * */
     handleEdit(index, row) {
-      console.log(index,row);
+      console.log(index, row);
       let _this = this;
-      _this.flag = true;
-      _this.title = "编辑用户信息";
-
-
-
-      _this.dialogFormVisible = true;
+      _this.dialogFormVisible = true; //打开对话框
+      _this.title = "编辑用户信息"; //改变对话框标题
+      _this.flag = true; //显示编辑按钮
     },
     /**
      * @method editClose
@@ -292,16 +356,20 @@ export default {
     editColse() {
       console.log("确认修改");
       let _this = this;
-      _this.dialogFormVisible = false;
+      _this.dialogFormVisible = false; //关闭对话框
     },
 
     /**
      * @method cancel
      * 取消/关闭对话框
      * */
-    cancel(){
+    cancel() {
       let _this = this;
-      _this.dialogFormVisible = false;
+      _this.$message({
+        type: "info",
+        message: "已取消"
+      });
+      _this.dialogFormVisible = false; //关闭对话框
     }
   },
   /**
@@ -309,8 +377,8 @@ export default {
    * */
   mounted() {
     let _this = this; //保存this对象
-    _this.getUserInfo();//用户信息
-    _this.getRole();//用户角色
+    _this.getUserInfo(); //用户信息
+    _this.getRole(); //用户角色
   }
 };
 </script>
