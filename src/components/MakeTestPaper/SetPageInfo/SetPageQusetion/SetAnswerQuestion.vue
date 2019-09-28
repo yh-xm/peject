@@ -106,17 +106,12 @@ export default {
         )
         .then(res => {
           if (res.data.message == "删除成功") {
-            _this.$parent.$parent.$parent.pageInfo[2].bodys.splice(
-              _this.nowIndex2,
-              1
-            ); //改变父组件的问答题的试卷信息
-            _this.$parent.$parent.$parent.pageInfo[2].nowAdd -= 1; //改变父组件的问答题的问题个数
-            _this.$parent.$parent.$parent.pageInfo[2].nowScroe -= parseInt(
-              _this.AddEssayQuestiontList.tpqScore
-            ); //改变父组件的问答题的分数
-            _this.$parent.$parent.$parent.pageInfo = [
-              ..._this.$parent.$parent.$parent.pageInfo
-            ]; //解构渲染
+          var data ={
+            index:_this.nowIndex2,
+            questionTypeId: 3,
+            tpqScore:_this.AddEssayQuestiontList.tpqScore
+          }
+            this.$emit("setQuestion",data)
           }
           this.$message({
             type: "success",

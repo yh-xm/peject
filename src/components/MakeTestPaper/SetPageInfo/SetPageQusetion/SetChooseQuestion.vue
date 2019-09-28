@@ -154,17 +154,12 @@ export default {
         .then(res => {
           console.log(res);
           if (res.data.message == "删除成功") {
-            _this.$parent.$parent.$parent.pageInfo[0].bodys.splice(
-              _this.nowIndex,
-              1
-            ); //改变父组件的问答题的试卷信息
-            _this.$parent.$parent.$parent.pageInfo[0].nowAdd -= 1; //改变父组件的问答题的问题个数
-            _this.$parent.$parent.$parent.pageInfo[0].nowScroe -= parseInt(
-              _this.AddChooseQuestionList.tpqScore
-            ); //改变父组件的问答题的分数
-            _this.$parent.$parent.$parent.pageInfo = [
-              ..._this.$parent.$parent.$parent.pageInfo
-            ]; //解构渲染
+                var data ={
+            index:_this.nowIndex,
+            questionTypeId: 1,
+            tpqScore:_this.AddChooseQuestionList.tpqScore
+          }
+            this.$emit("setQuestion",data)
           }
           this.$message({
             type: "success",
