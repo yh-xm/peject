@@ -102,6 +102,8 @@ export default {
             .then(res => {
               console.log(res);
               if (res.data.message == "添加成功") {
+                sessionStorage.data = JSON.stringify(res.data.data);
+                var data = {"tpqId":7042,"tpqPaperId":4476,"tpqQuestionId":7139,"tpqScore":4,"tpqQuestion":{"questionId":7139,"questionTitle":"w＿w＿","questionTypeId":3,"answerQuestion":null,"chooseQuestion":[],"fillQuestion":[{"fqId":7251,"fqQuestionId":7139,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7251,"fqsPaperQuestionId":7042,"fqsScore":2}]},{"fqId":7252,"fqQuestionId":7139,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7252,"fqsPaperQuestionId":7042,"fqsScore":2}]}]}}
                 console.log(res.data.data)
                 res.data.data.tpqQuestion.questionTypeId = 2;
                 var data = {

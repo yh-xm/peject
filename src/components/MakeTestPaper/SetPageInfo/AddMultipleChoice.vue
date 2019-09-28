@@ -22,12 +22,7 @@
           :key="domain.key"
           :prop="'domains.' + index + '.value'"
         >
-          <el-checkbox-group
-            v-model="AddMultipleChoice.checked"
-            :min="0"
-            :max="2"
-            @change="change"
-          >
+          <el-checkbox-group v-model="AddMultipleChoice.checked" :min="0" :max="2" @change="change">
             <el-checkbox :label="domain.options" :key="index"></el-checkbox>
           </el-checkbox-group>
 
@@ -65,9 +60,7 @@ export default {
         checked: [], //选中的多选按钮
         onum: 2, //默认分数
         nowAdd: 4, //默认添加个数
-        domains: [
-          
-        ], //选项
+        domains: [], //选项
         optionsActive: ["A、", "B、", "C、", "D、", "E、"], //对应字母
         title: "" //题目
       }
@@ -124,7 +117,8 @@ export default {
      * @param {object} formName 点击当前表单对象
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
-     */ 
+     */
+
     submitForm(formName) {
       //提交表单
       var _this = this;
@@ -137,15 +131,15 @@ export default {
           for (const key in _this.$refs[formName].model.domains) {
             if (
               _this.$refs[formName].model.domains[key].options ==
-                _this.AddMultipleChoice.checked[        //判断选中项
-                  _this.AddMultipleChoice.checked.length - 1  
+                _this.AddMultipleChoice.checked[ //判断选中项
+                  _this.AddMultipleChoice.checked.length - 1
                 ] ||
               _this.$refs[formName].model.domains[key].options ==
                 _this.AddMultipleChoice.checked[0]
             ) {
               arrs.push({
                 cqOption: _this.$refs[formName].model.domains[key].value,
-                cqIsRight: true  //选中为true
+                cqIsRight: true //选中为true
               });
             } else {
               arrs.push({
@@ -176,7 +170,7 @@ export default {
                   message: "添加成功!"
                 });
                 _this.init();
-                _this.resetForm('AddMultipleChoice')
+                _this.resetForm("AddMultipleChoice");
               }
             });
         } else {
@@ -185,37 +179,291 @@ export default {
         }
       });
     },
-     /**
+    /**
      * 初始化表单
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
-     */ 
-    init(){
+     */
+
+    init() {
       var _this = this;
-      _this.AddMultipleChoice.checked=[];
-         _this.AddMultipleChoice.domains=[];
-      for(let i=0;i<4;i++){
-         _this.AddMultipleChoice.domains.push({
-           value:"",
-           options:_this.AddMultipleChoice.optionsActive[i]
-         })
+      _this.AddMultipleChoice.checked = [];
+      _this.AddMultipleChoice.domains = [];
+      for (let i = 0; i < 4; i++) {
+        _this.AddMultipleChoice.domains.push({
+          value: "",
+          options: _this.AddMultipleChoice.optionsActive[i]
+        });
       }
-     
     },
-        /**
+    /**
      * 多选改变监听
      * @param {Array} v 点击当前选中多选
      *
      */
     change(v) {
-          var _this = this;
+      var _this = this;
       //多选变化
       _this.AddMultipleChoice.checked = v;
       _this.AddMultipleChoice.checked = [..._this.AddMultipleChoice.checked];
     }
   },
   created() {
-    this.init(); //初始化选项
+    var _this = this;
+    _this.init(); //初始化选项
+    _this.axios.get(`/api/TestPaper/GetTestPaper?id=4478`).then(res => {
+      sessionStorage.dasss = JSON.stringify(res.data);
+      console.log(res);
+      var obj = {
+        tpId: 4478,
+        tpTitle: "wwww",
+        tpCourseId: 1,
+        courseName: "Web前端开发",
+        questions: [
+          {
+            tpqId: 7043,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7140,
+            tpqScore: 2,
+            tpqQuestion: {
+              questionId: 7140,
+              questionTitle: "1",
+              questionTypeId: 1,
+              answerQuestion: null,
+              chooseQuestion: [
+                {
+                  cqId: 14625,
+                  cqQuestionId: 7140,
+                  cqOption: "2",
+                  cqIsRight: false
+                },
+                {
+                  cqId: 14626,
+                  cqQuestionId: 7140,
+                  cqOption: "3",
+                  cqIsRight: true
+                },
+                {
+                  cqId: 14627,
+                  cqQuestionId: 7140,
+                  cqOption: "4",
+                  cqIsRight: false
+                },
+                {
+                  cqId: 14628,
+                  cqQuestionId: 7140,
+                  cqOption: "5",
+                  cqIsRight: false
+                }
+              ],
+              fillQuestion: []
+            }
+          },
+          {
+            tpqId: 7044,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7141,
+            tpqScore: 2,
+            tpqQuestion: {
+              questionId: 7141,
+              questionTitle: "1",
+              questionTypeId: 1,
+              answerQuestion: null,
+              chooseQuestion: [
+                {
+                  cqId: 14629,
+                  cqQuestionId: 7141,
+                  cqOption: "2",
+                  cqIsRight: false
+                },
+                {
+                  cqId: 14630,
+                  cqQuestionId: 7141,
+                  cqOption: "3",
+                  cqIsRight: false
+                },
+                {
+                  cqId: 14631,
+                  cqQuestionId: 7141,
+                  cqOption: "4",
+                  cqIsRight: false
+                },
+                {
+                  cqId: 14632,
+                  cqQuestionId: 7141,
+                  cqOption: "5",
+                  cqIsRight: false
+                }
+              ],
+              fillQuestion: []
+            }
+          },
+          {
+            tpqId: 7045,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7142,
+            tpqScore: 2,
+            tpqQuestion: {
+              questionId: 7142,
+              questionTitle: "1",
+              questionTypeId: 1,
+              answerQuestion: null,
+              chooseQuestion: [
+                {
+                  cqId: 14633,
+                  cqQuestionId: 7142,
+                  cqOption: "2",
+                  cqIsRight: false
+                },
+                {
+                  cqId: 14634,
+                  cqQuestionId: 7142,
+                  cqOption: "3",
+                  cqIsRight: true
+                },
+                {
+                  cqId: 14635,
+                  cqQuestionId: 7142,
+                  cqOption: "4",
+                  cqIsRight: false
+                },
+                {
+                  cqId: 14636,
+                  cqQuestionId: 7142,
+                  cqOption: "5",
+                  cqIsRight: false
+                }
+              ],
+              fillQuestion: []
+            }
+          },
+          {
+            tpqId: 7046,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7143,
+            tpqScore: 4,
+            tpqQuestion: {
+              questionId: 7143,
+              questionTitle: "1＿2＿",
+              questionTypeId: 3,
+              answerQuestion: null,
+              chooseQuestion: [],
+              fillQuestion: [
+                {
+                  fqId: 7253,
+                  fqQuestionId: 7143,
+                  fqAnswer: "2",
+                  fqOrder: 0,
+                  fillQuestionScore: [
+                    {
+                      fqsFilleQuestionId: 7253,
+                      fqsPaperQuestionId: 7046,
+                      fqsScore: 2
+                    }
+                  ]
+                },
+                {
+                  fqId: 7254,
+                  fqQuestionId: 7143,
+                  fqAnswer: "2",
+                  fqOrder: 1,
+                  fillQuestionScore: [
+                    {
+                      fqsFilleQuestionId: 7254,
+                      fqsPaperQuestionId: 7046,
+                      fqsScore: 2
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            tpqId: 7047,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7144,
+            tpqScore: 4,
+            tpqQuestion: {
+              questionId: 7144,
+              questionTitle: "2＿2＿2",
+              questionTypeId: 3,
+              answerQuestion: null,
+              chooseQuestion: [],
+              fillQuestion: [
+                {
+                  fqId: 7255,
+                  fqQuestionId: 7144,
+                  fqAnswer: "1",
+                  fqOrder: 0,
+                  fillQuestionScore: [
+                    {
+                      fqsFilleQuestionId: 7255,
+                      fqsPaperQuestionId: 7047,
+                      fqsScore: 2
+                    }
+                  ]
+                },
+                {
+                  fqId: 7256,
+                  fqQuestionId: 7144,
+                  fqAnswer: "2",
+                  fqOrder: 1,
+                  fillQuestionScore: [
+                    {
+                      fqsFilleQuestionId: 7256,
+                      fqsPaperQuestionId: 7047,
+                      fqsScore: 2
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            tpqId: 7048,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7145,
+            tpqScore: 4,
+            tpqQuestion: {
+              questionId: 7145,
+              questionTitle: "2",
+              questionTypeId: 3,
+              answerQuestion: { aqQuestionId: 7145, aqAnswer: "2" },
+              chooseQuestion: [],
+              fillQuestion: []
+            }
+          },
+          {
+            tpqId: 7049,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7146,
+            tpqScore: 5,
+            tpqQuestion: {
+              questionId: 7146,
+              questionTitle: "2",
+              questionTypeId: 3,
+              answerQuestion: { aqQuestionId: 7146, aqAnswer: "22" },
+              chooseQuestion: [],
+              fillQuestion: []
+            }
+          },
+          {
+            tpqId: 7050,
+            tpqPaperId: 4478,
+            tpqQuestionId: 7147,
+            tpqScore: 3,
+            tpqQuestion: {
+              questionId: 7147,
+              questionTitle: "21241",
+              questionTypeId: 3,
+              answerQuestion: { aqQuestionId: 7147, aqAnswer: "2241" },
+              chooseQuestion: [],
+              fillQuestion: []
+            }
+          }
+        ]
+      };
+    });
   }
 };
 </script>
