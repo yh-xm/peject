@@ -6,6 +6,8 @@
       <el-breadcrumb-item>基础数据</el-breadcrumb-item>
       <el-breadcrumb-item>班级管理</el-breadcrumb-item>
     </el-breadcrumb>
+    <h1>{{lovingVue}}</h1>
+    <course-frame v-model="lovingVue" :options="options"></course-frame>
     <!-- 卡片 -->
     <el-card class="box-card">
       <div>
@@ -84,9 +86,13 @@
   </div>
 </template>
 <script>
+import CourseFrame from '@/components/CourseFrame.vue'
 export default {
+   components:{CourseFrame},
   data() {
     return {
+      options:[],
+      lovingVue:[],
       title: "", //弹出框标题
       tableData: [], //接收向后台请求的数据用渲染
       teacher: [], //接收后台传过来的老师信息
@@ -156,6 +162,7 @@ export default {
       _this.ruleForm.keChenId = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
       _this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
       _this.title = "修改班级信息";
+      _this.options=row.classCourseId
     },
     /**
      * 点击修改数据
