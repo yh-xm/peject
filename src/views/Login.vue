@@ -119,17 +119,6 @@ export default {
                 `/api/OAuth/authenticate?userMobile=${this.numberValidateForm.username}&userPassword=${this.numberValidateForm.passworld}`
               )
               .then(function(r) {
-<<<<<<< HEAD
-                console.log(r)
-                if (r.status == "200") {  
-                  if(_this.lenrnPsw == true){
-                    _this.setCookie(_this.numberValidateForm.username, _this.numberValidateForm.passworld,7)
-                  }else{
-                      _this.clearCookie();
-                  }
-                  sessionStorage.tkon = "Bearer"+" "+r.data.access_token; //获取tkon
-                  sessionStorage.userId = r.data.profile.userUid;
-=======
                 if (r.status == "200") {
                   if (_this.lenrnPsw == true) {
                     _this.setCookie(
@@ -142,7 +131,6 @@ export default {
                   }
                   sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
                   sessionStorage.stuUid = r.data.profile.stuUid;
->>>>>>> cy
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
                   if (_this.$route.query.redirect) {
