@@ -14,19 +14,18 @@
         <el-button type="text" @click="handleAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
         <!-- 新增用户按钮 -->
         <!-- 角色导航 -->
-        <el-radio v-model="filtRadio" label="1">全部</el-radio>
+        <el-radio v-model="filtRadio" label="0" @click="getUserInfo()">全部</el-radio>
         <el-radio
           v-for="item in roles"
           :key="item.userTypeTypeName"
           v-model="filtRadio"
           :label="item.userTypeTypeName"
-          @click.native="getFilt()"
         >{{item.userTypeTypeName}}</el-radio>
         <!-- 角色导航结束 -->
       </div>
       <div>
         <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="filtData" style="width: 100%">
           <el-table-column type="index"></el-table-column>
           <el-table-column label="用户名称" prop="userName"></el-table-column>
           <el-table-column label="手机号" prop="userMobile"></el-table-column>
@@ -131,7 +130,7 @@ export default {
       }
     };
     return {
-      filtRadio: "1", //初始化过滤角色导航按钮选中
+      filtRadio: "0", //初始化过滤角色导航按钮选中
       filtLabel: "", //初始化过滤角色导航label值
       filtName: "", //初始化过滤角色导航名
       tableData: [], //初始化获取的所有用户信息
@@ -183,13 +182,36 @@ export default {
       }
     };
   },
+  //定义计算属性
   computed: {
-    // 计算属性的 getter
+    /**
+     * 导航角色过滤
+     * @method filtData
+     * 思路  根据你当前 点 击 的值来进行判断 根据从后台拿到的相关数据来过滤掉不与你当前点击的值不一致的数据；
+     * 同时，根据过滤之后表格需要显示与之对应的内容；
+     *
+     * 步骤
+     * 使用filtRadio按钮属性判断你点击的是谁，
+     * 然后用tabaData（就是从后台拿到的数据）用es6的filter()方法进行过滤判断；
+     * 然后返回出去（就是return）;
+     * 这是计算属性
+     * 所以直接把这个方法名(也就是filtData)像data值一样绑定到显示结果的表格中;
+     * */
+    filtData() {
+      let _this = this;
+      if (_this.filtRadio == "0") {
+        return _this.tableData;
+      } else {
+        return _this.tableData.filter(
+          item => item.userTypeTypeName == _this.filtRadio
+        );
+      }
+    }
   },
+
   /**
    * 这里面定义方法
    * */
-
   methods: {
     /**
      * 方法说明
@@ -202,7 +224,6 @@ export default {
     /**
      *  获取所有角色--- 可调用
      * @method getRole
-     *
      * */
     getRole() {
       let _this = this; //保存this对象
@@ -220,7 +241,7 @@ export default {
     /**
      * 渲染---获取用户信息 可调用
      * @method getUserInfo
-     * 
+     *
      */
     getUserInfo() {
       // 发送get请求
@@ -238,24 +259,11 @@ export default {
     },
 
     /**
-     * @method getFilt
-     *
-     *
-     * */
-
-    getFilt() {
-      console.log("时代峰峻函数或")
-
-
-
-    },
-
-    /**
      * 删除所在行的数
      * @method handleDelete
      * @param   {Integer} index 点击行数据所在下标
      * @param {Array} row  点击行数据所在行数据
-     * 
+     *
      * */
     handleDelete(index, row) {
       // console.log(index, row);
@@ -299,7 +307,7 @@ export default {
     /**
      * 触发添加用户信息
      * @method handleAdd
-     * 
+     *
      * */
     handleAdd() {
       let _this = this;
@@ -319,7 +327,7 @@ export default {
      * 确认添加用户信息
      * @method addClose
      * @param  {string} formName 传过来的数据
-     * 
+     *
      * */
     addClose(formName) {
       let _this = this;
@@ -335,28 +343,26 @@ export default {
       //调用添加接口
       _this.$refs[formName].validate(valid => {
         if (valid) {
-          _this.axios.post("api/User/AddTeacher", obj).then(
-            function(res) {
-              console.log(res);
-              if (res.data.code == 1) {
-                _this.$message({
-                  type: "success",
-                  message: "添加成功!"
-                });
-              } else if(res.data.code == 0){
-                _this.$message({
-                  type: "info",
-                  message: "内容没有变化"
-                });
-              }else{
-                _this.$message({
-                  type: "error",
-                  message: "添加失败！"
-                });
-              }
-              _this.dialogFormVisible = false; //关闭对话框
+          _this.axios.post("api/User/AddTeacher", obj).then(function(res) {
+            console.log(res);
+            if (res.data.code == 1) {
+              _this.$message({
+                type: "success",
+                message: "添加成功!"
+              });
+            } else if (res.data.code == 0) {
+              _this.$message({
+                type: "info",
+                message: "内容没有变化"
+              });
+            } else {
+              _this.$message({
+                type: "error",
+                message: "添加失败！"
+              });
             }
-          );
+            _this.dialogFormVisible = false; //关闭对话框
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -394,8 +400,8 @@ export default {
      * */
     editColse(formName) {
       let _this = this;
-      console.log(_this.ruleForm.userTypeTypeName);
-      console.log(_this.ruleForm.userUserTypeId);
+      // console.log(_this.ruleForm.userTypeTypeName);
+      // console.log(_this.ruleForm.userUserTypeId);
       _this.$refs[formName].validate(valid => {
         if (valid) {
           //调用添加接口
@@ -414,12 +420,12 @@ export default {
                   type: "success",
                   message: "修改成功!"
                 });
-              } else if(res.data.code == 0){
+              } else if (res.data.code == 0) {
                 _this.$message({
                   type: "info",
                   message: "内容没有变化"
                 });
-              }else{
+              } else {
                 _this.$message({
                   type: "error",
                   message: "修改失败！"
@@ -438,7 +444,7 @@ export default {
      * 取消/关闭对话框
      * @method cancel
      *  @param {string} formName 传过来的内容
-     * 
+     *
      * */
     cancel(formName) {
       let _this = this;
