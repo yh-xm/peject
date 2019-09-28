@@ -81,7 +81,8 @@ export default {
       AddGapFillQuestion: {
         domains: []
       },
-      IndexArr: []
+      IndexArr: [],
+      fillQuestion: []
     };
   },
   props: {
@@ -106,69 +107,72 @@ export default {
       }
     },
     submitForm(formName) {
+      var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
           var fillQuestion = [];
-          var nowOption = this.nowOption;
-          var domains = this.$refs[formName].model.domains;
-          var oldarr = this.oldOption.fillQuestion;
-          var len = domains.length - oldarr.length;
-          if (domains.length > oldarr.length) {
-            for (let i = 0; i < len; i++) {
-              fillQuestion.push({
-                fqAnswer: domains[oldarr.length + i].value,
-                FqOrder: oldarr.length + i + 1
-              });
+          var addOptions = this.fillQuestion;
+          var nowOption = _this.nowOption;
+          var domains = JSON.parse(
+            JSON.stringify(_this.$refs[formName].model.domains)
+          );
+          var newDomains = JSON.parse(
+            JSON.stringify(_this.$refs[formName].model.domains)
+          );
+          var oldarr = _this.oldOption.fillQuestion;
+          for (const key in addOptions) {
+            if (key == 0) {
+              domains.splice(addOptions[key], 1);
+            } else {
+              addOptions[key] -= 1;
+              domains.splice(addOptions[key], 1);
             }
           }
-          for (const key in oldarr) {
-            if (oldarr[key].fqAnswer != domains[key].value) {
+          console.log(domains)
+          console.log(oldarr)
+          for (const key in domains) {
               fillQuestion.push({
                 fqId: oldarr[key].fqId,
                 fqAnswer: domains[key].value,
-                fqOrder: parseInt(key) + 1
+                fqOrder: parseInt(key) + 1 //填空的序号
               });
-            }
+
           }
-          if (fillQuestion.length == 0) {
-            this.$message({
-              type: "warning",
-              message: "数据没有变动"
+          for (const key in addOptions) {
+            fillQuestion.push({
+              fqAnswer: newDomains[addOptions[key]].value,
+              FqOrder: addOptions[key] + 1 //填空的序号
             });
-            this.odisabled = !this.odisabled;
-            this.oshow = !this.oshow;
-            return;
           }
+          console.log(nowOption.questionId)
           this.axios
             .post(`/api/TestPaper/ModifyQuestion`, {
               questionId: nowOption.questionId,
-              questionTitle: this.title,
+              questionTitle: _this.title,
               questionTypeId: nowOption.questionTypeId,
               fillQuestion: fillQuestion
             })
             .then(res => {
+              console.log(res);
+              this.fillQuestion = [];
               if (res.data.message == "数据没有变化") {
-                this.AddGapFillQuestion.domains = [];
-                for (const key in this.nowOption.fillQuestion) {
-                  this.AddGapFillQuestion.domains.push({
-                    value: this.nowOption.fillQuestion[key].fqAnswer,
-                    onum: this.nowOption.fillQuestion[key].fillQuestionScore[0]
-                      .fqsScore
-                  });
-                }
-                this.odisabled = !this.odisabled;
-                this.oshow = !this.oshow;
-                this.$message({
+                _this.$message({
                   type: "warning",
                   message: res.data.message
+                });
+              } else if (res.data.message == "修改成功") {
+                _this.$message({
+                  type: "success",
+                  message: "修改成功!"
                 });
               } else {
                 var data = res.data + "}]}}";
                 data = eval("(" + data + ")");
-                this.oldOption = JSON.parse(JSON.stringify(data.data));
-                this.odisabled = !this.odisabled;
-                this.oshow = !this.oshow;
-                this.$message({
+                // _this.oldOption = JSON.parse(JSON.stringify(nowOption));
+                //  console.log(data.data)
+                _this.odisabled = !_this.odisabled;
+                _this.oshow = !_this.oshow;
+                _this.$message({
                   type: "success",
                   message: "修改成功!"
                 });
@@ -205,28 +209,36 @@ export default {
       return CaretPos;
     },
     removeChoose() {
+      var _this = this;
       console.log(this.nowOption);
-      this.axios
+      _this.axios
         .post(
-          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${this.nowOption.tpqId}`
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}`
         )
         .then(res => {
           if (res.data.message == "删除成功") {
-
+            var data = {
+              index: _this.nowIndex3,
+              questionTypeId: 2,
+              tpqScore: _this.AddGapFillQuestionList.tpqScore
+            };
+            _this.$emit("setQuestion", data);
           }
-          this.$message({
+          _this.$message({
             type: "success",
             message: res.data.message
           });
         });
     },
-    init(){
-          // console.log(this.AddGapFillQuestionList)
-    this.oldOption = JSON.parse(
-      JSON.stringify(this.AddGapFillQuestionList.tpqQuestion)
-    );
-    this.nowOption = this.AddGapFillQuestionList.tpqQuestion;
-    this.title = this.nowOption.questionTitle;
+    init() {
+      var _this = this;
+      // console.log(this.AddGapFillQuestionList)
+      _this.oldOption = JSON.parse(
+        JSON.stringify(_this.AddGapFillQuestionList.tpqQuestion)
+      );
+      _this.nowOption = _this.AddGapFillQuestionList.tpqQuestion;
+      _this.title = _this.nowOption.questionTitle;
+      this.domains = this.AddGapFillQuestion.domains;
     }
   },
   watch: {
@@ -252,7 +264,7 @@ export default {
       this.IndexArr = narr; // 获取最新的分割题目数组
       var textindex = this.getCursortPosition(
         //获取文本下标
-        document.getElementById("textarea"+this.nowIndex3)
+        document.getElementById("textarea" + this.nowIndex3)
       );
       if (nindexArr.length > oindexArr.length) {
         //如果添加填空
@@ -287,6 +299,7 @@ export default {
                       onum: 2
                     }
                   );
+                  this.fillQuestion.push(oarr[parseInt(oindexArr[x])]);
                   console.log(this.AddGapFillQuestion.domains);
                   break;
                 } else {
@@ -299,44 +312,48 @@ export default {
                   value: "",
                   onum: 2
                 });
+                this.fillQuestion.push(
+                  this.AddGapFillQuestion.domains.length - 1
+                );
                 max = 0;
               }
             }
           } else {
             console.log(222);
-            console.log(textindex)
+            console.log(textindex);
             this.AddGapFillQuestion.domains.splice(narr[textindex], 0, {
               //按按钮操作添填空
               value: "",
               onum: 2
             });
+            this.fillQuestion.push(narr[textindex]);
           }
         }
       }
       if (nindexArr.length < oindexArr.length) {
         //填空减少了
-              
-      if (
-         oindexArr.length - nindexArr.length > 1 ||
+
+        if (
+          oindexArr.length - nindexArr.length > 1 ||
           oarr.length - narr.length > 1
-        ) {    //一次性删除多个填空
-          var delteArr =  oarr.splice(textindex,oarr.length-narr.length)
-            for(let i in  delteArr){
-              if(!isNaN(delteArr[i])){
-                if(i==0){
-                      this.AddGapFillQuestion.domains.splice(delteArr[i],1)
-                }else{
-                  console.log(delteArr[i])
-                  delteArr[i]-=1;
-                  console.log(delteArr[i])
-                   this.AddGapFillQuestion.domains.splice(delteArr[i],1)
-                }            
+        ) {
+          //一次性删除多个填空
+          var delteArr = oarr.splice(textindex, oarr.length - narr.length);
+          for (let i in delteArr) {
+            if (!isNaN(delteArr[i])) {
+              if (i == 0) {
+                this.AddGapFillQuestion.domains.splice(delteArr[i], 1);
+              } else {
+                console.log(delteArr[i]);
+                delteArr[i] -= 1;
+                console.log(delteArr[i]);
+                this.AddGapFillQuestion.domains.splice(delteArr[i], 1);
               }
             }
+          }
         } else {
-       this.AddGapFillQuestion.domains.splice(oarr[textindex], 1);
+          this.AddGapFillQuestion.domains.splice(oarr[textindex], 1);
         }
-
       }
       if (nindexArr.length == 0) {
         //填空为0

@@ -62,11 +62,11 @@ export default {
     };
   },
   methods: {
-          /**
+    /**
      * 新增题目
      *  {Number} testPaperId 试卷Id
      * @param {object} formName 点击当前表单
-     * 
+     *
      */
     submitForm(formName) {
       var _this = this;
@@ -100,17 +100,32 @@ export default {
               }
             })
             .then(res => {
-              console.log(res)
+              console.log(res);
               if (res.data.message == "添加成功") {
-                res.data.data.tpqQuestion.questionTypeId = 2
-                _this.$parent.$parent.pageInfo[1].bodys.push(res.data.data); //改变父组件的问答题的试卷信息
-                _this.$parent.$parent.pageInfo[1].nowAdd += 1; //改变父组件的问答题的问题个数
-                _this.$parent.$parent.pageInfo[1].nowScroe += parseInt(
-                  res.data.data.tpqScore
-                ); //改变父组件的问答题的分数
-                _this.$parent.$parent.pageInfo = [
-                  ..._this.$parent.$parent.pageInfo
-                ]; //解构渲染
+                console.log(res.data.data)
+
+
+          var obj = {"tpqId":7031,"tpqPaperId":4467,
+             "tpqQuestionId":7128,"tpqScore":4,
+             "tpqQuestion":{"questionId":7128,
+             "questionTitle":"w＿w＿",
+             "questionTypeId":3,
+             "answerQuestion":null,
+             "chooseQuestion":[],
+             "fillQuestion":[{
+               "fqId":7221,
+               "fqQuestionId":7128,
+               "fqAnswer":"w",
+               "fillQuestionScore":[{
+                 "fqsFilleQuestionId":7221,"fqsPaperQuestionId":7031,"fqsScore":2}]},{"fqId":7222,"fqQuestionId":7128,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7222,"fqsPaperQuestionId":7031,"fqsScore":2}]}]}}
+     
+                var data = {
+                  bodys: res.data.data,
+                  questionTypeId: 2
+                };
+                this.$emit("addGapFilling", data);
+                this.resetForm("AddGapFillQuestion");
+                this.title = "";
                 this.resetForm("AddGapFillQuestion");
                 this.title = "";
               }
@@ -121,31 +136,31 @@ export default {
         }
       });
     },
-       /**
+    /**
      * 重置表单
      * @param {object} formName 当前表单
      */
     resetForm(formName) {
       // 重置表单
-      var _this =this;
+      var _this = this;
       _this.$refs[formName].resetFields();
     },
-       /**
+    /**
      * 插入填空
      *  {function} getCursortPosition 获取文本光标
      */
     addDomain() {
       //插入填空
-      var _this =this;
+      var _this = this;
       var index = _this.getCursortPosition(document.getElementById("textarea"));
       _this.title = _this.title.split("");
       _this.title.splice(index, 0, "＿");
       _this.title = _this.title.join("");
     },
-         /**
+    /**
      * 获取文本光标
      *  {function} getCursortPosition 获取文本光标
-     * document.selection.createRange() 
+     * document.selection.createRange()
      * 根据当前文字选择返回 TextRange 对象
      * moveStart 更改范围开始位置
      * selectionStart --兼容所有浏览器
@@ -165,16 +180,16 @@ export default {
       return CaretPos;
     }
   },
-         /**
-     * 监听题目的变化
-     * o 旧值
-     * n 新值
-     * oindexArr 旧空格下标数组
-     * nindexArr 新空格下标数组
-     * oarr 旧题目分割数组
-     * narr 新题目分割数组
-     * AddGapFillQuestion.domains 添加的空格数组
-     */
+  /**
+   * 监听题目的变化
+   * o 旧值
+   * n 新值
+   * oindexArr 旧空格下标数组
+   * nindexArr 新空格下标数组
+   * oarr 旧题目分割数组
+   * narr 新题目分割数组
+   * AddGapFillQuestion.domains 添加的空格数组
+   */
   watch: {
     //监听题目变化
     title: function(n, o) {
@@ -196,20 +211,24 @@ export default {
           nindexArr.push(key);
         }
       }
-      var textindex = this.getCursortPosition(  //获取文本下标
+      var textindex = this.getCursortPosition(
+        //获取文本下标
         document.getElementById("textarea")
       );
-      if (nindexArr.length > oindexArr.length) { //如果添加填空
+      if (nindexArr.length > oindexArr.length) {
+        //如果添加填空
         if (
           nindexArr.length - oindexArr.length > 1 ||
           narr.length - oarr.length > 1
-        ) {    //一次性复制粘贴填空
+        ) {
+          //一次性复制粘贴填空
           var max = 0;
-          for (let i = 0; i < nindexArr.length - oindexArr.length; i++) { //添加多少填空
+          for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
+            //添加多少填空
             for (let x in oindexArr) {
               if (
-                textindex - (narr.length - oarr.length) <  //添加填空的位置
-                parseInt(oindexArr[x])   
+                textindex - (narr.length - oarr.length) < //添加填空的位置
+                parseInt(oindexArr[x])
               ) {
                 this.AddGapFillQuestion.domains.splice(
                   oarr[parseInt(oindexArr[x])],
@@ -225,7 +244,8 @@ export default {
                 max++;
               }
             }
-            if (max == oindexArr.length) { //往后添加空格
+            if (max == oindexArr.length) {
+              //往后添加空格
               this.AddGapFillQuestion.domains.push({
                 value: "",
                 onum: 2
@@ -234,39 +254,40 @@ export default {
             }
           }
         } else {
-          this.AddGapFillQuestion.domains.splice(narr[textindex], 0, {  //按按钮操作添填空
+          this.AddGapFillQuestion.domains.splice(narr[textindex], 0, {
+            //按按钮操作添填空
             value: "",
             onum: 2
           });
         }
       }
-      if (nindexArr.length < oindexArr.length) { //填空减少了
-       
-      if (
-         oindexArr.length - nindexArr.length > 1 ||
+      if (nindexArr.length < oindexArr.length) {
+        //填空减少了
+
+        if (
+          oindexArr.length - nindexArr.length > 1 ||
           oarr.length - narr.length > 1
-        ) {    //一次性删除多个填空
-          var delteArr =  oarr.splice(textindex,oarr.length-narr.length)
-            for(let i in  delteArr){
-              if(!isNaN(delteArr[i])){
-                if(i==0){
-                      this.AddGapFillQuestion.domains.splice(delteArr[i],1)
-                }else{
-                  console.log(delteArr[i])
-                  delteArr[i]-=1;
-                  console.log(delteArr[i])
-                   this.AddGapFillQuestion.domains.splice(delteArr[i],1)
-                }            
+        ) {
+          //一次性删除多个填空
+          var delteArr = oarr.splice(textindex, oarr.length - narr.length);
+          for (let i in delteArr) {
+            if (!isNaN(delteArr[i])) {
+              if (i == 0) {
+                this.AddGapFillQuestion.domains.splice(delteArr[i], 1);
+              } else {
+                console.log(delteArr[i]);
+                delteArr[i] -= 1;
+                console.log(delteArr[i]);
+                this.AddGapFillQuestion.domains.splice(delteArr[i], 1);
               }
             }
+          }
         } else {
-       this.AddGapFillQuestion.domains.splice(oarr[textindex], 1);
+          this.AddGapFillQuestion.domains.splice(oarr[textindex], 1);
         }
-
-
-        
       }
-      if (nindexArr.length == 0) { //填空为0
+      if (nindexArr.length == 0) {
+        //填空为0
         this.AddGapFillQuestion.domains = [];
       }
       this.IndexArr = narr; // 获取最新的分割题目数组

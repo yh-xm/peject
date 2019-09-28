@@ -166,14 +166,11 @@ export default {
             })
             .then(res => {
               if (res.data.message == "添加成功") {
-                _this.$parent.$parent.pageInfo[0].bodys.push(res.data.data); //改变父组件的问答题的试卷信息
-                _this.$parent.$parent.pageInfo[0].nowAdd += 1; //改变父组件的问答题的问题个数
-                _this.$parent.$parent.pageInfo[0].nowScroe += parseInt(
-                  res.data.data.tpqScore
-                ); //改变父组件的问答题的分数
-                _this.$parent.$parent.pageInfo = [
-                  ..._this.$parent.$parent.pageInfo
-                ]; //解构渲染
+                var data = {
+                  bodys: res.data.data,
+                  questionTypeId: 1
+                };
+                this.$emit("addMultipleChoice", data);
                 _this.$message({
                   type: "success",
                   message: "添加成功!"

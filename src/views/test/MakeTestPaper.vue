@@ -35,9 +35,9 @@
           </div>
         </div>
         <div class="content-view">
-          <AddMultipleChoice v-if="nowAddOption==0" />
-          <AddGapFilling v-if="nowAddOption==1" />
-          <AddEssayQuestion v-if="nowAddOption==2" />
+          <add-multiple-choice v-if="nowAddOption==0" @addMultipleChoice="addQuestion" />
+          <add-gap-filling v-if="nowAddOption==1" @addGapFilling="addQuestion" />
+          <add-essay-question v-if="nowAddOption==2" @addEssayQuestion="addQuestion" />
         </div>
         <div class="bottom-view" :data-t="pageInfo">
           <el-card class="box-card" v-for="(item,index) in pageInfo" :key="index">
@@ -52,16 +52,19 @@
                 v-if="items.tpqQuestion.questionTypeId=='1'?true:false"
                 :AddChooseQuestionList="items"
                 :nowIndex="indexs"
+                @setQuestion="setQuestion"
               ></SetChooseQuestion>
               <SetGapFillQuestion
                 v-if="items.tpqQuestion.questionTypeId=='2'?true:false"
                 :AddGapFillQuestionList="items"
                 :nowIndex3="indexs"
+                @setQuestion="setQuestion"
               ></SetGapFillQuestion>
               <SetAnswerQuestion
                 v-if="items.tpqQuestion.questionTypeId=='3'?true:false"
                 :AddEssayQuestiontList="items"
                 :nowIndex2="indexs"
+                @setQuestion="setQuestion"
               ></SetAnswerQuestion>
             </div>
           </el-card>
@@ -84,6 +87,7 @@ import SetAnswerQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQus
 export default {
   data() {
     return {
+      testPaperId: "",
       active: 0, //当前步奏
       pageInfo: [], //试卷信息
       radio: 3, //选项
@@ -140,6 +144,26 @@ export default {
           _this.pageInfo[i].nowScroe = 0;
         }
       });
+    },
+    /**
+     * 添加题目
+     */
+    addQuestion(data) {
+      var _this = this;
+      var index = data.questionTypeId - 1;
+      _this.pageInfo[index].bodys.push(data.bodys); //改变父组件的问答题的试卷信息
+      _this.pageInfo[index].nowAdd += 1; //改变父组件的问答题的问题个数
+      _this.pageInfo[index].nowScroe += parseInt(data.bodys.tpqScore); //改变父组件的问答题的分数
+      _this.pageInfo = [..._this.pageInfo]; //解构渲染
+    },
+    //维护题目
+    setQuestion(data) {
+      var _this = this;
+      var index = data.questionTypeId - 1;
+        _this.pageInfo[index].bodys.splice(data.index, 1); //改变父组件的问答题的试卷信息
+        _this.pageInfo[index].nowAdd -= 1; //改变父组件的问答题的问题个数
+        _this.pageInfo[index].nowScroe -= parseInt(data.tpqScore); //改变父组件的问答题的分数
+        _this.pageInfo = [..._this.pageInfo]; //解构渲染
     }
   },
   components: {
