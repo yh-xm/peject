@@ -246,7 +246,8 @@ export default {
     border: 1px solid transparent;
     // width: 450px;
     height: 300px;
-    min-width: 250px;
+    // width: 500px;
+    min-width: 150px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -297,22 +298,18 @@ export default {
       width: 50%;
       .el-form {
         margin: 0px auto;
-
         width: 80%;
         position: relative;
-        // border: 1px solid red;
-
         text-align: center;
         /deep/.el-form-item__content {
           margin-left: 0px !important;
-          //   border: 1px solid red;
         }
         .el-button {
           background-color: #67c239;
           color: white;
           outline: #67c239;
           width: 100%;
-          line-height: 12px;
+
           margin-top: 5%;
           height: 35px;
           .is-loading {
@@ -322,8 +319,6 @@ export default {
         /deep/ .el-input__inner {
           border-radius: 0px;
           border: #1ca092 1px solid;
-          height: 30px;
-          width: 100%;
           text-indent: 18px;
           outline: #67c239;
         }

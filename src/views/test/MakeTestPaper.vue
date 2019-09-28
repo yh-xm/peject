@@ -183,6 +183,9 @@ export default {
 </script>
 <style lang="less" scoped>
 #MakeTestPaper {
+  .box-card{
+    margin-top: 25px;
+  }
   #TestInfo {
     padding-top: 50px;
     .tabs {

@@ -103,22 +103,7 @@ export default {
               console.log(res);
               if (res.data.message == "添加成功") {
                 console.log(res.data.data)
-
-
-          var obj = {"tpqId":7031,"tpqPaperId":4467,
-             "tpqQuestionId":7128,"tpqScore":4,
-             "tpqQuestion":{"questionId":7128,
-             "questionTitle":"w＿w＿",
-             "questionTypeId":3,
-             "answerQuestion":null,
-             "chooseQuestion":[],
-             "fillQuestion":[{
-               "fqId":7221,
-               "fqQuestionId":7128,
-               "fqAnswer":"w",
-               "fillQuestionScore":[{
-                 "fqsFilleQuestionId":7221,"fqsPaperQuestionId":7031,"fqsScore":2}]},{"fqId":7222,"fqQuestionId":7128,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7222,"fqsPaperQuestionId":7031,"fqsScore":2}]}]}}
-     
+                res.data.data.tpqQuestion.questionTypeId = 2;
                 var data = {
                   bodys: res.data.data,
                   questionTypeId: 2

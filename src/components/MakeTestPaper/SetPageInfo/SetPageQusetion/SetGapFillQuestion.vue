@@ -75,7 +75,6 @@ export default {
     return {
       title: "",
       nowOption: [],
-      oldOption: [],
       odisabled: true,
       oshow: false,
       AddGapFillQuestion: {
@@ -119,7 +118,7 @@ export default {
           var newDomains = JSON.parse(
             JSON.stringify(_this.$refs[formName].model.domains)
           );
-          var oldarr = _this.oldOption.fillQuestion;
+          var oldarr = _this.nowOption.fillQuestion;
           for (const key in addOptions) {
             if (key == 0) {
               domains.splice(addOptions[key], 1);
@@ -128,15 +127,15 @@ export default {
               domains.splice(addOptions[key], 1);
             }
           }
-          console.log(domains)
-          console.log(oldarr)
+
           for (const key in domains) {
+            if (domains[key].value != oldarr[key].fqAnswer) {
               fillQuestion.push({
                 fqId: oldarr[key].fqId,
                 fqAnswer: domains[key].value,
                 fqOrder: parseInt(key) + 1 //填空的序号
               });
-
+            }
           }
           for (const key in addOptions) {
             fillQuestion.push({
@@ -144,7 +143,7 @@ export default {
               FqOrder: addOptions[key] + 1 //填空的序号
             });
           }
-          console.log(nowOption.questionId)
+          console.log(fillQuestion);
           this.axios
             .post(`/api/TestPaper/ModifyQuestion`, {
               questionId: nowOption.questionId,
@@ -155,27 +154,37 @@ export default {
             .then(res => {
               console.log(res);
               this.fillQuestion = [];
-              if (res.data.message == "数据没有变化") {
-                _this.$message({
-                  type: "warning",
-                  message: res.data.message
-                });
-              } else if (res.data.message == "修改成功") {
-                _this.$message({
-                  type: "success",
-                  message: "修改成功!"
-                });
-              } else {
-                var data = res.data + "}]}}";
-                data = eval("(" + data + ")");
-                // _this.oldOption = JSON.parse(JSON.stringify(nowOption));
-                //  console.log(data.data)
-                _this.odisabled = !_this.odisabled;
-                _this.oshow = !_this.oshow;
-                _this.$message({
-                  type: "success",
-                  message: "修改成功!"
-                });
+              if (res.data.code == 1) {
+                if (res.data.message == "数据没有变化") {
+                  _this.$message({
+                    type: "warning",
+                    message: res.data.message
+                  });
+                } else if (res.data.message == "修改成功") {
+                  _this.odisabled = !_this.odisabled;
+                  _this.oshow = !_this.oshow;
+                  _this.nowOption.questionTitle = _this.title; 
+                  _this.$message({
+                    type: "success",
+                    message: "修改成功!"
+                  });
+                } else {
+                  var data = res.data + "}]}}";
+                  data = eval("(" + data + ")");
+                  // _this.nowOption = JSON.parse(JSON.stringify(nowOption));
+                  console.log(data);
+                  _this.odisabled = !_this.odisabled;
+                  _this.oshow = !_this.oshow;
+                  _this.$message({
+                    type: "success",
+                    message: "修改成功!"
+                  });
+                }
+              }else{
+                    _this.$message({
+                    type: "success",
+                    message: res.data.message
+                  });
               }
             });
         } else {
@@ -233,12 +242,8 @@ export default {
     init() {
       var _this = this;
       // console.log(this.AddGapFillQuestionList)
-      _this.oldOption = JSON.parse(
-        JSON.stringify(_this.AddGapFillQuestionList.tpqQuestion)
-      );
       _this.nowOption = _this.AddGapFillQuestionList.tpqQuestion;
       _this.title = _this.nowOption.questionTitle;
-      this.domains = this.AddGapFillQuestion.domains;
     }
   },
   watch: {
