@@ -213,13 +213,6 @@ export default {
       let _this = this;
       console.log(newval); //新值
       console.log(val); //原值
-      // !function auto(){
-      //   // _this.addClose();
-      //   _this.editColse();
-      //   setTimeout(() =>{
-      //     auto()
-      //   },100);
-      // }
     }
   },
   /**
