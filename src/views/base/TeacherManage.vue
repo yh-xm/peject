@@ -11,17 +11,17 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <!-- 新增用户按钮 -->
-        <el-button type="text" @click="handleAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
-        <!-- 新增用户按钮 -->
-        <!-- 角色导航 -->
-        <el-radio v-model="filtRadio" label="0" @click="getUserInfo()">全部</el-radio>
-        <el-radio
-          v-for="item in roles"
-          :key="item.userTypeTypeName"
-          v-model="filtRadio"
-          :label="item.userTypeTypeName"
-        >{{item.userTypeTypeName}}</el-radio>
-        <!-- 角色导航结束 -->
+            <el-button type="text" @click="handleAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
+            <!-- 新增用户按钮 -->
+            <!-- 角色导航 -->
+            <el-radio v-model="filtRadio" label="0">全部</el-radio>
+            <el-radio
+              v-for="item in roles"
+              :key="item.userTypeTypeName"
+              v-model="filtRadio"
+              :label="item.userTypeTypeName"
+            >{{item.userTypeTypeName}}</el-radio>
+            <!-- 角色导航结束 -->
       </div>
       <div>
         <!-- 表格 -->
@@ -208,7 +208,20 @@ export default {
       }
     }
   },
-
+  watch: {
+    ruleForm: function(newval, val) {
+      let _this = this;
+      console.log(newval); //新值
+      console.log(val); //原值
+      // !function auto(){
+      //   // _this.addClose();
+      //   _this.editColse();
+      //   setTimeout(() =>{
+      //     auto()
+      //   },100);
+      // }
+    }
+  },
   /**
    * 这里面定义方法
    * */
@@ -483,6 +496,12 @@ li {
       .clearfix {
         text-align: left;
         margin-left: 30px;
+        overflow: hidden;
+
+        .el-radio{
+          flex: none;
+        }
+        
         .el-icon-circle-plus-outline {
           color: #409eff;
           margin-right: 30px;
