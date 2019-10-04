@@ -226,6 +226,7 @@ export default {
   },
   watch: {
     title: function(n, o) {
+      var _this = this;
       var oindex = 0;
       var nindex = 0;
       var oindexArr = [];
@@ -248,14 +249,14 @@ export default {
           narr[key] = "*";
         }
       }
-      this.IndexArr = narr; // 获取最新的分割题目数组
-      var textindex = this.getCursortPosition(
+      _this.IndexArr = narr; // 获取最新的分割题目数组
+      var textindex = _this.getCursortPosition(
         //获取文本下标
-        document.getElementById("textarea" + this.nowIndex3)
+        document.getElementById("textarea" + _this.nowIndex3)
       );
       if (nindexArr.length > oindexArr.length) {
         //如果添加填空
-        if (this.oshow == false) {
+        if (_this.oshow == false) {
           return;
         } else {
           if (
@@ -272,7 +273,7 @@ export default {
                   textindex - (narr.length - oarr.length) < //添加填空的位置
                   parseInt(oindexArr[x])
                 ) {
-                  this.nowOption.fillQuestion.splice(
+                  _this.nowOption.fillQuestion.splice(
                     oarr[parseInt(oindexArr[x])],
                     0,
                     {
@@ -284,8 +285,8 @@ export default {
                       ]
                     }
                   );
-                  this.fillQuestion.push(oarr[parseInt(oindexArr[x])]);
-                  console.log(this.nowOption.fillQuestion);
+                  _this.fillQuestion.push(oarr[parseInt(oindexArr[x])]);
+                  // console.log(this.nowOption.fillQuestion);
                   break;
                 } else {
                   max++;
@@ -293,7 +294,7 @@ export default {
               }
               if (max == oindexArr.length) {
                 //往后添加空格
-                this.nowOption.fillQuestion.push({
+                _this.nowOption.fillQuestion.push({
                   fqAnswer: "",
                   fillQuestionScore: [
                     {
@@ -301,12 +302,12 @@ export default {
                     }
                   ]
                 });
-                this.fillQuestion.push(this.nowOption.fillQuestion.length - 1);
+                _this.fillQuestion.push(_this.nowOption.fillQuestion.length - 1);
                 max = 0;
               }
             }
           } else {
-            this.nowOption.fillQuestion.splice(narr[textindex], 0, {
+            _this.nowOption.fillQuestion.splice(narr[textindex], 0, {
               //按按钮操作添填空
               fqAnswer: "",
               fillQuestionScore: [
@@ -315,50 +316,29 @@ export default {
                 }
               ]
             });
-            this.fillQuestion.push(narr[textindex]);
+            _this.fillQuestion.push(narr[textindex]);
           }
         }
       }
       if (nindexArr.length < oindexArr.length) {
         //填空减少了
-
-        if (
-          oindexArr.length - nindexArr.length > 1 ||
-          oarr.length - narr.length > 1
-        ) {
-          var textindex = this.getCursortPosition(
+          var textindex = _this.getCursortPosition(
             //获取文本下标
-            document.getElementById("textarea" + this.nowIndex3)
+            document.getElementById("textarea" + _this.nowIndex3)
           );
           //一次性删除多个填空
-
-          var delteArr = oarr.splice(narr.length, oarr.length - narr.length);
-          console.log(delteArr);
-          var flag = true;
-
-          for (let i in delteArr) {
-            if (!isNaN(delteArr[i])) {
-              if (flag) {
-                this.nowOption.fillQuestion.splice(delteArr[i], 1);
-                flag = false;
-              } else {
-                // console.log(delteArr[i]);
-                delteArr[i] -= 1;
-                // console.log(delteArr[i]);
-                this.nowOption.fillQuestion.splice(delteArr[i], 1);
-              }
+           for (let i in oindexArr) {
+            if (parseInt(oindexArr[i])>=textindex&&parseInt(oindexArr[i])<=textindex+oarr.length - narr.length) {
+            _this.nowOption.fillQuestion.splice(i, oindexArr.length - nindexArr.length);
+            break;
             }
           }
-        } else {
-          console.log(oarr[textindex]);
-          this.nowOption.fillQuestion.splice(oarr[textindex], 1);
-        }
       }
       if (nindexArr.length == 0) {
         //填空为0
-        this.nowOption.fillQuestion = [];
+        _this.nowOption.fillQuestion = [];
       }
-      console.log(this.nowOption.fillQuestion);
+      // console.log(_this.nowOption.fillQuestion);
     }
   },
   created() {},

@@ -349,10 +349,7 @@ changeLocale (command) {
     /deep/ .el-menu-item {
       background-color: #545c64;
       color: white;
-      height: 40px;
-      // max-width: 190px;
-      min-width: 190px;
-      line-height: 42px;
+         position: relative;
     }
 
     a {
@@ -381,13 +378,13 @@ changeLocale (command) {
       background-color: #373737 !important;
       color: #ffeb3a;
     }
-    .el-submenu .is-active::after {
+    .el-submenu .is-active:after {
       content: "◆";
       color: white;
       font-size: 40px;
       position: absolute;
-      right: 0;
-      margin-right: -12px;
+      right: -12px;
+      // margin-right: -12px;
     }
     /deep/ .is-opened {
       background-color: #545c64 !important;
