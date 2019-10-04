@@ -1,9 +1,12 @@
+
 <template>
   <div>
     <div class="essat-content">
+      <!-- 小题编号 -->
       <div class="option-title">{{nowIndex2+1}}、</div>
       <div class="option-content">
-        <el-form :model="nowOption" ref="dynamicValidateFormfore" class="demo-dynamic">
+        <!-- 题目 -->
+        <el-form :model="nowOption" ref="nowOption" class="demo-dynamic">
           <el-form-item prop="title">
             <el-input
               type="textarea"
@@ -12,10 +15,12 @@
               :disabled="odisabled"
             ></el-input>
           </el-form-item>
+          <!-- 答案 -->
           <el-form-item label="参考答案">
             <el-input v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer" :disabled="odisabled"></el-input>
           </el-form-item>
           <el-form-item>
+            <!-- 编辑 -->
             <el-button type="primary" plain @click.prevent="compile" size="small">编辑</el-button>
             <el-row v-show="oshow">
               <el-button round @click.prevent="cancel" size="small">取消</el-button>

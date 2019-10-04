@@ -55,6 +55,7 @@
   </div>
 </template>
 <script>
+import { setCookie, getCookie, clearCookie } from "@/api/SetCookie.js";
 export default {
   data() {
     return {
@@ -106,37 +107,40 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.disbable = true;
-      this.$refs[formName].validate(valid => {
+       var _this = this;
+      _this.disbable = true;
+      _this.$refs[formName].validate(valid => {
         if (valid) {
-          var _this = this;
+         
           if (
-            this.numberValidateForm.username.trim() != "" &&
-            this.numberValidateForm.passworld.trim() != ""
+            _this.numberValidateForm.username.trim() != "" &&
+            _this.numberValidateForm.passworld.trim() != ""
           ) {
-            this.axios
+            _this.axios
               .get(
-                `/api/OAuth/authenticate?userMobile=${this.numberValidateForm.username}&userPassword=${this.numberValidateForm.passworld}`
+                `/api/OAuth/authenticate?userMobile=${_this.numberValidateForm.username}&userPassword=${_this.numberValidateForm.passworld}`
               )
               .then(function(r) {
-                console.log(r)
-                if (r.status == "200") {  
-                  if(_this.lenrnPsw == true){
-                    _this.setCookie(_this.numberValidateForm.username, _this.numberValidateForm.passworld,7)
-                  }else{
-                      _this.clearCookie();
+                if (r.status == "200") {
+                  if (_this.lenrnPsw == true) {
+                    var obj = {
+                      username: _this.numberValidateForm.username,
+                      password: _this.numberValidateForm.passworld
+                    };
+                    setCookie(obj, 7);
+                  } else {
+                    clearCookie();
                   }
-                  sessionStorage.tkon = "Bearer"+" "+r.data.access_token; //获取tkon
+                  sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
                   sessionStorage.userId = r.data.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
-             
                   if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);
-        
+
                     let redirect = _this.$route.query.redirect;
-                                console.log(redirect)
+                    console.log(redirect);
                     _this.$router.push({
                       path: redirect
                     });
@@ -146,7 +150,7 @@ export default {
                       name: "home"
                     });
                   }
-                  
+
                   _this.$message({
                     type: "success",
                     message: "登录成功!"
@@ -168,52 +172,18 @@ export default {
             });
           }
         } else {
-          
           return false;
         }
       });
-       this.disbable = false;
-    },
-    // 设置cookie
-    setCookie(username,password,timer){
-      username = btoa(username+"")
-      password = btoa(password+"")
-      var nowDtate = new Date(); //获取当前时间
-      
-      nowDtate.setTime(nowDtate.getTime() + 24*60*60*1000*timer); //设置保存天数
-      window.document.cookie = "zxusername"+"="+username+";path=/;expires="+nowDtate.toGMTString();
-       window.document.cookie = "zxpassworld"+"="+password+";path=/;expires="+nowDtate.toGMTString();
-    },
-    //读取cookie
-    getCookie(){
-      if(document.cookie.length>0){
- 
-   
-        var arr = document.cookie.split("; ");
-        var ulen = "zxusername=".length;
-        var plen = "zxpassworld=".length;
-        for(let i=0;i<arr.length;i++){
-              if(arr[i].indexOf("zxusername")!=-1){
-                   this.lenrnPsw = true;
-                this.numberValidateForm.username = atob(arr[i].substr(ulen)); //解码用户名
-              }else if(arr[i].indexOf("zxpassworld")!=-1){
-                this.numberValidateForm.passworld = atob(arr[i].substr(plen));//解码密码
-              }
-        }
-      }
-    },
-    //清除cookie
-    clearCookie(){
-      this.setCookie("","",-1)
+      _this.disbable = false;
     }
   },
-  created() {
- 
-  },
+  created() {},
   watch: {
     screenWidth(val) {
-      this.screenWidth = val;
-      let that = this;
+       let that = this;
+      that.screenWidth = val;
+     
       if (this.screenWidth <= 767) {
         that.showItem = true;
       } else {
@@ -229,7 +199,14 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
-    this.getCookie();
+    var serachArr = ["username", "password"];
+    var obj = getCookie(serachArr);
+   if(obj.username&&obj.password){
+     that.numberValidateForm.username = obj.username;
+that.numberValidateForm.passworld = obj.password;
+that.lenrnPsw=true;
+   }
+
   }
 };
 </script>
@@ -241,13 +218,12 @@ export default {
   background-image: url("../../public/background.jpg");
   background-size: cover;
   .From {
-    
     margin: auto;
     border: 1px solid transparent;
     // width: 450px;
     height: 300px;
     // width: 500px;
-    min-width: 150px;
+    min-width: 250px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -297,7 +273,7 @@ export default {
     .from-right {
       width: 50%;
       .el-form {
-        margin: 0px auto;
+        margin: 20px auto;
         width: 80%;
         position: relative;
         text-align: center;
@@ -354,6 +330,7 @@ export default {
   .samllScreen {
     //  width: 100%;
     display: block;
+    height: 340px;
   }
 }
 </style>

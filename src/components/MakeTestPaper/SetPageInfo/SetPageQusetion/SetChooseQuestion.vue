@@ -1,6 +1,7 @@
 <template>
   <div class="MultipleChoice">
     <div class="Mult-Content">
+      <!-- 题目编号 -->
       <div class="option-title">{{nowIndex+1}}、</div>
       <div class="option-content">
         <el-form
@@ -9,6 +10,7 @@
           label-width="100px"
           class="demo-dynamic"
         >
+        <!-- 题目 -->
           <el-form-item prop="title">
             <el-input
               type="textarea"
@@ -17,7 +19,7 @@
               :disabled="odisabled"
             ></el-input>
           </el-form-item>
-
+  
           <el-form-item v-for="(domain, index) in nowOption.chooseQuestion" :key="domain.key">
             <el-checkbox-group v-model="checked" :min="0" :max="2" @change="checkboxChange">
               {{domain}}
@@ -115,9 +117,6 @@ export default {
           if (res.data.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             _this.odisabled = !_this.odisabled; //成功禁用
-            _this.$parent.$parent.$parent.pageInfo = [
-              ..._this.$parent.$parent.$parent.pageInfo
-            ]; //解构渲染
             _this.oshow = !_this.oshow;
             console.log(_this.nowOption);
             _this.$message({

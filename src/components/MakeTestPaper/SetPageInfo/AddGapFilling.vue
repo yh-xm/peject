@@ -7,6 +7,7 @@
         label-width="100px"
         class="demo-dynamic"
       >
+      <!-- 题目 -->
         <el-form-item label="题干">
           <el-button round icon="el-icon-document-checked" @click="addDomain" size="small">插入填空</el-button>
         </el-form-item>
@@ -70,58 +71,103 @@ export default {
      */
     submitForm(formName) {
       var _this = this;
-      //提交表单
-      _this.$refs[formName].validate(valid => {
-        if (valid) {
-          var tpqPaperId = sessionStorage.testPaperId;
-          var tpqScore = 0;
-          var fillQuestion = [];
-          var domains = _this.$refs[formName].model.domains;
-          for (const key in domains) {
-            tpqScore += parseInt(domains[key].onum);
-            fillQuestion.push({
-              fqOrder: key,
-              fqAnswer: domains[key].value,
+      var datas = {
+        tpqId: 7042,
+        tpqPaperId: 4476,
+        tpqQuestionId: 7139,
+        tpqScore: 4,
+        tpqQuestion: {
+          questionId: 7139,
+          questionTitle: "w＿w＿",
+          questionTypeId: 3,
+          answerQuestion: null,
+          chooseQuestion: [],
+          fillQuestion: [
+            {
+              fqId: 7251,
+              fqQuestionId: 7139,
+              fqAnswer: "w",
               fillQuestionScore: [
                 {
-                  fqsScore: domains[key].onum
+                  fqsFilleQuestionId: 7251,
+                  fqsPaperQuestionId: 7042,
+                  fqsScore: 2
                 }
               ]
-            });
-          }
-          _this.axios
-            .post(`/api/TestPaper/AddQuestionToTestPaper`, {
-              tpqPaperId: tpqPaperId, //试卷的编号
-              tpqScore: tpqScore, //题目的分值
-              tpqQuestion: {
-                questionTitle: _this.title, //填空题的标题
-                questionTypeId: 3,
-                fillQuestion: fillQuestion
-              }
-            })
-            .then(res => {
-              console.log(res);
-              if (res.data.message == "添加成功") {
-                sessionStorage.data = JSON.stringify(res.data.data);
-                var data = {"tpqId":7042,"tpqPaperId":4476,"tpqQuestionId":7139,"tpqScore":4,"tpqQuestion":{"questionId":7139,"questionTitle":"w＿w＿","questionTypeId":3,"answerQuestion":null,"chooseQuestion":[],"fillQuestion":[{"fqId":7251,"fqQuestionId":7139,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7251,"fqsPaperQuestionId":7042,"fqsScore":2}]},{"fqId":7252,"fqQuestionId":7139,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7252,"fqsPaperQuestionId":7042,"fqsScore":2}]}]}}
-                console.log(res.data.data)
-                res.data.data.tpqQuestion.questionTypeId = 2;
-                var data = {
-                  bodys: res.data.data,
-                  questionTypeId: 2
-                };
-                this.$emit("addGapFilling", data);
-                this.resetForm("AddGapFillQuestion");
-                this.title = "";
-                this.resetForm("AddGapFillQuestion");
-                this.title = "";
-              }
-            });
-        } else {
-          console.log("error submit!!");
-          return false;
+            },
+            {
+              fqId: 7252,
+              fqQuestionId: 7139,
+              fqAnswer: "w",
+              fillQuestionScore: [
+                {
+                  fqsFilleQuestionId: 7252,
+                  fqsPaperQuestionId: 7042,
+                  fqsScore: 2
+                }
+              ]
+            }
+          ]
         }
-      });
+      };
+     datas.tpqQuestion.questionTypeId = 2;
+      var data = {
+        bodys: datas,
+        questionTypeId: 2
+      };
+      this.$emit("addGapFilling", data);
+
+      //提交表单
+      // _this.$refs[formName].validate(valid => {
+      //   if (valid) {
+      //     var tpqPaperId = sessionStorage.testPaperId;
+      //     var tpqScore = 0;
+      //     var fillQuestion = [];
+      //     var domains = _this.$refs[formName].model.domains;
+      //     for (const key in domains) {
+      //       tpqScore += parseInt(domains[key].onum);
+      //       fillQuestion.push({
+      //         fqOrder: key,
+      //         fqAnswer: domains[key].value,
+      //         fillQuestionScore: [
+      //           {
+      //             fqsScore: domains[key].onum
+      //           }
+      //         ]
+      //       });
+      //     }
+      //     _this.axios
+      //       .post(`/api/TestPaper/AddQuestionToTestPaper`, {
+      //         tpqPaperId: tpqPaperId, //试卷的编号
+      //         tpqScore: tpqScore, //题目的分值
+      //         tpqQuestion: {
+      //           questionTitle: _this.title, //填空题的标题
+      //           questionTypeId: 3,
+      //           fillQuestion: fillQuestion
+      //         }
+      //       })
+      //       .then(res => {
+      //         console.log(res);
+      //         if (res.data.message == "添加成功") {
+      //           sessionStorage.data = JSON.stringify(res.data.data);
+      //           console.log(res.data.data)
+      //           res.data.data.tpqQuestion.questionTypeId = 2;
+      //           var data = {
+      //             bodys: res.data.data,
+      //             questionTypeId: 2
+      //           };
+      //           this.$emit("addGapFilling", data);
+      //           this.resetForm("AddGapFillQuestion");
+      //           this.title = "";
+      //           this.resetForm("AddGapFillQuestion");
+      //           this.title = "";
+      //         }
+      //       });
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
     },
     /**
      * 重置表单
@@ -187,15 +233,20 @@ export default {
       var oarr = o.split("");
       var narr = n.split("");
       for (const key in oarr) {
+        
         if (oarr[key] == "＿") {
           oarr[key] = oindex++;
           oindexArr.push(key);
+        }else{
+           oarr[key] = "*"
         }
       }
       for (const key in narr) {
         if (narr[key] == "＿") {
           narr[key] = nindex++;
           nindexArr.push(key);
+        }else{
+           narr[key] = "*"
         }
       }
       var textindex = this.getCursortPosition(
@@ -256,7 +307,7 @@ export default {
           oarr.length - narr.length > 1
         ) {
           //一次性删除多个填空
-          var delteArr = oarr.splice(textindex, oarr.length - narr.length);
+          var delteArr = oarr.splice(narr.length, oarr.length - narr.length);
           for (let i in delteArr) {
             if (!isNaN(delteArr[i])) {
               if (i == 0) {
