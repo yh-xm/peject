@@ -3,6 +3,7 @@
     <router-view  v-if="isRouterAlive"/>
   </div>
 </template>
+<<<<<<< HEAD
 <script>
   export default {
     name: 'App',
@@ -27,6 +28,8 @@
   }
 </script>
 
+=======
+>>>>>>> cy
 <style lang="less">
 * {
   margin: 0px;
