@@ -4,12 +4,16 @@
       <div class="testTime-name">考试时间</div>
       <div class="timeTable">
         <el-date-picker
-          v-model="value1"
+          v-model="value2"
           type="datetimerange"
+          :picker-options="pickerOptions"
+          range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          :default-time="['12:00:00']"
+          align="left"
+          size="small"
         ></el-date-picker>
+        <el-button type="danger" size="small" disabled plain>用时：00 分钟</el-button>
       </div>
     </div>
   </div>
@@ -19,7 +23,7 @@
 export default {
   data() {
     return {
-      value1: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)]
+      value2: ""
     };
   }
 };
@@ -30,18 +34,17 @@ export default {
   .testTime {
     display: flex;
     justify-content: space-between;
-    text-align: left;
-    margin: 30px auto;
+    margin-bottom: 20px;
     .testTime-name {
       flex: none;
       text-align: right;
       margin-right: 15px;
       color: #606266;
-      line-height: 40px;
       width: 70px;
+      font-size: 13px;
+      line-height: 30px;
     }
     .timeTable {
-      text-align: left;
       width: 100%;
     }
   }

@@ -2,12 +2,13 @@
   <div id="testDrownBox-testSetter">
     <div class="seleBox">
       <div class="seleName">试卷</div>
-      <el-select v-model="tpId" placeholder="请选择">
+      <el-select v-model="tpId" placeholder="请选择" size="small">
         <el-option
           v-for="item in options"
           :key="item.tpId"
           :label="item.tpTitle"
           :value="item.tpId"
+          
         ></el-option>
       </el-select>
     </div>
@@ -56,14 +57,16 @@ export default {
   .seleBox {
     display: flex;
     justify-content: space-between;
-    text-align: left;
+    margin-bottom: 20px;
     .seleName {
       flex: none;
-      line-height: 40px;
       text-align: right;
       margin-right: 15px;
       color: #606266;
       width: 70px;
+      font-size: 13px;
+      line-height: 30px;
+
     }
     .el-select {
       width: 100%;
