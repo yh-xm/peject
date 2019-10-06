@@ -39,7 +39,7 @@
         </el-table>
         <!-- 弹出框 -->
         <!-- Form -->
-        <el-dialog :title="title" :visible.sync="dialogFormVisible">
+        <el-dialog :title="title" :visible.sync="dialogFormVisible" center>
           <el-form
             :model="ruleForm"
             :rules="rules"

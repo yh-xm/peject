@@ -1,10 +1,35 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view  v-if="isRouterAlive"/>
   </div>
 </template>
+<<<<<<< HEAD
+<script>
+  export default {
+    name: 'App',
+    data () {
+      return {
+        isRouterAlive: true
+      }
+    },
+    // provide(){ //提供
+    //   return {
+    //     reload: this.reload
+    //   }
+    // },
+    // methods: {
+    //   reload(){
+    //     this.isRouterAlive = false
+    //     this.$nextTick( function () {
+    //       this.isRouterAlive = true
+    //     })
+    //   }
+    // }
+  }
+</script>
 
-
+=======
+>>>>>>> cy
 <style lang="less">
 * {
   margin: 0px;
@@ -17,7 +42,7 @@ html,body,#app{
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   color: #2c3e50;
 }
 

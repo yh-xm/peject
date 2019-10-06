@@ -3,7 +3,6 @@ const TestPaperManage = () => import('@/views/test/TestPaperManage')
 const TestResult = () => import('@/views/test/TestResult')
 const TestSetter = () => import('@/views/test/TestSetter')
 const ViewTestPaper = () => import('@/views/test/ViewTestPaper')
-
 export default(
     [
         {

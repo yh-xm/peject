@@ -55,6 +55,7 @@
   </div>
 </template>
 <script>
+import { setCookie, getCookie, clearCookie } from "@/api/SetCookie.js";
 export default {
   data() {
     return {
@@ -95,7 +96,7 @@ export default {
             trigger: "blur"
           },
           {
-            min: 6,
+            min: 3,
             max: 18,
             message: "长度在 1 到 18个字符",
             trigger: "blur"
@@ -106,34 +107,53 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.disbable = true;
-      this.$refs[formName].validate(valid => {
+       var _this = this;
+      _this.disbable = true;
+      _this.$refs[formName].validate(valid => {
         if (valid) {
-          var _this = this;
+         
           if (
-            this.numberValidateForm.username.trim() != "" &&
-            this.numberValidateForm.passworld.trim() != ""
+            _this.numberValidateForm.username.trim() != "" &&
+            _this.numberValidateForm.passworld.trim() != ""
           ) {
-            this.axios
+            _this.axios
               .get(
-                `/api/OAuth/authenticate?userMobile=${this.numberValidateForm.username}&userPassword=${this.numberValidateForm.passworld}`
+                `/api/OAuth/authenticate?userMobile=${_this.numberValidateForm.username}&userPassword=${_this.numberValidateForm.passworld}`
               )
               .then(function(r) {
                 if (r.status == "200") {
-                  if(_this.lenrnPsw == true){
-                    _this.setCookie(_this.numberValidateForm.username, _this.numberValidateForm.passworld,7)
-                  }else{
-                      _this.clearCookie();
+                  if (_this.lenrnPsw == true) {
+<<<<<<< HEAD
+                    _this.setCookie(
+                      _this.numberValidateForm.username,
+                      _this.numberValidateForm.passworld,
+                      7
+                    );
+                  } else {
+                    _this.clearCookie();
                   }
-                  sessionStorage.tkon = "Bearer"+" "+r.data.access_token; //获取tkon
+                  sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
                   sessionStorage.stuUid = r.data.profile.stuUid;
+=======
+                    var obj = {
+                      username: _this.numberValidateForm.username,
+                      password: _this.numberValidateForm.passworld
+                    };
+                    setCookie(obj, 7);
+                  } else {
+                    clearCookie();
+                  }
+                  sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
+                  sessionStorage.userId = r.data.profile.userUid;
+>>>>>>> wufei
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
-             
                   if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);
+
                     let redirect = _this.$route.query.redirect;
+                    console.log(redirect);
                     _this.$router.push({
                       path: redirect
                     });
@@ -143,74 +163,80 @@ export default {
                       name: "home"
                     });
                   }
-                  
+<<<<<<< HEAD
+
                   _this.$message({
                     type: "success",
                     message: "登录成功!"
                   });
+=======
+                   this.message(this,1, "登录成功!")
+>>>>>>> wufei
                 }
               })
               .catch(function(error) {
-                _this.$message({
-                  showClose: true,
-                  message: "用户名或密码错误，请重新输入!",
-                  type: "warning"
-                });
+                this.message(this,-1, "用户名或密码错误，请重新输入!")
               });
           } else {
-            _this.$message({
-              showClose: true,
-              message: "请填写用户名和密码",
-              type: "warning"
-            });
+             this.message(this,-1, "请填写用户名和密码")
           }
         } else {
-          
           return false;
         }
       });
-       this.disbable = false;
+<<<<<<< HEAD
+      this.disbable = false;
     },
     // 设置cookie
-    setCookie(username,password,timer){
-      username = btoa(username+"")
-      password = btoa(password+"")
+    setCookie(username, password, timer) {
+      username = btoa(username + "");
+      password = btoa(password + "");
       var nowDtate = new Date(); //获取当前时间
-      
-      nowDtate.setTime(nowDtate.getTime() + 24*60*60*1000*timer); //设置保存天数
-      window.document.cookie = "zxusername"+"="+username+";path=/;expires="+nowDtate.toGMTString();
-       window.document.cookie = "zxpassworld"+"="+password+";path=/;expires="+nowDtate.toGMTString();
+
+      nowDtate.setTime(nowDtate.getTime() + 24 * 60 * 60 * 1000 * timer); //设置保存天数
+      window.document.cookie =
+        "zxusername" +
+        "=" +
+        username +
+        ";path=/;expires=" +
+        nowDtate.toGMTString();
+      window.document.cookie =
+        "zxpassworld" +
+        "=" +
+        password +
+        ";path=/;expires=" +
+        nowDtate.toGMTString();
     },
     //读取cookie
-    getCookie(){
-      if(document.cookie.length>0){
- 
-   
+    getCookie() {
+      if (document.cookie.length > 0) {
         var arr = document.cookie.split("; ");
         var ulen = "zxusername=".length;
         var plen = "zxpassworld=".length;
-        for(let i=0;i<arr.length;i++){
-              if(arr[i].indexOf("zxusername")!=-1){
-                   this.lenrnPsw = true;
-                this.numberValidateForm.username = atob(arr[i].substr(ulen)); //解码用户名
-              }else if(arr[i].indexOf("zxpassworld")!=-1){
-                this.numberValidateForm.passworld = atob(arr[i].substr(plen));//解码密码
-              }
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].indexOf("zxusername") != -1) {
+            this.lenrnPsw = true;
+            this.numberValidateForm.username = atob(arr[i].substr(ulen)); //解码用户名
+          } else if (arr[i].indexOf("zxpassworld") != -1) {
+            this.numberValidateForm.passworld = atob(arr[i].substr(plen)); //解码密码
+          }
         }
       }
     },
     //清除cookie
-    clearCookie(){
-      this.setCookie("","",-1)
+    clearCookie() {
+      this.setCookie("", "", -1);
+=======
+      _this.disbable = false;
+>>>>>>> wufei
     }
   },
-  created() {
- 
-  },
+  created() {},
   watch: {
     screenWidth(val) {
-      this.screenWidth = val;
-      let that = this;
+       let that = this;
+      that.screenWidth = val;
+     
       if (this.screenWidth <= 767) {
         that.showItem = true;
       } else {
@@ -226,7 +252,14 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
-    this.getCookie();
+    var serachArr = ["username", "password"];
+    var obj = getCookie(serachArr);
+   if(obj.username&&obj.password){
+     that.numberValidateForm.username = obj.username;
+that.numberValidateForm.passworld = obj.password;
+that.lenrnPsw=true;
+   }
+
   }
 };
 </script>
@@ -238,12 +271,22 @@ export default {
   background-image: url("../../public/background.jpg");
   background-size: cover;
   .From {
-    
     margin: auto;
     border: 1px solid transparent;
+<<<<<<< HEAD
+    width: 500px;
+    height: 350px;
+    min-width: 300px;
+=======
     // width: 450px;
     height: 300px;
+    // width: 500px;
+<<<<<<< HEAD
+    min-width: 150px;
+>>>>>>> wufei
+=======
     min-width: 250px;
+>>>>>>> wufei
     position: absolute;
     left: 50%;
     top: 50%;
@@ -251,7 +294,7 @@ export default {
     box-shadow: #4a93d8 1px 1px 8px 10px;
     border-radius: 5px;
     background-color: #d8ecf5;
-    padding: 20px 20px;
+    padding: 50px 20px;
 
     #line {
       margin: 0 auto;
@@ -293,23 +336,19 @@ export default {
     .from-right {
       width: 50%;
       .el-form {
-        margin: 0px auto;
-
+        margin: 20px auto;
         width: 80%;
         position: relative;
-        // border: 1px solid red;
-
         text-align: center;
         /deep/.el-form-item__content {
           margin-left: 0px !important;
-          //   border: 1px solid red;
         }
         .el-button {
           background-color: #67c239;
           color: white;
           outline: #67c239;
           width: 100%;
-          line-height: 12px;
+
           margin-top: 5%;
           height: 35px;
           .is-loading {
@@ -319,8 +358,6 @@ export default {
         /deep/ .el-input__inner {
           border-radius: 0px;
           border: #1ca092 1px solid;
-          height: 30px;
-          width: 100%;
           text-indent: 18px;
           outline: #67c239;
         }
@@ -356,6 +393,7 @@ export default {
   .samllScreen {
     //  width: 100%;
     display: block;
+    height: 340px;
   }
 }
 </style>

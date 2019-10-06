@@ -9,20 +9,21 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
 import i18n from './i18n/i18n';
+import {message} from './api/MessageTips.js'
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 } 
-
 Vue.use(i18n);
 Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
+Vue.prototype.message = message;
 
 router.beforeEach((to, from, next) => {
     if(to.path == '/login' ){
     next();
-    }else if(sessionStorage.stuUid){
+    }else if(sessionStorage.userId){
       next()
     }else{
         next({ path: '/login',query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
@@ -45,7 +46,7 @@ axios.interceptors.response.use(response=>{
 },error=>{
  var url = error.config.url.toLocaleLowerCase();
  if(error.response.status === 401 && ! url.endsWith("oauth/authenticate")){ //过期登录
-  console.log(1111)
+  // console.log(1111)
    router.replace({
      name:'login',
      query: {
