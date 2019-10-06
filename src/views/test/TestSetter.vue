@@ -1,10 +1,27 @@
 <template>
 <div id="TestSetter">
-    安排测试
+    <test-drop-down-box></test-drop-down-box>
+
+
 </div>
 </template>
 <script>
+import TestDropDownBox from '@/components/TestSetter/TestDropDownBox';//试卷下拉框
 export default {
+    data(){
+        return{
+
+        }
+    },
+    //定义组件
+    components:{
+        TestDropDownBox
+
+    },
+    //定义方法
+    methods:{
+
+    }
     
 }
 </script>
