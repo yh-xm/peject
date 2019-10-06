@@ -182,39 +182,6 @@ export default {
       }
     };
   },
-  //定义计算属性
-  computed: {
-    /**
-     * 导航角色过滤
-     * @method filtData
-     * 思路  根据你当前 点 击 的值来进行判断 根据从后台拿到的相关数据来过滤掉不与你当前点击的值不一致的数据；
-     * 同时，根据过滤之后表格需要显示与之对应的内容；
-     *
-     * 步骤
-     * 使用filtRadio按钮属性判断你点击的是谁，
-     * 然后用tabaData（就是从后台拿到的数据）用es6的filter()方法进行过滤判断；
-     * 然后返回出去（就是return）;
-     * 这是计算属性
-     * 所以直接把这个方法名(也就是filtData)像data值一样绑定到显示结果的表格中;
-     * */
-    filtData() {
-      let _this = this;
-      if (_this.filtRadio == "0") {
-        return _this.tableData;
-      } else {
-        return _this.tableData.filter(
-          item => item.userTypeTypeName == _this.filtRadio
-        );
-      }
-    }
-  },
-  watch: {
-    ruleForm: function(newval, val) {
-      let _this = this;
-      console.log(newval); //新值
-      console.log(val); //原值
-    }
-  },
   /**
    * 这里面定义方法
    * */

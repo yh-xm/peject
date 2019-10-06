@@ -123,16 +123,16 @@ export default {
               .then(function(r) {
                 if (r.status == "200") {
                   if (_this.lenrnPsw == true) {
-                    _this.setCookie(
-                      _this.numberValidateForm.username,
-                      _this.numberValidateForm.passworld,
-                      7
-                    );
+                    var obj = {
+                      username: _this.numberValidateForm.username,
+                      password: _this.numberValidateForm.passworld
+                    };
+                    setCookie(obj, 7);
                   } else {
-                    _this.clearCookie();
+                    clearCookie();
                   }
                   sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
-                  sessionStorage.stuUid = r.data.profile.stuUid;
+                  sessionStorage.userId = r.data.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
                   if (_this.$route.query.redirect) {
@@ -150,7 +150,7 @@ export default {
                       name: "home"
                     });
                   }
-                   _this.message(this,1, "登录成功!")
+                   this.message(this,1, "登录成功!")
                 }
               })
               .catch(function(error) {
@@ -163,49 +163,7 @@ export default {
           return false;
         }
       });
-      this.disbable = false;
-    },
-    // 设置cookie
-    setCookie(username, password, timer) {
-      username = btoa(username + "");
-      password = btoa(password + "");
-      var nowDtate = new Date(); //获取当前时间
-
-      nowDtate.setTime(nowDtate.getTime() + 24 * 60 * 60 * 1000 * timer); //设置保存天数
-      window.document.cookie =
-        "zxusername" +
-        "=" +
-        username +
-        ";path=/;expires=" +
-        nowDtate.toGMTString();
-      window.document.cookie =
-        "zxpassworld" +
-        "=" +
-        password +
-        ";path=/;expires=" +
-        nowDtate.toGMTString();
-    },
-    //读取cookie
-    getCookie() {
-      if (document.cookie.length > 0) {
-        var arr = document.cookie.split("; ");
-        var ulen = "zxusername=".length;
-        var plen = "zxpassworld=".length;
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].indexOf("zxusername") != -1) {
-            this.lenrnPsw = true;
-            this.numberValidateForm.username = atob(arr[i].substr(ulen)); //解码用户名
-          } else if (arr[i].indexOf("zxpassworld") != -1) {
-            this.numberValidateForm.passworld = atob(arr[i].substr(plen)); //解码密码
-          }
-        }
-      }
-    },
-    //清除cookie
-    clearCookie() {
-      this.setCookie("", "", -1);
       _this.disbable = false;
-      //  wufei
     }
   },
   created() {},
@@ -250,13 +208,10 @@ that.lenrnPsw=true;
   .From {
     margin: auto;
     border: 1px solid transparent;
-    width: 500px;
-    height: 350px;
-    min-width: 300px;
+
     // width: 450px;
     height: 300px;
     // width: 500px;
-    min-width: 150px;
     min-width: 250px;
     position: absolute;
     left: 50%;
