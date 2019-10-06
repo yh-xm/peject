@@ -16,34 +16,28 @@
         <el-step title="完成制作"></el-step>
       </el-steps>
 
-      <BeginMake v-if="active==0"></BeginMake>
+      <begin-make v-if="active==0"></begin-make>
       <div id="TestInfo" v-if="active==1">
         <div class="tabs">
           <div class="left-list">
-            <span class="list-title">题目类型</span>
-            <el-radio-group v-model="radio" @change="changeQuestionType">
-              <el-radio
-                v-for="(item,index) in pageInfo"
-                :key="index"
-                :label="index"
-              >{{item.typeName}}</el-radio>
-            </el-radio-group>
-          </div>
+              <question-sectect :select="true" @changeOption="changeQuestionType" @init="init" />
+            </div>
+        
 
           <div class="right-button">
             <el-button type="primary" @click="fnover">完成制卷</el-button>
           </div>
         </div>
         <div class="content-view">
-          <AddMultipleChoice v-if="nowAddOption==0" />
-          <AddGapFilling v-if="nowAddOption==1" />
-          <AddEssayQuestion v-if="nowAddOption==2" />
+          <add-multiple-choice v-if="nowAddOption==0" @addMultipleChoice="addQuestion" />
+          <add-gap-filling v-if="nowAddOption==1" @addGapFilling="addQuestion" />
+          <add-essay-question v-if="nowAddOption==2" @addEssayQuestion="addQuestion" />
         </div>
         <div class="bottom-view" :data-t="pageInfo">
           <el-card class="box-card" v-for="(item,index) in pageInfo" :key="index">
             <div slot="header" class="clearfix">
               <span>
-                {{index+1}}、{{item.typeName}}（本题共{{item.nowAdd}}道小题，共
+                {{index+1 | questionsIndex}}{{item.typeName}}（本题共{{item.nowAdd}}道小题，共
                 <el-tag type="danger" effect="dark" size="small">{{item.nowScroe}}/{{sumSoce}}</el-tag>分）
               </span>
             </div>
@@ -52,16 +46,22 @@
                 v-if="items.tpqQuestion.questionTypeId=='1'?true:false"
                 :AddChooseQuestionList="items"
                 :nowIndex="indexs"
+                @setQuestion="setQuestion"
+                @changeScore="changeScore"
               ></SetChooseQuestion>
               <SetGapFillQuestion
                 v-if="items.tpqQuestion.questionTypeId=='2'?true:false"
                 :AddGapFillQuestionList="items"
                 :nowIndex3="indexs"
+                @setQuestion="setQuestion"
+                @changeScore="changeScore"
               ></SetGapFillQuestion>
               <SetAnswerQuestion
                 v-if="items.tpqQuestion.questionTypeId=='3'?true:false"
                 :AddEssayQuestiontList="items"
                 :nowIndex2="indexs"
+                @setQuestion="setQuestion"
+                @changeScore="changeScore"
               ></SetAnswerQuestion>
             </div>
           </el-card>
@@ -81,13 +81,26 @@ import AddEssayQuestion from "@/components/MakeTestPaper/SetPageInfo/AddEssayQue
 import SetChooseQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetChooseQuestion"; //维护选择题组件
 import SetGapFillQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetGapFillQuestion"; // 维护填空题组件
 import SetAnswerQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetAnswerQuestion"; // 维护问答题组件
+import QuestionSectect from "@/components/QuestionSectect"; // 维护问答题组件
 export default {
+    components: {
+    BeginMake, //第一步，选择科目
+    MakeOver, //第三步，完成试卷
+    AddMultipleChoice, //添加选择题
+    AddGapFilling, //添加填空题
+    AddEssayQuestion, //添加问答题
+    SetChooseQuestion, //维护选择题
+    SetGapFillQuestion, // 维护填空题
+    SetAnswerQuestion, //维护问答题
+    QuestionSectect //试卷问题类型下拉框
+  },
   data() {
     return {
+      testPaperId: "",
       active: 0, //当前步奏
       pageInfo: [], //试卷信息
       radio: 3, //选项
-      nowAddOption: "" //当前所在题型
+      nowAddOption: -1 //当前所在题型
     };
   },
   computed: {
@@ -114,6 +127,7 @@ export default {
      * @param {Number} v 题目所在下标
      */
     changeQuestionType(v) {
+      console.log(v);
       this.nowAddOption = v;
     },
     /**
@@ -129,28 +143,88 @@ export default {
      *  {Number} nowScroe 每种题目类型总分
      * {Number} nowAdd 每种题目类型总个数
      */
-    init() {
+    init(data) {
       var _this = this;
-      _this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
-        //接口初始化获取问题类型
-        _this.pageInfo = res.data;
-        for (let i in _this.pageInfo) {
-          _this.pageInfo[i].bodys = [];
-          _this.pageInfo[i].nowAdd = 0;
-          _this.pageInfo[i].nowScroe = 0;
-        }
-      });
+      _this.pageInfo = data;
+    },
+       /**
+     * 添加题目
+     * 
+     * @param {object} data 添加的题目信息
+     * 
+     */
+    addQuestion(data) {
+      var _this = this;
+      var index = data.questionTypeId - 1;
+      _this.pageInfo[index].bodys.push(data.bodys); //改变父组件的问答题的试卷信息
+      _this.pageInfo[index].nowAdd += 1; //改变父组件的问答题的问题个数
+          _this.sumScore(index)
+    },
+       /**
+     * 维护题目
+     * 
+     * @param {object} data 维护的题目信息
+     * 
+     * 
+     */
+    setQuestion(data) {
+      var _this = this;
+      var index = data.questionTypeId - 1;
+      _this.pageInfo[index].bodys.splice(data.index, 1); //改变父组件的问答题的试卷信息
+      _this.pageInfo[index].nowAdd -= 1; //改变父组件的问答题的问题个数
+      _this.pageInfo[index].nowScroe -= parseInt(data.tpqScore); //改变父组件的问答题的分数
+      _this.pageInfo = [..._this.pageInfo]; //解构渲染
+    },
+    /**
+     * 修改分数
+     * 
+     */
+    changeScore(data){
+      var _this = this;
+       var index = data.index;
+       console.log(data.fqIndex)
+       if(data.fqIndex!=undefined){
+         var fqIndex = data.fqIndex;
+         var fqsScore = data.fqsScore;
+        _this.sumScore(index,fqIndex,fqsScore)
+       }else{
+        _this.sumScore(data)
+       
+       }
+
+    },
+    /**
+     * 计算分数
+     * 
+     */
+    sumScore(index,fqIndex,fqsScore){
+      var _this = this;
+      console.log(index)
+       _this.pageInfo[index].nowScroe = 0;
+       if(fqIndex!=undefined){
+         _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
+       }
+       
+      for (const key in _this.pageInfo[index].bodys) {
+         _this.pageInfo[index].nowScroe += _this.pageInfo[index].bodys[key].tpqScore //改变父组件的问答题的分数
+          console.log(_this.pageInfo[index].bodys[key])
+      }
+      _this.pageInfo = [...this.pageInfo]
     }
+
   },
-  components: {
-    BeginMake, //第一步，选择科目
-    MakeOver, //第三步，完成试卷
-    AddMultipleChoice, //添加选择题
-    AddGapFilling, //添加填空题
-    AddEssayQuestion, //添加问答题
-    SetChooseQuestion, //维护选择题
-    SetGapFillQuestion, // 维护填空题
-    SetAnswerQuestion //维护问答题
+
+  filters: {
+    questionsIndex(data) {
+      switch (data) {
+        case 1:
+          return "一、";
+        case 2:
+          return "二、";
+        case 3:
+          return "三、";
+      }
+    }
   },
   created() {
     this.init(); //初始化题型
@@ -159,15 +233,16 @@ export default {
 </script>
 <style lang="less" scoped>
 #MakeTestPaper {
+  .box-card {
+    margin-top: 25px;
+  }
   #TestInfo {
     padding-top: 50px;
     .tabs {
       display: flex;
       .left-list {
         margin-right: auto;
-        .list-title {
-          margin: 0px 15px;
-        }
+     
       }
       .right-button {
         width: 150px;

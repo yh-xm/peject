@@ -40,10 +40,7 @@ export default {
   },
   methods:{
       goback(){ //上一步
-    var data = this.data;
-    sessionStorage.pageInfo = JSON.stringify(data) //完整试卷信息
  this.$parent.$parent.active = 1;
-
       }
   },
   created() { //获取试卷信息

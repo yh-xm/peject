@@ -9,15 +9,16 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
 import i18n from './i18n/i18n';
+import {message} from './api/MessageTips.js'
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 } 
-
 Vue.use(i18n);
 Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
+Vue.prototype.message = message;
 
 router.beforeEach((to, from, next) => {
     if(to.path == '/login' ){

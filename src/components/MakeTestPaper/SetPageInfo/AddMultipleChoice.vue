@@ -22,12 +22,7 @@
           :key="domain.key"
           :prop="'domains.' + index + '.value'"
         >
-          <el-checkbox-group
-            v-model="AddMultipleChoice.checked"
-            :min="0"
-            :max="2"
-            @change="change"
-          >
+          <el-checkbox-group v-model="AddMultipleChoice.checked" :min="0" :max="2" @change="change">
             <el-checkbox :label="domain.options" :key="index"></el-checkbox>
           </el-checkbox-group>
 
@@ -65,9 +60,7 @@ export default {
         checked: [], //选中的多选按钮
         onum: 2, //默认分数
         nowAdd: 4, //默认添加个数
-        domains: [
-          
-        ], //选项
+        domains: [], //选项
         optionsActive: ["A、", "B、", "C、", "D、", "E、"], //对应字母
         title: "" //题目
       }
@@ -124,7 +117,8 @@ export default {
      * @param {object} formName 点击当前表单对象
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
-     */ 
+     */
+
     submitForm(formName) {
       //提交表单
       var _this = this;
@@ -137,15 +131,15 @@ export default {
           for (const key in _this.$refs[formName].model.domains) {
             if (
               _this.$refs[formName].model.domains[key].options ==
-                _this.AddMultipleChoice.checked[        //判断选中项
-                  _this.AddMultipleChoice.checked.length - 1  
+                _this.AddMultipleChoice.checked[ //判断选中项
+                  _this.AddMultipleChoice.checked.length - 1
                 ] ||
               _this.$refs[formName].model.domains[key].options ==
                 _this.AddMultipleChoice.checked[0]
             ) {
               arrs.push({
                 cqOption: _this.$refs[formName].model.domains[key].value,
-                cqIsRight: true  //选中为true
+                cqIsRight: true //选中为true
               });
             } else {
               arrs.push({
@@ -166,20 +160,14 @@ export default {
             })
             .then(res => {
               if (res.data.message == "添加成功") {
-                _this.$parent.$parent.pageInfo[0].bodys.push(res.data.data); //改变父组件的问答题的试卷信息
-                _this.$parent.$parent.pageInfo[0].nowAdd += 1; //改变父组件的问答题的问题个数
-                _this.$parent.$parent.pageInfo[0].nowScroe += parseInt(
-                  res.data.data.tpqScore
-                ); //改变父组件的问答题的分数
-                _this.$parent.$parent.pageInfo = [
-                  ..._this.$parent.$parent.pageInfo
-                ]; //解构渲染
-                _this.$message({
-                  type: "success",
-                  message: "添加成功!"
-                });
+                var data = {
+                  bodys: res.data.data,
+                  questionTypeId: 1
+                };
+                this.$emit("addMultipleChoice", data);
+        this.message(this,1, "添加成功!")
                 _this.init();
-                _this.resetForm('AddMultipleChoice')
+                _this.resetForm("AddMultipleChoice");
               }
             });
         } else {
@@ -188,37 +176,38 @@ export default {
         }
       });
     },
-     /**
+    /**
      * 初始化表单
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
-     */ 
-    init(){
+     */
+
+    init() {
       var _this = this;
-      _this.AddMultipleChoice.checked=[];
-         _this.AddMultipleChoice.domains=[];
-      for(let i=0;i<4;i++){
-         _this.AddMultipleChoice.domains.push({
-           value:"",
-           options:_this.AddMultipleChoice.optionsActive[i]
-         })
+      _this.AddMultipleChoice.checked = [];
+      _this.AddMultipleChoice.domains = [];
+      for (let i = 0; i < 4; i++) {
+        _this.AddMultipleChoice.domains.push({
+          value: "",
+          options: _this.AddMultipleChoice.optionsActive[i]
+        });
       }
-     
     },
-        /**
+    /**
      * 多选改变监听
      * @param {Array} v 点击当前选中多选
      *
      */
     change(v) {
-          var _this = this;
+      var _this = this;
       //多选变化
       _this.AddMultipleChoice.checked = v;
       _this.AddMultipleChoice.checked = [..._this.AddMultipleChoice.checked];
     }
   },
   created() {
-    this.init(); //初始化选项
+    var _this = this;
+    _this.init(); //初始化选项
   }
 };
 </script>
