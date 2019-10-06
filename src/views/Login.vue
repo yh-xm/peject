@@ -150,26 +150,14 @@ export default {
                       name: "home"
                     });
                   }
-
-                  _this.$message({
-                    type: "success",
-                    message: "登录成功!"
-                  });
+                   this.message(this,1, "登录成功!")
                 }
               })
               .catch(function(error) {
-                _this.$message({
-                  showClose: true,
-                  message: "用户名或密码错误，请重新输入!",
-                  type: "warning"
-                });
+                this.message(this,-1, "用户名或密码错误，请重新输入!")
               });
           } else {
-            _this.$message({
-              showClose: true,
-              message: "请填写用户名和密码",
-              type: "warning"
-            });
+             this.message(this,-1, "请填写用户名和密码")
           }
         } else {
           return false;

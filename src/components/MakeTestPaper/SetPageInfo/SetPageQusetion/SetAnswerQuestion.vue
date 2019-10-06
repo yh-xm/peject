@@ -104,10 +104,7 @@ export default {
               message: "修改成功!"
             });
           } else {
-            _this.$message({
-              type: "warning",
-              message: res.data.message
-            });
+       _this.message(this,1, res.data.message)
           }
         });
     },
@@ -130,10 +127,7 @@ export default {
             };
             this.$emit("setQuestion", data);
           }
-          this.$message({
-            type: "success",
-            message: res.data.message
-          });
+         _this.message(this,1, res.data.message)
         });
     },
     /**

@@ -109,8 +109,10 @@ export default {
                   questionTypeId: 2
                 };
                 this.$emit("addGapFilling", data);
+                        this.message(this,1, "添加成功!")
                 this.resetForm("AddGapFillQuestion");
                 this.title = "";
+                
               }
             });
         } else {

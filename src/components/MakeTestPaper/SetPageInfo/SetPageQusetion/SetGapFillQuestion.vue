@@ -116,33 +116,21 @@ export default {
               this.fillQuestion = [];
               if (res.data.code == 1) {
                 if (res.data.message == "数据没有变化") {
-                  _this.$message({
-                    type: "warning",
-                    message: res.data.message
-                  });
+                  _this.message(this,1, res.data.message)
                 } else if (res.data.message == "修改成功") {
                   _this.oshow = !_this.oshow;
                   _this.nowOption.questionTitle = _this.title;
-                  _this.$message({
-                    type: "success",
-                    message: "修改成功!"
-                  });
+                 _this.message(this,1, "修改成功!")
                 } else {
                   var data = res.data + "}]}}";
                   data = eval("(" + data + ")");
                   // _this.nowOption = JSON.parse(JSON.stringify(nowOption));
                   console.log(data);
                   _this.oshow = !_this.oshow;
-                  _this.$message({
-                    type: "success",
-                    message: "修改成功!"
-                  });
+                 _this.message(this,1, "修改成功!")
                 }
               } else {
-                _this.$message({
-                  type: "success",
-                  message: res.data.message
-                });
+                _this.message(this,-1, res.data.message)
               }
             });
         } else {
@@ -192,10 +180,7 @@ export default {
             };
             _this.$emit("setQuestion", data);
           }
-          _this.$message({
-            type: "success",
-            message: res.data.message
-          });
+          _this.message(this,1, "删除成功!")
         });
     },
     changeScore(v) {
@@ -224,7 +209,7 @@ export default {
            fqsScore:_this.AddGapFillQuestionList.fqsScore,
             fqIndex:_this.nowIndex3
          }
-         
+                 _this.message(this,1, "修改成功!")
           _this.$emit('changeScore',data)
        }
         });
