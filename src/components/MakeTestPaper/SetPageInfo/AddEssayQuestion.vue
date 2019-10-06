@@ -85,11 +85,9 @@ export default {
               questionTypeId:3
             }
             this.$emit('addEssayQuestion',data)
-            _this.$message({
-              type: "success",
-              message: "添加成功!"
-            });
+             this.message(this,1, "添加成功!")
             _this.resetForm("AddEssayQuestion"); //重置表单
+            _this.AddEssayQuestion.value = "";
           }
         });
     }

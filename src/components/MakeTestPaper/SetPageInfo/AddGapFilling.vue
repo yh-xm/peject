@@ -7,6 +7,7 @@
         label-width="100px"
         class="demo-dynamic"
       >
+      <!-- 题目 -->
         <el-form-item label="题干">
           <el-button round icon="el-icon-document-checked" @click="addDomain" size="small">插入填空</el-button>
         </el-form-item>
@@ -102,19 +103,16 @@ export default {
             .then(res => {
               console.log(res);
               if (res.data.message == "添加成功") {
-                sessionStorage.data = JSON.stringify(res.data.data);
-                var data = {"tpqId":7042,"tpqPaperId":4476,"tpqQuestionId":7139,"tpqScore":4,"tpqQuestion":{"questionId":7139,"questionTitle":"w＿w＿","questionTypeId":3,"answerQuestion":null,"chooseQuestion":[],"fillQuestion":[{"fqId":7251,"fqQuestionId":7139,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7251,"fqsPaperQuestionId":7042,"fqsScore":2}]},{"fqId":7252,"fqQuestionId":7139,"fqAnswer":"w","fillQuestionScore":[{"fqsFilleQuestionId":7252,"fqsPaperQuestionId":7042,"fqsScore":2}]}]}}
-                console.log(res.data.data)
                 res.data.data.tpqQuestion.questionTypeId = 2;
                 var data = {
                   bodys: res.data.data,
                   questionTypeId: 2
                 };
                 this.$emit("addGapFilling", data);
+                        this.message(this,1, "添加成功!")
                 this.resetForm("AddGapFillQuestion");
                 this.title = "";
-                this.resetForm("AddGapFillQuestion");
-                this.title = "";
+                
               }
             });
         } else {
@@ -180,6 +178,7 @@ export default {
   watch: {
     //监听题目变化
     title: function(n, o) {
+      var _this = this;
       var oindex = 0;
       var nindex = 0;
       var oindexArr = [];
@@ -187,18 +186,23 @@ export default {
       var oarr = o.split("");
       var narr = n.split("");
       for (const key in oarr) {
+        
         if (oarr[key] == "＿") {
           oarr[key] = oindex++;
           oindexArr.push(key);
+        }else {
+          oarr[key] = "*";
         }
       }
       for (const key in narr) {
         if (narr[key] == "＿") {
           narr[key] = nindex++;
           nindexArr.push(key);
+        } else {
+          narr[key] = "*";
         }
       }
-      var textindex = this.getCursortPosition(
+      var textindex = _this.getCursortPosition(
         //获取文本下标
         document.getElementById("textarea")
       );
@@ -225,7 +229,7 @@ export default {
                     onum: 2
                   }
                 );
-                console.log(this.AddGapFillQuestion.domains);
+                // console.log(_this.AddGapFillQuestion.domains);
                 break;
               } else {
                 max++;
@@ -233,7 +237,7 @@ export default {
             }
             if (max == oindexArr.length) {
               //往后添加空格
-              this.AddGapFillQuestion.domains.push({
+              _this.AddGapFillQuestion.domains.push({
                 value: "",
                 onum: 2
               });
@@ -241,7 +245,7 @@ export default {
             }
           }
         } else {
-          this.AddGapFillQuestion.domains.splice(narr[textindex], 0, {
+          _this.AddGapFillQuestion.domains.splice(narr[textindex], 0, {
             //按按钮操作添填空
             value: "",
             onum: 2
@@ -250,34 +254,18 @@ export default {
       }
       if (nindexArr.length < oindexArr.length) {
         //填空减少了
-
-        if (
-          oindexArr.length - nindexArr.length > 1 ||
-          oarr.length - narr.length > 1
-        ) {
-          //一次性删除多个填空
-          var delteArr = oarr.splice(textindex, oarr.length - narr.length);
-          for (let i in delteArr) {
-            if (!isNaN(delteArr[i])) {
-              if (i == 0) {
-                this.AddGapFillQuestion.domains.splice(delteArr[i], 1);
-              } else {
-                console.log(delteArr[i]);
-                delteArr[i] -= 1;
-                console.log(delteArr[i]);
-                this.AddGapFillQuestion.domains.splice(delteArr[i], 1);
-              }
+            for (let i in oindexArr) {
+            if (parseInt(oindexArr[i])>=textindex&&parseInt(oindexArr[i])<=textindex+oarr.length - narr.length) {
+            _this.AddGapFillQuestion.domains.splice(i, oindexArr.length - nindexArr.length);
+            break;
             }
           }
-        } else {
-          this.AddGapFillQuestion.domains.splice(oarr[textindex], 1);
-        }
       }
       if (nindexArr.length == 0) {
         //填空为0
-        this.AddGapFillQuestion.domains = [];
+        _this.AddGapFillQuestion.domains = [];
       }
-      this.IndexArr = narr; // 获取最新的分割题目数组
+      _this.IndexArr = narr; // 获取最新的分割题目数组
     }
   }
 };

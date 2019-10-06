@@ -1,24 +1,36 @@
 <template>
   <div class="MultipleChoice">
     <div class="Mult-Content">
+      <!-- 题目编号 -->
       <div class="option-title">{{nowIndex+1}}、</div>
       <div class="option-content">
         <el-form
-          :model="nowOption"
+          :model="nowOption.tpqQuestion"
           ref="dynamicValidateFormfive"
           label-width="100px"
           class="demo-dynamic"
         >
+        <!-- 题目 -->
           <el-form-item prop="title">
             <el-input
               type="textarea"
-              v-model="nowOption.questionTitle"
+              v-model="nowOption.tpqQuestion.questionTitle"
               :rows="1"
               :disabled="odisabled"
+              v-show="!odisabled"
             ></el-input>
-          </el-form-item>
+            <span v-show="odisabled">{{nowOption.tpqQuestion.questionTitle}}
+            <el-input-number
+              size="small"
+              v-model="nowOption.tpqScore"
+             :min="1" :max="10"
+              @change="changeScore"
+            ></el-input-number>
 
-          <el-form-item v-for="(domain, index) in nowOption.chooseQuestion" :key="domain.key">
+            </span>
+          </el-form-item>
+  
+          <el-form-item v-for="(domain, index) in nowOption.tpqQuestion.chooseQuestion" :key="domain.key">
             <el-checkbox-group v-model="checked" :min="0" :max="2" @change="checkboxChange">
               {{domain}}
               <el-checkbox
@@ -61,7 +73,8 @@ export default {
       optionsActive: ["A、", "B、", "C、", "D、", "E、"], //对应字母
       checked: [], //多选信息
       oldOption: [], //克隆题目信息
-      nowOption: [] //当前题目信息
+      nowOption: [], //当前题目信息
+      tpqScore:0
     };
   },
   props: {
@@ -89,8 +102,8 @@ export default {
      * 添加选项
      */
     addOption() {
-      if (this.nowOption.chooseQuestion.length < this.optionsActive.length) {
-        this.nowOption.chooseQuestion.push({
+      if (this.nowOption.tpqQuestion.chooseQuestion.length < this.optionsActive.length) {
+        this.nowOption.tpqQuestion.chooseQuestion.push({
           cqId: 0,
           cqIsRight: false,
           cqOption: ""
@@ -106,18 +119,15 @@ export default {
       _this.axios
         .post(`/api/TestPaper/ModifyQuestion`, {
           //—修改选择题
-          questionId: nowOption.questionId,
-          questionTitle: nowOption.questionTitle,
-          questionTypeId: nowOption.questionTypeId,
-          chooseQuestion: nowOption.chooseQuestion
+          questionId: nowOption.tpqQuestion.questionId,
+          questionTitle: nowOption.tpqQuestion.questionTitle,
+          questionTypeId: nowOption.tpqQuestion.questionTypeId,
+          chooseQuestion: nowOption.tpqQuestion.chooseQuestion
         })
         .then(res => {
           if (res.data.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             _this.odisabled = !_this.odisabled; //成功禁用
-            _this.$parent.$parent.$parent.pageInfo = [
-              ..._this.$parent.$parent.$parent.pageInfo
-            ]; //解构渲染
             _this.oshow = !_this.oshow;
             console.log(_this.nowOption);
             _this.$message({
@@ -138,7 +148,7 @@ export default {
      * @param {object} index 当前选项下标
      */
     removeOption(index) {
-      this.nowOption.chooseQuestion.splice(index, 1);
+      this.nowOption.tpqQuestion.chooseQuestion.splice(index, 1);
     },
     /**
      * 删除题目
@@ -182,23 +192,41 @@ export default {
           arr.push(key);
         }
       }
-      for (let key in this.nowOption.chooseQuestion) {
+      for (let key in this.nowOption.tpqQuestion.chooseQuestion) {
         //全部不选中
-        this.nowOption.chooseQuestion[key].cqIsRight = false;
+        this.nowOption.tpqQuestion.chooseQuestion[key].cqIsRight = false;
       }
       for (let i = 0; i < arr.length; i++) {
         //选中当前选中的
-        this.nowOption.chooseQuestion[arr[i]].cqIsRight = true;
+        this.nowOption.tpqQuestion.chooseQuestion[arr[i]].cqIsRight = true;
       }
+    },
+    /**
+     * 修改题目分数
+     */
+    changeScore(v){
+            var _this = this;
+      _this.axios
+        .post(
+          `/api/TestPaper/ModifyScore`,{
+            "tpqId": _this.nowOption.tpqId, //主键编号
+            "tpqScore": v,//要修改的分值
+          } //修改题目分值
+        )
+        .then(res => {
+       if(res.data.message == "修改成功"){
+    this.$emit('changeScore',0)
+       }
+        });
     },
     /**
      * 初始化
      */
     init() {
       this.oldOption = JSON.parse(
-        JSON.stringify(this.AddChooseQuestionList.tpqQuestion)
+        JSON.stringify(this.AddChooseQuestionList)
       );
-      this.nowOption = this.AddChooseQuestionList.tpqQuestion;
+      this.nowOption = this.AddChooseQuestionList;
     }
   },
   created() {
@@ -222,9 +250,7 @@ export default {
           display: flex;
           margin-left: 40px !important;
           /deep/ .el-input {
-            margin-right: auto;
-            margin-right: 12px;
-            margin-left: 12px;
+            outline: none;
           }
           /deep/ .el-button {
             border-radius: 20px;

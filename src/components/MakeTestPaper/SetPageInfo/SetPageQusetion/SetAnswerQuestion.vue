@@ -1,21 +1,38 @@
+
 <template>
   <div>
     <div class="essat-content">
+      <!-- 小题编号 -->
       <div class="option-title">{{nowIndex2+1}}、</div>
       <div class="option-content">
-        <el-form :model="nowOption" ref="dynamicValidateFormfore" class="demo-dynamic">
-          <el-form-item prop="title">
+        <!-- 题目 -->
+        <el-form :model="nowOption" ref="nowOption" class="demo-dynamic">
+          <el-form-item prop="title" >
+              <span v-if="odisabled">
+            {{nowOption.tpqQuestion.questionTitle}}
+            <el-input-number
+              size="small"
+              v-model="nowOption.tpqScore"
+              :min="1"
+              :max="10"
+              @change="changeScore"
+            ></el-input-number>
+              </span>
             <el-input
               type="textarea"
               v-model="nowOption.tpqQuestion.questionTitle"
               :rows="1"
-              :disabled="odisabled"
+              v-if="!odisabled"
             ></el-input>
           </el-form-item>
-          <el-form-item label="参考答案">
-            <el-input v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer" :disabled="odisabled"></el-input>
+          <!-- 答案 -->
+          <el-form-item >
+            <el-tag type="info">参考答案</el-tag>
+            <div v-if="odisabled">{{nowOption.tpqQuestion.answerQuestion.aqAnswer}}</div>
+            <el-input v-if="!odisabled" v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer" :disabled="odisabled"></el-input>
           </el-form-item>
           <el-form-item>
+            <!-- 编辑 -->
             <el-button type="primary" plain @click.prevent="compile" size="small">编辑</el-button>
             <el-row v-show="oshow">
               <el-button round @click.prevent="cancel" size="small">取消</el-button>
@@ -87,10 +104,7 @@ export default {
               message: "修改成功!"
             });
           } else {
-            _this.$message({
-              type: "warning",
-              message: res.data.message
-            });
+       _this.message(this,1, res.data.message)
           }
         });
     },
@@ -106,17 +120,33 @@ export default {
         )
         .then(res => {
           if (res.data.message == "删除成功") {
-          var data ={
-            index:_this.nowIndex2,
-            questionTypeId: 3,
-            tpqScore:_this.AddEssayQuestiontList.tpqScore
+            var data = {
+              index: _this.nowIndex2,
+              questionTypeId: 3,
+              tpqScore: _this.AddEssayQuestiontList.tpqScore
+            };
+            this.$emit("setQuestion", data);
           }
-            this.$emit("setQuestion",data)
+         _this.message(this,1, res.data.message)
+        });
+    },
+    /**
+     * 修改题目分数
+     */
+    changeScore(v) {
+      var _this = this;
+      _this.axios
+        .post(
+          `/api/TestPaper/ModifyScore`,
+          {
+            tpqId: _this.nowOption.tpqId, //主键编号
+            tpqScore: v //要修改的分值
+          } //修改题目分值
+        )
+        .then(res => {
+          if (res.data.message == "修改成功") {
+            this.$emit("changeScore", 2);
           }
-          this.$message({
-            type: "success",
-            message: res.data.message
-          });
         });
     },
     /**

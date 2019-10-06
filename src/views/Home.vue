@@ -89,8 +89,10 @@
                 <el-dropdown-item command="英语">英语</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span style="margin-right: 15px">{{user.stuName}}</span>
-            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain "></el-avatar>
+            <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
+            <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
+             -->
+            <!-- <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain "></el-avatar> -->
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -319,6 +321,7 @@ changeLocale (command) {
     .el-icon-arrow-down {
       font-size: 12px;
     }
+ 
   }
 
   .el-aside {
@@ -347,10 +350,7 @@ changeLocale (command) {
     /deep/ .el-menu-item {
       background-color: #545c64;
       color: white;
-      height: 40px;
-      // max-width: 190px;
-      min-width: 190px;
-      line-height: 42px;
+         position: relative;
     }
 
     a {
@@ -379,13 +379,13 @@ changeLocale (command) {
       background-color: #373737 !important;
       color: #ffeb3a;
     }
-    .el-submenu .is-active::after {
+    .el-submenu .is-active:after {
       content: "◆";
       color: white;
       font-size: 40px;
       position: absolute;
-      right: 0;
-      margin-right: -12px;
+      right: -12px;
+      // margin-right: -12px;
     }
     /deep/ .is-opened {
       background-color: #545c64 !important;
