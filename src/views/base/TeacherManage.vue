@@ -182,6 +182,7 @@ export default {
       }
     };
   },
+<<<<<<< HEAD
   //定义计算属性
   computed: {
     /**
@@ -215,6 +216,8 @@ export default {
       console.log(val); //原值
     }
   },
+=======
+>>>>>>> master
   /**
    * 这里面定义方法
    * */
