@@ -63,6 +63,7 @@ export default {
       text-align: right;
       margin-right: 15px;
       color: #606266;
+      width: 70px;
     }
     .el-select {
       width: 100%;
