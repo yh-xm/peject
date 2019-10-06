@@ -90,6 +90,7 @@ export default {
               message: "添加成功!"
             });
             _this.resetForm("AddEssayQuestion"); //重置表单
+            _this.AddEssayQuestion.value = "";
           }
         });
     }

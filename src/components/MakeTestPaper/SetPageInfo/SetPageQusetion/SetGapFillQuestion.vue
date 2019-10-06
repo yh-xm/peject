@@ -2,7 +2,7 @@
   <div class="gapFilling">
     <div class="gapContent">
       <el-form :model="nowOption" ref="nowOption" label-width="100px" class="demo-dynamic">
-        <el-form-item class="view-options" v-show="!oshow"> 
+        <el-form-item class="view-options" v-show="!oshow">
           <!-- 题目预览 没有编辑状态-->
           <el-row v-for="(item,index) in title" :key="index">
             <span v-if="item!='＿'">{{item}}</span>
@@ -13,30 +13,20 @@
               class="ShowDaAn"
             ></el-input>
             <el-input-number
-            @change="changeScore"
+              @change="changeScore"
               v-if="item=='＿'"
               size="small"
+              :min="1" :max="5"
               v-model="nowOption.fillQuestion[IndexArr[index]].fillQuestionScore[0].fqsScore"
-              :step="1"
             ></el-input-number>
           </el-row>
           <!-- 题目预览/编辑  编辑状态-->
         </el-form-item>
         <el-form-item label="题干" v-show="oshow">
-          <el-button
-            round
-            icon="el-icon-document-checked"
-            @click="addDomain"
-            size="small"
-          >插入填空</el-button>
+          <el-button round icon="el-icon-document-checked" @click="addDomain" size="small">插入填空</el-button>
         </el-form-item>
         <el-form-item v-show="oshow">
-          <el-input
-            type="textarea"
-            v-model="title"
-            :rows="1"
-            :id="'textarea'+nowIndex3"
-          ></el-input>
+          <el-input type="textarea" v-model="title" :rows="1" :id="'textarea'+nowIndex3"></el-input>
         </el-form-item>
         <el-form-item
           v-show="oshow"
@@ -47,10 +37,7 @@
         >
           <el-tag type="danger" effect="dark" size="mini">{{index+1}}</el-tag>
 
-          <el-input
-            v-model="domain.fqAnswer"
-            :placeholder="'请输入第'+(index+1)+'个空的答案'"
-          ></el-input>
+          <el-input v-model="domain.fqAnswer" :placeholder="'请输入第'+(index+1)+'个空的答案'"></el-input>
         </el-form-item>
         <el-form-item label="题目预览" class="view-options" v-show="oshow">
           <el-row v-for="(item,index) in title" :key="index">
@@ -87,13 +74,13 @@
 </template>
 <script>
 export default {
-  name:"setGapfillQuestion", //维护填空题
+  name: "setGapfillQuestion", //维护填空题
   data() {
     return {
       title: "", //题目
       nowOption: {}, //当前数据
       oldOption: [], //历史数据
-      oshow: false, 
+      oshow: false,
       IndexArr: [],
       fillQuestion: []
     };
@@ -126,7 +113,6 @@ export default {
               fillQuestion: fillQuestion
             })
             .then(res => {
-              console.log(res);
               this.fillQuestion = [];
               if (res.data.code == 1) {
                 if (res.data.message == "数据没有变化") {
@@ -199,7 +185,7 @@ export default {
         .then(res => {
           if (res.data.message == "删除成功") {
             var data = {
-               setType:-1,
+              setType: -1,
               index: _this.nowIndex3,
               questionTypeId: 2,
               tpqScore: _this.AddGapFillQuestionList.tpqScore
@@ -212,8 +198,36 @@ export default {
           });
         });
     },
-    changeScore(v){
-      console.log(v)
+    changeScore(v) {
+      var _this = this;
+      var fillQuestion = _this.nowOption.fillQuestion;
+      _this.AddGapFillQuestionList.fqsScore = 0;
+      var fillQuestionScore = [];
+      for (const key in fillQuestion) {
+        _this.AddGapFillQuestionList.fqsScore +=
+          fillQuestion[key].fillQuestionScore[0].fqsScore;
+          fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0])
+      }
+      _this.axios
+        .post(
+          `/api/TestPaper/ModifyScore`,
+          {
+            tpqId: _this.AddGapFillQuestionList.tpqId, //主键编号
+            tpqScore:_this.AddGapFillQuestionList.fqsScore, //填空题分值
+            fillQuestionScore:fillQuestionScore
+          } //修改题目分值
+        )
+        .then(res => {
+       if(res.data.message == "修改成功"){
+         var data ={
+           index:1,
+           fqsScore:_this.AddGapFillQuestionList.fqsScore,
+            fqIndex:_this.nowIndex3
+         }
+         
+          _this.$emit('changeScore',data)
+       }
+        });
     },
     init() {
       var _this = this;
@@ -302,7 +316,9 @@ export default {
                     }
                   ]
                 });
-                _this.fillQuestion.push(_this.nowOption.fillQuestion.length - 1);
+                _this.fillQuestion.push(
+                  _this.nowOption.fillQuestion.length - 1
+                );
                 max = 0;
               }
             }
@@ -322,17 +338,23 @@ export default {
       }
       if (nindexArr.length < oindexArr.length) {
         //填空减少了
-          var textindex = _this.getCursortPosition(
-            //获取文本下标
-            document.getElementById("textarea" + _this.nowIndex3)
-          );
-          //一次性删除多个填空
-           for (let i in oindexArr) {
-            if (parseInt(oindexArr[i])>=textindex&&parseInt(oindexArr[i])<=textindex+oarr.length - narr.length) {
-            _this.nowOption.fillQuestion.splice(i, oindexArr.length - nindexArr.length);
+        var textindex = _this.getCursortPosition(
+          //获取文本下标
+          document.getElementById("textarea" + _this.nowIndex3)
+        );
+        //一次性删除多个填空
+        for (let i in oindexArr) {
+          if (
+            parseInt(oindexArr[i]) >= textindex &&
+            parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length
+          ) {
+            _this.nowOption.fillQuestion.splice(
+              i,
+              oindexArr.length - nindexArr.length
+            );
             break;
-            }
           }
+        }
       }
       if (nindexArr.length == 0) {
         //填空为0

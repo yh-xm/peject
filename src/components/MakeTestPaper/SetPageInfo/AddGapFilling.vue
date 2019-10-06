@@ -71,103 +71,53 @@ export default {
      */
     submitForm(formName) {
       var _this = this;
-      var datas = {
-        tpqId: 7042,
-        tpqPaperId: 4476,
-        tpqQuestionId: 7139,
-        tpqScore: 4,
-        tpqQuestion: {
-          questionId: 7139,
-          questionTitle: "w＿w＿",
-          questionTypeId: 3,
-          answerQuestion: null,
-          chooseQuestion: [],
-          fillQuestion: [
-            {
-              fqId: 7251,
-              fqQuestionId: 7139,
-              fqAnswer: "w",
-              fillQuestionScore: [
-                {
-                  fqsFilleQuestionId: 7251,
-                  fqsPaperQuestionId: 7042,
-                  fqsScore: 2
-                }
-              ]
-            },
-            {
-              fqId: 7252,
-              fqQuestionId: 7139,
-              fqAnswer: "w",
-              fillQuestionScore: [
-                {
-                  fqsFilleQuestionId: 7252,
-                  fqsPaperQuestionId: 7042,
-                  fqsScore: 2
-                }
-              ]
-            }
-          ]
-        }
-      };
-     datas.tpqQuestion.questionTypeId = 2;
-      var data = {
-        bodys: datas,
-        questionTypeId: 2
-      };
-      this.$emit("addGapFilling", data);
-
       //提交表单
-      // _this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     var tpqPaperId = sessionStorage.testPaperId;
-      //     var tpqScore = 0;
-      //     var fillQuestion = [];
-      //     var domains = _this.$refs[formName].model.domains;
-      //     for (const key in domains) {
-      //       tpqScore += parseInt(domains[key].onum);
-      //       fillQuestion.push({
-      //         fqOrder: key,
-      //         fqAnswer: domains[key].value,
-      //         fillQuestionScore: [
-      //           {
-      //             fqsScore: domains[key].onum
-      //           }
-      //         ]
-      //       });
-      //     }
-      //     _this.axios
-      //       .post(`/api/TestPaper/AddQuestionToTestPaper`, {
-      //         tpqPaperId: tpqPaperId, //试卷的编号
-      //         tpqScore: tpqScore, //题目的分值
-      //         tpqQuestion: {
-      //           questionTitle: _this.title, //填空题的标题
-      //           questionTypeId: 3,
-      //           fillQuestion: fillQuestion
-      //         }
-      //       })
-      //       .then(res => {
-      //         console.log(res);
-      //         if (res.data.message == "添加成功") {
-      //           sessionStorage.data = JSON.stringify(res.data.data);
-      //           console.log(res.data.data)
-      //           res.data.data.tpqQuestion.questionTypeId = 2;
-      //           var data = {
-      //             bodys: res.data.data,
-      //             questionTypeId: 2
-      //           };
-      //           this.$emit("addGapFilling", data);
-      //           this.resetForm("AddGapFillQuestion");
-      //           this.title = "";
-      //           this.resetForm("AddGapFillQuestion");
-      //           this.title = "";
-      //         }
-      //       });
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+      _this.$refs[formName].validate(valid => {
+        if (valid) {
+          var tpqPaperId = sessionStorage.testPaperId;
+          var tpqScore = 0;
+          var fillQuestion = [];
+          var domains = _this.$refs[formName].model.domains;
+          for (const key in domains) {
+            tpqScore += parseInt(domains[key].onum);
+            fillQuestion.push({
+              fqOrder: key,
+              fqAnswer: domains[key].value,
+              fillQuestionScore: [
+                {
+                  fqsScore: domains[key].onum
+                }
+              ]
+            });
+          }
+          _this.axios
+            .post(`/api/TestPaper/AddQuestionToTestPaper`, {
+              tpqPaperId: tpqPaperId, //试卷的编号
+              tpqScore: tpqScore, //题目的分值
+              tpqQuestion: {
+                questionTitle: _this.title, //填空题的标题
+                questionTypeId: 3,
+                fillQuestion: fillQuestion
+              }
+            })
+            .then(res => {
+              console.log(res);
+              if (res.data.message == "添加成功") {
+                res.data.data.tpqQuestion.questionTypeId = 2;
+                var data = {
+                  bodys: res.data.data,
+                  questionTypeId: 2
+                };
+                this.$emit("addGapFilling", data);
+                this.resetForm("AddGapFillQuestion");
+                this.title = "";
+              }
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     /**
      * 重置表单

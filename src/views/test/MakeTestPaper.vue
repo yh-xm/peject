@@ -47,18 +47,21 @@
                 :AddChooseQuestionList="items"
                 :nowIndex="indexs"
                 @setQuestion="setQuestion"
+                @changeScore="changeScore"
               ></SetChooseQuestion>
               <SetGapFillQuestion
                 v-if="items.tpqQuestion.questionTypeId=='2'?true:false"
                 :AddGapFillQuestionList="items"
                 :nowIndex3="indexs"
                 @setQuestion="setQuestion"
+                @changeScore="changeScore"
               ></SetGapFillQuestion>
               <SetAnswerQuestion
                 v-if="items.tpqQuestion.questionTypeId=='3'?true:false"
                 :AddEssayQuestiontList="items"
                 :nowIndex2="indexs"
                 @setQuestion="setQuestion"
+                @changeScore="changeScore"
               ></SetAnswerQuestion>
             </div>
           </el-card>
@@ -144,10 +147,7 @@ export default {
       var index = data.questionTypeId - 1;
       _this.pageInfo[index].bodys.push(data.bodys); //改变父组件的问答题的试卷信息
       _this.pageInfo[index].nowAdd += 1; //改变父组件的问答题的问题个数
-      for (const key in _this.pageInfo[index].bodys) {
-         _this.pageInfo[index].nowScroe += _this.pageInfo[index].bodys[key].tpqScore //改变父组件的问答题的分数
-      }
-      _this.pageInfo = [..._this.pageInfo]; //解构渲染
+          _this.sumScore(index)
     },
        /**
      * 维护题目
@@ -163,7 +163,44 @@ export default {
       _this.pageInfo[index].nowAdd -= 1; //改变父组件的问答题的问题个数
       _this.pageInfo[index].nowScroe -= parseInt(data.tpqScore); //改变父组件的问答题的分数
       _this.pageInfo = [..._this.pageInfo]; //解构渲染
+    },
+    /**
+     * 修改分数
+     * 
+     */
+    changeScore(data){
+      var _this = this;
+       var index = data.index;
+       console.log(data.fqIndex)
+       if(data.fqIndex!=undefined){
+         var fqIndex = data.fqIndex;
+         var fqsScore = data.fqsScore;
+        _this.sumScore(index,fqIndex,fqsScore)
+       }else{
+        _this.sumScore(data)
+       
+       }
+
+    },
+    /**
+     * 计算分数
+     * 
+     */
+    sumScore(index,fqIndex,fqsScore){
+      var _this = this;
+      console.log(index)
+       _this.pageInfo[index].nowScroe = 0;
+       if(fqIndex!=undefined){
+         _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
+       }
+       
+      for (const key in _this.pageInfo[index].bodys) {
+         _this.pageInfo[index].nowScroe += _this.pageInfo[index].bodys[key].tpqScore //改变父组件的问答题的分数
+          console.log(_this.pageInfo[index].bodys[key])
+      }
+      _this.pageInfo = [...this.pageInfo]
     }
+
   },
   components: {
     BeginMake, //第一步，选择科目

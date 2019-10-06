@@ -59,25 +59,21 @@ export default {
         var tpCourseId = _this.$refs[formName].model.region; //获取下拉选中的课程Id
         var name = _this.$refs[formName].model.name; //试卷名称
         if (valid) {
-
-
-                
-
-          // _this.axios
-          //   .post(`/api/TestPaper/MakeTestPaper?uid=${userId}`, {
-          //     //对应接口传递信息
-          //     tpTitle: name, //要添加的试卷名称
-          //     tpCourseId: tpCourseId //选中的课程Id
-          //   })
-          //   .then(res => {
-          //     if (res.data.message == "添加成功") {
-          //       _this.$parent.$parent.active = 1; //下一步操作
-          //       sessionStorage.testPaperId = res.data.data.testPaperId; //临时存储试卷Id
-          //     }
-          //   });
+          _this.axios
+            .post(`/api/TestPaper/MakeTestPaper?uid=${userId}`, {
+              //对应接口传递信息
+              tpTitle: name, //要添加的试卷名称
+              tpCourseId: tpCourseId //选中的课程Id
+            })
+            .then(res => {
+              if (res.data.message == "添加成功") {
+                _this.$parent.$parent.active = 1; //下一步操作
+                sessionStorage.testPaperId = res.data.data.testPaperId; //临时存储试卷Id
+              }
+            });
         } else {
 
-          _this.$parent.$parent.active = 1; //下一步操作
+
           console.log("error submit!!");
           return false;
         }
@@ -95,7 +91,7 @@ export default {
     }
   },
   created() {
-    // this.getOptions(); //初始化下拉列表
+    this.getOptions(); //初始化下拉列表
   }
 };
 </script>

@@ -29,7 +29,7 @@ export default {
   props: {
     select: {
       type: Boolean,
-      required: true
+       default: true //默认为true
     }
   },
   data() {
@@ -42,27 +42,19 @@ export default {
   methods: {
     init() {
       var _this = this;
-      _this.pageInfo = [
-        { typeName: "选择题" },
-        { typeName: "填空题" },
-        { typeName: "问答题" }
-      ];
-      for (let i in _this.pageInfo) {
-        _this.pageInfo[i].bodys = [];
-        _this.pageInfo[i].nowAdd = 0;
-        _this.pageInfo[i].nowScroe = 0;
-      }
-      // _this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
-      //   //接口初始化获取问题类型
-      //   // _this.pageInfo = res.data;
 
-      //   for (let i in _this.pageInfo) {
-      //     _this.pageInfo[i].bodys = [];
-      //     _this.pageInfo[i].nowAdd = 0;
-      //     _this.pageInfo[i].nowScroe = 0;
-      //   }
-      // });
-        this.$emit('init', _this.pageInfo)
+      _this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
+        //接口初始化获取问题类型
+        _this.pageInfo = res.data;
+
+        for (let i in _this.pageInfo) {
+          _this.pageInfo[i].bodys = [];
+          _this.pageInfo[i].nowAdd = 0;
+          _this.pageInfo[i].nowScroe = 0;
+        }
+       this.$emit('init', _this.pageInfo)
+      });
+        
     },
     changeQuestionType(type) {
       var index = 0;

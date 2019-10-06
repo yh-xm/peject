@@ -7,17 +7,29 @@
       <div class="option-content">
         <!-- 题目 -->
         <el-form :model="nowOption" ref="nowOption" class="demo-dynamic">
-          <el-form-item prop="title">
+          <el-form-item prop="title" >
+              <span v-if="odisabled">
+            {{nowOption.tpqQuestion.questionTitle}}
+            <el-input-number
+              size="small"
+              v-model="nowOption.tpqScore"
+              :min="1"
+              :max="10"
+              @change="changeScore"
+            ></el-input-number>
+              </span>
             <el-input
               type="textarea"
               v-model="nowOption.tpqQuestion.questionTitle"
               :rows="1"
-              :disabled="odisabled"
+              v-if="!odisabled"
             ></el-input>
           </el-form-item>
           <!-- 答案 -->
-          <el-form-item label="参考答案">
-            <el-input v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer" :disabled="odisabled"></el-input>
+          <el-form-item >
+            <el-tag type="info">参考答案</el-tag>
+            <div v-if="odisabled">{{nowOption.tpqQuestion.answerQuestion.aqAnswer}}</div>
+            <el-input v-if="!odisabled" v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer" :disabled="odisabled"></el-input>
           </el-form-item>
           <el-form-item>
             <!-- 编辑 -->
@@ -111,17 +123,36 @@ export default {
         )
         .then(res => {
           if (res.data.message == "删除成功") {
-          var data ={
-            index:_this.nowIndex2,
-            questionTypeId: 3,
-            tpqScore:_this.AddEssayQuestiontList.tpqScore
-          }
-            this.$emit("setQuestion",data)
+            var data = {
+              index: _this.nowIndex2,
+              questionTypeId: 3,
+              tpqScore: _this.AddEssayQuestiontList.tpqScore
+            };
+            this.$emit("setQuestion", data);
           }
           this.$message({
             type: "success",
             message: res.data.message
           });
+        });
+    },
+    /**
+     * 修改题目分数
+     */
+    changeScore(v) {
+      var _this = this;
+      _this.axios
+        .post(
+          `/api/TestPaper/ModifyScore`,
+          {
+            tpqId: _this.nowOption.tpqId, //主键编号
+            tpqScore: v //要修改的分值
+          } //修改题目分值
+        )
+        .then(res => {
+          if (res.data.message == "修改成功") {
+            this.$emit("changeScore", 2);
+          }
         });
     },
     /**
