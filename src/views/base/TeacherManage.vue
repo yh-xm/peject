@@ -187,14 +187,6 @@ export default {
    * */
   methods: {
     /**
-     * 方法说明
-     * @method 方法名
-     * @for 所属类名
-     * @param {参数类型} 参数名 参数说明
-     * @return {返回值类型} 返回值说明
-     * @param {参数类型} 参数名 参数说明
-     */
-    /**
      *  获取所有角色--- 可调用
      * @method getRole
      * */
