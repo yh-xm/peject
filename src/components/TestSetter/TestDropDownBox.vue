@@ -37,7 +37,7 @@ export default {
       _this.axios.get("/api/TestPaper/GetAllTestPaper").then(
         function(res) {
           //tableData等于回调函数返回的res（值）
-          console.log(res.data);
+          // console.log(res.data);
           _this.options = res.data;
         },
         function() {
