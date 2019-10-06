@@ -123,7 +123,6 @@ export default {
               .then(function(r) {
                 if (r.status == "200") {
                   if (_this.lenrnPsw == true) {
-<<<<<<< HEAD
                     _this.setCookie(
                       _this.numberValidateForm.username,
                       _this.numberValidateForm.passworld,
@@ -134,18 +133,6 @@ export default {
                   }
                   sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
                   sessionStorage.stuUid = r.data.profile.stuUid;
-=======
-                    var obj = {
-                      username: _this.numberValidateForm.username,
-                      password: _this.numberValidateForm.passworld
-                    };
-                    setCookie(obj, 7);
-                  } else {
-                    clearCookie();
-                  }
-                  sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
-                  sessionStorage.userId = r.data.profile.userUid;
->>>>>>> wufei
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
                   if (_this.$route.query.redirect) {
@@ -163,15 +150,7 @@ export default {
                       name: "home"
                     });
                   }
-<<<<<<< HEAD
-
-                  _this.$message({
-                    type: "success",
-                    message: "登录成功!"
-                  });
-=======
-                   this.message(this,1, "登录成功!")
->>>>>>> wufei
+                   _this.message(this,1, "登录成功!")
                 }
               })
               .catch(function(error) {
@@ -184,7 +163,6 @@ export default {
           return false;
         }
       });
-<<<<<<< HEAD
       this.disbable = false;
     },
     // 设置cookie
@@ -226,9 +204,8 @@ export default {
     //清除cookie
     clearCookie() {
       this.setCookie("", "", -1);
-=======
       _this.disbable = false;
->>>>>>> wufei
+      //  wufei
     }
   },
   created() {},
@@ -273,20 +250,14 @@ that.lenrnPsw=true;
   .From {
     margin: auto;
     border: 1px solid transparent;
-<<<<<<< HEAD
     width: 500px;
     height: 350px;
     min-width: 300px;
-=======
     // width: 450px;
     height: 300px;
     // width: 500px;
-<<<<<<< HEAD
     min-width: 150px;
->>>>>>> wufei
-=======
     min-width: 250px;
->>>>>>> wufei
     position: absolute;
     left: 50%;
     top: 50%;
