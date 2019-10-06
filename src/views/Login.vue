@@ -212,12 +212,8 @@ that.lenrnPsw=true;
     // width: 450px;
     height: 300px;
     // width: 500px;
-<<<<<<< HEAD
 
     min-width: 150px;
-=======
-    min-width: 250px;
->>>>>>> master
     position: absolute;
     left: 50%;
     top: 50%;
