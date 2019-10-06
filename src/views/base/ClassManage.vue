@@ -7,7 +7,7 @@
       <el-breadcrumb-item>班级管理</el-breadcrumb-item>
     </el-breadcrumb>
     <h1>{{lovingVue}}</h1>
-    <course-frame v-model="lovingVue" :options="options"></course-frame>
+    <!-- <course-frame v-model="lovingVue" :options="options"></course-frame> -->
     <!-- 卡片 -->
     <el-card class="box-card">
       <div>
@@ -52,7 +52,8 @@
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <!-- 弹出框 专业课程下拉框 -->
-            <el-form-item label="专业课程" prop="keChenId">
+            <course-frame v-model="lovingVue" :options="options" :oindex="index1"></course-frame>
+            <!-- <el-form-item label="专业课程" prop="keChenId">
               <el-select v-model="ruleForm.keChenId" placeholder="请选择">
                 <el-option
                   v-for="(inte,index) in course"
@@ -61,7 +62,7 @@
                   :value="inte.courseId"
                 ></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <!-- 弹出框 授课老师下拉框 -->
             <el-form-item label="授课老师" prop="usName">
               <el-select v-model="ruleForm.usName" placeholder="请选择">
@@ -91,6 +92,7 @@ export default {
    components:{CourseFrame},
   data() {
     return {
+      index1:0,
       options:[],
       lovingVue:[],
       title: "", //弹出框标题
@@ -135,12 +137,6 @@ export default {
      */
     minZhi() {
       var _this = this;
-      var usKeChen = _this.course.filter(function(data) {
-        //过滤器过滤课程
-        return data.courseId == _this.ruleForm.keChenId;
-      });
-      _this.keCen = usKeChen[0].courseName;
-
       var usLaoShi = _this.teacher.filter(function(data) {
         //过滤器过滤名字
         return data.userId == _this.ruleForm.usName;
@@ -159,10 +155,11 @@ export default {
       _this.stuNewly = true; //弹出框的新增按钮为true时
       _this.ruleForm.name = row.className; //点击获取的班级名字赋值给输入框
       _this.classId = row.classId; //获取的班级主键赋值
-      _this.ruleForm.keChenId = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
+      _this.index1 = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
       _this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
       _this.title = "修改班级信息";
-      _this.options=row.classCourseId
+      // console.log(_this.index1)
+      
     },
     /**
      * 点击修改数据
@@ -178,7 +175,7 @@ export default {
             .post("/api/Class/ModifyClass", {
               classId: _this.classId,
               className: _this.ruleForm.name,
-              classCourseId: _this.ruleForm.keChenId,
+              classCourseId:_this.lovingVue[0].courseId,
               classTeacherId: _this.ruleForm.usName
             })
             .then(function(data) {
@@ -188,7 +185,7 @@ export default {
                 _this.type = "success";
 
                 var banJi = _this.tableData[_this.index]; //获取要修改的那组数据并赋值了一个变量
-                banJi.courseName = _this.keCen; //课程名字
+                banJi.courseName =_this.lovingVue[0].courseName; //课程名字
                 banJi.userName = _this.laoShi; //授课老师
                 banJi.className = _this.ruleForm.name; //班级名字
                 banJi.classCourseId = _this.ruleForm.keChenId; //课程编码
@@ -271,19 +268,19 @@ export default {
       var _this = this;
       _this.$refs[formName].validate(valid => {
         if (valid) {
+         
           _this.minZhi(); //调用 获取下拉框选中的名字 方法
           _this.axios
             .post("/api/Class/AddClass", {
               className: _this.ruleForm.name,
-              classCourseId: _this.ruleForm.keChenId,
+              classCourseId: _this.lovingVue[0].courseId,
               classTeacherId: _this.ruleForm.usName
             })
             .then(function(data) {
-              console.log(data.data.data);
               //deta 接收的值为 1 时新增成功， -1 为异常，0 为没有改变
               var quanBu = data.data.data; //后台返回的数据赋值了一个变量
               if (data.data.code == 1) {
-                quanBu.courseName = _this.keCen; //获取的课程名字
+                quanBu.courseName =_this.lovingVue[0].courseName; //获取的课程名字
                 quanBu.userName = _this.laoShi; //获取的课程名字
                 quanBu.classCreateTime = new Date(
                   quanBu.classCreateTime

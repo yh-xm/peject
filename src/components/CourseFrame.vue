@@ -1,5 +1,6 @@
 <template>
   <div id="CourseFrame">
+    {{oindex}}
     <el-form
       :model="ruleForm"
       :rules="rules"
@@ -8,7 +9,7 @@
       class="demo-ruleForm"
     >
       <el-form-item label="专业课程" prop="keChenId">
-        <el-select v-model="ruleForm.keChenId" placeholder="请选择" @visible-change=a(ruleForm.keChenId)>
+        <el-select v-model="ruleForm.keChenId" placeholder="请选择" @change=tranSmit(ruleForm.keChenId) >
           <el-option
             v-for="(inte,index) in course"
             :key="index"
@@ -22,14 +23,13 @@
 </template>
 <script>
 export default {
-    model:{
-        prop:"checked",
-        event:"update"
-    },
     props:{
         checked:Array,
-        update:String
+        update:String,
+        oindex:Number
     },
+   
+   
 
   data(){
     return {
@@ -48,22 +48,24 @@ export default {
       }
     };
   },
+  
   methods: {
-    
-      a(a){
+
+          /**
+           * 改变事件
+           * @param {object} price 传递过来的id名
+           * 
+           */
+      tranSmit(price){
         var _this=this
           var fi=_this.course.filter(function(data){
           return data.courseId == _this.ruleForm.keChenId;
           })
-
+           console.log(fi)
         _this.$emit("update",fi)  
-        console.log(a)
+       
       },
-
-
-
-
-
+    
     /**
      * 课程信息
      */
@@ -80,6 +82,8 @@ export default {
   created() {
     var _this = this;
     _this.usCourse();
+  
+
   }
 };
 </script>
