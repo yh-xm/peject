@@ -37,7 +37,7 @@
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -75,9 +75,7 @@ export default {
       _this.axios.get("/api/TestPaper/GetTestTask").then(
         function(res) {
           // roles等于回调函数返回的res（值）
-          console.log(res.data.data);
           _this.SetTest = res.data.data;
-          // console.log(_this.SetTest);
         },
         function() {
           console.log("请求失败处理");
@@ -95,12 +93,15 @@ export default {
     },
     /**
      * 删除当前行表格信息
-     * @param {Nameber} index 当前行所在下标
      * @param {String} row 当前行所有数据
      * */
 
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleDelete(row) {
+      console.log(row);
+
+
+
+
     }
   },
   created() {
