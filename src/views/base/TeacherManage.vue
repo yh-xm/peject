@@ -182,7 +182,6 @@ export default {
       }
     };
   },
-<<<<<<< HEAD
   //定义计算属性
   computed: {
     /**
@@ -216,8 +215,6 @@ export default {
       console.log(val); //原值
     }
   },
-=======
->>>>>>> cy
   /**
    * 这里面定义方法
    * */
@@ -487,7 +484,7 @@ export default {
      * 这是计算属性
      * 所以直接把这个方法名(也就是filtData)像data值一样绑定到显示结果的表格中;
      * */
-    filtData() {
+    filtData(){
       let _this = this;
       if (_this.filtRadio == "0") {
         return _this.tableData;
