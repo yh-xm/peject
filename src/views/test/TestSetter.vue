@@ -74,7 +74,7 @@ export default {
           let _this = this;
           _this.axios.get("/api/TestPaper/GetTestTask")
           .then(function(res){
-              //roles等于回调函数返回的res（值）
+              // roles等于回调函数返回的res（值）
               console.log(res);
           },function(){
               console.log("请求失败处理")
