@@ -83,6 +83,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #MakeOver {
+  text-align: center;
   .content-make {
     width: 80%;
     margin: 0px auto;

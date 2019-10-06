@@ -99,10 +99,7 @@ export default {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
             _this.odisabled = !_this.odisabled;
             _this.oshow = !_this.oshow;
-            _this.$message({
-              type: "success",
-              message: "修改成功!"
-            });
+ _this.message(this,1, res.data.message)
           } else {
        _this.message(this,1, res.data.message)
           }
@@ -145,7 +142,14 @@ export default {
         )
         .then(res => {
           if (res.data.message == "修改成功") {
-            this.$emit("changeScore", 2);
+              _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
+        var data ={
+           index:2,
+           fqsScore:v,
+            fqIndex:_this.nowIndex2
+         }
+           _this.message(this,1, "修改成功!")
+          _this.$emit('changeScore',data)
           }
         });
     },

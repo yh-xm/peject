@@ -14,7 +14,7 @@ export  const message = (that,type,message) => {
     if(type==1){
         type="success";
     }else if(type==-1){
-        this.$message.error(message);
+      that.$message.error(message);
       return;
     }else{
         type="warning";

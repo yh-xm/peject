@@ -20,7 +20,7 @@
       <div id="TestInfo" v-if="active==1">
         <div class="tabs">
           <div class="left-list">
-              <question-sectect :select="true" @changeOption="changeQuestionType" @init="init" />
+              <question-sectect :select="true" @changeOption="changeQuestionType" @questionInit="questionInit" />
             </div>
         
 
@@ -143,9 +143,12 @@ export default {
      *  {Number} nowScroe 每种题目类型总分
      * {Number} nowAdd 每种题目类型总个数
      */
-    init(data) {
+    questionInit(data) {
       var _this = this;
-      _this.pageInfo = data;
+      
+      if(_this.pageInfo.length==0){
+          _this.pageInfo = data
+      }
     },
        /**
      * 添加题目
@@ -182,16 +185,9 @@ export default {
     changeScore(data){
       var _this = this;
        var index = data.index;
-       console.log(data.fqIndex)
-       if(data.fqIndex!=undefined){
          var fqIndex = data.fqIndex;
          var fqsScore = data.fqsScore;
         _this.sumScore(index,fqIndex,fqsScore)
-       }else{
-        _this.sumScore(data)
-       
-       }
-
     },
     /**
      * 计算分数
@@ -199,7 +195,6 @@ export default {
      */
     sumScore(index,fqIndex,fqsScore){
       var _this = this;
-      console.log(index)
        _this.pageInfo[index].nowScroe = 0;
        if(fqIndex!=undefined){
          _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
@@ -207,7 +202,6 @@ export default {
        
       for (const key in _this.pageInfo[index].bodys) {
          _this.pageInfo[index].nowScroe += _this.pageInfo[index].bodys[key].tpqScore //改变父组件的问答题的分数
-          console.log(_this.pageInfo[index].bodys[key])
       }
       _this.pageInfo = [...this.pageInfo]
     }
@@ -227,7 +221,6 @@ export default {
     }
   },
   created() {
-    this.init(); //初始化题型
   }
 };
 </script>

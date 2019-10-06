@@ -16,7 +16,8 @@
               @change="changeScore"
               v-if="item=='＿'"
               size="small"
-              :min="1" :max="5"
+              :min="1"
+              :max="5"
               v-model="nowOption.fillQuestion[IndexArr[index]].fillQuestionScore[0].fqsScore"
             ></el-input-number>
           </el-row>
@@ -100,39 +101,60 @@ export default {
     },
     submitForm(formName) {
       var _this = this;
+      var addQuestion = [];
       this.$refs[formName].validate(valid => {
+        _this.fillQuestion = _this.fillQuestion.sort(function(a, b) {
+          return a - b;
+        });
+        console.log(_this.fillQuestion);
         if (valid) {
-          var fillQuestion = [];
-          // var addOptions = this.fillQuestion;
-          console.log(this.nowOption.fillQuestion);
-          this.axios
-            .post(`/api/TestPaper/ModifyQuestion`, {
-              questionId: nowOption.questionId,
-              questionTitle: _this.title,
-              questionTypeId: nowOption.questionTypeId,
-              fillQuestion: fillQuestion
-            })
-            .then(res => {
-              this.fillQuestion = [];
-              if (res.data.code == 1) {
-                if (res.data.message == "数据没有变化") {
-                  _this.message(this,1, res.data.message)
-                } else if (res.data.message == "修改成功") {
-                  _this.oshow = !_this.oshow;
-                  _this.nowOption.questionTitle = _this.title;
-                 _this.message(this,1, "修改成功!")
-                } else {
-                  var data = res.data + "}]}}";
-                  data = eval("(" + data + ")");
-                  // _this.nowOption = JSON.parse(JSON.stringify(nowOption));
-                  console.log(data);
-                  _this.oshow = !_this.oshow;
-                 _this.message(this,1, "修改成功!")
-                }
-              } else {
-                _this.message(this,-1, res.data.message)
+          for (const key in _this.nowOption.fillQuestion) {
+            for (const index in _this.fillQuestion) {
+              if (_this.fillQuestion[index] == key) {
+                addQuestion.push({
+                  fqAnswer: _this.nowOption.fillQuestion[key].fqAnswer, ///表示新增
+                  FqOrder: _this.fillQuestion[index]+1 //填空的序号
+                });
+               
               }
-            });
+            }
+          }
+          var flag = 0;
+          var testNowOption = JSON.parse(JSON.stringify(_this.nowOption.fillQuestion));
+          for (const key in testNowOption) {
+            if(testNowOption.fqId==undefined){
+              console.log(testNowOption[key])
+            }
+          }
+          console.log(testNowOption)
+          // this.axios
+          //   .post(`/api/TestPaper/ModifyQuestion`, {
+          //     questionId: _this.nowOption.questionId,
+          //     questionTitle: _this.title,
+          //     questionTypeId: _this.nowOption.questionTypeId,
+          //     fillQuestion: fillQuestion
+          //   })
+          //   .then(res => {
+          //     this.fillQuestion = [];
+          //     if (res.data.code == 1) {
+          //       if (res.data.message == "数据没有变化") {
+          //         _this.message(_this,1, res.data.message)
+          //       } else if (res.data.message == "修改成功") {
+          //         _this.oshow = !_this.oshow;
+          //         _this.nowOption.questionTitle = _this.title;
+          //        _this.message(_this,1, "修改成功!")
+          //       } else {
+          //         var data = res.data + "}]}}";
+          //         data = eval("(" + data + ")");
+          //         // _this.nowOption = JSON.parse(JSON.stringify(nowOption));
+          //         console.log(data);
+          //         _this.oshow = !_this.oshow;
+          //        _this.message(_this,1, "修改成功!")
+          //       }
+          //     } else {
+          //       _this.message(_this,-1, res.data.message)
+          //     }
+          //   });
         } else {
           console.log("error submit!!");
           return false;
@@ -180,7 +202,7 @@ export default {
             };
             _this.$emit("setQuestion", data);
           }
-          _this.message(this,1, "删除成功!")
+          _this.message(this, 1, "删除成功!");
         });
     },
     changeScore(v) {
@@ -191,27 +213,28 @@ export default {
       for (const key in fillQuestion) {
         _this.AddGapFillQuestionList.fqsScore +=
           fillQuestion[key].fillQuestionScore[0].fqsScore;
-          fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0])
+        fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0]);
       }
       _this.axios
         .post(
           `/api/TestPaper/ModifyScore`,
           {
             tpqId: _this.AddGapFillQuestionList.tpqId, //主键编号
-            tpqScore:_this.AddGapFillQuestionList.fqsScore, //填空题分值
-            fillQuestionScore:fillQuestionScore
+            tpqScore: _this.AddGapFillQuestionList.fqsScore, //填空题分值
+            fillQuestionScore: fillQuestionScore
           } //修改题目分值
         )
         .then(res => {
-       if(res.data.message == "修改成功"){
-         var data ={
-           index:1,
-           fqsScore:_this.AddGapFillQuestionList.fqsScore,
-            fqIndex:_this.nowIndex3
-         }
-                 _this.message(this,1, "修改成功!")
-          _this.$emit('changeScore',data)
-       }
+          if (res.data.message == "修改成功") {
+            this.oldOption = JSON.parse(JSON.stringify(this.nowOption));
+            var data = {
+              index: 1,
+              fqsScore: _this.AddGapFillQuestionList.fqsScore,
+              fqIndex: _this.nowIndex3
+            };
+            _this.message(this, 1, "修改成功!");
+            _this.$emit("changeScore", data);
+          }
         });
     },
     init() {

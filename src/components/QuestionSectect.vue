@@ -40,7 +40,7 @@ export default {
     };
   },
   methods: {
-    init() {
+    questionInit() {
       var _this = this;
 
       _this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
@@ -52,7 +52,7 @@ export default {
           _this.pageInfo[i].nowAdd = 0;
           _this.pageInfo[i].nowScroe = 0;
         }
-       this.$emit('init', _this.pageInfo)
+       this.$emit('questionInit', _this.pageInfo)
       });
         
     },
@@ -74,7 +74,7 @@ export default {
   },
   created() {
     var _this = this;
-    _this.init();
+    _this.questionInit();
   }
 };
 </script>

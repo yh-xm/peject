@@ -129,16 +129,9 @@ export default {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             _this.odisabled = !_this.odisabled; //成功禁用
             _this.oshow = !_this.oshow;
-            console.log(_this.nowOption);
-            _this.$message({
-              type: "success",
-              message: "修改成功!"
-            });
+           _this.message(this,1,res.data.message )
           } else {
-            _this.$message({
-              type: "warning",
-              message: res.data.message
-            });
+       _this.message(this,-1,res.data.message )
           }
         });
     },
@@ -215,6 +208,14 @@ export default {
         )
         .then(res => {
        if(res.data.message == "修改成功"){
+        _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
+        var data ={
+           index:0,
+           fqsScore:v,
+            fqIndex:_this.nowIndex
+         }
+           _this.message(this,1, "修改成功!")
+          _this.$emit('changeScore',data)
     this.$emit('changeScore',0)
        }
         });
