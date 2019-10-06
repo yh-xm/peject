@@ -83,6 +83,17 @@ import SetGapFillQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQu
 import SetAnswerQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetAnswerQuestion"; // 维护问答题组件
 import QuestionSectect from "@/components/QuestionSectect"; // 维护问答题组件
 export default {
+    components: {
+    BeginMake, //第一步，选择科目
+    MakeOver, //第三步，完成试卷
+    AddMultipleChoice, //添加选择题
+    AddGapFilling, //添加填空题
+    AddEssayQuestion, //添加问答题
+    SetChooseQuestion, //维护选择题
+    SetGapFillQuestion, // 维护填空题
+    SetAnswerQuestion, //维护问答题
+    QuestionSectect //试卷问题类型下拉框
+  },
   data() {
     return {
       testPaperId: "",
@@ -202,17 +213,7 @@ export default {
     }
 
   },
-  components: {
-    BeginMake, //第一步，选择科目
-    MakeOver, //第三步，完成试卷
-    AddMultipleChoice, //添加选择题
-    AddGapFilling, //添加填空题
-    AddEssayQuestion, //添加问答题
-    SetChooseQuestion, //维护选择题
-    SetGapFillQuestion, // 维护填空题
-    SetAnswerQuestion, //维护问答题
-    QuestionSectect //试卷问题类型下拉框
-  },
+
   filters: {
     questionsIndex(data) {
       switch (data) {
@@ -226,9 +227,7 @@ export default {
     }
   },
   created() {
-    // this.init(); //初始化题型
-    this.message(this,1,'66666')
-    console.log(this)
+    this.init(); //初始化题型
   }
 };
 </script>
