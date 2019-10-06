@@ -6,9 +6,6 @@
       <el-breadcrumb-item>基础数据</el-breadcrumb-item>
       <el-breadcrumb-item>班级管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <h1>{{lovingVue}}</h1>
-    <!-- <course-frame v-model="lovingVue" :options="options"></course-frame> -->
-    <!-- 卡片 -->
     <el-card class="box-card">
       <div>
         <!-- 新增 -->
@@ -52,17 +49,7 @@
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <!-- 弹出框 专业课程下拉框 -->
-            <course-frame v-model="lovingVue" :options="options" :oindex="index1"></course-frame>
-            <!-- <el-form-item label="专业课程" prop="keChenId">
-              <el-select v-model="ruleForm.keChenId" placeholder="请选择">
-                <el-option
-                  v-for="(inte,index) in course"
-                  :key="index"
-                  :label="inte.courseName"
-                  :value="inte.courseId"
-                ></el-option>
-              </el-select>
-            </el-form-item> -->
+            <course-frame v-model="lovingVue" :oindex="seed"></course-frame>
             <!-- 弹出框 授课老师下拉框 -->
             <el-form-item label="授课老师" prop="usName">
               <el-select v-model="ruleForm.usName" placeholder="请选择">
@@ -89,12 +76,11 @@
 <script>
 import CourseFrame from '@/components/CourseFrame.vue'
 export default {
-   components:{CourseFrame},
+   components:{CourseFrame}, //注册
   data() {
     return {
-      index1:0,
-      options:[],
-      lovingVue:[],
+      seed:"", //传递给子组件
+      lovingVue:[], //接收子组件传过来的值
       title: "", //弹出框标题
       tableData: [], //接收向后台请求的数据用渲染
       teacher: [], //接收后台传过来的老师信息
@@ -155,10 +141,10 @@ export default {
       _this.stuNewly = true; //弹出框的新增按钮为true时
       _this.ruleForm.name = row.className; //点击获取的班级名字赋值给输入框
       _this.classId = row.classId; //获取的班级主键赋值
-      _this.index1 = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
+      _this.seed = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
       _this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
       _this.title = "修改班级信息";
-      // console.log(_this.index1)
+     
       
     },
     /**
@@ -212,7 +198,9 @@ export default {
      * @param {object} row 点击当前行的所有数据
      */
     handleDelete(index, row) {
+        
       var _this = this;
+      // _this.message(this,1, "66666")
       _this
         .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
           confirmButtonText: "确定",
@@ -222,7 +210,6 @@ export default {
         })
         .then(() => {
           //删除axios
-          console.log(row.classId);
           _this
             .axios("/api/Class/RemoveClass?classId=" + row.classId)
             .then(function(data) {
@@ -231,6 +218,7 @@ export default {
                 _this.tableData.splice(index, 1);
                 _this.message = "删除班级成功";
                 _this.type = "success";
+                // _this.message(this,1, "66666")
               } else if (data.data.code == -1) {
                 _this.message = "此班级不能删除，如要删除请联系管理员";
                 _this.type = "warning";
@@ -259,6 +247,8 @@ export default {
       _this.ruleForm.keChenId = ""; //清除修改时赋的值
       _this.ruleForm.usName = ""; //清除修改时赋的值
       _this.title = "新增班级信息";
+      _this.seed=null //赋值为空用以清除
+     
     },
     /**
      * 点击新增
@@ -359,6 +349,7 @@ export default {
     _this.overall(); //调用封装渲染axios
     _this.usTeacher(); //授课老师信息
     _this.usCourse(); //课程信息
+   
   }
 };
 </script>
