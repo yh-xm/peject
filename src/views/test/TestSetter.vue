@@ -188,12 +188,9 @@ export default {
      * @param {Number} val 传过来的值
      * */
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
-      // console.log(val)
       let _this = this;
       _this.pageSize = val;
       _this.getSetTest();
-      console.log(_this.pageSize)
       // _this.pageSize = val; 
     },
     /**
@@ -203,7 +200,6 @@ export default {
      * */
 
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       let _this = this;
       _this.currentPage = val;
       _this.getSetTest();
