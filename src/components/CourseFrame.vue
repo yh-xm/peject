@@ -3,11 +3,11 @@
 
   引用  import CourseFrame from '@/components/CourseFrame.vue'
    注册    components:{CourseFrame},
-     当标签使用   <course-frame v-model="lovingVue" :oindex="seed"></course-frame>
+     当标签使用    <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId"></course-frame>
 locingVue 是数组类型 接收子组件的值
-seed 用于传递给子组件值 Number 类型
-修改时不需要 :oindex="seed"  都行
-
+seed 用于传递给子组件值 传递当前行的课程id Number 类型 
+新增时 不需要 :oindex="seed"  都行
+:oname="nemuId" 是用于给下拉框的名字 的宽度 后面要加像素单位px
 */
 <template>
   <div id="CourseFrame">
@@ -15,7 +15,7 @@ seed 用于传递给子组件值 Number 类型
       :model="ruleForm"
       :rules="rules"
       ref="ruleForm"
-      label-width="100px"
+      :label-width="oname"
       class="demo-ruleForm"
     >
       <el-form-item label="专业课程" prop="keChenId">
@@ -38,7 +38,8 @@ export default {
         event:"update"  //传递父组件的方法
     },
     props:{
-        oindex:Number //类型
+        oindex:Number,// 父组件传过来的类型 用于编辑
+        oname:String //父组件传过来的类型  用于标题名
     },
    
    
