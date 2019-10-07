@@ -127,8 +127,6 @@ export default {
             // _this.totalNum = res.data.items; //总条数
             // _this.totalPage = res.data.pages; //总页码（数）
 
-
-
           },
           function() {
             console.log("请求失败处理");
