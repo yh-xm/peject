@@ -26,8 +26,9 @@
       </div>
       <div>
         <!-- 表格 -->
+<!-- .slice((currentPage-1)*pageSize,currentPage*pageSize) -->
 
-        <el-table :data="SetTest.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%">
+        <el-table :data="SetTest" style="width: 100%">
           <el-table-column type="index"></el-table-column>
           <el-table-column label="试卷名称" prop="tpTitle" align="center"></el-table-column>
           <el-table-column label="班级" prop="className" align="center"></el-table-column>
@@ -54,10 +55,10 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5,10, 20, 30]"
+        :page-sizes="[10,15,20]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="SetTest.length"
+        :total="total"
       ></el-pagination>
     </div>
     <!-- 分页结束 -->
@@ -94,11 +95,9 @@ export default {
       form: {
         name: ""
       },
-      currentPage:1,//当前页
-      pageSize:10,//默认记录
-      // totalNum: null, //总条目
-      // showNum: null, //每页显示条目个数
-      // totalPage: null //总页数
+      currentPage:1,//当前页码
+      pageSize:10,//每页大小
+      total: null, //总条目
     };
   },
   //定义组件
@@ -118,13 +117,13 @@ export default {
     getSetTest() {
       let _this = this;
       _this.axios
-        .get("/api/TestPaper/GetTestTask")
+        .get("/api/TestPaper/GetTestTask?pageIndex="+_this.currentPage+"&pageSize="+_this.pageSize)
         .then(
           function(res) {
             // roles等于回调函数返回的res（值）
             // console.log(res);
             _this.SetTest = res.data.data; //表格数据
-            // _this.totalNum = res.data.items; //总条数
+            _this.total = res.data.items; //总条数
             // _this.totalPage = res.data.pages; //总页码（数）
 
           },
@@ -185,22 +184,31 @@ export default {
 
     /**
      * 分页 pageSize 改变时会触发
+     * 长度改变----改变每页显示的条数的时候  自动触发
      * @param {Number} val 传过来的值
      * */
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
+      // console.log(val)
       let _this = this;
-    _this.getSetTest();
+      _this.pageSize = val;
+      _this.getSetTest();
+      console.log(_this.pageSize)
+      // _this.pageSize = val; 
     },
     /**
      * 分页 currenPage 改变时会触发
+     * 当前改变----当前页码改变之后，触发这个函数
      *
      * */
 
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       let _this = this;
-    _this.getSetTest();
+      _this.currentPage = val;
+      _this.getSetTest();
+
+
     }
   },
   created() {
