@@ -82,8 +82,8 @@ export default {
       nowOption: {}, //当前数据
       oldOption: [], //历史数据
       oshow: false,
-      IndexArr: [],
-      fillQuestion: []
+      IndexArr: [],//填空下标数组
+      fillQuestion: []//存储插入的填空下标数组
     };
   },
   props: {
@@ -101,60 +101,85 @@ export default {
     },
     submitForm(formName) {
       var _this = this;
-      var addQuestion = [];
+      var changeQuestion = [];
       this.$refs[formName].validate(valid => {
-        _this.fillQuestion = _this.fillQuestion.sort(function(a, b) {
-          return a - b;
-        });
-        console.log(_this.fillQuestion);
         if (valid) {
-          for (const key in _this.nowOption.fillQuestion) {
-            for (const index in _this.fillQuestion) {
-              if (_this.fillQuestion[index] == key) {
-                addQuestion.push({
-                  fqAnswer: _this.nowOption.fillQuestion[key].fqAnswer, ///表示新增
-                  FqOrder: _this.fillQuestion[index]+1 //填空的序号
-                });
-               
-              }
-            }
-          }
-          var flag = 0;
-          var testNowOption = JSON.parse(JSON.stringify(_this.nowOption.fillQuestion));
+          var testNowOption = JSON.parse(
+            JSON.stringify(_this.nowOption.fillQuestion)
+          );
+          var testOldOption = [];
           for (const key in testNowOption) {
-            if(testNowOption.fqId==undefined){
-              console.log(testNowOption[key])
+            if (testNowOption[key].fqId == undefined) {
+              changeQuestion.push({
+                fqAnswer: testNowOption[key].fqAnswer, ///表示新增
+                FqOrder: parseInt(key) + 1 //填空的序号
+              });
+            }else{
+              changeQuestion.push({
+                fqId: testNowOption[key].fqId,
+                fqAnswer: testNowOption[key].fqAnswer, ///表示修改
+                fqOrder: parseInt(key) + 1 //填空的序号
+              })
+              // testOldOption.push({
+              //   fqId: testNowOption[key].fqId,
+              //   fqAnswer: testNowOption[key].fqAnswer, ///表示修改
+              //   fqOrder: parseInt(key) + 1 //填空的序号
+              // })
             }
           }
-          console.log(testNowOption)
-          // this.axios
-          //   .post(`/api/TestPaper/ModifyQuestion`, {
-          //     questionId: _this.nowOption.questionId,
-          //     questionTitle: _this.title,
-          //     questionTypeId: _this.nowOption.questionTypeId,
-          //     fillQuestion: fillQuestion
-          //   })
-          //   .then(res => {
-          //     this.fillQuestion = [];
-          //     if (res.data.code == 1) {
-          //       if (res.data.message == "数据没有变化") {
-          //         _this.message(_this,1, res.data.message)
-          //       } else if (res.data.message == "修改成功") {
-          //         _this.oshow = !_this.oshow;
-          //         _this.nowOption.questionTitle = _this.title;
-          //        _this.message(_this,1, "修改成功!")
-          //       } else {
-          //         var data = res.data + "}]}}";
-          //         data = eval("(" + data + ")");
-          //         // _this.nowOption = JSON.parse(JSON.stringify(nowOption));
-          //         console.log(data);
-          //         _this.oshow = !_this.oshow;
-          //        _this.message(_this,1, "修改成功!")
-          //       }
-          //     } else {
-          //       _this.message(_this,-1, res.data.message)
-          //     }
-          //   });
+
+          // for (const key in _this.oldOption.fillQuestion) {
+          //   if(_this.oldOption.fillQuestion[key].fqAnswer!=testOldOption[key].fqAnswer){
+          //       changeQuestion.push(testOldOption[key]);
+          //   }
+          // }
+
+
+
+          console.log(changeQuestion)
+
+
+
+          
+          this.axios
+            .post(`/api/TestPaper/ModifyQuestion`, {
+              questionId: _this.nowOption.questionId,
+              questionTitle: _this.title,
+              questionTypeId: _this.nowOption.questionTypeId,
+              fillQuestion: changeQuestion
+            })
+            .then(res => {
+               
+                console.log(res)
+              if(res.data.code == undefined){
+                        var data = res.data + "}]}}";
+                  data = eval("(" + data + ")");
+                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
+                  _this.oldOption.questionTitle=_this.title
+                  console.log(data);
+                  _this.oshow = !_this.oshow;
+                 _this.message(_this,1,"修改成功!")
+              }
+
+
+
+
+
+              
+              // if (res.data.code == 1) {
+              //   if (res.data.message == "数据没有变化") {
+              //     _this.message(_this,1, res.data.message)
+              //   } else if (res.data.message == "修改成功") {
+              //     _this.oshow = !_this.oshow;
+              //     _this.nowOption.questionTitle = _this.title;
+              //    _this.message(_this,1, "修改成功!")
+              //   } else {
+            
+              //   }
+              // } else {
+              //   _this.message(_this,-1, res.data.message)
+              // }
+            });
         } else {
           console.log("error submit!!");
           return false;
