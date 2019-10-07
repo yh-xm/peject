@@ -49,7 +49,7 @@
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <!-- 弹出框 专业课程下拉框 -->
-            <course-frame v-model="lovingVue" :oindex="seed"></course-frame>
+        <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId"></course-frame>
             <!-- 弹出框 授课老师下拉框 -->
             <el-form-item label="授课老师" prop="usName">
               <el-select v-model="ruleForm.usName" placeholder="请选择">
@@ -79,6 +79,7 @@ export default {
    components:{CourseFrame}, //注册
   data() {
     return {
+      nemuId:"100px",//传递给子组件用于命名
       seed:"", //传递给子组件
       lovingVue:[], //接收子组件传过来的值
       title: "", //弹出框标题
@@ -90,7 +91,6 @@ export default {
       ruleForm: {
         //新增的参数
         name: "", //班级名
-        keChenId: "", //课程编码
         usName: "" //老师编码
       },
       rules: {
@@ -99,10 +99,6 @@ export default {
           //表单验证班级名字
           { required: true, message: "请输入班级名称", trigger: "blur" },
           { min: 1, trigger: "blur" }
-        ],
-        keChenId: [
-          //表单验证课程
-          { required: true, message: "请选择课程", trigger: "change" }
         ],
         usName: [
           //表单验证授课老师
@@ -113,7 +109,6 @@ export default {
       message: "", //"接收通知框文字"
       type: "", //接收通知框颜色类型
       index: "", //修改所需要的下标
-      keCen: "", //用来接收课程名字
       laoShi: "" //用来接收老师名字
     };
   },
@@ -174,7 +169,6 @@ export default {
                 banJi.courseName =_this.lovingVue[0].courseName; //课程名字
                 banJi.userName = _this.laoShi; //授课老师
                 banJi.className = _this.ruleForm.name; //班级名字
-                banJi.classCourseId = _this.ruleForm.keChenId; //课程编码
                 banJi.classTeacherId = _this.ruleForm.usName; //授课老师编码
               } else if (data.data.code == -1) {
                 _this.message = "数据异常";
@@ -243,8 +237,7 @@ export default {
       var _this = this;
       _this.dialogFormVisible = true; //当为true时弹出弹出框
       _this.stuNewly = false; //弹出框的新增按钮为false
-      _this.ruleForm.name = ""; //点击获取的班级名字赋值给输入框
-      _this.ruleForm.keChenId = ""; //清除修改时赋的值
+      _this.ruleForm.name = ""; //点击获取的班级名字赋值给输入
       _this.ruleForm.usName = ""; //清除修改时赋的值
       _this.title = "新增班级信息";
       _this.seed=null //赋值为空用以清除
@@ -387,4 +380,5 @@ export default {
     text-align: center;
   }
 }
+.name{display: inline-block;}
 </style>
