@@ -190,7 +190,7 @@ export default {
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
       let _this = this;
-    // _this.getSetTest();
+    _this.getSetTest();
     },
     /**
      * 分页 currenPage 改变时会触发
@@ -200,7 +200,7 @@ export default {
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       let _this = this;
-    // _this.getSetTest();
+    _this.getSetTest();
     }
   },
   created() {
