@@ -38,10 +38,6 @@ export default {
         disabledDate(time){
           return time.getTime() < Date.now();
         }
-
-
-
-
       }
     };
   }
@@ -65,6 +61,9 @@ export default {
     }
     .timeTable {
       width: 100%;
+      .el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner{
+        width:40%;
+      }
     }
   }
 }

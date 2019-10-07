@@ -13,7 +13,22 @@
         <div class="impComp">
           <!-- 组件引用 -->
           <test-drop-down-box></test-drop-down-box>
-          <test-time></test-time>
+          <class-and-grade></class-and-grade>
+          <!-- <test-time></test-time> -->
+          <div class="testTime">
+            <div class="testTime-name">考试时间</div>
+            <div class="timeTable">
+              <el-date-picker
+                v-model="value"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :picker-options="pickerOptions"
+              ></el-date-picker>
+              <el-button type="danger" size="small" disabled plain>用时：{{timeLimit}} 分钟</el-button>
+            </div>
+          </div>
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -46,21 +61,53 @@
       </div>
     </el-card>
     <!-- 卡片结束 -->
+    <!-- 添加对话框 -->
+    <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="30%">
+      <!-- 嵌套的表单 -->
+      <el-form :model="form">
+        <!-- <el-form-item label="试卷" :label-width="formLabelWidth">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>-->
+        <test-drop-down-box></test-drop-down-box>
+        <class-and-grade></class-and-grade>
+        <!-- <test-time></test-time> -->
+      </el-form>
+      <!-- 嵌套的表单结束 -->
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">修 改</el-button>
+      </div>
+    </el-dialog>
+    <!-- 添加对话框结束 -->
   </div>
 </template>
 <script>
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
-import TestTime from "@/components/TestSetter/TestTime"; //考试时间
+import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
+// import TestTime from "@/components/TestSetter/TestTime"; //考试时间
+
 export default {
   data() {
     return {
-      SetTest: [] //初始化分页数据
+      value: [], //初始化时间表
+      timeLimit: "00", //初始化用时
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        }
+      },
+      SetTest: [], //初始化分页数据
+      dialogFormVisible: false, //对话框隐藏
+      form: {
+        name: ""
+      }
     };
   },
   //定义组件
   components: {
     TestDropDownBox,
-    TestTime
+    ClassAndGrade
+    // TestTime
   },
   //定义方法
   methods: {
@@ -89,7 +136,10 @@ export default {
      * @param {String} row 当前行所有数据
      * */
     handleEdit(index, row) {
-      console.log(index, row);
+      let _this = this;
+      // console.log(index, row);
+      _this.dialogFormVisible = true;
+      // _this.row =
     },
     /**
      * 删除当前行表格信息
@@ -97,11 +147,33 @@ export default {
      * */
 
     handleDelete(row) {
-      console.log(row);
-
-
-
-
+      // console.log(row.taskId);
+      let taskId = row.taskId;
+      _this
+        .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          center: true
+        })
+        .then(() => {
+          _this.axios
+            .post("/api/TestPaper/RemoveTestTask?taskId=" + taskId)
+            .then(function(res) {
+              console.log(res);
+              _this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              _this.tableData.splice(index, 1);
+            });
+        })
+        .catch(() => {
+          _this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   },
   created() {
@@ -112,8 +184,41 @@ export default {
 </script>
 <style lang="less" scoped>
 #TestSetter {
+  .testTime {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    .testTime-name {
+      flex: none;
+      text-align: right;
+      margin-right: 15px;
+      color: #606266;
+      width: 70px;
+      font-size: 13px;
+      line-height: 30px;
+    }
+    .timeTable {
+      width: 100%;
+      .el-date-editor--datetimerange.el-input,
+      .el-date-editor--datetimerange.el-input__inner {
+        width: 40%;
+      }
+    }
+  }
+
   .el-breadcrumb {
     margin-bottom: 20px;
+  }
+  .el-form-item {
+    display: flex;
+    /deep/.el-form-item__label {
+      flex: none;
+      text-align: right;
+      margin-right: 10px;
+    }
+    /deep/.el-form-item__content {
+      width: 100%;
+    }
   }
 }
 </style>
