@@ -8,16 +8,7 @@
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <!-- 选择课程名称 -->
-        <el-form-item label="课程名称" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择课程">
-            <el-option
-              v-for="item in ruleForm.options"
-              :key="item.courseName"
-              :label="item.courseName"
-              :value="item.courseId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+      <course-frame v-model="lovingVue" class="dropBlock"></course-frame>
         <!-- 进行下一步操作 -->
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">下一步</el-button>
@@ -27,7 +18,9 @@
   </div>
 </template>
 <script>
+import CourseFrame from '@/components/CourseFrame.vue'
 export default {
+   components:{CourseFrame},
   data() {
     return {
       ruleForm: {
@@ -42,7 +35,8 @@ export default {
         region: [
           { required: true, message: "请选择课程名称", trigger: "change" } //对应验证信息
         ]
-      }
+      },
+      lovingVue:[]
     };
   },
   methods: {
@@ -104,8 +98,11 @@ export default {
     .el-select {
       display: block;
     }
-    /deep/ .el-select__caret {
-      margin-top: 19px;
+ 
+  }
+  .dropBlock{
+   /deep/ .el-select {
+     width: 100%;
     }
   }
 }

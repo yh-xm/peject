@@ -1,4 +1,21 @@
+/** 
+课程下拉框
 
+  引用  import QuestionSectect from "@/components/QuestionSectect";
+   注册    components:{QuestionSectect},
+     当标签使用    
+      <question-sectect 
+              :select="false" 
+              :defaultSelect="0"
+              @changeOption="changeQuestionType" 
+              @questionInit="questionInit" 
+          />
+select 需传入Boolean true 为下拉框 false 为单选按钮
+defaultSelect  需传入Number 选中第几个 
+@changeOption="changeQuestionType"  //更改了选中项
+@questionInit="questionInit"  //返回题目类型
+
+*/
 <template>
   <div class="question-select">
     <div class="radio-group" v-if="!select">
@@ -17,7 +34,7 @@
         <el-option
           v-for="item in pageInfo"
           :key="item.value"
-          :label="item.label"
+          :label="item.value"
           :value="item.typeName"
         ></el-option>
       </el-select>
@@ -30,13 +47,16 @@ export default {
     select: {
       type: Boolean,
        default: true //默认为true
+    },
+    defaultSelect:{
+      type:Number
     }
   },
   data() {
     return {
-      pageInfo: [],
-      radio: 0,
-      value: ""
+      pageInfo: [], //初始化试卷信息
+      radio:"", //默认选中选择题
+      value:""//默认为空
     };
   },
   methods: {
@@ -53,8 +73,14 @@ export default {
           _this.pageInfo[i].nowScroe = 0;
         }
        this.$emit('questionInit', _this.pageInfo)
+         if(_this.select==true){
+           _this.value = _this.pageInfo[_this.defaultSelect].typeName
+         }else{
+           _this.radio = _this.pageInfo[_this.defaultSelect].typeName
+         }
       });
         
+       
     },
     changeQuestionType(type) {
       var index = 0;

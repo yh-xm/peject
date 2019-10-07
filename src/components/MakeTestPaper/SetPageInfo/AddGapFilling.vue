@@ -1,3 +1,18 @@
+/** 
+添加填空题组件
+
+  引用 import AddGapFilling 
+  from "@/components/MakeTestPaper/SetPageInfo/AddGapFilling"; //添加选择题组件
+
+   注册    components:{AddGapFilling},
+     当标签使用    
+          <add-gap-filling
+          @addGapFilling="addQuestion" 添加题目时触发的事件
+           />
+
+*/
+
+
 <template>
   <div class="GapFilling">
     <div class="gapContent">
@@ -7,7 +22,7 @@
         label-width="100px"
         class="demo-dynamic"
       >
-      <!-- 题目 -->
+        <!-- 题目 -->
         <el-form-item label="题干">
           <el-button round icon="el-icon-document-checked" @click="addDomain" size="small">插入填空</el-button>
         </el-form-item>
@@ -109,10 +124,9 @@ export default {
                   questionTypeId: 2
                 };
                 this.$emit("addGapFilling", data);
-                this.message(this,1,"添加成功!")
+                this.message(this, 1, "添加成功!");
                 this.resetForm("AddGapFillQuestion");
                 this.title = "";
-                
               }
             });
         } else {
@@ -186,11 +200,10 @@ export default {
       var oarr = o.split("");
       var narr = n.split("");
       for (const key in oarr) {
-        
         if (oarr[key] == "＿") {
           oarr[key] = oindex++;
           oindexArr.push(key);
-        }else {
+        } else {
           oarr[key] = "*";
         }
       }
@@ -254,12 +267,18 @@ export default {
       }
       if (nindexArr.length < oindexArr.length) {
         //填空减少了
-            for (let i in oindexArr) {
-            if (parseInt(oindexArr[i])>=textindex&&parseInt(oindexArr[i])<=textindex+oarr.length - narr.length) {
-            _this.AddGapFillQuestion.domains.splice(i, oindexArr.length - nindexArr.length);
+        for (let i in oindexArr) {
+          if (
+            parseInt(oindexArr[i]) >= textindex &&
+            parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length
+          ) {
+            _this.AddGapFillQuestion.domains.splice(
+              i,
+              oindexArr.length - nindexArr.length
+            );
             break;
-            }
           }
+        }
       }
       if (nindexArr.length == 0) {
         //填空为0

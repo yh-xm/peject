@@ -1,3 +1,17 @@
+/** 
+维护填空题组件
+
+  引用  import SetGapFillQuestion from 
+  "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetGapFillQuestion"; 
+   注册    components:{SetGapFillQuestion},
+     当标签使用    
+ :AddChooseQuestionList="items" 传入题目信息
+:nowIndex="indexs" 传入题号
+@setQuestion="setQuestion" 进行维护时触发的方法
+ @changeScore="changeScore" 修改分数时触发的方法
+*/
+
+
 <template>
   <div class="gapFilling">
     <div class="gapContent">
@@ -82,8 +96,8 @@ export default {
       nowOption: {}, //当前数据
       oldOption: [], //历史数据
       oshow: false,
-      IndexArr: [],//填空下标数组
-      fillQuestion: []//存储插入的填空下标数组
+      IndexArr: [], //填空下标数组
+      fillQuestion: [] //存储插入的填空下标数组
     };
   },
   props: {
@@ -111,36 +125,23 @@ export default {
           for (const key in testNowOption) {
             if (testNowOption[key].fqId == undefined) {
               changeQuestion.push({
-                fqAnswer: testNowOption[key].fqAnswer, ///表示新增
-                FqOrder: parseInt(key) + 1 //填空的序号
+                fqOrder: parseInt(key) + 1, //填空的序号
+                fqAnswer: testNowOption[key].fqAnswer ///表示新增
               });
-            }else{
+            } else {
               changeQuestion.push({
-                fqId: testNowOption[key].fqId,
+                fqOrder: parseInt(key) + 1, //填空的序号
                 fqAnswer: testNowOption[key].fqAnswer, ///表示修改
-                fqOrder: parseInt(key) + 1 //填空的序号
-              })
-              // testOldOption.push({
-              //   fqId: testNowOption[key].fqId,
-              //   fqAnswer: testNowOption[key].fqAnswer, ///表示修改
-              //   fqOrder: parseInt(key) + 1 //填空的序号
-              // })
+                fqId: testNowOption[key].fqId
+              });
             }
           }
 
-          // for (const key in _this.oldOption.fillQuestion) {
-          //   if(_this.oldOption.fillQuestion[key].fqAnswer!=testOldOption[key].fqAnswer){
-          //       changeQuestion.push(testOldOption[key]);
-          //   }
-          // }
+          console.log(_this.nowOption.questionId);
+          console.log(_this.title);
+          console.log(_this.nowOption.questionTypeId);
+          console.log(changeQuestion);
 
-
-
-          console.log(changeQuestion)
-
-
-
-          
           this.axios
             .post(`/api/TestPaper/ModifyQuestion`, {
               questionId: _this.nowOption.questionId,
@@ -149,23 +150,17 @@ export default {
               fillQuestion: changeQuestion
             })
             .then(res => {
-               
-                console.log(res)
-              if(res.data.code == undefined){
-                        var data = res.data + "}]}}";
-                  data = eval("(" + data + ")");
-                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
-                  _this.oldOption.questionTitle=_this.title
-                  console.log(data);
-                  _this.oshow = !_this.oshow;
-                 _this.message(_this,1,"修改成功!")
+              console.log(res);
+              if (res.data.code == undefined) {
+                var data = res.data + "}]}}";
+                data = eval("(" + data + ")");
+                _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
+                _this.oldOption.questionTitle = _this.title;
+                console.log(data);
+                _this.oshow = !_this.oshow;
+                _this.message(_this, 1, "修改成功!");
               }
 
-
-
-
-
-              
               // if (res.data.code == 1) {
               //   if (res.data.message == "数据没有变化") {
               //     _this.message(_this,1, res.data.message)
@@ -174,7 +169,7 @@ export default {
               //     _this.nowOption.questionTitle = _this.title;
               //    _this.message(_this,1, "修改成功!")
               //   } else {
-            
+
               //   }
               // } else {
               //   _this.message(_this,-1, res.data.message)

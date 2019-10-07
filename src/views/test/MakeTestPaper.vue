@@ -20,7 +20,12 @@
       <div id="TestInfo" v-if="active==1">
         <div class="tabs">
           <div class="left-list">
-              <question-sectect :select="true" @changeOption="changeQuestionType" @questionInit="questionInit" />
+              <question-sectect 
+              :select="false" 
+              :defaultSelect="0"
+              @changeOption="changeQuestionType" 
+              @questionInit="questionInit" 
+              />
             </div>
         
 
@@ -100,7 +105,7 @@ export default {
       active: 0, //当前步奏
       pageInfo: [], //试卷信息
       radio: 3, //选项
-      nowAddOption: -1 //当前所在题型
+      nowAddOption: 0 //当前所在题型
     };
   },
   computed: {

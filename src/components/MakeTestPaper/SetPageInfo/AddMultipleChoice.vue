@@ -1,3 +1,16 @@
+/** 
+添加选择题组件
+
+  引用 import AddMultipleChoice 
+  from "@/components/MakeTestPaper/SetPageInfo/AddMultipleChoice"; //添加选择题组件
+
+   注册    components:{AddMultipleChoice},
+     当标签使用    
+          <add-multiple-choice 
+          @addMultipleChoice="addQuestion" 添加题目时触发的事件
+           />
+
+*/
 <template>
   <div id="MultipleChoice">
     <div class="Mult-Content">

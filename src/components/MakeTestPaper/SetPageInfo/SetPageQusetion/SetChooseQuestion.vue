@@ -1,3 +1,17 @@
+/** 
+维护选择题组件
+
+  引用  import SetChooseQuestion from 
+  "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetChooseQuestion"; 
+   注册    components:{SetChooseQuestion},
+     当标签使用    
+ :AddChooseQuestionList="items" 传入题目信息
+:nowIndex="indexs" 传入题号
+@setQuestion="setQuestion" 进行维护时触发的方法
+ @changeScore="changeScore" 修改分数时触发的方法
+*/
+
+
 <template>
   <div class="MultipleChoice">
     <div class="Mult-Content">
