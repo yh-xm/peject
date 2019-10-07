@@ -52,7 +52,7 @@
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -143,15 +143,19 @@ export default {
     },
     /**
      * 删除当前行表格信息
+     * @param {Nameber} index 当前行所在下标
      * @param {String} row 当前行所有数据
      * */
 
-    handleDelete(row) {
+    handleDelete(index, row) {
+      // console.log(row);
       // console.log(row.taskId);
       let taskId = row.taskId;
+      let _this = this;
+
       _this
-        .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-          confirmButtonText: "确定",
+        .$confirm("此操作将永久删除该数据,是否继续", "提示", {
+          congirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
           center: true
@@ -159,13 +163,14 @@ export default {
         .then(() => {
           _this.axios
             .post("/api/TestPaper/RemoveTestTask?taskId=" + taskId)
-            .then(function(res) {
-              console.log(res);
-              _this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              _this.tableData.splice(index, 1);
+            .then(res => {
+              if (res.status === 200) {
+                _this.SetTest.splice(index, 1);
+                _this.message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+              }
             });
         })
         .catch(() => {
