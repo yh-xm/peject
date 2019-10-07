@@ -26,8 +26,7 @@
       </div>
       <div>
         <!-- 表格 -->
-<!-- .slice((currentPage-1)*pageSize,currentPage*pageSize) -->
-
+        <!-- .slice((currentPage-1)*pageSize,currentPage*pageSize) -->
         <el-table :data="SetTest" style="width: 100%">
           <el-table-column type="index"></el-table-column>
           <el-table-column label="试卷名称" prop="tpTitle" align="center"></el-table-column>
@@ -50,7 +49,6 @@
     <!-- 分页 -->
 
     <div class="block">
-      <!-- :page-count="SetTest." -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -66,9 +64,6 @@
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="30%">
       <!-- 嵌套的表单 -->
       <el-form :model="form">
-        <!-- <el-form-item label="试卷" :label-width="formLabelWidth">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>-->
         <test-drop-down-box></test-drop-down-box>
         <class-and-grade></class-and-grade>
         <test-time></test-time>
@@ -95,9 +90,9 @@ export default {
       form: {
         name: ""
       },
-      currentPage:1,//当前页码
-      pageSize:10,//每页大小
-      total: null, //总条目
+      currentPage: 1, //当前页码
+      pageSize: 10, //每页大小
+      total: null //总条目
     };
   },
   //定义组件
@@ -117,15 +112,18 @@ export default {
     getSetTest() {
       let _this = this;
       _this.axios
-        .get("/api/TestPaper/GetTestTask?pageIndex="+_this.currentPage+"&pageSize="+_this.pageSize)
+        .get(
+          "/api/TestPaper/GetTestTask?pageIndex=" +
+            _this.currentPage +
+            "&pageSize=" +
+            _this.pageSize
+        )
         .then(
           function(res) {
             // roles等于回调函数返回的res（值）
             // console.log(res);
             _this.SetTest = res.data.data; //表格数据
             _this.total = res.data.items; //总条数
-            // _this.totalPage = res.data.pages; //总页码（数）
-
           },
           function() {
             console.log("请求失败处理");
@@ -185,26 +183,23 @@ export default {
     /**
      * 分页 pageSize 改变时会触发
      * 长度改变----改变每页显示的条数的时候  自动触发
-     * @param {Number} val 传过来的值
+     * @param {Number} val 显示多少条数据
      * */
     handleSizeChange(val) {
       let _this = this;
       _this.pageSize = val;
       _this.getSetTest();
-      // _this.pageSize = val; 
     },
     /**
      * 分页 currenPage 改变时会触发
      * 当前改变----当前页码改变之后，触发这个函数
-     *
+     *@param {Number} val 点击后的当前页
      * */
 
     handleCurrentChange(val) {
       let _this = this;
       _this.currentPage = val;
       _this.getSetTest();
-
-
     }
   },
   created() {
@@ -215,7 +210,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #TestSetter {
-// 导航样式
+  // 导航样式
   .el-breadcrumb {
     margin-bottom: 20px;
   }
