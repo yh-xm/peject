@@ -19,12 +19,14 @@
             <div class="testTime-name">考试时间</div>
             <div class="timeTable">
               <el-date-picker
-                v-model="value"
+                v-model="logEnd"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 :picker-options="pickerOptions"
+                size="small"
+                @change="logTimeChange"
               ></el-date-picker>
               <el-button type="danger" size="small" disabled plain>用时：{{timeLimit}} 分钟</el-button>
             </div>
@@ -56,11 +58,25 @@
             </template>
           </el-table-column>
         </el-table>
-
         <!-- 表格结束 -->
       </div>
     </el-card>
     <!-- 卡片结束 -->
+    <!-- 分页 -->
+
+    <div class="block">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="seleNum"
+        :page-size="showNum"
+        :page-count="totalPage"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalNum"
+      ></el-pagination>
+    </div>
+    <!-- 分页结束 -->
     <!-- 添加对话框 -->
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="30%">
       <!-- 嵌套的表单 -->
@@ -89,18 +105,23 @@ import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
 export default {
   data() {
     return {
-      value: [], //初始化时间表
-      timeLimit: "00", //初始化用时
+      logEnd: [], //初始化始终时间值
+      timeLimit: 0, //初始化 用时
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < Date.now();
+          return time.getTime() < Date.now() - 8.64e7;//设置选择今天以及今天之后的日
         }
       },
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
       form: {
         name: ""
-      }
+      },
+      currentPage: 1, //当前页数
+      totalNum: null, //总条目数
+      seleNum: [10,20,30,40,50,60,70,80,90], //每页显示个数选择器的选项设置
+      showNum: null, //每页显示条目个数
+      totalPage:null,//总页数
     };
   },
   //定义组件
@@ -119,15 +140,20 @@ export default {
 
     getSetTest() {
       let _this = this;
-      _this.axios.get("/api/TestPaper/GetTestTask").then(
-        function(res) {
-          // roles等于回调函数返回的res（值）
-          _this.SetTest = res.data.data;
-        },
-        function() {
-          console.log("请求失败处理");
-        }
-      );
+      _this.axios
+        .get("/api/TestPaper/GetTestTask?pageIndex=" + _this.currentPage)
+        .then(
+          function(res) {
+            // roles等于回调函数返回的res（值）
+            // console.log(res);
+            _this.SetTest = res.data.data;//表格数据
+            _this.totalNum = res.data.items; //总条数
+            _this.totalPage = res.data.pages;//总页码（数）
+          },
+          function() {
+            console.log("请求失败处理");
+          }
+        );
     },
 
     /**
@@ -137,7 +163,7 @@ export default {
      * */
     handleEdit(index, row) {
       let _this = this;
-      // console.log(index, row);
+      console.log(index, row);
       _this.dialogFormVisible = true;
       // _this.row =
     },
@@ -148,8 +174,6 @@ export default {
      * */
 
     handleDelete(index, row) {
-      // console.log(row);
-      // console.log(row.taskId);
       let taskId = row.taskId;
       let _this = this;
 
@@ -179,7 +203,38 @@ export default {
             message: "已取消删除"
           });
         });
-    }
+    },
+
+    /**
+     * 分页 pageSize 改变时会触发
+     * @param {Number} val 传过来的值
+     * */
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+    },
+    /**
+     * 分页 currenPage 改变时会触发
+     *
+     * */
+
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+    },
+    /**
+     * 时间改变事件
+     * @param {Date} val input框内容
+    */
+   logTimeChange(val){
+
+     console.log(val)
+
+   }
+
+
+
+
+
+
   },
   created() {
     let _this = this;
@@ -225,5 +280,13 @@ export default {
       width: 100%;
     }
   }
+// 分页样式
+.block{
+margin: 30px auto;
+text-align: center;
+}
+
+
+
 }
 </style>

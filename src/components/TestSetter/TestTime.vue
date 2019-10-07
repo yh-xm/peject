@@ -3,16 +3,6 @@
     <div class="testTime">
       <div class="testTime-name">考试时间</div>
       <div class="timeTable">
-        <!-- <el-date-picker
-          v-model="value2"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          align="left"
-          size="small"
-        ></el-date-picker>-->
-
         <el-date-picker
           v-model="value"
           type="datetimerange"
@@ -20,8 +10,8 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
+          @change="logTimeChange"
         ></el-date-picker>
-
         <el-button type="danger" size="small" disabled plain>用时：{{timeLimit}} 分钟</el-button>
       </div>
     </div>
@@ -32,14 +22,23 @@
 export default {
   data() {
     return {
-      value:[],//初始化时间表
-      timeLimit: "00",//初始化用时
-      pickerOptions:{
-        disabledDate(time){
-          return time.getTime() < Date.now();
+      value: [], //初始化时间表
+      timeLimit: "00", //初始化用时
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7; ////设置选择今天以及今天之后的日//如果没有后面的-8.64e7就是不可以选择今天的
         }
       }
     };
+  },
+  methods: {
+    /**
+     * 时间改变事件
+     * @param {Date} val input框内容
+     */
+    logTimeChange(val) {
+      console.log(val);
+    }
   }
 };
 </script>
@@ -61,8 +60,9 @@ export default {
     }
     .timeTable {
       width: 100%;
-      .el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner{
-        width:40%;
+      .el-date-editor--datetimerange.el-input,
+      .el-date-editor--datetimerange.el-input__inner {
+        width: 40%;
       }
     }
   }
