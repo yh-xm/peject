@@ -14,23 +14,7 @@
           <!-- 组件引用 -->
           <test-drop-down-box></test-drop-down-box>
           <class-and-grade></class-and-grade>
-          <!-- <test-time></test-time> -->
-          <div class="testTime">
-            <div class="testTime-name">考试时间</div>
-            <div class="timeTable">
-              <el-date-picker
-                v-model="logEnd"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :picker-options="pickerOptions"
-                size="small"
-                @change="logTimeChange"
-              ></el-date-picker>
-              <el-button type="danger" size="small" disabled plain>用时：{{timeLimit}} 分钟</el-button>
-            </div>
-          </div>
+          <test-time></test-time>
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -65,15 +49,15 @@
     <!-- 分页 -->
 
     <div class="block">
+      <!-- :page-count="SetTest." -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="seleNum"
-        :page-size="showNum"
-        :page-count="totalPage"
+        :page-sizes="[5,10, 20, 30]"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="totalNum"
+        :total="SetTest.length"
       ></el-pagination>
     </div>
     <!-- 分页结束 -->
@@ -86,7 +70,7 @@
         </el-form-item>-->
         <test-drop-down-box></test-drop-down-box>
         <class-and-grade></class-and-grade>
-        <!-- <test-time></test-time> -->
+        <test-time></test-time>
       </el-form>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
@@ -100,35 +84,28 @@
 <script>
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
 import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
-// import TestTime from "@/components/TestSetter/TestTime"; //考试时间
+import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 
 export default {
   data() {
     return {
-      logEnd: [], //初始化始终时间值
-      timeLimit: 0, //初始化 用时
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7;//设置选择今天以及今天之后的日
-        }
-      },
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
       form: {
         name: ""
       },
-      currentPage: 1, //当前页数
-      totalNum: null, //总条目数
-      seleNum: [10,20,30,40,50,60,70,80,90], //每页显示个数选择器的选项设置
-      showNum: null, //每页显示条目个数
-      totalPage:null,//总页数
+      currentPage:1,//当前页
+      pageSize:10,//默认记录
+      // totalNum: null, //总条目
+      // showNum: null, //每页显示条目个数
+      // totalPage: null //总页数
     };
   },
   //定义组件
   components: {
     TestDropDownBox,
-    ClassAndGrade
-    // TestTime
+    ClassAndGrade,
+    TestTime
   },
   //定义方法
   methods: {
@@ -141,14 +118,17 @@ export default {
     getSetTest() {
       let _this = this;
       _this.axios
-        .get("/api/TestPaper/GetTestTask?pageIndex=" + _this.currentPage)
+        .get("/api/TestPaper/GetTestTask")
         .then(
           function(res) {
             // roles等于回调函数返回的res（值）
             // console.log(res);
-            _this.SetTest = res.data.data;//表格数据
-            _this.totalNum = res.data.items; //总条数
-            _this.totalPage = res.data.pages;//总页码（数）
+            _this.SetTest = res.data.data; //表格数据
+            // _this.totalNum = res.data.items; //总条数
+            // _this.totalPage = res.data.pages; //总页码（数）
+
+
+
           },
           function() {
             console.log("请求失败处理");
@@ -211,6 +191,8 @@ export default {
      * */
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
+      let _this = this;
+    // _this.getSetTest();
     },
     /**
      * 分页 currenPage 改变时会触发
@@ -219,22 +201,9 @@ export default {
 
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-    },
-    /**
-     * 时间改变事件
-     * @param {Date} val input框内容
-    */
-   logTimeChange(val){
-
-     console.log(val)
-
-   }
-
-
-
-
-
-
+      let _this = this;
+    // _this.getSetTest();
+    }
   },
   created() {
     let _this = this;
@@ -244,31 +213,11 @@ export default {
 </script>
 <style lang="less" scoped>
 #TestSetter {
-  .testTime {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    .testTime-name {
-      flex: none;
-      text-align: right;
-      margin-right: 15px;
-      color: #606266;
-      width: 70px;
-      font-size: 13px;
-      line-height: 30px;
-    }
-    .timeTable {
-      width: 100%;
-      .el-date-editor--datetimerange.el-input,
-      .el-date-editor--datetimerange.el-input__inner {
-        width: 40%;
-      }
-    }
-  }
-
+// 导航样式
   .el-breadcrumb {
     margin-bottom: 20px;
   }
+  // 对话框样式
   .el-form-item {
     display: flex;
     /deep/.el-form-item__label {
@@ -280,13 +229,10 @@ export default {
       width: 100%;
     }
   }
-// 分页样式
-.block{
-margin: 30px auto;
-text-align: center;
-}
-
-
-
+  // 分页样式
+  .block {
+    margin: 30px auto;
+    text-align: center;
+  }
 }
 </style>
