@@ -41,15 +41,15 @@
         </el-form-item>
         <el-form-item label="题目预览" class="view-options">
           <el-row v-for="(item,index) in title" :key="index">
-            <span v-if="item!='＿'">{{item}}</span>
+            <span v-if="item!='▁'">{{item}}</span>
 
             <el-input
-              v-if="item=='＿'"
+              v-if="item=='▁'"
               :key="index"
               v-model="AddGapFillQuestion.domains[IndexArr[index]].value"
               class="ShowDaAn"
             ></el-input>
-            <span v-if="item=='＿'">({{AddGapFillQuestion.domains[IndexArr[index]].onum}}分)</span>
+            <span v-if="item=='▁'">({{AddGapFillQuestion.domains[IndexArr[index]].onum}}分)</span>
           </el-row>
         </el-form-item>
         <el-form-item>
@@ -153,7 +153,7 @@ export default {
       var _this = this;
       var index = _this.getCursortPosition(document.getElementById("textarea"));
       _this.title = _this.title.split("");
-      _this.title.splice(index, 0, "＿");
+      _this.title.splice(index, 0, "▁");
       _this.title = _this.title.join("");
     },
     /**
@@ -200,7 +200,7 @@ export default {
       var oarr = o.split("");
       var narr = n.split("");
       for (const key in oarr) {
-        if (oarr[key] == "＿") {
+        if (oarr[key] == "▁") {
           oarr[key] = oindex++;
           oindexArr.push(key);
         } else {
@@ -208,7 +208,7 @@ export default {
         }
       }
       for (const key in narr) {
-        if (narr[key] == "＿") {
+        if (narr[key] == "▁") {
           narr[key] = nindex++;
           nindexArr.push(key);
         } else {

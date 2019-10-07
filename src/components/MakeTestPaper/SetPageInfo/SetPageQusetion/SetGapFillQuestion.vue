@@ -16,19 +16,20 @@
   <div class="gapFilling">
     <div class="gapContent">
       <el-form :model="nowOption" ref="nowOption" label-width="100px" class="demo-dynamic">
+        {{nowIndex3+1}}、
         <el-form-item class="view-options" v-show="!oshow">
           <!-- 题目预览 没有编辑状态-->
           <el-row v-for="(item,index) in title" :key="index">
-            <span v-if="item!='＿'">{{item}}</span>
+            <span v-if="item!='▁'">{{item}}</span>
             <el-input
-              v-if="item=='＿'"
+              v-if="item=='▁'"
               :key="index"
               v-model="nowOption.fillQuestion[IndexArr[index]].fqAnswer"
               class="ShowDaAn"
             ></el-input>
             <el-input-number
               @change="changeScore"
-              v-if="item=='＿'"
+              v-if="item=='▁'"
               size="small"
               :min="1"
               :max="5"
@@ -56,16 +57,16 @@
         </el-form-item>
         <el-form-item label="题目预览" class="view-options" v-show="oshow">
           <el-row v-for="(item,index) in title" :key="index">
-            <span v-if="item!='＿'">{{item}}</span>
+            <span v-if="item!='▁'">{{item}}</span>
             <el-input
-              v-if="item=='＿'"
+              v-if="item=='▁'"
               :key="index"
               v-model="nowOption.fillQuestion[IndexArr[index]].fqAnswer"
               class="ShowDaAn"
               disabled
             ></el-input>
             <span
-              v-if="item=='＿'"
+              v-if="item=='▁'"
             >({{nowOption.fillQuestion[IndexArr[index]].fillQuestionScore[0].fqsScore}}分)</span>
           </el-row>
         </el-form-item>
@@ -101,19 +102,32 @@ export default {
     };
   },
   props: {
-    AddGapFillQuestionList: Object,
-    nowIndex3: Number
+    AddGapFillQuestionList: Object, //传入的题目信息
+    nowIndex3: Number //传入的题号
   },
   methods: {
+    /**
+     * 点击编辑
+     *
+     */
     compile() {
-      this.oshow = !this.oshow;
+      this.oshow = !this.oshow; //点击编辑
     },
+    /**
+     * 点击取消
+     *
+     */
     out() {
       this.oshow = !this.oshow;
       this.title = this.oldOption.questionTitle;
-      this.nowOption = JSON.parse(JSON.stringify(this.oldOption));
+      this.nowOption = JSON.parse(JSON.stringify(this.oldOption)); //点击取消
     },
+    /**
+     * 点击保存修改
+     * @param {object} formName 点击当前表单
+     */
     submitForm(formName) {
+      //保存修改
       var _this = this;
       var changeQuestion = [];
       this.$refs[formName].validate(valid => {
@@ -136,75 +150,100 @@ export default {
               });
             }
           }
-
-          console.log(_this.nowOption.questionId);
-          console.log(_this.title);
-          console.log(_this.nowOption.questionTypeId);
-          console.log(changeQuestion);
-
-          this.axios
-            .post(`/api/TestPaper/ModifyQuestion`, {
-              questionId: _this.nowOption.questionId,
-              questionTitle: _this.title,
-              questionTypeId: _this.nowOption.questionTypeId,
-              fillQuestion: changeQuestion
-            })
-            .then(res => {
-              console.log(res);
-              if (res.data.code == undefined) {
-                var data = res.data + "}]}}";
-                data = eval("(" + data + ")");
-                _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
-                _this.oldOption.questionTitle = _this.title;
-                console.log(data);
-                _this.oshow = !_this.oshow;
-                _this.message(_this, 1, "修改成功!");
-              }
-
-              // if (res.data.code == 1) {
-              //   if (res.data.message == "数据没有变化") {
-              //     _this.message(_this,1, res.data.message)
-              //   } else if (res.data.message == "修改成功") {
-              //     _this.oshow = !_this.oshow;
-              //     _this.nowOption.questionTitle = _this.title;
-              //    _this.message(_this,1, "修改成功!")
-              //   } else {
-
-              //   }
-              // } else {
-              //   _this.message(_this,-1, res.data.message)
-              // }
-            });
+          if (_this.fillQuestion.length > 0) {
+            //是否添加填空
+            var value = _this.AddGapFillQuestionList.tpqId;
+            this.axios
+              .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
+                questionId: _this.nowOption.questionId, //题目Id
+                questionTitle: _this.title, //题目
+                questionTypeId: _this.nowOption.questionTypeId, //题目类型
+                fillQuestion: changeQuestion //题目信息
+              })
+              .then(res => {
+                if (res.data.code == undefined) {
+                  console.log(res);
+                  var data = res.data + "}]}}";
+                  data = eval("(" + data + ")");
+                  console.log(data);
+                  _this.nowOption.questionTitle = _this.title; //更新题目
+                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
+                  _this.oshow = !_this.oshow;
+                  _this.message(_this, 1, data.message);
+                } else {
+                  _this.message(_this, -1, res.data.message);
+                }
+              });
+            _this.fillQuestion = [];
+          } else {
+            //没有添加填空
+            this.axios
+              .post(`/api/TestPaper/ModifyQuestion`, {
+                questionId: _this.nowOption.questionId, //题目Id
+                questionTitle: _this.title, //题目
+                questionTypeId: _this.nowOption.questionTypeId, //题目类型
+                fillQuestion: changeQuestion //题目信息
+              })
+              .then(res => {
+                console.log(res);
+                if (res.data.code == undefined) {
+                  var data = res.data + "}]}}";
+                  data = eval("(" + data + ")");
+                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新题目信息
+                  _this.oldOption.questionTitle = _this.title; //更新题目
+                  _this.oshow = !_this.oshow;
+                  _this.message(_this, 1, data.message);
+                } else {
+                  _this.message(_this, -1, res.data.message);
+                }
+              });
+          }
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
+    /**
+     * 重置表单
+     *@param {object} formName 点击当前表单
+     */
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+    /**
+     * 插入填空
+     *
+     */
     addDomain() {
       var index = this.getCursortPosition(
-        document.getElementById("textarea" + this.nowIndex3)
+        document.getElementById("textarea" + this.nowIndex3) //获取文本域
       );
       this.title = this.title.split("");
-      this.title.splice(index, 0, "＿");
+      this.title.splice(index, 0, "▁"); //插入填空
       this.title = this.title.join("");
     },
+    /**
+     * 获取文本域下标
+     *
+     */
     getCursortPosition(element) {
       var CaretPos = 0;
       if (document.selection) {
         //支持IE
         element.focus();
         var Sel = document.selection.createRange();
-        Sel.moveStart("character", -element.value.length);
+        Sel.moveStart("character", -element.value.length); //获取光标位置
         CaretPos = Sel.text.length;
       } else if (element.selectionStart || element.selectionStart == "0")
         //支持firefox
         CaretPos = element.selectionStart;
       return CaretPos;
     },
+    /**
+     *删除题目
+     *
+     */
     removeChoose() {
       var _this = this;
       console.log(this.nowOption);
@@ -225,12 +264,17 @@ export default {
           _this.message(this, 1, "删除成功!");
         });
     },
+    /**
+     *修改分数
+     *@param {Number} v 当前数字
+     */
     changeScore(v) {
       var _this = this;
       var fillQuestion = _this.nowOption.fillQuestion;
       _this.AddGapFillQuestionList.fqsScore = 0;
       var fillQuestionScore = [];
       for (const key in fillQuestion) {
+        //算出所有填空的总分
         _this.AddGapFillQuestionList.fqsScore +=
           fillQuestion[key].fillQuestionScore[0].fqsScore;
         fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0]);
@@ -246,7 +290,7 @@ export default {
         )
         .then(res => {
           if (res.data.message == "修改成功") {
-            this.oldOption = JSON.parse(JSON.stringify(this.nowOption));
+            this.oldOption = JSON.parse(JSON.stringify(this.nowOption)); //更新题目信息
             var data = {
               index: 1,
               fqsScore: _this.AddGapFillQuestionList.fqsScore,
@@ -257,13 +301,14 @@ export default {
           }
         });
     },
+    /**
+     *初始化
+     */
     init() {
       var _this = this;
-      // console.log(this.AddGapFillQuestionList)
-      _this.nowOption = _this.AddGapFillQuestionList.tpqQuestion;
-      _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
-      _this.title = _this.nowOption.questionTitle;
-      console.log(_this.nowOption);
+      _this.nowOption = _this.AddGapFillQuestionList.tpqQuestion; //获取题目信息
+      _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //克隆题目信息
+      _this.title = _this.nowOption.questionTitle; //获取题目
     }
   },
   watch: {
@@ -276,7 +321,7 @@ export default {
       var oarr = o.split("");
       var narr = n.split("");
       for (const key in oarr) {
-        if (oarr[key] == "＿") {
+        if (oarr[key] == "▁") {
           oarr[key] = oindex++;
           oindexArr.push(key);
         } else {
@@ -284,7 +329,7 @@ export default {
         }
       }
       for (const key in narr) {
-        if (narr[key] == "＿") {
+        if (narr[key] == "▁") {
           narr[key] = nindex++;
           nindexArr.push(key);
         } else {

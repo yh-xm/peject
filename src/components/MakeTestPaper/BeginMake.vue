@@ -50,7 +50,7 @@ export default {
       var _this = this;
       var userId = sessionStorage.userId; //当前老师的唯一标识符
       _this.$refs[formName].validate(valid => {
-        var tpCourseId = _this.$refs[formName].model.region; //获取下拉选中的课程Id
+        var tpCourseId = _this.lovingVue[0].courseId //获取下拉选中的课程Id
         var name = _this.$refs[formName].model.name; //试卷名称
         if (valid) {
           _this.axios
@@ -73,19 +73,9 @@ export default {
         }
       });
     },
-    /**
-     * 获取下拉列表科目信息
-     *  {object} ruleForm  当前表单对象
-     */
-    getOptions() {
-      var _this = this;
-      _this.axios.get(`/api/Class/GetAllCourse`).then(res => {
-        _this.ruleForm.options = res.data; //获取下拉列表
-      });
-    }
+
   },
   created() {
-    this.getOptions(); //初始化下拉列表
   }
 };
 </script>

@@ -179,6 +179,13 @@ export default {
           _this.tableData = stu;
           _this.pages = data.data.items; //赋值给显示的条数
         });
+    },
+     /**
+     *查看详情
+     */
+      handleGet(index, row) {
+      // console.log(row.tpId)
+      this.$router.push({ path: `/testPageInfo/${row.tpId}` });
     }
   },
   created() {

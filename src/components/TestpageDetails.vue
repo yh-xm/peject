@@ -140,7 +140,6 @@ export default {
       for (let i in _this.pageInfo) {
         if (_this.pageInfo[i].bodys.length != 0) {
           sum += _this.pageInfo[i].nowScroe;
-          console.log(66666);
         }
       }
       return sum;
@@ -261,6 +260,9 @@ export default {
      */
     sumScore(index, fqIndex, fqsScore) {
       var _this = this;
+      if(index==undefined){
+          return;
+      }
       _this.pageInfo[index].nowScroe = 0;
       if (fqIndex != undefined) {
         _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
