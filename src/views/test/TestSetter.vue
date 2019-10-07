@@ -27,7 +27,7 @@
       <div>
         <!-- 表格 -->
 
-        <el-table :data="SetTest" style="width: 100%">
+        <el-table :data="SetTest.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%">
           <el-table-column type="index"></el-table-column>
           <el-table-column label="试卷名称" prop="tpTitle" align="center"></el-table-column>
           <el-table-column label="班级" prop="className" align="center"></el-table-column>
