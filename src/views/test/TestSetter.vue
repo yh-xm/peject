@@ -12,8 +12,8 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <test-drop-down-box></test-drop-down-box>
-          <class-and-grade></class-and-grade>
+          <test-drop-down-box @getInfo="getInfo"></test-drop-down-box>
+          <class-and-grade @getGrade="getGrade"></class-and-grade>
           <test-time></test-time>
           <!-- 组件引用结束 -->
         </div>
@@ -26,7 +26,6 @@
       </div>
       <div>
         <!-- 表格 -->
-        <!-- .slice((currentPage-1)*pageSize,currentPage*pageSize) -->
         <el-table :data="SetTest" style="width: 100%">
           <el-table-column type="index"></el-table-column>
           <el-table-column label="试卷名称" prop="tpTitle" align="center"></el-table-column>
@@ -80,7 +79,7 @@
 <script>
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
 import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
-import TestTime from "@/components/TestSetter/TestTime"; //考试时间
+// import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 
 export default {
   data() {
@@ -99,10 +98,28 @@ export default {
   components: {
     TestDropDownBox,
     ClassAndGrade,
-    TestTime
+    // TestTime
   },
   //定义方法
   methods: {
+
+    /**
+     * 获取子组件的数据
+     * 试卷
+     *
+     * */
+    getInfo(data){
+      console.log(data)
+    },
+ /**
+     * 获取子组件的数据
+     * 班级
+     *
+     * */
+    getGrade(data){
+      console.log(data)
+    },
+
     /**
      * 安排测试
      *
@@ -112,17 +129,15 @@ export default {
     setTest() {
       console.log("安排测试");
       let _this = this;
+      var obj = {
 
 
+      };
+      // 调用接口
+      // _this.axios.post("/api/TestPaper/SetTest",obj).then((res) => {
+      //       console.log(res);
 
-
-
-
-
-
-
-
-
+      // })
     },
 
     /**

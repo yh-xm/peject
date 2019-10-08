@@ -2,7 +2,7 @@
   <div id="testDrownBox-testSetter">
     <div class="seleBox">
       <div class="seleName">班级</div>
-      <el-select v-model="classId" placeholder="请选择" size="small">
+      <el-select v-model="classId" placeholder="请选择" size="small" @change="setClass">
         <el-option
           v-for="item in options"
           :key="item.classId"
@@ -42,6 +42,16 @@ export default {
           console.log("数据请求失败处理");
         }
       );
+    },
+    /**
+     * 选择班级信息
+     *
+     * */
+    setClass(val){
+      // console.log(val)
+     this.$emit("getGrade",val);
+
+
     }
   },
   created() {

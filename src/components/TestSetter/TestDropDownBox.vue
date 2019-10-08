@@ -2,7 +2,7 @@
   <div id="testDrownBox-testSetter">
     <div class="seleBox">
       <div class="seleName">试卷</div>
-      <el-select v-model="tpId" placeholder="请选择" size="small">
+      <el-select v-model="tpId" placeholder="请选择" size="small" @change="setInfo">
         <el-option
           v-for="item in options"
           :key="item.tpId"
@@ -44,6 +44,12 @@ export default {
           console.log("数据请求失败处理");
         }
       );
+    },
+     /**
+     *选择信息
+     * */
+    setInfo(v){
+     this.$emit("getInfo",v)
     }
   },
   created() {
