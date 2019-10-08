@@ -8,7 +8,6 @@
       </el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片 -->
-    <h1>{{lovingVue}}</h1>
     <el-card class="box-card">
       <!-- 表格 -->
       <div slot="header" class="clearfix">
