@@ -125,7 +125,7 @@ export default {
                   questionTypeId: 2
                 };
                 this.$emit("addGapFilling", data);  //改变父组件的值
-                this.message(this, 1, "添加成功!"); 
+                _this.$msg(this, 1, "添加成功!"); 
                 this.resetForm("AddGapFillQuestion"); //重置表单
                 this.title = ""; //重置题目
               }
@@ -237,7 +237,7 @@ export default {
             }
             if (max == oindexArr.length) {
               //往后添加空格
-              _this.AddGapFillQuestion.domains.push({value: "", onum: 2});
+              _this.AddGapFillQuestion.domains.push(nowAddOption);
               max = 0;
             }
           }

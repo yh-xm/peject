@@ -100,8 +100,9 @@ export default {
     saveOption() {
       var _this = this;
       var nowOption = _this.nowOption;
+      var value = _this.AddEssayQuestiontList.tpqId; //获取题目Id
       _this.axios
-        .post(`/api/TestPaper/ModifyQuestion`, {
+        .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
           questionId: nowOption.tpqQuestion.questionId, //题目Id
           questionTitle: nowOption.tpqQuestion.questionTitle, //题目名称
           questionTypeId: nowOption.tpqQuestion.questionTypeId, //题目类型
@@ -114,9 +115,9 @@ export default {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
             _this.odisabled = !_this.odisabled;
             _this.oshow = !_this.oshow;
-            _this.message(this, 1, res.data.message);
+            _this.$msg(this, 1, res.data.message);
           } else {
-            _this.message(this, 1, res.data.message);
+            _this.$msg(this, 1, res.data.message);
           }
         });
     },
@@ -139,7 +140,7 @@ export default {
             };
             this.$emit("setQuestion", data);
           }
-          _this.message(this, 1, res.data.message);
+          _this.$msg(this, 1, res.data.message);
         });
     },
     /**
@@ -163,7 +164,7 @@ export default {
               fqsScore: v,
               fqIndex: _this.nowIndex2
             };
-            _this.message(this, 1, "修改成功!");
+            _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);
           }
         });

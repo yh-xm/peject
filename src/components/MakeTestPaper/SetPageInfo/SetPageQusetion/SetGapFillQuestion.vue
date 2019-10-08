@@ -152,7 +152,7 @@ export default {
           }
         
             //是否添加填空
-            var value = _this.AddGapFillQuestionList.tpqId;
+            var value = _this.AddGapFillQuestionList.tpqId;//获取题目Id
             this.axios
               .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
                 questionId: _this.nowOption.questionId, //题目Id
@@ -169,9 +169,13 @@ export default {
                   _this.nowOption.questionTitle = _this.title; //更新题目
                   _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
                   _this.oshow = !_this.oshow;
-                  _this.message(_this, 1, data.message);
+                  _this.$msg(_this, 1, data.message);
+                  _this.changeScore();
                 } else {
-                  _this.message(_this, -1, res.data.message);
+                  _this.$msg(_this, res.data.code, res.data.message);
+                      _this.nowOption.questionTitle = _this.title; //更新题目
+                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
+                  _this.oshow = !_this.oshow;
                 }
               });
             _this.fillQuestion = [];
@@ -224,10 +228,9 @@ export default {
      */
     removeChoose() {
       var _this = this;
-      console.log(this.nowOption);
       _this.axios
         .post(
-          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}`
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}`//获取题目Id
         )
         .then(res => {
           if (res.data.message == "删除成功") {
@@ -239,7 +242,7 @@ export default {
             };
             _this.$emit("setQuestion", data);
           }
-          _this.message(this, 1, "删除成功!");
+          _this.$msg(this, 1, "删除成功!");
         });
     },
     /**
@@ -274,7 +277,7 @@ export default {
               fqsScore: _this.AddGapFillQuestionList.fqsScore, //问题分数
               fqIndex: _this.nowIndex3 //问题题号
             };
-            _this.message(this, 1, "修改成功!");
+            _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);  //修改父组件的分数信息
           }
         });
@@ -302,7 +305,7 @@ export default {
                 fqAnswer: "", //插入填空答案
                 fillQuestionScore: [
                  {
-                   fqsScore: 2 //默认分数
+                   fqsScore: 1 //默认分数
                  }
             ]
       }

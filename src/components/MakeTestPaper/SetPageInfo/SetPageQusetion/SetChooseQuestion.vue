@@ -146,22 +146,23 @@ export default {
     saveOption() {
       var nowOption = this.nowOption;
       var _this = this;
+      var value = _this.AddChooseQuestionList.tpqId;//获取题目Id
       _this.axios
-        .post(`/api/TestPaper/ModifyQuestion`, {
+        .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
           //—修改选择题
           questionId: nowOption.tpqQuestion.questionId, //题目Id
           questionTitle: nowOption.tpqQuestion.questionTitle, //题目
           questionTypeId: nowOption.tpqQuestion.questionTypeId, //题目类型
-          chooseQuestion: nowOption.tpqQuestion.chooseQuestion //选项信息
+          chooseQuestion: nowOption.tpqQuestion.chooseQuestion
         })
         .then(res => {
           if (res.data.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             _this.odisabled = !_this.odisabled; //成功禁用
             _this.oshow = !_this.oshow;
-            _this.message(this, 1, res.data.message);
+            _this.$msg(this, 1, res.data.message);
           } else {
-            _this.message(this, -1, res.data.message);
+            _this.$msg(this, -1, res.data.message);
           }
         });
     },
@@ -245,7 +246,7 @@ export default {
               fqsScore: v, //分数
               fqIndex: _this.nowIndex //题号
             };
-            _this.message(this, 1, "修改成功!");
+            _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);
           }
         });

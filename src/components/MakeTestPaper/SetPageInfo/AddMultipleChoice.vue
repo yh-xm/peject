@@ -177,8 +177,8 @@ export default {
                   bodys: res.data.data,
                   questionTypeId: 1
                 };
-                this.$emit("addMultipleChoice", data);
-        this.message(this,1, "添加成功!")
+                _this.$emit("addMultipleChoice", data);
+        _this.$msg(this,1, "添加成功!")
                 _this.init();
                 _this.resetForm("AddMultipleChoice");
               }
