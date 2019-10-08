@@ -175,32 +175,34 @@ export default {
     },
     removeTab(targetName) {
       //删除标签卡
-
-      let tabs = this.editableTabs;
-      let activeName = this.editableTabsValue;
+var _this =this;
+      let tabs = _this.editableTabs;
+      let activeName = _this.editableTabsValue;
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
             let nextTab = tabs[index + 1] || tabs[index - 1];
             if (nextTab) {
               activeName = nextTab.name;
-              this.$router.push({ path: nextTab.url }); //跳转路由
+              _this.$router.push({ path: nextTab.url }); //跳转路由
             }
           }
         });
       }
-      this.editableTabsValue = activeName;
+      _this.editableTabsValue = activeName;
      
-      this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
+      _this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
     },
     benToUrl(tab) {
+      var _this = this
       //点击跳转路由
-      var ourl = this.editableTabs[tab.index].url;
-      this.$router.push({ path: ourl }); //跳转路由
+      var ourl = _this.editableTabs[tab.index].url;
+      _this.$router.push({ path: ourl }); //跳转路由
     },
         fnisCollapse() { //折叠侧边栏
-      this.isCollapse = ! this.isCollapse; //是否折叠
-      this.isCollapse ? (this.owidth = 64) : (this.owidth = 190); //切换宽度
+        var _this = this
+      _this.isCollapse = ! _this.isCollapse; //是否折叠
+      _this.isCollapse ? (_this.owidth = 64) : (_this.owidth = 190); //切换宽度
     },
 // js方法
 changeLocale (command) {
