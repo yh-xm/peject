@@ -150,14 +150,14 @@ export default {
                       name: "home"
                     });
                   }
-                   this.message(this,1, "登录成功!")
+                   _this.$msg(_this,1, "登录成功!")
                 }
               })
               .catch(function(error) {
-                this.message(this,-1, "用户名或密码错误，请重新输入!")
+                _this.$msg(_this,-1, "用户名或密码错误，请重新输入!")
               });
           } else {
-             this.message(this,-1, "请填写用户名和密码")
+             _this.$msg(_this,-1, "请填写用户名和密码")
           }
         } else {
           return false;

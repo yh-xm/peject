@@ -42,7 +42,15 @@ export default {
     event: "update" //传递父组件的方法
   },
   props: {
-    oindex: Object, // 父组件传过来的类型 用于编辑
+    oindex: {
+       type: Object,
+      default:function(){
+        return{
+          index:null,
+          flag:false
+        }
+      } //默认为true
+    }, // 父组件传过来的类型 用于编辑
     oname: String //父组件传过来的类型  用于标题名
   },
 
