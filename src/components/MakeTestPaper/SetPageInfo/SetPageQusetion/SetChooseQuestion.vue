@@ -24,7 +24,7 @@
           label-width="100px"
           class="demo-dynamic"
         >
-        <!-- 题目 -->
+          <!-- 题目 -->
           <el-form-item prop="title">
             <el-input
               type="textarea"
@@ -33,18 +33,22 @@
               :disabled="odisabled"
               v-show="!odisabled"
             ></el-input>
-            <span v-show="odisabled">{{nowOption.tpqQuestion.questionTitle}}
-            <el-input-number
-              size="small"
-              v-model="nowOption.tpqScore"
-             :min="1" :max="10"
-              @change="changeScore"
-            ></el-input-number>
-
+            <span v-show="odisabled">
+              {{nowOption.tpqQuestion.questionTitle}}
+              <el-input-number
+                size="small"
+                v-model="nowOption.tpqScore"
+                :min="1"
+                :max="10"
+                @change="changeScore"
+              ></el-input-number>
             </span>
           </el-form-item>
-  
-          <el-form-item v-for="(domain, index) in nowOption.tpqQuestion.chooseQuestion" :key="domain.key">
+
+          <el-form-item
+            v-for="(domain, index) in nowOption.tpqQuestion.chooseQuestion"
+            :key="domain.key"
+          >
             <el-checkbox-group v-model="checked" :min="0" :max="2" @change="checkboxChange">
               {{domain}}
               <el-checkbox
@@ -88,7 +92,7 @@ export default {
       checked: [], //多选信息
       oldOption: [], //克隆题目信息
       nowOption: [], //当前题目信息
-      tpqScore:0
+      tpqScore: 0
     };
   },
   props: {
@@ -100,23 +104,35 @@ export default {
      * 编辑表单
      */
     compile() {
-      this.odisabled = !this.odisabled;
-      this.oshow = !this.oshow;
+      var _this = this;
+      _this.odisabled = !_this.odisabled;
+      _this.oshow = !_this.oshow;
     },
     /**
      * 取消操作
      */
     cancel() {
-      this.odisabled = !this.odisabled;
-      this.oshow = !this.oshow;
-      this.nowOption = JSON.parse(JSON.stringify(this.oldOption));
-      console.log(this.oldOption);
+      var _this = this;
+      _this.odisabled = !_this.odisabled;
+      _this.oshow = !_this.oshow;
+      _this.nowOption = JSON.parse(JSON.stringify(_this.oldOption)); //恢复原来的数据
+      _this.checked = [];
+      for (let key in this.nowOption.tpqQuestion.chooseQuestion) {
+        //全部不选中
+        if (this.oldOption.tpqQuestion.chooseQuestion[key].cqIsRight == true) {
+          //恢复选中的选项
+          _this.checked.push(_this.optionsActive[key]);
+        }
+      }
     },
     /**
      * 添加选项
      */
     addOption() {
-      if (this.nowOption.tpqQuestion.chooseQuestion.length < this.optionsActive.length) {
+      if (
+        this.nowOption.tpqQuestion.chooseQuestion.length <
+        this.optionsActive.length
+      ) {
         this.nowOption.tpqQuestion.chooseQuestion.push({
           cqId: 0,
           cqIsRight: false,
@@ -133,19 +149,19 @@ export default {
       _this.axios
         .post(`/api/TestPaper/ModifyQuestion`, {
           //—修改选择题
-          questionId: nowOption.tpqQuestion.questionId,
-          questionTitle: nowOption.tpqQuestion.questionTitle,
-          questionTypeId: nowOption.tpqQuestion.questionTypeId,
-          chooseQuestion: nowOption.tpqQuestion.chooseQuestion
+          questionId: nowOption.tpqQuestion.questionId, //题目Id
+          questionTitle: nowOption.tpqQuestion.questionTitle, //题目
+          questionTypeId: nowOption.tpqQuestion.questionTypeId, //题目类型
+          chooseQuestion: nowOption.tpqQuestion.chooseQuestion //选项信息
         })
         .then(res => {
           if (res.data.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             _this.odisabled = !_this.odisabled; //成功禁用
             _this.oshow = !_this.oshow;
-           _this.message(this,1,res.data.message )
+            _this.message(this, 1, res.data.message);
           } else {
-       _this.message(this,-1,res.data.message )
+            _this.message(this, -1, res.data.message);
           }
         });
     },
@@ -171,12 +187,12 @@ export default {
         .then(res => {
           console.log(res);
           if (res.data.message == "删除成功") {
-                var data ={
-            index:_this.nowIndex,
-            questionTypeId: 1,
-            tpqScore:_this.AddChooseQuestionList.tpqScore
-          }
-            this.$emit("setQuestion",data)
+            var data = {
+              index: _this.nowIndex, //题号
+              questionTypeId: 1, //题目类型
+              tpqScore: _this.AddChooseQuestionList.tpqScore //题目分数
+            };
+            this.$emit("setQuestion", data); //改变父组件的分数
           }
           this.$message({
             type: "success",
@@ -211,36 +227,34 @@ export default {
     /**
      * 修改题目分数
      */
-    changeScore(v){
-            var _this = this;
+    changeScore(v) {
+      var _this = this;
       _this.axios
         .post(
-          `/api/TestPaper/ModifyScore`,{
-            "tpqId": _this.nowOption.tpqId, //主键编号
-            "tpqScore": v,//要修改的分值
+          `/api/TestPaper/ModifyScore`,
+          {
+            tpqId: _this.nowOption.tpqId, //主键编号
+            tpqScore: v //要修改的分值
           } //修改题目分值
         )
         .then(res => {
-       if(res.data.message == "修改成功"){
-        _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
-        var data ={
-           index:0,
-           fqsScore:v,
-            fqIndex:_this.nowIndex
-         }
-           _this.message(this,1, "修改成功!")
-          _this.$emit('changeScore',data)
-    this.$emit('changeScore',0)
-       }
+          if (res.data.message == "修改成功") {
+            _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
+            var data = {
+              index: 0, //题目所在下标
+              fqsScore: v, //分数
+              fqIndex: _this.nowIndex //题号
+            };
+            _this.message(this, 1, "修改成功!");
+            _this.$emit("changeScore", data);
+          }
         });
     },
     /**
      * 初始化
      */
     init() {
-      this.oldOption = JSON.parse(
-        JSON.stringify(this.AddChooseQuestionList)
-      );
+      this.oldOption = JSON.parse(JSON.stringify(this.AddChooseQuestionList)); //克隆信息
       this.nowOption = this.AddChooseQuestionList;
     }
   },

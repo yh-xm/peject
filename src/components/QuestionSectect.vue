@@ -19,7 +19,7 @@ defaultSelect  需传入Number 选中第几个
 <template>
   <div class="question-select">
     <div class="radio-group" v-if="!select">
-      <span class="list-title" >题目类型</span>
+      <span class="list-title">题目类型</span>
       <el-radio-group v-model="radio" @change="changeQuestionType">
         <el-radio
           v-for="(item,index) in pageInfo"
@@ -29,7 +29,7 @@ defaultSelect  需传入Number 选中第几个
       </el-radio-group>
     </div>
     <div class="select-group" v-if="select">
-        <span class="list-title" >题目类型</span>
+      <span class="list-title">题目类型</span>
       <el-select v-model="value" clearable placeholder="请选择" @change="changeQuestionType">
         <el-option
           v-for="item in pageInfo"
@@ -43,24 +43,23 @@ defaultSelect  需传入Number 选中第几个
 </template>
 <script>
 export default {
-      model:{
-     
-        event:"changeOption"  //传递父组件的方法
-    },
+  model: {
+    event: "changeOption" //传递父组件的方法
+  },
   props: {
     select: {
       type: Boolean,
-       default: true //默认为true
+      default: true //默认为true
     },
-    defaultSelect:{
-      type:Number
+    defaultSelect: {
+      type: Number
     }
   },
   data() {
     return {
       pageInfo: [], //初始化试卷信息
-      radio:"", //默认选中选择题
-      value:""//默认为空
+      radio: "", //默认选中选择题
+      value: "" //默认为空
     };
   },
   methods: {
@@ -76,21 +75,19 @@ export default {
           _this.pageInfo[i].nowAdd = 0;
           _this.pageInfo[i].nowScroe = 0;
         }
-       this.$emit('questionInit', _this.pageInfo)
-         if(_this.select==true){
-           _this.value = _this.pageInfo[_this.defaultSelect].typeName
-         }else{
-           _this.radio = _this.pageInfo[_this.defaultSelect].typeName
-         }
+        this.$emit("questionInit", _this.pageInfo);
+        if (_this.select == true) {
+          _this.value = _this.pageInfo[_this.defaultSelect].typeName;
+        } else {
+          _this.radio = _this.pageInfo[_this.defaultSelect].typeName;
+        }
       });
-        
-       
     },
     changeQuestionType(type) {
       var index = 0;
       switch (type) {
         case "选择题":
-            index = 0;
+          index = 0;
           break;
         case "填空题":
           index = 1;
@@ -99,7 +96,7 @@ export default {
           index = 2;
           break;
       }
-      this.$emit('changeOption',index)
+      this.$emit("changeOption", index);
     }
   },
   created() {
@@ -109,9 +106,9 @@ export default {
 };
 </script>
 <style  lang="less" scoped>
-.question-select{
-     .list-title {
-          margin: 0px 25px;
+.question-select {
+  .list-title {
+    margin: 0px 25px;
   }
 }
 </style>

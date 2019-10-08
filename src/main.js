@@ -47,7 +47,7 @@ axios.interceptors.response.use(response=>{
  var url = error.config.url.toLocaleLowerCase();
  if(error.response.status === 401 && ! url.endsWith("oauth/authenticate")){ //过期登录
   // console.log(1111)
-   router.replace({
+   router.push({
      name:'login',
      query: {
       redirect: router.fullPath

@@ -150,7 +150,7 @@ export default {
               });
             }
           }
-          if (_this.fillQuestion.length > 0) {
+        
             //是否添加填空
             var value = _this.AddGapFillQuestionList.tpqId;
             this.axios
@@ -175,29 +175,7 @@ export default {
                 }
               });
             _this.fillQuestion = [];
-          } else {
-            //没有添加填空
-            this.axios
-              .post(`/api/TestPaper/ModifyQuestion`, {
-                questionId: _this.nowOption.questionId, //题目Id
-                questionTitle: _this.title, //题目
-                questionTypeId: _this.nowOption.questionTypeId, //题目类型
-                fillQuestion: changeQuestion //题目信息
-              })
-              .then(res => {
-                console.log(res);
-                if (res.data.code == undefined) {
-                  var data = res.data + "}]}}";
-                  data = eval("(" + data + ")");
-                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新题目信息
-                  _this.oldOption.questionTitle = _this.title; //更新题目
-                  _this.oshow = !_this.oshow;
-                  _this.message(_this, 1, data.message);
-                } else {
-                  _this.message(_this, -1, res.data.message);
-                }
-              });
-          }
+          
         } else {
           console.log("error submit!!");
           return false;
@@ -292,12 +270,12 @@ export default {
           if (res.data.message == "修改成功") {
             this.oldOption = JSON.parse(JSON.stringify(this.nowOption)); //更新题目信息
             var data = {
-              index: 1,
-              fqsScore: _this.AddGapFillQuestionList.fqsScore,
-              fqIndex: _this.nowIndex3
+              index: 1, //问题所在下标
+              fqsScore: _this.AddGapFillQuestionList.fqsScore, //问题分数
+              fqIndex: _this.nowIndex3 //问题题号
             };
             _this.message(this, 1, "修改成功!");
-            _this.$emit("changeScore", data);
+            _this.$emit("changeScore", data);  //修改父组件的分数信息
           }
         });
     },
@@ -314,26 +292,34 @@ export default {
   watch: {
     title: function(n, o) {
       var _this = this;
-      var oindex = 0;
-      var nindex = 0;
-      var oindexArr = [];
-      var nindexArr = [];
-      var oarr = o.split("");
-      var narr = n.split("");
+      var oindex = 0; //旧字符串数组下标
+      var nindex = 0; //新字符串数组下标
+      var oindexArr = []; //旧填空数组
+      var nindexArr = []; //新填空数组
+      var oarr = o.split(""); //旧题目字符串变成数组
+      var narr = n.split("");//新题目字符串变成数组
+      var nowAddOption = {
+                fqAnswer: "", //插入填空答案
+                fillQuestionScore: [
+                 {
+                   fqsScore: 2 //默认分数
+                 }
+            ]
+      }
       for (const key in oarr) {
         if (oarr[key] == "▁") {
-          oarr[key] = oindex++;
-          oindexArr.push(key);
+          oarr[key] = oindex++; //填空的下标 第几个填空
+          oindexArr.push(key); //存入旧填空数组
         } else {
-          oarr[key] = "*";
+          oarr[key] = "*";//存入旧填空数组
         }
       }
       for (const key in narr) {
         if (narr[key] == "▁") {
-          narr[key] = nindex++;
-          nindexArr.push(key);
+          narr[key] = nindex++;//填空的下标 第几个填空
+          nindexArr.push(key); //存入旧填空数组
         } else {
-          narr[key] = "*";
+          narr[key] = "*"; //不是填空变为*
         }
       }
       _this.IndexArr = narr; // 获取最新的分割题目数组
@@ -346,66 +332,33 @@ export default {
         if (_this.oshow == false) {
           return;
         } else {
-          if (
-            nindexArr.length - oindexArr.length > 1 ||
-            narr.length - oarr.length > 1
-          ) {
+          if (nindexArr.length - oindexArr.length > 1 ||narr.length - oarr.length > 1) {
             //一次性复制粘贴填空
-
             var max = 0;
             for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
               //添加多少填空
-              for (let x in oindexArr) {
-                if (
-                  textindex - (narr.length - oarr.length) < //添加填空的位置
-                  parseInt(oindexArr[x])
-                ) {
-                  _this.nowOption.fillQuestion.splice(
-                    oarr[parseInt(oindexArr[x])],
-                    0,
-                    {
-                      fqAnswer: "",
-                      fillQuestionScore: [
-                        {
-                          fqsScore: 2
-                        }
-                      ]
-                    }
-                  );
-                  _this.fillQuestion.push(oarr[parseInt(oindexArr[x])]);
-                  // console.log(this.nowOption.fillQuestion);
+              for (let x in oindexArr) { //添加填空的位置
+                if ( textindex - (narr.length - oarr.length) <parseInt(oindexArr[x])) { //在最后之前位置插入填空
+                  _this.nowOption.fillQuestion.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption);
+                  _this.fillQuestion.push(oarr[parseInt(oindexArr[x])]); //获取插入填空的位置
                   break;
                 } else {
                   max++;
                 }
               }
-              if (max == oindexArr.length) {
+              if (max == oindexArr.length) { //在末尾插入填空
                 //往后添加空格
-                _this.nowOption.fillQuestion.push({
-                  fqAnswer: "",
-                  fillQuestionScore: [
-                    {
-                      fqsScore: 2
-                    }
-                  ]
-                });
+                _this.nowOption.fillQuestion.push(nowAddOption);
                 _this.fillQuestion.push(
                   _this.nowOption.fillQuestion.length - 1
-                );
+                ); //获取插入填空的位置
                 max = 0;
               }
             }
           } else {
-            _this.nowOption.fillQuestion.splice(narr[textindex], 0, {
-              //按按钮操作添填空
-              fqAnswer: "",
-              fillQuestionScore: [
-                {
-                  fqsScore: 2
-                }
-              ]
-            });
-            _this.fillQuestion.push(narr[textindex]);
+            // 按插入按钮进行插入
+            _this.nowOption.fillQuestion.splice(narr[textindex], 0, nowAddOption);
+            _this.fillQuestion.push(narr[textindex]);//获取插入填空的位置
           }
         }
       }
@@ -415,16 +368,10 @@ export default {
           //获取文本下标
           document.getElementById("textarea" + _this.nowIndex3)
         );
-        //一次性删除多个填空
+     
         for (let i in oindexArr) {
-          if (
-            parseInt(oindexArr[i]) >= textindex &&
-            parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length
-          ) {
-            _this.nowOption.fillQuestion.splice(
-              i,
-              oindexArr.length - nindexArr.length
-            );
+          if (parseInt(oindexArr[i]) >= textindex && parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
+            _this.nowOption.fillQuestion.splice(i,oindexArr.length - nindexArr.length);  //一次性删除多个填空
             break;
           }
         }
@@ -433,7 +380,6 @@ export default {
         //填空为0
         _this.nowOption.fillQuestion = [];
       }
-      // console.log(_this.nowOption.fillQuestion);
     }
   },
   created() {},
