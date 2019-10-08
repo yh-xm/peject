@@ -77,7 +77,7 @@
           </el-tabs>
           <div
             class="header-right"
-            style="display:flex;justify-content:space-around;padding-right:5px;min-width:150px;"
+            style="display:flex;justify-content:space-around;padding-right:35px;min-width:150px;"
           >
             <el-dropdown  @command="changeLocale">
               <span class="el-dropdown-link">
@@ -92,7 +92,7 @@
             <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
              -->
-            <!-- <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain "></el-avatar> -->
+            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:25px;"></el-avatar>
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
