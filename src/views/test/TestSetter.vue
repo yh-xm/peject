@@ -19,8 +19,8 @@
         </div>
         <el-row style="margin-left: 85px;">
           <!-- 圆角按钮 -->
-          <el-button round>取消</el-button>
-          <el-button type="primary" round>设置</el-button>
+          <el-button round @click="cancelTest()">取消</el-button>
+          <el-button type="primary" round @click="setTest()">设置</el-button>
           <!-- 圆角按钮结束 -->
         </el-row>
       </div>
@@ -53,7 +53,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[10,15,20]"
+        :page-sizes="[10,15,20,30,40]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -103,6 +103,38 @@ export default {
   },
   //定义方法
   methods: {
+    /**
+     * 安排测试
+     *
+     *
+     * */
+
+    setTest() {
+      console.log("安排测试");
+      let _this = this;
+
+
+
+
+
+
+
+
+
+
+
+    },
+
+    /**
+     * 取消安排测试
+     * 
+     * */ 
+    cancelTest(){
+      console.log("取消安排测试");
+      let _this = this;
+
+    },
+
     /**
      * 分页获取测试任务表
      * 渲染到表格
