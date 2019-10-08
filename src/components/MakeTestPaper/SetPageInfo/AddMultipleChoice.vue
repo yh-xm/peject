@@ -9,7 +9,6 @@
           <add-multiple-choice 
           @addMultipleChoice="addQuestion" 添加题目时触发的事件
            />
-
 */
 <template>
   <div id="MultipleChoice">
