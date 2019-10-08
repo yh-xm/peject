@@ -12,55 +12,7 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            label-width="100px"
-            class="demo-ruleForm"
-            hide-required-asterisk
-          >
-            <!-- 试卷 -->
-            <el-form-item label="试卷" prop="tpId" size="small">
-              <el-select v-model="ruleForm.tpId" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.tpId"
-                  :label="item.tpTitle"
-                  :value="item.tpId"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-
-            <!-- 班级 -->
-
-            <el-form-item label="班级" prop="classId" size="small">
-              <el-select v-model="ruleForm.classId" placeholder="请选择">
-                <el-option
-                  v-for="item in options2"
-                  :key="item.classId"
-                  :label="item.className"
-                  :value="item.classId"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-
-            <!-- 时间 -->
-            <el-form-item label="时间" prop="logEnd" size="small">
-              <!-- value-format="yyyy-MM-dd HH:mm:ss" -->
-              <el-date-picker
-                v-model="ruleForm.logEnd"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :picker-options="pickerOptions"
-                size="small"
-                @change="logTimeChange"
-              ></el-date-picker>
-              <el-button type="danger" size="small" disabled plain>用时：{{timeLimit}} 分钟</el-button>
-            </el-form-item>
-          </el-form>
+          <c-t-t-box></c-t-t-box>
 
           <!-- 组件引用结束 -->
         </div>
@@ -120,30 +72,10 @@
   </div>
 </template>
 <script>
+import CTTBox from "@/components/TestSetter/CTTBOx"
 export default {
   data() {
     return {
-      options: [], //试卷下拉框数组
-      options2: [], //班级下拉框数组
-      // logEnd: [], //初始化始终时间值
-      ruleForm: {
-        //表单数据
-        tpId: "", //试卷
-        classId: "", //班级下拉框绑定值
-        logEnd: [] //初始化始终时间值
-      },
-      rules: {
-        //表单验证
-        tpId: [{ required: true, message: "请选择试卷", trigger: "change" }],
-        classId: [{ required: true, message: "请选择班级", trigger: "change" }],
-        logEnd: [{ required: true, message: "请选择时间", trigger: "change" }]
-      },
-      timeLimit: 0, //初始化 用时
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7; //设置选择今天以及今天之后的日
-        }
-      },
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
       form: {
@@ -154,77 +86,12 @@ export default {
       total: null //总条目
     };
   },
+  components:{
+    CTTBox
+
+  },
   //定义方法
   methods: {
-    /**
-     * 获取所有试卷
-     * 可复用
-     *
-     * */
-
-    getAllTestPaper() {
-      // 发送get请求
-      let _this = this; //保存this对象
-      _this.axios.get("/api/TestPaper/GetAllTestPaper").then(
-        function(res) {
-          //tableData等于回调函数返回的res（值）
-          // console.log(res.data);
-          _this.options = res.data;
-        },
-        function() {
-          console.log("数据请求失败处理");
-        }
-      );
-    },
-    /**
-     * 获取所有班级信息
-     * 可复用
-     *
-     * */
-
-    getAllClass() {
-      // 发送get请求
-      let _this = this; //保存this对象
-      _this.axios.get("/api/Class/GetAllClass").then(
-        function(res) {
-          //tableData等于回调函数返回的res（值）
-          //   console.log(res);
-          _this.options2 = res.data;
-        },
-        function() {
-          console.log("数据请求失败处理");
-        }
-      );
-    },
-
-    /**
-     * 时间改变事件
-     * @param {Object} val input框内容
-     *
-     */
-    logTimeChange(val) {
-      let _this = this;
-      _this.ruleForm.logEnd = val;
-      console.log(_this.ruleForm.logEnd);
-      // Math.abs()取绝对值
-      if (
-        _this.ruleForm.logEnd == null ||
-        _this.ruleForm.logEnd == undefined ||
-        _this.ruleForm.logEnd == {}
-      ) {
-        _this.timeLimit = 0;
-      } else {
-        _this.timeLimit = parseInt(
-          Math.abs(_this.ruleForm.logEnd[1] - _this.ruleForm.logEnd[0]) /
-            1000 /
-            60
-        );
-      }
-
-      // _this.timeLimit = parseInt(Math.abs(_this.ruleForm.logEnd[1] - _this.ruleForm.logEnd[0]) / 1000 / 60);
-
-      // console.log(_this.timeLimit)
-    },
     /**
      * 安排测试
      *
@@ -352,8 +219,6 @@ export default {
   },
   created() {
     let _this = this;
-    _this.getAllTestPaper();
-    _this.getAllClass();
     _this.getSetTest();
   }
 };
@@ -365,17 +230,17 @@ export default {
     margin-bottom: 20px;
   }
   // 卡片样式
-  .box-card {
-    .impComp {
-      /deep/.el-form-item__content {
-        margin-left: 0 !important;
+  // .box-card {
+  //   .impComp {
+  //     /deep/.el-form-item__content {
+  //       margin-left: 0 !important;
 
-        .el-select {
-          width: 100%;
-        }
-      }
-    }
-  }
+  //       .el-select {
+  //         width: 100%;
+  //       }
+  //     }
+  //   }
+  // }
 
   // 对话框样式
   .el-form-item {
