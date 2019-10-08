@@ -127,10 +127,6 @@ export default {
     }
   },
   methods: {
-<<<<<<< HEAD
-
-=======
->>>>>>> master
     /**
      * 点击完成制作
      */

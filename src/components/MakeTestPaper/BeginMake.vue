@@ -71,10 +71,6 @@ export default {
         }
       });
     },
-<<<<<<< HEAD
-
-=======
->>>>>>> master
   },
   created() {
   }

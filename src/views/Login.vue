@@ -150,16 +150,6 @@ export default {
                       name: "home"
                     });
                   }
-<<<<<<< HEAD
-                   _this.message(_this,1, "登录成功!")
-                }
-              })
-              .catch(function(error) {
-                _this.message(_this,-1, "用户名或密码错误，请重新输入!")
-              });
-          } else {
-             _this.message(_this,-1, "请填写用户名和密码")
-=======
                    _this.$msg(_this,1, "登录成功!")
                 }
               })
@@ -168,7 +158,6 @@ export default {
               });
           } else {
              _this.$msg(_this,-1, "请填写用户名和密码")
->>>>>>> master
           }
         } else {
           return false;
@@ -220,13 +209,7 @@ that.lenrnPsw=true;
     margin: auto;
     border: 1px solid transparent;
     height: 300px;
-<<<<<<< HEAD
-    // width: 500px;
-
-    min-width: 150px;
-=======
     min-width: 250px;
->>>>>>> master
     position: absolute;
     left: 50%;
     top: 50%;
@@ -276,11 +259,7 @@ that.lenrnPsw=true;
     .from-right {
       width: 50%;
       .el-form {
-<<<<<<< HEAD
-        margin: 3px auto;
-=======
         margin: -5px auto;
->>>>>>> master
         width: 80%;
         position: relative;
         text-align: center;
