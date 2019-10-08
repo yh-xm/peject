@@ -208,10 +208,7 @@ that.lenrnPsw=true;
   .From {
     margin: auto;
     border: 1px solid transparent;
-
-    // width: 450px;
     height: 300px;
-    // width: 500px;
     min-width: 250px;
     position: absolute;
     left: 50%;
@@ -262,7 +259,7 @@ that.lenrnPsw=true;
     .from-right {
       width: 50%;
       .el-form {
-        margin: 20px auto;
+        margin: -5px auto;
         width: 80%;
         position: relative;
         text-align: center;

@@ -18,7 +18,7 @@ Vue.use(i18n);
 Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
-Vue.prototype.message = message;
+Vue.prototype.$msg = message;
 
 router.beforeEach((to, from, next) => {
     if(to.path == '/login' ){

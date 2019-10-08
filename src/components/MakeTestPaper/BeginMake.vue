@@ -8,16 +8,7 @@
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <!-- 选择课程名称 -->
-        <el-form-item label="课程名称" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择课程">
-            <el-option
-              v-for="item in ruleForm.options"
-              :key="item.courseName"
-              :label="item.courseName"
-              :value="item.courseId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+      <course-frame v-model="lovingVue" class="dropBlock"></course-frame>
         <!-- 进行下一步操作 -->
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">下一步</el-button>
@@ -27,7 +18,9 @@
   </div>
 </template>
 <script>
+import CourseFrame from '@/components/CourseFrame.vue'
 export default {
+   components:{CourseFrame},
   data() {
     return {
       ruleForm: {
@@ -42,7 +35,8 @@ export default {
         region: [
           { required: true, message: "请选择课程名称", trigger: "change" } //对应验证信息
         ]
-      }
+      },
+      lovingVue:[]
     };
   },
   methods: {
@@ -56,7 +50,7 @@ export default {
       var _this = this;
       var userId = sessionStorage.userId; //当前老师的唯一标识符
       _this.$refs[formName].validate(valid => {
-        var tpCourseId = _this.$refs[formName].model.region; //获取下拉选中的课程Id
+        var tpCourseId = _this.lovingVue[0].courseId //获取下拉选中的课程Id
         var name = _this.$refs[formName].model.name; //试卷名称
         if (valid) {
           _this.axios
@@ -72,26 +66,13 @@ export default {
               }
             });
         } else {
-
-
           console.log("error submit!!");
           return false;
         }
       });
     },
-    /**
-     * 获取下拉列表科目信息
-     *  {object} ruleForm  当前表单对象
-     */
-    getOptions() {
-      var _this = this;
-      _this.axios.get(`/api/Class/GetAllCourse`).then(res => {
-        _this.ruleForm.options = res.data; //获取下拉列表
-      });
-    }
   },
   created() {
-    this.getOptions(); //初始化下拉列表
   }
 };
 </script>
@@ -104,8 +85,11 @@ export default {
     .el-select {
       display: block;
     }
-    /deep/ .el-select__caret {
-      margin-top: 19px;
+ 
+  }
+  .dropBlock{
+   /deep/ .el-select {
+     width: 100%;
     }
   }
 }

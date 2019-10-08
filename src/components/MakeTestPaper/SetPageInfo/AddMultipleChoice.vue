@@ -1,3 +1,15 @@
+/** 
+添加选择题组件
+
+  引用 import AddMultipleChoice 
+  from "@/components/MakeTestPaper/SetPageInfo/AddMultipleChoice"; //添加选择题组件
+
+   注册    components:{AddMultipleChoice},
+     当标签使用    
+          <add-multiple-choice 
+          @addMultipleChoice="addQuestion" 添加题目时触发的事件
+           />
+*/
 <template>
   <div id="MultipleChoice">
     <div class="Mult-Content">
@@ -118,7 +130,6 @@ export default {
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
      */
-
     submitForm(formName) {
       //提交表单
       var _this = this;
@@ -164,8 +175,8 @@ export default {
                   bodys: res.data.data,
                   questionTypeId: 1
                 };
-                this.$emit("addMultipleChoice", data);
-        this.message(this,1, "添加成功!")
+                _this.$emit("addMultipleChoice", data);
+        _this.$msg(this,1, "添加成功!")
                 _this.init();
                 _this.resetForm("AddMultipleChoice");
               }
@@ -181,7 +192,6 @@ export default {
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
      */
-
     init() {
       var _this = this;
       _this.AddMultipleChoice.checked = [];

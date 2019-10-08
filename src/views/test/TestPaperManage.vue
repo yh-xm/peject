@@ -1,9 +1,10 @@
 <template>
   <div id="TestPaperManage">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>在线测试</el-breadcrumb-item>
-      <el-breadcrumb-item>试卷管理</el-breadcrumb-item>
+      <el-breadcrumb-item v-for="(item,index) in $route.meta" :key="index">
+        <router-link v-if="item.url" :to="item.url">{{item.name}}</router-link>
+        <a v-else>{{item.name}}</a>
+      </el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
@@ -16,7 +17,7 @@
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini">详情</el-button>
+              <el-button size="mini" @click="handleGet(scope.$index, scope.row)">详情</el-button>
               <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -116,7 +117,6 @@ export default {
                var alter=_this.tableData[_this.usIndex]
               alter.tpTitle=_this.ruleForm.name;
               alter.courseName=_this.lovingVue[0]
-
              console.log(data)
            })
             _this.dialogFormVisible = false;
@@ -162,7 +162,6 @@ export default {
       _this.fewPages = val; //显示第几页的数据 赋值给定义的变量并调用渲染接口
       _this.testPaper();
     }, 
-
     /**
      * 封装渲染数据方法以达到重复调用
      */
@@ -178,6 +177,13 @@ export default {
           _this.tableData = stu;
           _this.pages = data.data.items; //赋值给显示的条数
         });
+    },
+     /**
+     *查看详情
+     */
+      handleGet(index, row) {
+      // console.log(row.tpId)
+      this.$router.push({ path: `/testPageInfo/${row.tpId}` });
     }
   },
   created() {
@@ -195,7 +201,6 @@ export default {
 .block {
   text-align: center;
 }
-
 //控制输入框宽度
 /deep/.el-form-item {
   div {
@@ -203,7 +208,6 @@ export default {
   }
  
 }
-
 //弹出弹出框的宽度
 /deep/.el-dialog {
   p{text-indent: 100px;padding-bottom: 10px ;padding-top: 15px;}
