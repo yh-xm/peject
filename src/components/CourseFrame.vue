@@ -93,7 +93,9 @@ export default {
         });
         _this.$emit("update", singular); //传递到父组件
       });
-    }
+    },
+
+
   },
 
   /**

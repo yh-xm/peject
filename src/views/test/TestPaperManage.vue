@@ -1,11 +1,15 @@
 <template>
   <div id="TestPaperManage">
+    <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>在线测试</el-breadcrumb-item>
       <el-breadcrumb-item>试卷管理</el-breadcrumb-item>
     </el-breadcrumb>
+    <!-- 卡片 -->
+    <h1>{{lovingVue}}</h1>
     <el-card class="box-card">
+      <!-- 表格 -->
       <div slot="header" class="clearfix">
         <el-table :data="tableData" style="width:100%" :border="true">
           <el-table-column label="#" type="index"></el-table-column>
@@ -24,6 +28,7 @@
       </div>
       <div class="text">
         <div class="block">
+          <!-- 分页 -->
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -32,21 +37,13 @@
             :total="pages"
           ></el-pagination>
         </div>
+         <!-- 弹出框 -->
         <el-dialog title="修改试卷信息" :visible.sync="dialogFormVisible" center>
-          <!-- 弹出框的确定取消按钮 -->
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <p>试卷标题</p>
-            <el-form-item  prop="name">
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+            <el-form-item label="试卷标题" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-             <p>专业课程</p>
-            <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId"></course-frame>
+           <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId"></course-frame>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -58,30 +55,30 @@
   </div>
 </template>
 <script>
-import CourseFrame from '@/components/CourseFrame.vue'
+import CourseFrame from "@/components/CourseFrame.vue";
 export default {
-   components:{CourseFrame},
+  components: { CourseFrame },
   data() {
     return {
-      lovingVue:[],
-      seed:0,
-      nemuId:"",
+      lovingVue: [], //接收子组件的值
+      seed:"", //发送给子组件的对象
+      nemuId: "", //用于发送给子组件的宽度
       tableData: [], //接收渲染的数据
       pages: 0, //总条数
       each: 10, // 显示多少条每页
       fewPages: 1, //显示从第几条显示
       dialogFormVisible: false, //用于判断是否弹出弹出框
-      tpId:"", //试卷编号
-      usIndex:"",//编辑时选中的下标
-       ruleForm: {
-          name: '',
-        },
-              rules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 1,  trigger: 'blur' }
-          ],
-        }
+      tpId: "", //试卷编号
+      usIndex: "", //编辑时选中的下标
+      ruleForm: {
+        name: "" //试卷标题
+      },
+      rules: {
+        name: [//试卷标题验证
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 1, trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
@@ -91,57 +88,85 @@ export default {
      * @param {object} row 当前行的用户数据
      */
     handleEdit(index, row) {
-      console.log(index, row);
       var _this = this;
-      _this.ruleForm.name =row.tpTitle //获取的名字赋值给弹出框
-      _this.seed = row.tpCourseId //把课程id 赋值给子组件
-      _this.tpId = row.tpId
-      _this.usIndex =index
+      _this.ruleForm.name = row.tpTitle; //获取的名字赋值给弹出框
+      _this.seed = { //赋值给子组件
+        index:row.tpCourseId, //把课程id 赋值给子组件
+       flag:false
+      };
+      _this.tpId = row.tpId; //当前行的试卷id
+      _this.usIndex = index; //当前行的下标
       _this.dialogFormVisible = true;
     },
-       /**
-       * 点击确定修改
-       * @param {boolean} formName 表单的验证
-       */
-      amend(formName) {
-        var _this=this
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            console.log(_this.lovingVue[0])
-           _this.axios.post("api/TestPaper/ModifyTestPaper",{
-             tpId:_this.tpId,//试卷编号
-              tpCourseId:_this.lovingVue[0].courseId,//课程编号，可修改
-              tpTitle:_this.ruleForm.name,//试卷标题，可修改
-           }).then(function(data){
-               var alter=_this.tableData[_this.usIndex]
-              alter.tpTitle=_this.ruleForm.name;
-              alter.courseName=_this.lovingVue[0]
+    /**
+     * 点击确定修改
+     * @param {boolean} formName 表单的验证
+     */
+    amend(formName) {
+      var _this = this;
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          _this.axios
+            .post("api/TestPaper/ModifyTestPaper", {
+              tpId: _this.tpId, //试卷编号
+              tpCourseId: _this.lovingVue[0].courseId, //课程编号
+              tpTitle: _this.ruleForm.name //试卷标题
+            })
+            .then(function(data) {
+              if (data.data.code == 1) {
+                _this.message(_this, 1, "修改成功");//成功提示
 
-             console.log(data)
-           })
-            _this.dialogFormVisible = false;
-          } else {
-          
-            return false;
-          }
-        });
-      },
+                var alter = _this.tableData[_this.usIndex]; //数据赋值以达到刷新
+                alter.tpTitle = _this.ruleForm.name;
+                alter.courseName = _this.lovingVue[0].courseName;
+                alter.tpCourseId = _this.lovingVue[0].courseId;
+                
+              } else if (data.data.code == 0) {
+                _this.message(_this, 0, "数据没做修改"); //警告提示 
+              } else if (data.data.code == -1) {
+                _this.message(_this, -1, "系统异常"); //错误提示 
+              }
+            });
+          _this.dialogFormVisible = false;
+        } else {
+          return false;
+        }
+      });
+    },
     /**
      * 点击删除
      * @param {Number} index 当前行的下标
      * @param {object} row 当前行的用户数据
      */
     handleDelete(index, row) {
-      console.log(row.tpId);
       var _this = this;
-      _this.axios
-        .post("api/TestPaper/RemoveTestPaper?id=" + row.tpId)
-        .then(function(data) {
-          console.log(data);
-          if (data.data.code == 1) {
-            _this.message(_this, 1, "66666");
-            _this.tableData.splice(index, 1);
-          }
+      _this
+        .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          center: true
+        })
+        .then(() => {
+          //删除axios
+          _this.axios
+            .post("api/TestPaper/RemoveTestPaper?id=" + row.tpId)
+            .then(function(data) {
+              if (data.data.code == 1) {
+                _this.message(_this, 1, "删除成功");//成功提示
+                _this.tableData.splice(index, 1);
+              } else if (data.data.code == 0) {
+                _this.message(_this, 0, "数据没做修改"); //警告提示 
+              } else if (data.data.code == -1) {
+                _this.message(_this, -1, "系统异常"); //错误提示 
+              }
+            });
+        })
+        .catch(() => {
+          _this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
     },
     /**
@@ -161,14 +186,20 @@ export default {
       var _this = this;
       _this.fewPages = val; //显示第几页的数据 赋值给定义的变量并调用渲染接口
       _this.testPaper();
-    }, 
+    },
 
     /**
      * 封装渲染数据方法以达到重复调用
      */
     testPaper() {
       var _this = this;
-      _this.axios("/api/TestPaper/GetTestPaperList?pageIndex=" +_this.fewPages +"&pageSize=" +_this.each)
+      _this
+        .axios(
+          "/api/TestPaper/GetTestPaperList?pageIndex=" +
+            _this.fewPages +
+            "&pageSize=" +
+            _this.each
+        )
         .then(function(data) {
           var stu = data.data.data; //赋值给定义的变量用于渲染
           for (const key in stu) {
@@ -198,19 +229,26 @@ export default {
 
 //控制输入框宽度
 /deep/.el-form-item {
-  div {
-    width: 300px;   
+  /deep/.el-form-item__label {
+    margin-left: 45px;
   }
- 
+  /deep/.el-input__inner {
+    margin-left: 45px;
+  }
+  div {
+    width: 350px;
+    /deep/.el-input__suffix{
+      left: 360px;
+    }
+  }
 }
 
 //弹出弹出框的宽度
 /deep/.el-dialog {
-  p{text-indent: 100px;padding-bottom: 10px ;padding-top: 15px;}
-/deep/.el-dialog__body{
-      padding: 0px;
-    }
-  width: 478px;
+  /deep/.el-dialog__body {
+    padding: 0px;
+  }
+  width: 450px;
   .el-dialog__footer {
     text-align: center;
   }
