@@ -19,7 +19,6 @@
             label-width="100px"
             class="demo-ruleForm"
             hide-required-asterisk
-
           >
             <!-- 试卷 -->
             <el-form-item label="试卷" prop="tpId" size="small">
@@ -48,6 +47,7 @@
 
             <!-- 时间 -->
             <el-form-item label="时间" prop="logEnd" size="small">
+              <!-- value-format="yyyy-MM-dd HH:mm:ss" -->
               <el-date-picker
                 v-model="ruleForm.logEnd"
                 type="datetimerange"
@@ -125,18 +125,18 @@ export default {
     return {
       options: [], //试卷下拉框数组
       options2: [], //班级下拉框数组
-
+      // logEnd: [], //初始化始终时间值
       ruleForm: {
         //表单数据
         tpId: "", //试卷
         classId: "", //班级下拉框绑定值
-        logEnd:[]//初始化始终时间值
+        logEnd: [] //初始化始终时间值
       },
       rules: {
         //表单验证
         tpId: [{ required: true, message: "请选择试卷", trigger: "change" }],
         classId: [{ required: true, message: "请选择班级", trigger: "change" }],
-        logEnd:[{ required: true, message: "请选择时间", trigger: "change" }]
+        logEnd: [{ required: true, message: "请选择时间", trigger: "change" }]
       },
       timeLimit: 0, //初始化 用时
       pickerOptions: {
@@ -199,16 +199,31 @@ export default {
 
     /**
      * 时间改变事件
-     * @param {Date} val input框内容
+     * @param {Object} val input框内容
+     *
      */
     logTimeChange(val) {
       let _this = this;
-      _this.logEnd = val;
+      _this.ruleForm.logEnd = val;
+      console.log(_this.ruleForm.logEnd);
       // Math.abs()取绝对值
-      _this.timeLimit = parseInt(Math.abs(_this.logEnd[1] - _this.logEnd[0]) / 1000 / 60);
-      if(_this.logEnd.trim() ==""){
-         _this.timeLimit =0;
+      if (
+        _this.ruleForm.logEnd == null ||
+        _this.ruleForm.logEnd == undefined ||
+        _this.ruleForm.logEnd == {}
+      ) {
+        _this.timeLimit = 0;
+      } else {
+        _this.timeLimit = parseInt(
+          Math.abs(_this.ruleForm.logEnd[1] - _this.ruleForm.logEnd[0]) /
+            1000 /
+            60
+        );
       }
+
+      // _this.timeLimit = parseInt(Math.abs(_this.ruleForm.logEnd[1] - _this.ruleForm.logEnd[0]) / 1000 / 60);
+
+      // console.log(_this.timeLimit)
     },
     /**
      * 安排测试
