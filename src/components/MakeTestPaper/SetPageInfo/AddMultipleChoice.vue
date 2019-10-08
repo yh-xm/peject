@@ -130,7 +130,6 @@ export default {
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
      */
-
     submitForm(formName) {
       //提交表单
       var _this = this;
@@ -193,7 +192,6 @@ export default {
      *  {Array} AddMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
      */
-
     init() {
       var _this = this;
       _this.AddMultipleChoice.checked = [];

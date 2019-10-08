@@ -13,8 +13,11 @@
 export  const message = (that,type,message) => {
     if(type==1){
         type="success";
+<<<<<<< HEAD
     }else if(type==-1){
       type="error";
+=======
+>>>>>>> master
     }else{
         type="warning";
     }

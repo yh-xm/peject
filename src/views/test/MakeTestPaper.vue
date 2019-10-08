@@ -127,7 +127,10 @@ export default {
     }
   },
   methods: {
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     /**
      * 点击完成制作
      */
@@ -203,9 +206,7 @@ export default {
       }
       _this.pageInfo = [...this.pageInfo] //重新解构赋值
     }
-
   },
-
   filters: {
     questionsIndex(data) { //过滤题号
       switch (data) {
@@ -244,11 +245,9 @@ export default {
       .text {
         font-size: 14px;
       }
-
       .item {
         margin-bottom: 18px;
       }
-
       .clearfix:before,
       .clearfix:after {
         display: table;
@@ -257,7 +256,6 @@ export default {
       .clearfix:after {
         clear: both;
       }
-
       .box-card {
         min-height: 20px;
       }

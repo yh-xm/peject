@@ -166,7 +166,10 @@ export default {
               _this.pageInfo[1].nowAdd += 1;
               data.questions[key].tpqQuestion.questionTypeId = 2;
               _this.pageInfo[1].bodys.push(data.questions[key]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
               console.log(data.questions[key]);
             }
             if (data.questions[key].tpqQuestion.answerQuestion != null) {
@@ -203,7 +206,10 @@ export default {
      */
     questionInit(data) {
       var _this = this;
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
       if (_this.pageInfo.length == 0) {
         _this.pageInfo = data;
       }
@@ -260,7 +266,10 @@ export default {
       if (fqIndex != undefined) {
         _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
       }
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
       for (const key in _this.pageInfo[index].bodys) {
         _this.pageInfo[index].nowScroe +=
           _this.pageInfo[index].bodys[key].tpqScore; //改变父组件的问答题的分数

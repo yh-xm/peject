@@ -66,14 +66,15 @@ export default {
               }
             });
         } else {
-
-
           console.log("error submit!!");
           return false;
         }
       });
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
   },
   created() {
   }

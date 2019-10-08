@@ -124,6 +124,7 @@ export default {
       });
       _this.laoShi = usLaoShi[0].userName;
     },
+    
     /**
      * 修改弹出框并赋值
      * @param {Number} index 当前行的下标
@@ -136,8 +137,13 @@ export default {
       _this.stuNewly = true; //弹出框的新增按钮为true时
       _this.ruleForm.name = row.className; //点击获取的班级名字赋值给输入框
       _this.classId = row.classId; //获取的班级主键赋值
-      _this.seed = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
+      
+      _this.seed = {
+        index:row.classCourseId,//获取的课程编码赋值给原课程编码 就能默认选中
+        flag:false
+      }; 
       _this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
+      
       _this.title = "修改班级信息";
      
       
@@ -167,6 +173,7 @@ export default {
 
                 var banJi = _this.tableData[_this.index]; //获取要修改的那组数据并赋值了一个变量
                 banJi.courseName =_this.lovingVue[0].courseName; //课程名字
+                banJi.classCourseId =_this.lovingVue[0].courseId
                 banJi.userName = _this.laoShi; //授课老师
                 banJi.className = _this.ruleForm.name; //班级名字
                 banJi.classTeacherId = _this.ruleForm.usName; //授课老师编码
@@ -179,11 +186,14 @@ export default {
               }
               _this.open2();
             });
+          
           _this.dialogFormVisible = false; //关闭弹出框
+
         } else {
           //输入框为空时执行
           return false;
         }
+         
       });
     },
     /**
@@ -240,7 +250,10 @@ export default {
       _this.ruleForm.name = ""; //点击获取的班级名字赋值给输入
       _this.ruleForm.usName = ""; //清除修改时赋的值
       _this.title = "新增班级信息";
-      _this.seed=null //赋值为空用以清除
+      _this.seed={
+        index:null,
+         flag:false
+      } //赋值为空用以清除
      
     },
     /**
