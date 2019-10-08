@@ -174,8 +174,8 @@ export default {
      */
     init() {
       var _this = this;
-      _this.oldOption = JSON.parse(JSON.stringify(_this.AddEssayQuestiontList));
-      _this.nowOption = _this.AddEssayQuestiontList;
+      _this.oldOption = JSON.parse(JSON.stringify(_this.AddEssayQuestiontList));//获取题目信息
+      _this.nowOption = _this.AddEssayQuestiontList; //获取题目信息
     }
   },
   created() {
