@@ -43,6 +43,10 @@ defaultSelect  需传入Number 选中第几个
 </template>
 <script>
 export default {
+      model:{
+     
+        event:"changeOption"  //传递父组件的方法
+    },
   props: {
     select: {
       type: Boolean,

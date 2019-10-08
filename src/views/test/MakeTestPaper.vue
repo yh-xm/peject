@@ -23,7 +23,7 @@
               <question-sectect 
               :select="false" 
               :defaultSelect="0"
-              @changeOption="changeQuestionType" 
+              v-model="nowAddOption"
               @questionInit="questionInit" 
               />
             </div>
@@ -127,14 +127,7 @@ export default {
     }
   },
   methods: {
-    /**
-     * 切换题型
-     * @param {Number} v 题目所在下标
-     */
-    changeQuestionType(v) {
-      console.log(v);
-      this.nowAddOption = v;
-    },
+
     /**
      * 点击完成制作
      */
