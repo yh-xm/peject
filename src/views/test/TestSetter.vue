@@ -10,11 +10,9 @@
     <!-- 卡片 -->
     <el-card class="box-card">
       <div slot="header">
-        <div class="impComp"> 
+        <div class="impComp">
           <!-- 组件引用 -->
           <c-t-t-box v-model="son"></c-t-t-box>
-          <h1>极度深寒{{son}}</h1>
-
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -62,7 +60,9 @@
     <!-- 添加对话框 -->
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="30%">
       <!-- 嵌套的表单 -->
-      <el-form :model="form"></el-form>
+      <el-form :model="form">
+        <c-t-t-box></c-t-t-box>
+      </el-form>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -73,7 +73,7 @@
   </div>
 </template>
 <script>
-import CTTBox from "@/components/TestSetter/CTTBOx"
+import CTTBox from "@/components/TestSetter/CTTBOx";
 export default {
   data() {
     return {
@@ -85,11 +85,12 @@ export default {
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
       total: null, //总条目
-      son:[],//子值
+      son: [], //接收子值
+      fuCZ: {} //父传子
     };
   },
-  components:{
-    "c-t-t-box":CTTBox
+  components: {
+    "c-t-t-box": CTTBox
   },
   //定义方法
   methods: {
@@ -100,26 +101,52 @@ export default {
      * */
     setTest() {
       let _this = this;
-      var obj = {};
-      console.log(_this.son.m[0]);//开始时间
-      console.log(_this.son.m[1]);//结束时间
-      console.log(_this.son.t);//试卷id
-      console.log(_this.son.c);//班级id
-
+      let obj = {
+        taskTestPaperId: _this.son.t, //试卷编号
+        taskClassId: _this.son.c, //班级编号
+        taskStartTime: _this.son.m[0], //开始时间
+        taskEndTime: _this.son.m[1] //结束时间
+      };
+      console.log(obj);
+      let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
+      console.log(uId);
       // 调用接口
-      // _this.axios.post("/api/TestPaper/SetTest",obj).then((res) => {
-      //       console.log(res);
-      // })
+      _this.axios.post("/api/TestPaper/SetTest?uid=" + uId, obj).then(
+        res => {
+          console.log(res);
+          if (res.data.code == 1) {
+            _this.$message({
+              type: "success",
+              message: "设置成功!"
+            });
+            obj = {}; //清空值
+            _this.son = []; //清空值
+            // console.log( obj);
+            // console.log(_this.son)
+          } else if (res.data.code == -2) {
+            _this.$message({
+              type: "error",
+              message: "参数错误!设置失败！"
+            });
+          }
+        },
+        () => {
+          _this.$message({
+            type: "error",
+            message: "系统错误!"
+          });
+        }
+      );
     },
-
     /**
      * 取消安排测试
      *
      * */
-
     cancelTest() {
       console.log("取消安排测试");
       let _this = this;
+      // _this.son = ;
+      console.log(_this.son);
     },
 
     /**
@@ -139,7 +166,7 @@ export default {
         .then(
           function(res) {
             // roles等于回调函数返回的res（值）
-            // console.log(res);
+            console.log(res);
             _this.SetTest = res.data.data; //表格数据
             _this.total = res.data.items; //总条数
           },
@@ -232,18 +259,6 @@ export default {
   .el-breadcrumb {
     margin-bottom: 20px;
   }
-  // 卡片样式
-  // .box-card {
-  //   .impComp {
-  //     /deep/.el-form-item__content {
-  //       margin-left: 0 !important;
-
-  //       .el-select {
-  //         width: 100%;
-  //       }
-  //     }
-  //   }
-  // }
 
   // 对话框样式
   .el-form-item {

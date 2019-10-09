@@ -1,3 +1,18 @@
+<!-- 
+
+js
+    引用  import CTTBox from "@/components/TestSetter/CTTBOx"
+    注册  components: {"c-t-t-box": CTTBox}
+template 
+
+      <c-t-t-box v-model="son" :oindex="seed" :oname="nemuId"></c-t-t-box>
+
+      父组件自定义一个数组,接收子组件传给父组件的值
+      seed 用于父组件传值给子组件 传递当前值 {Object} 类型
+      seed = {
+        index:row.id //获取的新id赋值给原id，
+      }
+ --> 
 <template>
   <div id="cctbox">
     <!-- 试卷 -->
@@ -35,7 +50,7 @@
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
           size="small"
-          value-format="yyyy/MM/dd HH:mm:ss"
+          value-format="yyyy/MM/dd HH:mm"
           @change="logTimeChange"
         ></el-date-picker>
         <el-button type="danger" plain disabled size="small">用时：{{form.timeLimit}} 分钟</el-button>
@@ -46,7 +61,7 @@
 <script>
 export default {
   model: {
-    event: "cusChange" //自定义方法
+    event: "cusChange",//input自定义事件
   },
   data() {
     return {
@@ -83,7 +98,7 @@ export default {
       _this.axios.get("/api/TestPaper/GetAllTestPaper").then(
         function(res) {
           //tableData等于回调函数返回的res（值）
-          console.log(res.data);
+          // console.log(res.data);
           _this.options = res.data;
         },
         function() {
@@ -103,7 +118,7 @@ export default {
       _this.axios.get("/api/Class/GetAllClass").then(
         function(res) {
           //tableData等于回调函数返回的res（值）
-            console.log(res);
+          // console.log(res);
           _this.options2 = res.data;
         },
         function() {
@@ -148,12 +163,12 @@ export default {
       if (_this.form.logEnd == null) {
         _this.form.timeLimit = 0;
       } else {
-        var data1 = new Date(_this.form.logEnd[0])
-        var data2 = new Date(_this.form.logEnd[1])
-        var long = data2.getTime()-data1.getTime();
-        _this.form.timeLimit = long/(60*1000);
+        var data1 = new Date(_this.form.logEnd[0]);
+        var data2 = new Date(_this.form.logEnd[1]);
+        var long = data2.getTime() - data1.getTime();
+        _this.form.timeLimit = long / (60 * 1000);
       }
-      _this.arr.m =  _this.form.logEnd ;
+      _this.arr.m = _this.form.logEnd;
       _this.$emit("cusChange", _this.arr);
     }
   },
