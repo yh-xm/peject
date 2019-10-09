@@ -1,21 +1,22 @@
 <template>
   <div>
-    <el-select v-model="className" @change="getClassName(options,className)" placeholder="请选择" >
+    <el-select v-model="value" @change="getClassName(value)" placeholder="请选择" >
       <el-option
         v-for="item in options"
         :key="item.classId"
-        :value="item.className">
+        :label="item.className"
+        :value="item.classId">
       </el-option>
     </el-select>
   </div>
 </template>
 <script>
   export default {
-    name: 'sltopn',
     data() {
       return {
         options:[],
-        className:"",
+        value:"",
+        polist:[]
       }
     },
     methods: {
@@ -33,8 +34,12 @@
       // console.log(r.data)
         });
       },
-      getClassName(res,name){
-        // console.log(res+name)
+      getClassName(value){
+         var _this=this;
+          _this.axios.get("/api/Student/GetClassStudent?classId="+value).then(r => {
+            _this.polist=r.data
+            _this.$emit('selectData',_this.polist)
+      });
       }
       //初始话下拉框的值
       //远程请求回来的数据
@@ -45,6 +50,7 @@
   },
   created(){
     this.public()
+    this.getClassName()
   }
   }
 </script>
