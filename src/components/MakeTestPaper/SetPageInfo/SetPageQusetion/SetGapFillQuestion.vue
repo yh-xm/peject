@@ -252,11 +252,11 @@ export default {
     changeScore(v) {
       var _this = this;
       var fillQuestion = _this.nowOption.fillQuestion;
-      _this.AddGapFillQuestionList.fqsScore = 0;
+      _this.AddGapFillQuestionList.fqsScore = 0; //清空分数
       var fillQuestionScore = [];
       for (const key in fillQuestion) {
         //算出所有填空的总分
-        _this.AddGapFillQuestionList.fqsScore +=
+        _this.AddGapFillQuestionList.fqsScore += //累加填空的分数
           fillQuestion[key].fillQuestionScore[0].fqsScore;
         fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0]);
       }
@@ -290,11 +290,42 @@ export default {
       _this.nowOption = _this.AddGapFillQuestionList.tpqQuestion; //获取题目信息
       _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //克隆题目信息
       _this.title = _this.nowOption.questionTitle; //获取题目
-    }
+    },
+    CompareString(oldString, newString){
+	var len=Math.max(oldString.length, newString. length);
+	var startIndex=-1;
+	//M左到右进行比纹
+	for(var i=0;i<len;i++){
+	if(oldString.charAt(i) !=newString.charAt(i)){
+	startIndex=i;
+	break;
+	}
+	}
+	var oldString2=oldString.substring(startIndex)
+	var newString2=newString.substring(startIndex)
+	len=Math.max(oldString2.length, newString2.length);
+	var endIndex=-1;
+	//从右到左进行比统
+	for(var i=0;i<len;i++){
+	if(oldString2.charAt(oldString2.length-1-i)!=newString2.charAt(newString2.length-1-i)){
+	endIndex=i;
+	break;
+	}
+	}
+	var oldEndIndex=oldString.length-1-endIndex;
+	var newEndIndex=newString.length-1-endIndex;
+	var oldChange=oldString.substring(startIndex,oldEndIndex+1)
+	var newChange=newString.substring(startIndex,newEndIndex+1)
+	return {startIndex, endIndex, oldChange, newChange}
+	}
   },
+  //监听题目的变化
   watch: {
     title: function(n, o) {
+      
       var _this = this;
+      var a = _this.CompareString(o,n)
+   console.log(a)
       var oindex = 0; //旧字符串数组下标
       var nindex = 0; //新字符串数组下标
       var oindexArr = []; //旧填空数组
@@ -440,7 +471,7 @@ export default {
         margin-top: 12px;
       }
       .ShowDaAn {
-        max-width: 80px;
+        max-width: 180px;
       }
       .ShowFen {
         width: 20px;

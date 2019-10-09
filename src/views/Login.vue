@@ -181,6 +181,7 @@ export default {
   },
   mounted() {
     const that = this;
+      that.screenWidth = window.screenWidth;
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -259,8 +260,8 @@ that.lenrnPsw=true;
     .from-right {
       width: 50%;
       .el-form {
-        margin: -5px auto;
-        width: 80%;
+        margin: 14px 20px;
+        width: 90%;
         position: relative;
         text-align: center;
         /deep/.el-form-item__content {
