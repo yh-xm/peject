@@ -12,7 +12,8 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <c-t-t-box></c-t-t-box>
+          <c-t-t-box v-model="v"></c-t-t-box>
+          <h1>极度深寒{{v}}</h1>
 
           <!-- 组件引用结束 -->
         </div>
@@ -83,11 +84,12 @@ export default {
       },
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
-      total: null //总条目
+      total: null, //总条目
+      v:[],//子值
     };
   },
   components:{
-    CTTBox
+    "c-t-t-box":CTTBox
 
   },
   //定义方法

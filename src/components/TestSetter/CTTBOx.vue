@@ -3,7 +3,7 @@
     <!-- 试卷 -->
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="试卷">
-        <el-select v-model="form.tpId" placeholder="请选择试卷" size="small">
+        <el-select v-model="form.tpId" placeholder="请选择试卷" size="small" @change="testChange">
           <el-option
             v-for="item in options"
             :key="item.tpId"
@@ -16,7 +16,7 @@
       <!-- 班级 -->
 
       <el-form-item label="班级">
-        <el-select v-model="form.classId" placeholder="请选择班级" size="small">
+        <el-select v-model="form.classId" placeholder="请选择班级" size="small" @change="classChange">
           <el-option
             v-for="item in options2"
             :key="item.classId"
@@ -44,10 +44,18 @@
 </template>
 <script>
 export default {
+  model: {
+    event: "cusChange" //自定义方法
+  },
   data() {
     return {
       options: [], //试卷下拉框数组
       options2: [], //班级下拉框数组
+      arr: {
+        t: "",
+        c: "",
+        m: ""
+      }, //子传父
       form: {
         tpId: "", //试卷Id
         classId: "", //班级Id
@@ -104,6 +112,29 @@ export default {
     },
 
     /**
+     * 获取试卷下拉框的值
+     *
+     * */
+
+    testChange(val) {
+      console.log(val);
+      let _this = this;
+      _this.arr.t = val;
+      _this.$emit("cusChange", _this.arr);
+    },
+    /**
+     * 获取班级下拉框的值
+     *
+     * */
+
+    classChange(val) {
+      console.log(val);
+      let _this = this;
+      _this.arr.c = val;
+      _this.$emit("cusChange", _this.arr);
+    },
+
+    /**
      * 时间改变事件
      * @param {Object} val input框内容
      *
@@ -111,21 +142,25 @@ export default {
     logTimeChange(val) {
       let _this = this;
       _this.form.logEnd = val;
-      console.log(_this.form.logEnd);
       // Math.abs()取绝对值
-      if (
-        _this.form.logEnd == null ||
-        _this.form.logEnd == undefined ||
-        _this.form.logEnd == {}
-      ) {
+      if (_this.form.logEnd == null) {
         _this.form.timeLimit = 0;
       } else {
         _this.form.timeLimit = parseInt(
-          Math.abs(_this.form.logEnd[1] - _this.form.logEnd[0]) /
-            1000 /
-            60
+          Math.abs(_this.form.logEnd[1] - _this.form.logEnd[0]) / 1000 / 60
         );
       }
+      _this.form.logEnd = _this.form.logEnd.toLocaleString();
+     
+      var nowDataArr = _this.form.logEnd.split(",")
+      console.log( nowDataArr)
+      for (const key in nowDataArr) {
+       nowDataArr[key] = nowDataArr[key].substring(11,2)
+
+      }
+      console.log(nowDataArr)
+       _this.arr.m =  _this.form.logEnd;
+      _this.$emit("cusChange", _this.arr);
     }
   },
   created() {
