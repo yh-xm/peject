@@ -30,7 +30,7 @@
       <!-- 获取学员试卷是否已批阅结束 -->
 
       <!-- 个人考试信息开始-->
-      <div v-if="isShow2">
+      <div v-if="isShow">
         <h3 class="title">{{tpTitle}}</h3>
         <el-table :data="tableData1" border style="width: 100%">
           <el-table-column prop="stuName" label="姓名" ></el-table-column>
@@ -140,7 +140,7 @@
         <div class="savePaper">
           <el-tag type="info">
             学生成绩
-            <span>{{resCount}}</span>分
+            <span>{{countScore}}</span>分
           </el-tag>
           <el-button type="primary" @click="saveTest" size="small">保存阅卷</el-button>
         </div>
@@ -155,7 +155,7 @@ export default {
   data(){
     return{
       info:this.$route.query.dataInfo,
-      isShow2:false,//考生详情隐藏和显示
+      isShow:false,//考生详情隐藏和显示
       tableData1: [], //学员个人考试信息
       testUid:"",//学员考试标识符
       fillQuestion: [], //批阅填空题
@@ -164,6 +164,8 @@ export default {
       result: ["A", "B", "C", "D","E","F","G"],//选择题序号
       totalPoints: [],//学生考试结果
       tpTitle: "",//考试科目
+      stuScore:0,//选择题分
+      countScore:0,//总分
       /**
        * 获取已批阅和未批阅的学员名单信息
        * @param title {string} 是否批阅的标题
@@ -265,11 +267,6 @@ export default {
       }
       _this.totalPoints.scoretestPaperScore = testPaperScore;
       return [ _this.answer.length, testPaperScore, score];
-    },
-    //计算总分
-    resCount:function(){
-      var _this=this
-      return  _this.tableData1[0].fillQuestion +_this.tableData1[0].choseQuestions + _this.tableData1[0].answer
     }
   },
   methods:{
@@ -282,12 +279,12 @@ export default {
               _this.tableDatas[0].stuName.push(_this.info[i]);
             }
           }
-          console.log(_this.info)
-          console.log(_this.tableDatas[1].stuName)
-          console.log(_this.tableDatas[0].stuName)
     },
+    //计算总分
     handleChange(value){
-      console.log(value)
+      var _this=this
+      console.log(_this.stuScore+_this.computFillQuestion[2]+_this.answerdata[2])
+      _this.countScore=_this.stuScore+_this.answerdata[2]+_this.computFillQuestion[2]
     },
     /**
      * 获取学员个人考试信息
@@ -295,7 +292,7 @@ export default {
      */
     getStuTestInfo(testUid) {
       let _this = this;
-      _this.isShow2 = true
+      _this.isShow = true
       _this.testUid=testUid//
       _this.axios
         .get("/api/TestResult/GetStudentTestPaper?testUid=" + testUid)
@@ -338,6 +335,7 @@ export default {
           _this.tableData1[0].fillQuestion = fillTiScore;
           _this.tableData1[0].choseQuestions = choseTiScore;
           _this.tableData1[0].answer = answerScore;
+          _this.countScore=choseTiScore+fillTiScore+answerScore
           console.log(_this.tableData1)
           // console.log(_this.choseQuestions.choseQuestions)
           // console.log(_this.answer.answer)
@@ -389,11 +387,36 @@ export default {
       _this.axios
         .post("/api/TestResult/SetTestPaperScore?userUid=" + userUid, arr)
         .then(res => {
-          // console.log(_this.tableDatas[0].stuName.filter(item=>item.testUid ==_this.testUid)[0])
           document.querySelector(".el-main").scrollTop = 0; //保存阅卷回到顶部
-          _this.tableDatas[1].stuName.push(_this.tableDatas[0].stuName.filter(item=>item.testUid ==_this.testUid)[0])
-          _this.tableDatas[0].stuName.splice(_this.tableDatas[0].stuName.lastIndexOf(_this.tableDatas[0].stuName.filter(item=>item.testUid ==_this.testUid)[0]),1)
-        });
+          console.log(_this.answerdata[2])
+          // console.log(_this.tableDatas[0].stuName.filter(item=>item.testUid ==_this.testUid)[0])
+          let noDone=_this.tableDatas[0].stuName
+          let hasDone=_this.tableDatas[1].stuName
+          if (noDone.filter(item => item.testUid == _this.testUid)[0] != undefined) {
+            hasDone.push(noDone.filter(item=>item.testUid ==_this.testUid)[0])
+            noDone.splice(noDone.lastIndexOf(noDone.filter(item=>item.testUid ==_this.testUid)[0]),1)
+            _this.$message({
+                  type: "success",
+                  message: "批阅成功！"
+                })
+          }else if(hasDone.filter(item => item.testUid == _this.testUid)[0]!= undefined){
+            _this.tableData1[0].fillQuestion = _this.computFillQuestion[2]; //填空题分数
+            _this.tableData1[0].answer = _this.answerdata[2]; //问答题分数
+            _this.tableData1[0].testScore = _this.stuScore; // //总分
+            _this.tableData1.splice(0, 1, _this.tableData1[0]); //替换数据
+            // console.log("批阅成功！")
+            _this.$message({
+                  type: "success",
+                  message: "批阅成功！"
+                })
+          }else{
+             _this.$message({
+                  type: "warning",
+                  message: "修改失败！"
+                });
+           }
+          
+       });
     }
   },
   created:function() {
