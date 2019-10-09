@@ -448,7 +448,7 @@ export default {
           _this.tableData1[0].choseQuestions = choseQuestions1;
           _this.tableData1[0].answer = answer1;
           _this.stuScore =fillQuestion1+choseQuestions1+answer1
-          console.log(_this.tableData1)
+          // console.log(_this.tableData1)
         });
     },
 
