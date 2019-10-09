@@ -228,7 +228,7 @@ export default {
           for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
             //添加多少填空
             for (let x in oindexArr) {//添加填空的位置
-              if (textindex - (narr.length - oarr.length) < parseInt(oindexArr[x])) {
+              if (textindex - (narr.length - oarr.length) < parseInt(oindexArr[x])) { 
                 this.AddGapFillQuestion.domains.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption);
                 break;
               } else {
@@ -247,8 +247,8 @@ export default {
         }
       }
       if (nindexArr.length < oindexArr.length) { //填空减少了
-        for (let i in oindexArr) {
-          if (parseInt(oindexArr[i]) >= textindex &&parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
+        for (let i in oindexArr) { //删除位置在哪个区间
+          if (parseInt(oindexArr[i]) >= textindex && parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
             _this.AddGapFillQuestion.domains.splice(i,oindexArr.length - nindexArr.length);
             break;
           }

@@ -147,6 +147,11 @@ export default {
     };
   },
   methods: {
+    /**
+     * 添加标签卡
+     *  @param {String} targetName 当前标签名称
+     *  @param {String} ourl 当前路径
+     */
     addTab(targetName, ourl) {
       //添加标签卡
       var editableTabs = this.editableTabs;
@@ -173,6 +178,10 @@ export default {
         this.editableTabsValue = this.editableTabs[flag].name; // 有相同的标签
       }
     },
+       /**
+     * 删除标签卡
+     *  @param {String} targetName 当前标签名称
+     */
     removeTab(targetName) {
       //删除标签卡
 
@@ -193,6 +202,10 @@ export default {
      
       this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
     },
+        /**
+     * 删除标签卡
+     *  @param {Object} tab 当前跳转的路由对象
+     */
     benToUrl(tab) {
       //点击跳转路由
       var ourl = this.editableTabs[tab.index].url;
@@ -203,6 +216,10 @@ export default {
       this.isCollapse ? (this.owidth = 64) : (this.owidth = 190); //切换宽度
     },
 // js方法
+       /**
+     * 切换中英文
+     *  @param {Object} command 当前语言类型
+     */
 changeLocale (command) {
   this.langen == command ?this.langen:this.langen=command;
   // console.log(command)

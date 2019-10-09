@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       lenrnPsw: false, //是否记住密码
-      NowLoginUser: {}, //当前登录用户信息
+      nowLoginUser: {}, //当前登录用户信息
       screenWidth: 0, //宽度
       showItem: false, // 响应式标识
       From: "From", //样式
@@ -106,6 +106,10 @@ export default {
     };
   },
   methods: {
+      /**
+     * 点击删除
+     * @param {object} formName 当前表单对象
+     */
     submitForm(formName) {
       var _this = this;
       _this.disbable = true;
@@ -132,7 +136,7 @@ export default {
                   }
                   sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
                   sessionStorage.userId = r.data.profile.userUid;
-                  sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
+                  sessionStorage.nowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
                   if (_this.$route.query.redirect) {
                     //是否返回之前路由
@@ -167,6 +171,10 @@ export default {
   },
   created() {},
   watch: {
+         /**
+     * 监听宽度变化
+     * @param {Number} val 当前页面宽度
+     */
     screenWidth(val) {
       let that = this;
       that.screenWidth = val;
@@ -179,6 +187,10 @@ export default {
     }
   },
   mounted() {
+             /**
+     * 监听宽度变化
+     * 
+     */
     const that = this;
     that.screenWidth = window.screenWidth;
     window.onresize = () => {
@@ -187,11 +199,11 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
-    var serachArr = ["username", "password"];
+    var serachArr = ["username", "password"]; //查找是否有记住密码
     var obj = getCookie(serachArr);
     if (obj.username && obj.password) {
-      that.numberValidateForm.username = obj.username;
-      that.numberValidateForm.passworld = obj.password;
+      that.numberValidateForm.username = obj.username; //有记住密码赋值
+      that.numberValidateForm.passworld = obj.password;//有记住密码赋值
       that.lenrnPsw = true;
     }
   }

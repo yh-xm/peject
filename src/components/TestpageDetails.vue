@@ -48,7 +48,7 @@
           <question-sectect
             :select="false"
             :defaultSelect="0"
-             v-model="nowAddOption"
+            v-model="nowAddOption"
             @questionInit="questionInit"
           />
         </div>
@@ -146,6 +146,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 初始化获取题目信息
+     */
     init() {
       var _this = this;
       sessionStorage.testPaperId = _this.id;
@@ -159,16 +162,15 @@ export default {
               _this.score.chooseScore += data.questions[key].tpqScore;
               _this.pageInfo[0].nowAdd += 1;
               _this.pageInfo[0].bodys.push(data.questions[key]);
-            }
-            if (data.questions[key].tpqQuestion.fillQuestion.length != 0) {
+            } else if (
+              data.questions[key].tpqQuestion.fillQuestion.length != 0
+            ) {
               //填空题
               _this.score.gapfillScore += data.questions[key].tpqScore;
               _this.pageInfo[1].nowAdd += 1;
               data.questions[key].tpqQuestion.questionTypeId = 2;
               _this.pageInfo[1].bodys.push(data.questions[key]);
-              console.log(data.questions[key]);
-            }
-            if (data.questions[key].tpqQuestion.answerQuestion != null) {
+            } else {
               //问答题
               _this.score.answerScore += data.questions[key].tpqScore;
               _this.pageInfo[2].nowAdd += 1;
@@ -186,12 +188,6 @@ export default {
           _this.tpTitle = data.tpTitle;
           _this.pageInfo = [..._this.pageInfo];
         });
-    },
-    /**
-     * 点击完成制作
-     */
-    fnover() {
-      this.active = 2;
     },
     /**
      * 初始化试卷
@@ -236,7 +232,7 @@ export default {
     },
     /**
      * 修改分数
-     *
+     *@param {object} data 维护的题目信息
      */
     changeScore(data) {
       var _this = this;
@@ -247,12 +243,14 @@ export default {
     },
     /**
      * 计算分数
-     *
+     *@param {Number} index 维护的题目题型下标
+     *@param {Number} fqIndex 维护的题目题号
+     *@param {Number} fqsScore 维护的题目分数
      */
     sumScore(index, fqIndex, fqsScore) {
       var _this = this;
-      if(index==undefined){
-          return;
+      if (index == undefined) {
+        return;
       }
       _this.pageInfo[index].nowScroe = 0;
       if (fqIndex != undefined) {
@@ -265,6 +263,9 @@ export default {
       _this.pageInfo = [...this.pageInfo];
     }
   },
+  /**
+   * 过滤大题的数据格式
+   */
   filters: {
     questionsIndex(data) {
       switch (data) {

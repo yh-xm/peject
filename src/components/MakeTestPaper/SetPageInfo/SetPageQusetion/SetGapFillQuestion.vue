@@ -96,7 +96,7 @@ export default {
       title: "", //题目
       nowOption: {}, //当前数据
       oldOption: [], //历史数据
-      oshow: false,
+      oshow: false, //是否显示编辑
       IndexArr: [], //填空下标数组
       fillQuestion: [] //存储插入的填空下标数组
     };
@@ -165,7 +165,6 @@ export default {
                   console.log(res);
                   var data = res.data + "}]}}";
                   data = eval("(" + data + ")");
-                  console.log(data);
                   _this.nowOption.questionTitle = _this.title; //更新题目
                   _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
                   _this.oshow = !_this.oshow;
@@ -235,12 +234,11 @@ export default {
         .then(res => {
           if (res.data.message == "删除成功") {
             var data = {
-              setType: -1,
-              index: _this.nowIndex3,
-              questionTypeId: 2,
-              tpqScore: _this.AddGapFillQuestionList.tpqScore
+              index: _this.nowIndex3,//题号
+              questionTypeId: 2,//题目类型
+              tpqScore: _this.AddGapFillQuestionList.tpqScore//题目分数
             };
-            _this.$emit("setQuestion", data);
+            _this.$emit("setQuestion", data);//改变父组件的分数
           }
           _this.$msg(this, 1, "删除成功!");
         });
@@ -372,7 +370,7 @@ export default {
           document.getElementById("textarea" + _this.nowIndex3)
         );
      
-        for (let i in oindexArr) {
+        for (let i in oindexArr) { //删除位置的区间
           if (parseInt(oindexArr[i]) >= textindex && parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
             _this.nowOption.fillQuestion.splice(i,oindexArr.length - nindexArr.length);  //一次性删除多个填空
             break;
