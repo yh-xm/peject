@@ -20,6 +20,9 @@ Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
 Vue.prototype.$msg = message;
 
+/**
+ * 过滤器过滤时间 格式为'YYYY-MM-DD
+ */
 Vue.filter("firstSet",function(val){
         var value=new Date(val);
         var year=value.getFullYear();
