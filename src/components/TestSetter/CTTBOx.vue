@@ -35,6 +35,7 @@
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
           size="small"
+          value-format="yyyy/MM/dd HH:mm:ss"
           @change="logTimeChange"
         ></el-date-picker>
         <el-button type="danger" plain disabled size="small">用时：{{form.timeLimit}} 分钟</el-button>
@@ -54,7 +55,7 @@ export default {
       arr: {
         t: "",
         c: "",
-        m: ""
+        m: []
       }, //子传父
       form: {
         tpId: "", //试卷Id
@@ -82,7 +83,7 @@ export default {
       _this.axios.get("/api/TestPaper/GetAllTestPaper").then(
         function(res) {
           //tableData等于回调函数返回的res（值）
-          console.log(res.data);
+          // console.log(res.data);
           _this.options = res.data;
         },
         function() {
@@ -142,24 +143,17 @@ export default {
     logTimeChange(val) {
       let _this = this;
       _this.form.logEnd = val;
+      // 计算耗时
       // Math.abs()取绝对值
       if (_this.form.logEnd == null) {
         _this.form.timeLimit = 0;
       } else {
-        _this.form.timeLimit = parseInt(
-          Math.abs(_this.form.logEnd[1] - _this.form.logEnd[0]) / 1000 / 60
-        );
+        var data1 = new Date(_this.form.logEnd[0])
+        var data2 = new Date(_this.form.logEnd[1])
+        var long = data2.getTime()-data1.getTime();
+        _this.form.timeLimit = long/(60*1000);
       }
-      _this.form.logEnd = _this.form.logEnd.toLocaleString();
-     
-      var nowDataArr = _this.form.logEnd.split(",")
-      console.log( nowDataArr)
-      for (const key in nowDataArr) {
-       nowDataArr[key] = nowDataArr[key].substring(11,2)
-
-      }
-      console.log(nowDataArr)
-       _this.arr.m =  _this.form.logEnd;
+      _this.arr.m =  _this.form.logEnd ;
       _this.$emit("cusChange", _this.arr);
     }
   },
