@@ -10,10 +10,10 @@
     <!-- 卡片 -->
     <el-card class="box-card">
       <div slot="header">
-        <div class="impComp">
+        <div class="impComp"> 
           <!-- 组件引用 -->
-          <c-t-t-box v-model="v"></c-t-t-box>
-          <h1>极度深寒{{v}}</h1>
+          <c-t-t-box v-model="son"></c-t-t-box>
+          <h1>极度深寒{{son}}</h1>
 
           <!-- 组件引用结束 -->
         </div>
@@ -85,12 +85,11 @@ export default {
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
       total: null, //总条目
-      v:[],//子值
+      son:[],//子值
     };
   },
   components:{
     "c-t-t-box":CTTBox
-
   },
   //定义方法
   methods: {
@@ -99,15 +98,17 @@ export default {
      *
      *
      * */
-
     setTest() {
-      console.log("安排测试");
       let _this = this;
       var obj = {};
+      console.log(_this.son.m[0]);//开始时间
+      console.log(_this.son.m[1]);//结束时间
+      console.log(_this.son.t);//试卷id
+      console.log(_this.son.c);//班级id
+
       // 调用接口
       // _this.axios.post("/api/TestPaper/SetTest",obj).then((res) => {
       //       console.log(res);
-
       // })
     },
 

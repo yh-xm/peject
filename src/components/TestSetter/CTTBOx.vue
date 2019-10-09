@@ -118,7 +118,7 @@ export default {
      * */
 
     testChange(val) {
-      console.log(val);
+      // console.log(val);
       let _this = this;
       _this.arr.t = val;
       _this.$emit("cusChange", _this.arr);
@@ -129,7 +129,7 @@ export default {
      * */
 
     classChange(val) {
-      console.log(val);
+      // console.log(val);
       let _this = this;
       _this.arr.c = val;
       _this.$emit("cusChange", _this.arr);
