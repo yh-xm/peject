@@ -92,7 +92,7 @@ export default {
       checked: [], //多选信息
       oldOption: [], //克隆题目信息
       nowOption: [], //当前题目信息
-      tpqScore: 0
+      tpqScore: 0 //题目分数
     };
   },
   props: {
@@ -117,9 +117,9 @@ export default {
       _this.oshow = !_this.oshow;
       _this.nowOption = JSON.parse(JSON.stringify(_this.oldOption)); //恢复原来的数据
       _this.checked = [];
-      for (let key in this.nowOption.tpqQuestion.chooseQuestion) {
+      for (let key in _this.nowOption.tpqQuestion.chooseQuestion) {
         //全部不选中
-        if (this.oldOption.tpqQuestion.chooseQuestion[key].cqIsRight == true) {
+        if (_this.oldOption.tpqQuestion.chooseQuestion[key].cqIsRight == true) {
           //恢复选中的选项
           _this.checked.push(_this.optionsActive[key]);
         }
@@ -129,16 +129,18 @@ export default {
      * 添加选项
      */
     addOption() {
+      var _this = this;
       if (
-        this.nowOption.tpqQuestion.chooseQuestion.length <
-        this.optionsActive.length
+        _this.nowOption.tpqQuestion.chooseQuestion.length <
+        _this.optionsActive.length //少于固定的选项数组长度
       ) {
-        console.log(this.optionsActive.length)
-        this.nowOption.tpqQuestion.chooseQuestion.push({
+        _this.nowOption.tpqQuestion.chooseQuestion.push({
           cqId: 0,
           cqIsRight: false,
           cqOption: ""
         });
+      }else{
+         _this.$msg(this, -1, "不能再添加选项了！");
       }
     },
     /**
@@ -194,12 +196,11 @@ export default {
               questionTypeId: 1, //题目类型
               tpqScore: _this.AddChooseQuestionList.tpqScore //题目分数
             };
+            _this.$msg(this,1, res.data.message)
             this.$emit("setQuestion", data); //改变父组件的分数
-          }
-          this.$message({
-            type: "success",
-            message: res.data.message
-          });
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
         });
     },
     /**
@@ -249,7 +250,9 @@ export default {
             };
             _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);
-          }
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
         });
     },
     /**

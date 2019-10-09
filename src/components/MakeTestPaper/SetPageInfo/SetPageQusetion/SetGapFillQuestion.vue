@@ -24,7 +24,7 @@
             <el-input
               v-if="item=='▁'"
               :key="index"
-              v-model="nowOption.fillQuestion[IndexArr[index]].fqAnswer"
+              v-model="nowOption.fillQuestion[optionsIndexArr[index]].fqAnswer"
               class="ShowDaAn"
             ></el-input>
             <el-input-number
@@ -33,7 +33,7 @@
               size="small"
               :min="1"
               :max="5"
-              v-model="nowOption.fillQuestion[IndexArr[index]].fillQuestionScore[0].fqsScore"
+              v-model="nowOption.fillQuestion[optionsIndexArr[index]].fillQuestionScore[0].fqsScore"
             ></el-input-number>
           </el-row>
           <!-- 题目预览/编辑  编辑状态-->
@@ -61,13 +61,13 @@
             <el-input
               v-if="item=='▁'"
               :key="index"
-              v-model="nowOption.fillQuestion[IndexArr[index]].fqAnswer"
+              v-model="nowOption.fillQuestion[optionsIndexArr[index]].fqAnswer"
               class="ShowDaAn"
               disabled
             ></el-input>
             <span
               v-if="item=='▁'"
-            >({{nowOption.fillQuestion[IndexArr[index]].fillQuestionScore[0].fqsScore}}分)</span>
+            >({{nowOption.fillQuestion[optionsIndexArr[index]].fillQuestionScore[0].fqsScore}}分)</span>
           </el-row>
         </el-form-item>
 
@@ -96,8 +96,8 @@ export default {
       title: "", //题目
       nowOption: {}, //当前数据
       oldOption: [], //历史数据
-      oshow: false,
-      IndexArr: [], //填空下标数组
+      oshow: false,//编辑状态
+      optionsIndexArr: [], //填空下标数组
       fillQuestion: [] //存储插入的填空下标数组
     };
   },
@@ -240,9 +240,12 @@ export default {
               questionTypeId: 2,
               tpqScore: _this.AddGapFillQuestionList.tpqScore
             };
+                  _this.$msg(this,1, res.data.message)
             _this.$emit("setQuestion", data);
-          }
-          _this.$msg(this, 1, "删除成功!");
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
+         
         });
     },
     /**
@@ -279,7 +282,9 @@ export default {
             };
             _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);  //修改父组件的分数信息
-          }
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
         });
     },
     /**
@@ -290,42 +295,12 @@ export default {
       _this.nowOption = _this.AddGapFillQuestionList.tpqQuestion; //获取题目信息
       _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //克隆题目信息
       _this.title = _this.nowOption.questionTitle; //获取题目
-    },
-    CompareString(oldString, newString){
-	var len=Math.max(oldString.length, newString. length);
-	var startIndex=-1;
-	//M左到右进行比纹
-	for(var i=0;i<len;i++){
-	if(oldString.charAt(i) !=newString.charAt(i)){
-	startIndex=i;
-	break;
-	}
-	}
-	var oldString2=oldString.substring(startIndex)
-	var newString2=newString.substring(startIndex)
-	len=Math.max(oldString2.length, newString2.length);
-	var endIndex=-1;
-	//从右到左进行比统
-	for(var i=0;i<len;i++){
-	if(oldString2.charAt(oldString2.length-1-i)!=newString2.charAt(newString2.length-1-i)){
-	endIndex=i;
-	break;
-	}
-	}
-	var oldEndIndex=oldString.length-1-endIndex;
-	var newEndIndex=newString.length-1-endIndex;
-	var oldChange=oldString.substring(startIndex,oldEndIndex+1)
-	var newChange=newString.substring(startIndex,newEndIndex+1)
-	return {startIndex, endIndex, oldChange, newChange}
-	}
+    }
   },
   //监听题目的变化
   watch: {
     title: function(n, o) {
-      
       var _this = this;
-      var a = _this.CompareString(o,n)
-   console.log(a)
       var oindex = 0; //旧字符串数组下标
       var nindex = 0; //新字符串数组下标
       var oindexArr = []; //旧填空数组
@@ -356,7 +331,7 @@ export default {
           narr[key] = "*"; //不是填空变为*
         }
       }
-      _this.IndexArr = narr; // 获取最新的分割题目数组
+      _this.optionsIndexArr = narr; // 获取最新的分割题目数组
       var textindex = _this.getCursortPosition(
         //获取文本下标
         document.getElementById("textarea" + _this.nowIndex3)
