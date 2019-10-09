@@ -209,7 +209,7 @@ export default {
           var stu = data.data.data; //赋值给定义的变量用于渲染
           for (const key in stu) {
             //计算位置下标并赋值
-            stu[key].index=Number(_this.each)*(Number(_this.fewPages)-1)+Number(key)+1
+            stu[key].index=Number(_this.each) * (Number(_this.fewPages)-1) + Number(key) + 1
           }
           _this.tableData = stu;
           _this.pages = data.data.items; //赋值给显示的条数

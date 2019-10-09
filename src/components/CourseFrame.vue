@@ -1,4 +1,4 @@
-/** 
+<!--
 课程下拉框
 
   引用  import CourseFrame from '@/components/CourseFrame.vue'
@@ -11,7 +11,7 @@ seed = {
         flag:false //用于清除change 事件的影响
       }; 
 :oname="nemuId" 是用于给下拉框的名字 的宽度 后面要加像素单位px
-*/
+-->
 <template>
   <div id="CourseFrame">
     <el-form
