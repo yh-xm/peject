@@ -18,7 +18,7 @@
           <el-table-column label="课程" prop="courseName"></el-table-column>
           <el-table-column label="出卷日期">
             <template slot-scope="scope">{{scope.row.tpDate | firstSet}}</template>
-          </el-table-column>
+          </el-table-column> 
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <!-- hasTest -->
