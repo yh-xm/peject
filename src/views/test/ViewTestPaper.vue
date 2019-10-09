@@ -6,7 +6,7 @@
       <el-breadcrumb-item :to="{ path: '/ViewTestPaper'}">测试任务</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/piYueTestPaper'}">批阅试卷</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-card class="box-card" v-if="!isShow">
+    <el-card class="box-card">
       <div>
         <h6>试卷任务列表</h6>
       </div>
@@ -14,7 +14,6 @@
         <el-table :data="tableData" style="width: 100%">
           <el-table-column label="#" width="80" >
           <template slot-scope="scope">
-            <!-- 计算了很久 -->
             <span style="margin-left: 10px">{{scope.$index+(currentPage - 1)*currentPageSize + 1}}</span>
           </template>
         </el-table-column>
@@ -173,11 +172,6 @@ export default {
     //计算总分
     resCount:function(){
       var _this=this
-      // let studentachievement = 0;
-      // studentachievement = _this.answerData[2]; //获取问答题获得的分数
-      // studentachievement += _this.reversedMessage[2]; //获取填空题获得的分数
-      // studentachievement += _this.choseQuestionsdata[1]; //获取选择题得到的分数
-      // return studentachievement;
       return  _this.tableData1[0].fillQuestion +_this.tableData1[0].choseQuestions + _this.tableData1[0].answer
     }
   },
@@ -226,7 +220,6 @@ export default {
      */
     piYueTest(index, row) {
       let _this = this;
-      _this.isShow = true;
       _this.axios
         .get("/api/TestResult/GetStudentTest?taskId=" + row.taskId)
         .then(res => {
