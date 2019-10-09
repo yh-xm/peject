@@ -1,4 +1,4 @@
-/** 
+<!--
 添加填空题组件
 
   引用 import AddGapFilling 
@@ -10,7 +10,7 @@
           @addGapFilling="addQuestion" 添加题目时触发的事件
            />
 
-*/
+-->
 
 
 <template>

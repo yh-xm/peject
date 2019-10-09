@@ -1,4 +1,4 @@
-/** 
+<!--
 课程下拉框
 
   引用  import QuestionSectect from "@/components/QuestionSectect";
@@ -15,7 +15,7 @@ defaultSelect  需传入Number 选中第几个
 @changeOption="changeQuestionType"  //更改了选中项
 @questionInit="questionInit"  //返回题目类型
 
-*/
+-->
 <template>
   <div class="question-select">
     <div class="radio-group" v-if="!select">

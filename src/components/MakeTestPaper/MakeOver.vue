@@ -1,3 +1,11 @@
+<!--
+老师出题
+  第三步组件
+
+  引用 import MakeOver 
+  from "@/components/MakeTestPaper/MakeOver"; 
+ 注册    components:{MakeOver},
+-->
 <template>
   <div id="MakeOver">
     <div class="content-make">
@@ -40,8 +48,8 @@ export default {
   },
   methods:{
       goback(){ //上一步
- this.$parent.$parent.active = 1;
- console.log(6666)
+
+   this.$emit("changeType",1)
       }
   },
   created() { //获取试卷信息

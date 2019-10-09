@@ -1,4 +1,4 @@
-/** 
+<!--
 添加问答题组件
 
   引用 import AddEssayQuestion 
@@ -10,7 +10,7 @@
           @addEssayQuestion="addQuestion" 添加题目时触发的事件
            />
 
-*/
+-->
 <template>
   <div id="EssayQuestion">
     <div class="essat-content">

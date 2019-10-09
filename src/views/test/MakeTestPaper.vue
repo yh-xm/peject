@@ -16,9 +16,9 @@
         <el-step title="完成制作"></el-step>
       </el-steps>
 
-      <begin-make v-if="active==0"></begin-make>
+      <begin-make v-if="active==0" @changeType="changeActive"></begin-make>
       <div id="TestInfo" v-if="active==1">
-        <div class="tabs">
+        <div class="tabs" >
           <div class="left-list">
               <question-sectect 
               :select="false" 
@@ -72,7 +72,7 @@
           </el-card>
         </div>
       </div>
-      <MakeOver v-if="active==2"></MakeOver>
+      <MakeOver v-if="active==2"  @changeType="changeActive"></MakeOver>
     </el-card>
   </div>
 </template>
@@ -132,6 +132,13 @@ export default {
      */
     fnover() {
       this.active = 2;
+    },
+     /**
+     * 改变步奏
+     * @param {Number} v 当前步奏
+     */
+    changeActive(v){
+this.active = v;
     },
     /**
      * 初始化试卷
@@ -221,6 +228,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #MakeTestPaper {
+  min-width: 450px;
   .box-card {
     margin-top: 25px;
   }

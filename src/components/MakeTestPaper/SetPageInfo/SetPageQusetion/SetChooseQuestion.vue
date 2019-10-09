@@ -1,4 +1,4 @@
-/** 
+<!--
 维护选择题组件
 
   引用  import SetChooseQuestion from 
@@ -9,7 +9,7 @@
 :nowIndex="indexs" 传入题号
 @setQuestion="setQuestion" 进行维护时触发的方法
  @changeScore="changeScore" 修改分数时触发的方法
-*/
+-->
 
 
 <template>

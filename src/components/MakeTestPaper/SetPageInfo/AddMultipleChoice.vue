@@ -1,4 +1,4 @@
-/** 
+<!--
 添加选择题组件
 
   引用 import AddMultipleChoice 
@@ -9,7 +9,7 @@
           <add-multiple-choice 
           @addMultipleChoice="addQuestion" 添加题目时触发的事件
            />
-*/
+-->
 <template>
   <div id="MultipleChoice">
     <div class="Mult-Content">

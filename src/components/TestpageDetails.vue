@@ -1,9 +1,8 @@
-/** 
+<!--
 试卷详情组件
 通过路由传参 
 需要传入 试卷Id 
-*/
-
+-->
 <template>
   <div class="TestInfo">
     <!-- 面包屑导航 -->
@@ -298,6 +297,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .TestInfo {
+  min-width: 450px;
   .table-content {
     width: 80%;
     margin: 30px auto;
