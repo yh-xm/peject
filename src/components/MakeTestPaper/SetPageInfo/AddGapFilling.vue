@@ -14,7 +14,7 @@
 
 
 <template>
-  <div class="GapFilling">
+  <div class="GapFilnpmling">
     <div class="gapContent">
       <el-form
         :model="AddGapFillQuestion"

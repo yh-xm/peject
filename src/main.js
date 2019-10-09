@@ -5,7 +5,7 @@ import store from './store'
 import axios from 'axios'
 import vueaxios from 'vue-axios'
 import ElementUI from 'element-ui'
-
+import { setCookie, getCookie, clearCookie } from "@/api/SetCookie.js";
 import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
 import i18n from './i18n/i18n';
@@ -59,12 +59,8 @@ axios.interceptors.response.use(response=>{
 },error=>{
  var url = error.config.url.toLocaleLowerCase();
  if(error.response.status === 401 && ! url.endsWith("oauth/authenticate")){ //过期登录
-  // console.log(1111)
    router.push({
-     name:'login',
-     query: {
-      redirect: router.fullPath
-    } 
+    path: '/login',query: {redirect:"warning"} 
     })
  }
  return Promise.reject(error);
