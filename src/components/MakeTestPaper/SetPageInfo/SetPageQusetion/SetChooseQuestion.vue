@@ -39,7 +39,7 @@
                 size="small"
                 v-model="nowOption.tpqScore"
                 :min="1"
-                :max="10"
+                :max="50"
                 @change="changeScore"
               ></el-input-number>
             </span>
@@ -88,7 +88,7 @@ export default {
     return {
       odisabled: true, //禁用选项
       oshow: false, //显示
-      optionsActive: ["A、", "B、", "C、", "D、", "E、"], //对应字母
+      optionsActive: ["A、", "B、", "C、", "D、", "E、","F、"], //对应字母
       checked: [], //多选信息
       oldOption: [], //克隆题目信息
       nowOption: [], //当前题目信息
@@ -133,6 +133,7 @@ export default {
         this.nowOption.tpqQuestion.chooseQuestion.length <
         this.optionsActive.length
       ) {
+        console.log(this.optionsActive.length)
         this.nowOption.tpqQuestion.chooseQuestion.push({
           cqId: 0,
           cqIsRight: false,

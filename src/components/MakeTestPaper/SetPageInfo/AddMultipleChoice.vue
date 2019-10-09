@@ -32,7 +32,6 @@
         <el-form-item
           v-for="(domain, index) in AddMultipleChoice.domains"
           :key="domain.key"
-          :prop="'domains.' + index + '.value'"
         >
           <el-checkbox-group v-model="AddMultipleChoice.checked" :min="0" :max="2" @change="change">
             <el-checkbox :label="domain.options" :key="index"></el-checkbox>
@@ -73,7 +72,7 @@ export default {
         onum: 2, //默认分数
         nowAdd: 4, //默认添加个数
         domains: [], //选项
-        optionsActive: ["A、", "B、", "C、", "D、", "E、"], //对应字母
+        optionsActive: ["A、", "B、", "C、", "D、", "E、","F、"], //对应字母
         title: "" //题目
       }
     };
@@ -113,15 +112,16 @@ export default {
      *
      */
     addDomain() {
-      if (this.AddMultipleChoice.nowAdd < 5) {
-        //选项个数小于5执行添加
-        this.AddMultipleChoice.nowAdd++;
-        this.AddMultipleChoice.domains.push({
+      var _this = this;
+      if (_this.AddMultipleChoice.domains.length < _this.AddMultipleChoice.optionsActive.length) {
+        _this.AddMultipleChoice.domains.push({
           value: "",
-          options: this.AddMultipleChoice.optionsActive[
-            this.AddMultipleChoice.nowAdd - 1
+          options: _this.AddMultipleChoice.optionsActive[
+            _this.AddMultipleChoice.domains.length 
           ]
         });
+      }else{
+        _this.$msg(_this,-1,"不能添加选项了！")
       }
     },
     /**
@@ -133,7 +133,8 @@ export default {
     submitForm(formName) {
       //提交表单
       var _this = this;
-      _this.$refs[formName].validate(valid => {
+       _this.$nextTick(function(){
+              _this.$refs[formName].validate(valid => {
         if (valid) {
           var tpqPaperId = sessionStorage.testPaperId;
           var tpqScore = _this.$refs[formName].model.onum;
@@ -186,6 +187,8 @@ export default {
           return false;
         }
       });
+       })
+ 
     },
     /**
      * 初始化表单

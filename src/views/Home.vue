@@ -300,7 +300,7 @@ changeLocale (command) {
       border-bottom: 8px solid #409eff;
     }
     .el-button {
-      width: 3%;
+      width:32px;
       height: 100%;
       background-color: #008181;
       font-size: 25px;
