@@ -12,11 +12,13 @@
       <!-- 表格 -->
       <div slot="header" class="clearfix">
         <el-table :data="tableData" style="width:100%" :border="true">
-          <el-table-column label="#" type="index"></el-table-column>
+          <el-table-column label="#" prop="index"></el-table-column>
           <el-table-column label="标题" prop="tpTitle"></el-table-column>
           <el-table-column label="出卷人" prop="userName"></el-table-column>
           <el-table-column label="课程" prop="courseName"></el-table-column>
-          <el-table-column label="出卷日期" prop="tpDate"></el-table-column>
+          <el-table-column label="出卷日期">
+            <template slot-scope="scope">{{scope.row.tpDate | firstSet}}</template>
+          </el-table-column>
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -37,13 +39,13 @@
             :total="pages"
           ></el-pagination>
         </div>
-         <!-- 弹出框 -->
-        <el-dialog title="修改试卷信息" :visible.sync="dialogFormVisible" center>
+        <!-- 弹出框 -->
+        <el-dialog center title="修改试卷信息" :visible.sync="dialogFormVisible">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <el-form-item label="试卷标题" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-           <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId"></course-frame>
+            <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId" class="selectOptions"></course-frame>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -57,11 +59,11 @@
 <script>
 import CourseFrame from "@/components/CourseFrame.vue";
 export default {
-  components: { CourseFrame },
+  components: { CourseFrame },//组件注册
   data() {
     return {
       lovingVue: [], //接收子组件的值
-      seed:"", //发送给子组件的对象
+      seed: "", //发送给子组件的对象
       nemuId: "", //用于发送给子组件的宽度
       tableData: [], //接收渲染的数据
       pages: 0, //总条数
@@ -74,7 +76,8 @@ export default {
         name: "" //试卷标题
       },
       rules: {
-        name: [//试卷标题验证
+        name: [
+          //试卷标题验证
           { required: true, message: "请输入活动名称", trigger: "blur" },
           { min: 1, trigger: "blur" }
         ]
@@ -90,9 +93,10 @@ export default {
     handleEdit(index, row) {
       var _this = this;
       _this.ruleForm.name = row.tpTitle; //获取的名字赋值给弹出框
-      _this.seed = { //赋值给子组件
-        index:row.tpCourseId, //把课程id 赋值给子组件
-       flag:false
+      _this.seed = {
+        //赋值给子组件
+        index: row.tpCourseId, //把课程id 赋值给子组件
+        flag: false
       };
       _this.tpId = row.tpId; //当前行的试卷id
       _this.usIndex = index; //当前行的下标
@@ -114,17 +118,17 @@ export default {
             })
             .then(function(data) {
               if (data.data.code == 1) {
-                _this.message(_this, 1, "修改成功");//成功提示
+                _this.$msg(_this, 1, "修改成功"); //成功提示
 
                 var alter = _this.tableData[_this.usIndex]; //数据赋值以达到刷新
                 alter.tpTitle = _this.ruleForm.name;
                 alter.courseName = _this.lovingVue[0].courseName;
                 alter.tpCourseId = _this.lovingVue[0].courseId;
-                
+
               } else if (data.data.code == 0) {
-                _this.message(_this, 0, "数据没做修改"); //警告提示 
+                _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
-                _this.message(_this, -1, "系统异常"); //错误提示 
+                _this.$msg(_this, -1, "系统异常"); //错误提示
               }
             });
           _this.dialogFormVisible = false;
@@ -153,12 +157,13 @@ export default {
             .post("api/TestPaper/RemoveTestPaper?id=" + row.tpId)
             .then(function(data) {
               if (data.data.code == 1) {
-                _this.message(_this, 1, "删除成功");//成功提示
-                _this.tableData.splice(index, 1);
+                _this.$msg(_this, 1, "删除成功"); //成功提示
+                _this.tableData.splice(index, 1); //用下标删除面板中单行的数据达到刷新
+
               } else if (data.data.code == 0) {
-                _this.message(_this, 0, "数据没做修改"); //警告提示 
+                _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
-                _this.message(_this, -1, "系统异常"); //错误提示 
+                _this.$msg(_this, -1, "系统异常"); //错误提示
               }
             });
         })
@@ -170,7 +175,7 @@ export default {
         });
     },
     /**
-     * 获取每页显示几条的数据并赋值
+     * 获取每页显示多少条的数据并赋值
      * @param {Number} val 每页需要显示的条数
      */
     handleSizeChange(val) {
@@ -180,7 +185,7 @@ export default {
     },
     /**
      * 获取当前多少页并赋值
-     * @param {Number} val 显示第几页
+     * @param {Number} val 表示第几页
      */
     handleCurrentChange(val) {
       var _this = this;
@@ -203,24 +208,26 @@ export default {
         .then(function(data) {
           var stu = data.data.data; //赋值给定义的变量用于渲染
           for (const key in stu) {
-            //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
-            stu[key].tpDate = new Date(stu[key].tpDate).toLocaleDateString();
+            //计算位置下标并赋值
+            stu[key].index=Number(_this.each) * (Number(_this.fewPages)-1) + Number(key) + 1
           }
           _this.tableData = stu;
           _this.pages = data.data.items; //赋值给显示的条数
         });
     },
-     /**
+    /**
      *查看详情
+     * @param {Number} index 当前行的下标
+     * @param {object} row 当前行的用户数据
      */
-      handleGet(index, row) {
+    handleGet(index, row) {
       // console.log(row.tpId)
       this.$router.push({ path: `/testPageInfo/${row.tpId}` });
     }
   },
   created() {
     var _this = this;
-    _this.testPaper();
+    _this.testPaper();//调用数据渲染
   }
 };
 </script>
@@ -233,29 +240,32 @@ export default {
 .block {
   text-align: center;
 }
-//控制输入框宽度
+//控制from表单输入框宽度
 /deep/.el-form-item {
   /deep/.el-form-item__label {
-    margin-left: 45px;
+    margin-left: 15px;
   }
   /deep/.el-input__inner {
-    margin-left: 45px;
+    margin-left: 15px;
   }
+
   div {
     width: 350px;
-    /deep/.el-input__suffix{
-      left: 360px;
+    //调下拉框小三角
+    /deep/.el-input__suffix {
+      left: 340px;
     }
   }
 }
+//把表单的小 *点变成白色的
+/deep/.el-form-item__label:before {
+    content: '*';
+    color: #fff !important;
+    margin-right: 4px;
+}
+
 //弹出弹出框的宽度
 /deep/.el-dialog {
-  /deep/.el-dialog__body {
-    padding: 0px;
-  }
-  width: 450px;
-  .el-dialog__footer {
-    text-align: center;
-  }
+  width: 430px;
 }
 </style>

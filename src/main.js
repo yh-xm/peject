@@ -20,6 +20,19 @@ Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
 Vue.prototype.$msg = message;
 
+/**
+ * 过滤器过滤时间 格式为'YYYY-MM-DD
+ */
+Vue.filter("firstSet",function(val){
+        var value=new Date(val);
+        var year=value.getFullYear();
+      var m = value.getMonth() + 1;
+      var d = value.getDate();
+      m < 10 && (m = "0" + m);
+      d < 10 && (d = "0" + d);
+      return year + '-' + m +'-'+ d
+})
+
 router.beforeEach((to, from, next) => {
     if(to.path == '/login' ){
     next();

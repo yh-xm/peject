@@ -21,7 +21,9 @@
           <el-table-column label="授课老师" prop="userName"></el-table-column>
           <el-table-column label="专业" prop="courseName"></el-table-column>
           <el-table-column label="班级人数" prop="classStudents"></el-table-column>
-          <el-table-column label="开班日期" prop="classCreateTime"></el-table-column>
+          <el-table-column label="开班日期">
+            <template slot-scope="scope">{{scope.row.classCreateTime | firstSet}}</template>
+          </el-table-column>
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -64,9 +66,9 @@
           </el-form>
           <!-- 弹出框的确定取消按钮 -->
           <div slot="footer" class="dialog-footer">
+             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')" v-if="stuNewly==!true">添加</el-button>
-            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly==true">修改</el-button>
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly">修改</el-button>
           </div>
         </el-dialog>
       </div>
@@ -106,8 +108,6 @@ export default {
         ]
       },
       stuNewly: true, //新增按钮
-      message: "", //"接收通知框文字"
-      type: "", //接收通知框颜色类型
       index: "", //修改所需要的下标
       laoShi: "" //用来接收老师名字
     };
@@ -168,9 +168,7 @@ export default {
             .then(function(data) {
               //deta 接收的值为 1 时修改成功， -1 为异常，0 为没有改变
               if (data.data.code == 1) {
-                _this.message = data.data.message;
-                _this.type = "success";
-
+                  _this.$msg(_this, 1, "修改成功");//成功提示
                 var banJi = _this.tableData[_this.index]; //获取要修改的那组数据并赋值了一个变量
                 banJi.courseName =_this.lovingVue[0].courseName; //课程名字
                 banJi.classCourseId =_this.lovingVue[0].courseId
@@ -178,22 +176,16 @@ export default {
                 banJi.className = _this.ruleForm.name; //班级名字
                 banJi.classTeacherId = _this.ruleForm.usName; //授课老师编码
               } else if (data.data.code == -1) {
-                _this.message = "数据异常";
-                _this.type = "warning";
+                 _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+              _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
             });
-          
           _this.dialogFormVisible = false; //关闭弹出框
-
         } else {
           //输入框为空时执行
           return false;
-        }
-         
+        } 
       });
     },
     /**
@@ -204,7 +196,7 @@ export default {
     handleDelete(index, row) {
         
       var _this = this;
-      // _this.message(this,1, "66666")
+     
       _this
         .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
           confirmButtonText: "确定",
@@ -220,24 +212,16 @@ export default {
               //deta 接收的值为 1 时删除成功， -1 为异常表示不能删除，0 为没有改变
               if (data.data.code == 1) {
                 _this.tableData.splice(index, 1);
-                _this.message = "删除班级成功";
-                _this.type = "success";
-                // _this.message(this,1, "66666")
+               _this.$msg(_this, 1, "删除成功");//成功提示
               } else if (data.data.code == -1) {
-                _this.message = "此班级不能删除，如要删除请联系管理员";
-                _this.type = "warning";
+               _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+                 _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
             });
         })
         .catch(() => {
-          _this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          _this.$msg(_this, 2, "已取消删除");//成功提示
         });
     },
     /**
@@ -254,7 +238,6 @@ export default {
         index:null,
          flag:false
       } //赋值为空用以清除
-     
     },
     /**
      * 点击新增
@@ -278,22 +261,13 @@ export default {
               if (data.data.code == 1) {
                 quanBu.courseName =_this.lovingVue[0].courseName; //获取的课程名字
                 quanBu.userName = _this.laoShi; //获取的课程名字
-                quanBu.classCreateTime = new Date(
-                  quanBu.classCreateTime
-                ).toLocaleDateString(); //把返回的时间给转本地时间格式
                 _this.tableData.unshift(quanBu); // 把后台的数据从渲染的数组第一个位置插入
-
-                _this.message = "新增班级成功";
-                _this.type = "success";
+                 _this.$msg(_this, 1, "新增成功");//成功提示
               } else if (data.data.code == -1) {
-                _this.message = "数据异常";
-                _this.type = "warning";
+                  _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+                _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
-              // _this.overall();
             });
           _this.dialogFormVisible = false;
         } else {
@@ -303,29 +277,12 @@ export default {
       });
     },
     /**
-     * 用于被删除新增修改调用
-     */
-    open2() {
-      var _this = this;
-      _this.$message({
-        message: _this.message,
-        type: _this.type
-      });
-    },
-    /**
      * 分装的axios班级信息用来调用刷新
      */
     overall() {
       var _this = this;
       _this.axios.get("/api/Class/GetAllClass").then(function(data) {
-        var stu = data.data;
-        for (const key in stu) {
-          //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
-          stu[key].classCreateTime = new Date(
-            stu[key].classCreateTime
-          ).toLocaleDateString();
-        }
-        _this.tableData = stu;
+       _this.tableData = data.data;
       });
     },
     /**
@@ -337,15 +294,6 @@ export default {
         _this.teacher = data.data;
       });
     },
-    /**
-     *  获取课程信息
-     */
-    usCourse() {
-      var _this = this;
-      _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
-        _this.course = data.data;
-      });
-    }
   },
   /**
    * 生命周期创建后
@@ -354,18 +302,19 @@ export default {
     var _this = this;
     _this.overall(); //调用封装渲染axios
     _this.usTeacher(); //授课老师信息
-    _this.usCourse(); //课程信息
+  
    
   }
 };
 </script>
 
 <style lang="less" scoped>
+//面包屑导航统一向下20px
 /deep/.el-breadcrumb {
   margin-bottom: 20px;
 }
 
-// 新增按钮
+// 新增班级按钮
 .newly {
   border-bottom: 1px solid #ebeef5;
   text-align: left;
@@ -375,11 +324,8 @@ export default {
   }
 }
 
-// 弹出框
+// 弹出框 form 表单
 /deep/.el-form-item {
-  span {
-    text-align: center;
-  }
   div {
     width: 300px;
     .el-input.el-input--suffix {
@@ -387,11 +333,12 @@ export default {
     }
   }
 }
+//弹出框宽度
 /deep/.el-dialog {
   width: 448px;
   .el-dialog__footer {
     text-align: center;
   }
 }
-.name{display: inline-block;}
+
 </style>
