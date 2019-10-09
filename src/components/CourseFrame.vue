@@ -14,7 +14,6 @@ seed = {
 */
 <template>
   <div id="CourseFrame">
-    
     <el-form
     :name="oindex"
       :model="ruleForm"
@@ -42,16 +41,16 @@ export default {
     event: "update" //传递父组件的方法
   },
   props: {
-    oindex: {
+    oindex: { // 父组件传过来的类型 用于编辑操作 
        type: Object,
       default:function(){
-        return{
+        return{ //默认值
           index:null,
           flag:false
         }
-      } //默认为true
-    }, // 父组件传过来的类型 用于编辑
-    oname: String //父组件传过来的类型  用于标题名
+      } 
+    }, 
+    oname: String //父组件传过来的  用于标题名的宽度
   },
 
   data() {
@@ -79,11 +78,7 @@ export default {
       var _this = this;
       _this.flag = true;
       _this.ruleForm.keChenId = price;
-      var singular = _this.course.filter(function(data) {
-        //过滤
-        return data.courseId == _this.ruleForm.keChenId;
-      });
-      _this.$emit("update", singular); //传递到父组件
+      _this.repeTition(_this.ruleForm.keChenId)
     },
 
     /**
@@ -94,18 +89,22 @@ export default {
       _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
         _this.course = data.data;
         _this.ruleForm.keChenId = _this.oindex; //首次赋值id
-
-        var singular = _this.course.filter(function(data) {
-          //过滤
-          return data.courseId == _this.oindex;
-        });
-        _this.$emit("update", singular); //传递到父组件
+    _this.repeTition(_this.ruleForm.keChenId)
       });
     },
-
-
+    /**
+     * 封装好的过滤以达到重复调用
+     * @param {Number} subscript 被调用时传过来的id
+     */
+    repeTition(subscript){
+      var _this=this
+         var singular = _this.course.filter(function(data) {
+          //过滤
+          return data.courseId == subscript;
+        });
+        _this.$emit("update", singular); //传递到父组件
+    }
   },
-
   /**
    * 钩子函数创建后
    */
@@ -122,11 +121,7 @@ export default {
         return;
       }
       _this.ruleForm.keChenId = _this.oindex.index;
-      var singular = _this.course.filter(function(data) {
-        //过滤
-        return data.courseId == _this.ruleForm.keChenId;
-      });
-      _this.$emit("update", singular); //传递到父组件
+       _this.repeTition(_this.ruleForm.keChenId)
     } else {
       _this.flag = _this.oindex.flag;
     }

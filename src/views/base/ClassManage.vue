@@ -168,9 +168,7 @@ export default {
             .then(function(data) {
               //deta 接收的值为 1 时修改成功， -1 为异常，0 为没有改变
               if (data.data.code == 1) {
-                _this.message = data.data.message;
-                _this.type = "success";
-
+                  _this.$msg(_this, 1, "修改成功");//成功提示
                 var banJi = _this.tableData[_this.index]; //获取要修改的那组数据并赋值了一个变量
                 banJi.courseName =_this.lovingVue[0].courseName; //课程名字
                 banJi.classCourseId =_this.lovingVue[0].courseId
@@ -178,22 +176,16 @@ export default {
                 banJi.className = _this.ruleForm.name; //班级名字
                 banJi.classTeacherId = _this.ruleForm.usName; //授课老师编码
               } else if (data.data.code == -1) {
-                _this.message = "数据异常";
-                _this.type = "warning";
+                 _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+              _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
             });
-          
           _this.dialogFormVisible = false; //关闭弹出框
-
         } else {
           //输入框为空时执行
           return false;
-        }
-         
+        } 
       });
     },
     /**
@@ -204,7 +196,7 @@ export default {
     handleDelete(index, row) {
         
       var _this = this;
-      // _this.message(this,1, "66666")
+     
       _this
         .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
           confirmButtonText: "确定",
@@ -220,17 +212,12 @@ export default {
               //deta 接收的值为 1 时删除成功， -1 为异常表示不能删除，0 为没有改变
               if (data.data.code == 1) {
                 _this.tableData.splice(index, 1);
-                _this.message = "删除班级成功";
-                _this.type = "success";
-                // _this.message(this,1, "66666")
+               _this.$msg(_this, 1, "删除成功");//成功提示
               } else if (data.data.code == -1) {
-                _this.message = "此班级不能删除，如要删除请联系管理员";
-                _this.type = "warning";
+               _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+                 _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
             });
         })
         .catch(() => {
@@ -283,33 +270,18 @@ export default {
                 ).toLocaleDateString(); //把返回的时间给转本地时间格式
                 _this.tableData.unshift(quanBu); // 把后台的数据从渲染的数组第一个位置插入
 
-                _this.message = "新增班级成功";
-                _this.type = "success";
+                 _this.$msg(_this, 1, "新增成功");//成功提示
               } else if (data.data.code == -1) {
-                _this.message = "数据异常";
-                _this.type = "warning";
+                  _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+                _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
-              // _this.overall();
             });
           _this.dialogFormVisible = false;
         } else {
           //输入框为空时执行
           return false;
         }
-      });
-    },
-    /**
-     * 用于被删除新增修改调用
-     */
-    open2() {
-      var _this = this;
-      _this.$message({
-        message: _this.message,
-        type: _this.type
       });
     },
     /**
