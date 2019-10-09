@@ -240,9 +240,12 @@ export default {
               questionTypeId: 2,
               tpqScore: _this.AddGapFillQuestionList.tpqScore
             };
+                  _this.$msg(this,1, res.data.message)
             _this.$emit("setQuestion", data);
-          }
-          _this.$msg(this, 1, "删除成功!");
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
+         
         });
     },
     /**
@@ -279,7 +282,9 @@ export default {
             };
             _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);  //修改父组件的分数信息
-          }
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
         });
     },
     /**

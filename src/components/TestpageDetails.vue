@@ -142,6 +142,7 @@ export default {
           sum += _this.pageInfo[i].nowScroe;
         }
       }
+             _this.score.sum = sum;
       return sum;
     }
   },
@@ -217,6 +218,7 @@ export default {
       var index = data.questionTypeId - 1;
       _this.pageInfo[index].bodys.push(data.bodys); //改变父组件的问答题的试卷信息
       _this.pageInfo[index].nowAdd += 1; //改变父组件的问答题的问题个数
+      _this.changeTableScore();
       _this.sumScore(index);
     },
     /**
@@ -232,6 +234,7 @@ export default {
       _this.pageInfo[index].bodys.splice(data.index, 1); //改变父组件的问答题的试卷信息
       _this.pageInfo[index].nowAdd -= 1; //改变父组件的问答题的问题个数
       _this.pageInfo[index].nowScroe -= parseInt(data.tpqScore); //改变父组件的问答题的分数
+      _this.changeTableScore();
       _this.pageInfo = [..._this.pageInfo]; //解构渲染
     },
     /**
@@ -262,7 +265,13 @@ export default {
         _this.pageInfo[index].nowScroe +=
           _this.pageInfo[index].bodys[key].tpqScore; //改变父组件的问答题的分数
       }
+      _this.changeTableScore();
       _this.pageInfo = [...this.pageInfo];
+    },
+    changeTableScore(){
+            _this.score.chooseScore = parseInt(_this.pageInfo[0].nowScroe );
+         _this.score.gapfillScore  = parseInt(_this.pageInfo[1].nowScroe);
+       _this.score.answerScore  = parseInt( _this.pageInfo[2].nowScroe );
     }
   },
   filters: {

@@ -128,6 +128,8 @@ export default {
                 _this.$msg(this, 1, "添加成功!"); 
                 this.resetForm("AddGapFillQuestion"); //重置表单
                 this.title = ""; //重置题目
+              }else{
+                _this.$msg(this,-1, res.data.message)
               }
             });
         } else {

@@ -196,12 +196,12 @@ export default {
               questionTypeId: 1, //题目类型
               tpqScore: _this.AddChooseQuestionList.tpqScore //题目分数
             };
+            _this.$msg(this,1, res.data.message)
             this.$emit("setQuestion", data); //改变父组件的分数
-          }
-          this.$message({
-            type: "success",
-            message: res.data.message
-          });
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
+
         });
     },
     /**
@@ -251,7 +251,9 @@ export default {
             };
             _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);
-          }
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
         });
     },
     /**

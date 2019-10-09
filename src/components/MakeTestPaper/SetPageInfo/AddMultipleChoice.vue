@@ -180,6 +180,8 @@ export default {
         _this.$msg(this,1, "添加成功!")
                 _this.init();
                 _this.resetForm("AddMultipleChoice");
+              }else{
+                _this.$msg(this,-1, res.data.message)
               }
             });
         } else {

@@ -117,7 +117,7 @@ export default {
             _this.oshow = !_this.oshow;
             _this.$msg(this, 1, res.data.message);
           } else {
-            _this.$msg(this, 1, res.data.message);
+            _this.$msg(this, -1, res.data.message);
           }
         });
     },
@@ -139,7 +139,9 @@ export default {
               tpqScore: _this.AddEssayQuestiontList.tpqScore
             };
             _this.$emit("setQuestion", data);
-          }
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
           _this.$msg(this, 1, res.data.message);
         });
     },
@@ -166,7 +168,9 @@ export default {
             };
             _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);
-          }
+          }else{
+                _this.$msg(this,-1, res.data.message)
+              }
         });
     },
     /**
