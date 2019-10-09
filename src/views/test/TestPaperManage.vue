@@ -124,6 +124,7 @@ export default {
                 alter.tpTitle = _this.ruleForm.name;
                 alter.courseName = _this.lovingVue[0].courseName;
                 alter.tpCourseId = _this.lovingVue[0].courseId;
+
               } else if (data.data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
@@ -157,7 +158,8 @@ export default {
             .then(function(data) {
               if (data.data.code == 1) {
                 _this.$msg(_this, 1, "删除成功"); //成功提示
-                _this.tableData.splice(index, 1);
+                _this.tableData.splice(index, 1); //用下标删除面板中单行的数据达到刷新
+
               } else if (data.data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
@@ -173,7 +175,7 @@ export default {
         });
     },
     /**
-     * 获取每页显示几条的数据并赋值
+     * 获取每页显示多少条的数据并赋值
      * @param {Number} val 每页需要显示的条数
      */
     handleSizeChange(val) {
@@ -183,7 +185,7 @@ export default {
     },
     /**
      * 获取当前多少页并赋值
-     * @param {Number} val 显示第几页
+     * @param {Number} val 表示第几页
      */
     handleCurrentChange(val) {
       var _this = this;
@@ -206,8 +208,6 @@ export default {
         .then(function(data) {
           var stu = data.data.data; //赋值给定义的变量用于渲染
           for (const key in stu) {
-            //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
-            // stu[key].tpDate = new Date(stu[key].tpDate).toLocaleDateString();
             //计算位置下标并赋值
             stu[key].index=Number(_this.each)*(Number(_this.fewPages)-1)+Number(key)+1
           }
@@ -227,7 +227,7 @@ export default {
   },
   created() {
     var _this = this;
-    _this.testPaper();
+    _this.testPaper();//调用数据渲染
   }
 };
 </script>
@@ -240,7 +240,7 @@ export default {
 .block {
   text-align: center;
 }
-//控制输入框宽度
+//控制from表单输入框宽度
 /deep/.el-form-item {
   /deep/.el-form-item__label {
     margin-left: 15px;
@@ -251,7 +251,7 @@ export default {
 
   div {
     width: 350px;
-    //调小三角
+    //调下拉框小三角
     /deep/.el-input__suffix {
       left: 340px;
     }

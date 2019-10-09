@@ -66,9 +66,9 @@
           </el-form>
           <!-- 弹出框的确定取消按钮 -->
           <div slot="footer" class="dialog-footer">
+             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')" v-if="stuNewly==!true">添加</el-button>
-            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly==true">修改</el-button>
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly">修改</el-button>
           </div>
         </el-dialog>
       </div>
@@ -108,8 +108,6 @@ export default {
         ]
       },
       stuNewly: true, //新增按钮
-      message: "", //"接收通知框文字"
-      type: "", //接收通知框颜色类型
       index: "", //修改所需要的下标
       laoShi: "" //用来接收老师名字
     };
@@ -223,10 +221,7 @@ export default {
             });
         })
         .catch(() => {
-          _this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          _this.$msg(_this, 2, "已取消删除");//成功提示
         });
     },
     /**
@@ -299,15 +294,6 @@ export default {
         _this.teacher = data.data;
       });
     },
-    /**
-     *  获取课程信息
-     */
-    usCourse() {
-      var _this = this;
-      _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
-        _this.course = data.data;
-      });
-    }
   },
   /**
    * 生命周期创建后
@@ -316,18 +302,19 @@ export default {
     var _this = this;
     _this.overall(); //调用封装渲染axios
     _this.usTeacher(); //授课老师信息
-    _this.usCourse(); //课程信息
+  
    
   }
 };
 </script>
 
 <style lang="less" scoped>
+//面包屑导航统一向下20px
 /deep/.el-breadcrumb {
   margin-bottom: 20px;
 }
 
-// 新增按钮
+// 新增班级按钮
 .newly {
   border-bottom: 1px solid #ebeef5;
   text-align: left;
@@ -337,11 +324,8 @@ export default {
   }
 }
 
-// 弹出框
+// 弹出框 form 表单
 /deep/.el-form-item {
-  span {
-    text-align: center;
-  }
   div {
     width: 300px;
     .el-input.el-input--suffix {
@@ -349,11 +333,12 @@ export default {
     }
   }
 }
+//弹出框宽度
 /deep/.el-dialog {
   width: 448px;
   .el-dialog__footer {
     text-align: center;
   }
 }
-.name{display: inline-block;}
+
 </style>

@@ -7,8 +7,8 @@
 locingVue 是数组类型 接收子组件的值
 seed 用于传递给子组件值 传递当前行的课程id {Object} 类型 
 seed = {
-        index:row.classCourseId,//获取的课程编码赋值给原课程编码 就能默认选中
-        flag:false
+        index:row.classCourseId,//获取的课程编码赋值给原课程编码 就能默认选中 ，不需要的话请赋值 null
+        flag:false //用于清除change 事件的影响
       }; 
 :oname="nemuId" 是用于给下拉框的名字 的宽度 后面要加像素单位px
 */
