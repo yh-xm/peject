@@ -162,10 +162,7 @@ export default {
     },
        /**
      * 维护题目
-     * 
      * @param {object} data 维护的题目信息
-     * 
-     * 
      */
     setQuestion(data) {
       var _this = this;
@@ -177,7 +174,7 @@ export default {
     },
     /**
      * 修改分数
-     * 
+     * @param {object} data 维护的题目信息
      */
     changeScore(data){
       var _this = this;
@@ -188,7 +185,9 @@ export default {
     },
     /**
      * 计算分数
-     * 
+     * @param {Number} index 维护的题目的类型下标
+     * @param {Number} fqIndex 维护的题目题号
+     * @param {Number} fqsScore 维护的题目分数
      */
     sumScore(index,fqIndex,fqsScore){
       var _this = this;
@@ -203,6 +202,9 @@ export default {
       _this.pageInfo = [...this.pageInfo] //重新解构赋值
     }
   },
+      /**
+     * 过滤大题的数据格式
+     */
   filters: {
     questionsIndex(data) { //过滤题号
       switch (data) {

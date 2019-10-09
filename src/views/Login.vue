@@ -106,6 +106,10 @@ export default {
     };
   },
   methods: {
+     /**
+      * 提交表单登录
+      * @param {Object} formName 当前表单信息
+     */
     submitForm(formName) {
        var _this = this;
       _this.disbable = true;
@@ -167,6 +171,10 @@ export default {
     }
   },
   created() {},
+   /**
+    * 监听宽度变化
+    * 
+     */
   watch: {
     screenWidth(val) {
        let that = this;
@@ -179,6 +187,10 @@ export default {
       }
     }
   },
+     /**
+    * 监听宽度变化
+    * 
+     */
   mounted() {
     const that = this;
       that.screenWidth = window.screenWidth;
