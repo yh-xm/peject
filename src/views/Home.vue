@@ -77,7 +77,7 @@
           </el-tabs>
           <div
             class="header-right"
-            style="display:flex;justify-content:space-around;padding-right:5px;min-width:150px;"
+            style="display:flex;justify-content:space-around;padding-right:35px;min-width:150px;"
           >
             <el-dropdown  @command="changeLocale">
               <span class="el-dropdown-link">
@@ -89,8 +89,10 @@
                 <el-dropdown-item command="英语">英语</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span style="margin-right: 15px">{{user.stuName}}</span>
-            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain "></el-avatar>
+            <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
+            <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
+             -->
+            <!-- <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:15px;"></el-avatar> -->
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -173,32 +175,34 @@ export default {
     },
     removeTab(targetName) {
       //删除标签卡
-
-      let tabs = this.editableTabs;
-      let activeName = this.editableTabsValue;
+var _this =this;
+      let tabs = _this.editableTabs;
+      let activeName = _this.editableTabsValue;
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
             let nextTab = tabs[index + 1] || tabs[index - 1];
             if (nextTab) {
               activeName = nextTab.name;
-              this.$router.push({ path: nextTab.url }); //跳转路由
+              _this.$router.push({ path: nextTab.url }); //跳转路由
             }
           }
         });
       }
-      this.editableTabsValue = activeName;
+      _this.editableTabsValue = activeName;
      
-      this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
+      _this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
     },
     benToUrl(tab) {
+      var _this = this
       //点击跳转路由
-      var ourl = this.editableTabs[tab.index].url;
-      this.$router.push({ path: ourl }); //跳转路由
+      var ourl = _this.editableTabs[tab.index].url;
+      _this.$router.push({ path: ourl }); //跳转路由
     },
         fnisCollapse() { //折叠侧边栏
-      this.isCollapse = ! this.isCollapse; //是否折叠
-      this.isCollapse ? (this.owidth = 64) : (this.owidth = 190); //切换宽度
+        var _this = this
+      _this.isCollapse = ! _this.isCollapse; //是否折叠
+      _this.isCollapse ? (_this.owidth = 64) : (_this.owidth = 190); //切换宽度
     },
 // js方法
 changeLocale (command) {
@@ -298,7 +302,7 @@ changeLocale (command) {
       border-bottom: 8px solid #409eff;
     }
     .el-button {
-      width: 3%;
+      width:32px;
       height: 100%;
       background-color: #008181;
       font-size: 25px;
@@ -319,6 +323,7 @@ changeLocale (command) {
     .el-icon-arrow-down {
       font-size: 12px;
     }
+ 
   }
 
   .el-aside {
@@ -347,10 +352,7 @@ changeLocale (command) {
     /deep/ .el-menu-item {
       background-color: #545c64;
       color: white;
-      height: 40px;
-      // max-width: 190px;
-      min-width: 190px;
-      line-height: 42px;
+         position: relative;
     }
 
     a {
@@ -379,13 +381,13 @@ changeLocale (command) {
       background-color: #373737 !important;
       color: #ffeb3a;
     }
-    .el-submenu .is-active::after {
+    .el-submenu .is-active:after {
       content: "◆";
       color: white;
       font-size: 40px;
       position: absolute;
-      right: 0;
-      margin-right: -12px;
+      right: -12px;
+      // margin-right: -12px;
     }
     /deep/ .is-opened {
       background-color: #545c64 !important;
