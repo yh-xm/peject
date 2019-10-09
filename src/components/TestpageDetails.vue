@@ -259,16 +259,21 @@ export default {
       }
       _this.pageInfo[index].nowScroe = 0;
       if (fqIndex != undefined) {
-        _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
+        _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore; //修改题目的分数
       }
       for (const key in _this.pageInfo[index].bodys) {
         _this.pageInfo[index].nowScroe +=
           _this.pageInfo[index].bodys[key].tpqScore; //改变父组件的问答题的分数
       }
       _this.changeTableScore();
-      _this.pageInfo = [...this.pageInfo];
+      _this.pageInfo = [..._this.pageInfo];
     },
+    /**
+     * 表格分数重新赋值
+     *
+     */
     changeTableScore(){
+      var _this = this;
             _this.score.chooseScore = parseInt(_this.pageInfo[0].nowScroe );
          _this.score.gapfillScore  = parseInt(_this.pageInfo[1].nowScroe);
        _this.score.answerScore  = parseInt( _this.pageInfo[2].nowScroe );

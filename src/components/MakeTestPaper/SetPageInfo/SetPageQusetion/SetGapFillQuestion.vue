@@ -172,6 +172,7 @@ export default {
                   _this.$msg(_this, 1, data.message);
                   _this.changeScore();
                 } else {
+                  console.log(666)
                   _this.$msg(_this, res.data.code, res.data.message);
                       _this.nowOption.questionTitle = _this.title; //更新题目
                   _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
@@ -283,7 +284,7 @@ export default {
             _this.$msg(this, 1, "修改成功!");
             _this.$emit("changeScore", data);  //修改父组件的分数信息
           }else{
-                _this.$msg(this,-1, res.data.message)
+                _this.$msg(this,-1,"分数没有变化")
               }
         });
     },

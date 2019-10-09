@@ -166,10 +166,10 @@ export default {
               fqsScore: v,
               fqIndex: _this.nowIndex2
             };
-            _this.$msg(this, 1, "修改成功!");
+            _this.$msg(_this, 1, "修改成功!");
             _this.$emit("changeScore", data);
           }else{
-                _this.$msg(this,-1, res.data.message)
+                _this.$msg(_this,-1, res.data.message)
               }
         });
     },
