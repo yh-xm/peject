@@ -12,11 +12,13 @@
       <!-- 表格 -->
       <div slot="header" class="clearfix">
         <el-table :data="tableData" style="width:100%" :border="true">
-          <el-table-column label="#" type="index"></el-table-column>
+          <el-table-column label="#" prop="index"></el-table-column>
           <el-table-column label="标题" prop="tpTitle"></el-table-column>
           <el-table-column label="出卷人" prop="userName"></el-table-column>
           <el-table-column label="课程" prop="courseName"></el-table-column>
-          <el-table-column label="出卷日期" prop="tpDate"></el-table-column>
+          <el-table-column label="出卷日期">
+            <template slot-scope="scope">{{scope.row.tpDate | firstSet}}</template>
+          </el-table-column>
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -57,7 +59,7 @@
 <script>
 import CourseFrame from "@/components/CourseFrame.vue";
 export default {
-  components: { CourseFrame },
+  components: { CourseFrame },//组件注册
   data() {
     return {
       lovingVue: [], //接收子组件的值
@@ -205,7 +207,9 @@ export default {
           var stu = data.data.data; //赋值给定义的变量用于渲染
           for (const key in stu) {
             //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
-            stu[key].tpDate = new Date(stu[key].tpDate).toLocaleDateString();
+            // stu[key].tpDate = new Date(stu[key].tpDate).toLocaleDateString();
+            //计算位置下标并赋值
+            stu[key].index=Number(_this.each)*(Number(_this.fewPages)-1)+Number(key)+1
           }
           _this.tableData = stu;
           _this.pages = data.data.items; //赋值给显示的条数

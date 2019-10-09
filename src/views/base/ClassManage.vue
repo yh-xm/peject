@@ -21,7 +21,9 @@
           <el-table-column label="授课老师" prop="userName"></el-table-column>
           <el-table-column label="专业" prop="courseName"></el-table-column>
           <el-table-column label="班级人数" prop="classStudents"></el-table-column>
-          <el-table-column label="开班日期" prop="classCreateTime"></el-table-column>
+          <el-table-column label="开班日期">
+            <template slot-scope="scope">{{scope.row.classCreateTime | firstSet}}</template>
+          </el-table-column>
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -241,7 +243,6 @@ export default {
         index:null,
          flag:false
       } //赋值为空用以清除
-     
     },
     /**
      * 点击新增
@@ -265,11 +266,7 @@ export default {
               if (data.data.code == 1) {
                 quanBu.courseName =_this.lovingVue[0].courseName; //获取的课程名字
                 quanBu.userName = _this.laoShi; //获取的课程名字
-                quanBu.classCreateTime = new Date(
-                  quanBu.classCreateTime
-                ).toLocaleDateString(); //把返回的时间给转本地时间格式
                 _this.tableData.unshift(quanBu); // 把后台的数据从渲染的数组第一个位置插入
-
                  _this.$msg(_this, 1, "新增成功");//成功提示
               } else if (data.data.code == -1) {
                   _this.$msg(_this, -1, "系统异常"); //错误提示 
@@ -290,14 +287,7 @@ export default {
     overall() {
       var _this = this;
       _this.axios.get("/api/Class/GetAllClass").then(function(data) {
-        var stu = data.data;
-        for (const key in stu) {
-          //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
-          stu[key].classCreateTime = new Date(
-            stu[key].classCreateTime
-          ).toLocaleDateString();
-        }
-        _this.tableData = stu;
+       _this.tableData = data.data;
       });
     },
     /**

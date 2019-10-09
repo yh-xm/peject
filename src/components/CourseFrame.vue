@@ -84,7 +84,7 @@ export default {
     /**
      * 课程信息加首次赋值id
      */
-    usCourse() {
+    usCourse(){
       var _this = this;
       _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
         _this.course = data.data;
