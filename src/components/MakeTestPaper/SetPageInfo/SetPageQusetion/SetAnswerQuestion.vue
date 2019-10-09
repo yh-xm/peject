@@ -25,7 +25,7 @@
                 size="small"
                 v-model="nowOption.tpqScore"
                 :min="1"
-                :max="10"
+                :max="50"
                 @change="changeScore"
               ></el-input-number>
             </span>

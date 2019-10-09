@@ -260,8 +260,8 @@ that.lenrnPsw=true;
     .from-right {
       width: 50%;
       .el-form {
-        margin: 14px auto;
-        width: 80%;
+        margin: 14px 20px;
+        width: 90%;
         position: relative;
         text-align: center;
         /deep/.el-form-item__content {

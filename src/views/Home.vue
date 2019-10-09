@@ -92,7 +92,7 @@
             <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
              -->
-            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain" style="margin-left:15px"></el-avatar>
+            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:15px;"></el-avatar>
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -302,7 +302,7 @@ changeLocale (command) {
       border-bottom: 8px solid #409eff;
     }
     .el-button {
-      width: 3%;
+      width:32px;
       height: 100%;
       background-color: #008181;
       font-size: 25px;

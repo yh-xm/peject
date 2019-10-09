@@ -41,6 +41,7 @@ export default {
   methods:{
       goback(){ //上一步
  this.$parent.$parent.active = 1;
+ console.log(6666)
       }
   },
   created() { //获取试卷信息
@@ -82,6 +83,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #MakeOver {
+  text-align: center;
   .content-make {
     width: 80%;
     margin: 0px auto;

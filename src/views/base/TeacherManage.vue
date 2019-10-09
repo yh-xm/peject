@@ -421,21 +421,6 @@ export default {
       _this.dialogFormVisible = false; //关闭对话框
     }
   },
-    watch: {
-    ruleForm: function(newval, val) {
-      let _this = this;
-      console.log(newval); //新值
-      console.log(val); //原值
-      // !function auto(){
-      //   // _this.addClose();
-      //   _this.editColse();
-      //   setTimeout(() =>{
-      //     auto()
-      //   },100);
-      // }
-    }
-  },
-
     //定义计算属性
   computed: {
     /**
@@ -451,7 +436,7 @@ export default {
      * 这是计算属性
      * 所以直接把这个方法名(也就是filtData)像data值一样绑定到显示结果的表格中;
      * */
-    filtData() {
+    filtData(){
       let _this = this;
       if (_this.filtRadio == "0") {
         return _this.tableData;
