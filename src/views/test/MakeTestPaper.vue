@@ -20,14 +20,13 @@
       <div id="TestInfo" v-if="active==1">
         <div class="tabs">
           <div class="left-list">
-              <question-sectect 
-              :select="false" 
+            <question-sectect
+              :select="false"
               :defaultSelect="0"
               v-model="nowAddOption"
-              @questionInit="questionInit" 
-              />
-            </div>
-        
+              @questionInit="questionInit"
+            />
+          </div>
 
           <div class="right-button">
             <el-button type="primary" @click="fnover">完成制卷</el-button>
@@ -88,7 +87,7 @@ import SetGapFillQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQu
 import SetAnswerQuestion from "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetAnswerQuestion"; // 维护问答题组件
 import QuestionSectect from "@/components/QuestionSectect"; // 维护问答题组件
 export default {
-    components: {
+  components: {
     BeginMake, //第一步，选择科目
     MakeOver, //第三步，完成试卷
     AddMultipleChoice, //添加选择题
@@ -142,25 +141,25 @@ export default {
      */
     questionInit(data) {
       var _this = this;
-      
-      if(_this.pageInfo.length==0){
-          _this.pageInfo = data
+
+      if (_this.pageInfo.length == 0) {
+        _this.pageInfo = data;
       }
     },
-       /**
+    /**
      * 添加题目
-     * 
+     *
      * @param {object} data 添加的题目信息
-     * 
+     *
      */
     addQuestion(data) {
       var _this = this;
       var index = data.questionTypeId - 1;
       _this.pageInfo[index].bodys.push(data.bodys); //改变父组件的问答题的试卷信息
       _this.pageInfo[index].nowAdd += 1; //改变父组件的问答题的问题个数
-          _this.sumScore(index)
+      _this.sumScore(index);
     },
-       /**
+    /**
      * 维护题目
      * @param {object} data 维护的题目信息
      */
@@ -176,12 +175,12 @@ export default {
      * 修改分数
      * @param {object} data 维护的题目信息
      */
-    changeScore(data){
+    changeScore(data) {
       var _this = this;
-       var index = data.index; //获取传递的题目下标
-         var fqIndex = data.fqIndex; //获取传递的题目题号
-         var fqsScore = data.fqsScore;//获取传递的题目分数
-        _this.sumScore(index,fqIndex,fqsScore) //调用算分数方法
+      var index = data.index; //获取传递的题目下标
+      var fqIndex = data.fqIndex; //获取传递的题目题号
+      var fqsScore = data.fqsScore; //获取传递的题目分数
+      _this.sumScore(index, fqIndex, fqsScore); //调用算分数方法
     },
     /**
      * 计算分数
@@ -189,24 +188,27 @@ export default {
      * @param {Number} fqIndex 维护的题目题号
      * @param {Number} fqsScore 维护的题目分数
      */
-    sumScore(index,fqIndex,fqsScore){
+    sumScore(index, fqIndex, fqsScore) {
       var _this = this;
-       _this.pageInfo[index].nowScroe = 0; //清空分数
-       if(fqIndex!=undefined){
-         _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore; //修改题目的分数
-       }
-       
-      for (const key in _this.pageInfo[index].bodys) { //累加分数 
-         _this.pageInfo[index].nowScroe += _this.pageInfo[index].bodys[key].tpqScore //改变父组件的问答题的分数
+      _this.pageInfo[index].nowScroe = 0; //清空分数
+      if (fqIndex != undefined) {
+        _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore; //修改题目的分数
       }
-      _this.pageInfo = [...this.pageInfo] //重新解构赋值
+
+      for (const key in _this.pageInfo[index].bodys) {
+        //累加分数
+        _this.pageInfo[index].nowScroe +=
+          _this.pageInfo[index].bodys[key].tpqScore; //改变父组件的问答题的分数
+      }
+      _this.pageInfo = [...this.pageInfo]; //重新解构赋值
     }
   },
-      /**
-     * 过滤大题的数据格式
-     */
+  /**
+   * 过滤大题的数据格式
+   */
   filters: {
-    questionsIndex(data) { //过滤题号
+    questionsIndex(data) {
+      //过滤题号
       switch (data) {
         case 1:
           return "一、";
@@ -217,8 +219,7 @@ export default {
       }
     }
   },
-  created() {
-  }
+  created() {}
 };
 </script>
 <style lang="less" scoped>
@@ -232,7 +233,6 @@ export default {
       display: flex;
       .left-list {
         margin-right: auto;
-     
       }
       .right-button {
         width: 150px;

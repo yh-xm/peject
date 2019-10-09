@@ -13,7 +13,6 @@
           style="height:100%;"
           router
         >
-
           <el-row :gutter="20">
             <el-col :span="24">
               <div class="grid-content bg-purple">
@@ -24,7 +23,7 @@
               </div>
             </el-col>
           </el-row>
-  
+
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-menu"></i>
@@ -59,7 +58,7 @@
           <el-button
             type="primary"
             :icon="isCollapse?'el-icon-caret-right':'el-icon-caret-left'"
-                @click="fnisCollapse"
+            @click="fnisCollapse"
           ></el-button>
           <el-tabs
             v-model="editableTabsValue"
@@ -79,7 +78,7 @@
             class="header-right"
             style="display:flex;justify-content:space-around;padding-right:35px;min-width:150px;"
           >
-            <el-dropdown  @command="changeLocale">
+            <el-dropdown @command="changeLocale">
               <span class="el-dropdown-link">
                 {{langen}}
                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -89,10 +88,17 @@
                 <el-dropdown-item command="英语">英语</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
+            <span class="getOut" style="font-size:16px;">
+              <i class="el-icon-s-custom"></i>退出
+            </span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
-             -->
-            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:15px;"></el-avatar>
+            -->
+            <el-avatar
+              size="medium"
+              :src="user.userHeader || circleUrl"
+              fit="contain "
+              style="margin-left:15px;"
+            ></el-avatar>
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -113,13 +119,13 @@ export default {
   data() {
     return {
       user: {},
-      langen:"中文",
+      langen: "中文",
       base: [
         //导航栏数据测试
-        { name:"base.r1", url: "/ClassManage" },
+        { name: "base.r1", url: "/ClassManage" },
         { name: "base.r2", url: "/StudentManage" },
         { name: "base.r3", url: "/TeacherManage" },
-         { name: "base.r5", url: "/UserManage" },
+        { name: "base.r5", url: "/UserManage" },
         { name: "base.r4", url: "/ModifyPassword" }
       ],
       test: [
@@ -147,14 +153,15 @@ export default {
     };
   },
   methods: {
-       /**
-    * 添加标签卡
-    * @param {String} 标签名 当前标签名
-    * @param {String} ourl 当前路径
+    /**
+     * 添加标签卡
+     * @param {String} 标签名 当前标签名
+     * @param {String} ourl 当前路径
      */
     addTab(targetName, ourl) {
       //添加标签卡
-      var editableTabs = this.editableTabs;
+      var _this = this;
+      var editableTabs = _this.editableTabs;
       var flag = 0;
       for (let key in editableTabs) {
         // 查找相同标签
@@ -167,97 +174,94 @@ export default {
       }
       if (flag == editableTabs.length) {
         //没有相同标签
-        let newTabName = ++this.tabIndex + "";
+        let newTabName = ++_this.tabIndex + "";
         editableTabs.push({
           title: targetName,
           name: newTabName,
           url: ourl
         });
-        this.editableTabsValue = newTabName;
+        _this.editableTabsValue = newTabName;
       } else {
-        this.editableTabsValue = this.editableTabs[flag].name; // 有相同的标签
+        _this.editableTabsValue = _this.editableTabs[flag].name; // 有相同的标签
       }
     },
-       /**
-    * 删除标签卡
-    * @param {String} targetName 传入要删除的标签名
+    /**
+     * 删除标签卡
+     * @param {String} targetName 传入要删除的标签名
      */
     removeTab(targetName) {
       //删除标签卡
-
-      let tabs = this.editableTabs;
-      let activeName = this.editableTabsValue;
+      var _this = this;
+      let tabs = _this.editableTabs;
+      let activeName = _this.editableTabsValue;
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
             let nextTab = tabs[index + 1] || tabs[index - 1];
             if (nextTab) {
               activeName = nextTab.name;
-              this.$router.push({ path: nextTab.url }); //跳转路由
+              _this.$router.push({ path: nextTab.url }); //跳转路由
             }
           }
         });
       }
-      this.editableTabsValue = activeName;
-     
-      this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
+      _this.editableTabsValue = activeName;
+
+      _this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
     },
-       /**
-    * 点击标签跳转路由
-    * @param {Obeject} tab 跳转标签对象
+    /**
+     * 点击标签跳转路由
+     * @param {Obeject} tab 跳转标签对象
      */
     benToUrl(tab) {
+      var _this = this;
       //点击跳转路由
-      var ourl = this.editableTabs[tab.index].url;
-      this.$router.push({ path: ourl }); //跳转路由
+      var ourl = _this.editableTabs[tab.index].url;
+      _this.$router.push({ path: ourl }); //跳转路由
     },
-        fnisCollapse() { //折叠侧边栏
-      this.isCollapse = ! this.isCollapse; //是否折叠
-      this.isCollapse ? (this.owidth = 64) : (this.owidth = 190); //切换宽度
+    fnisCollapse() {
+      //折叠侧边栏
+      var _this = this;
+      _this.isCollapse = !_this.isCollapse; //是否折叠
+      _this.isCollapse ? (_this.owidth = 64) : (_this.owidth = 190); //切换宽度
     },
-       /**
-    * 监听语言变化
-    *  @param {String} command 当前语言种类
+    /**
+     * 监听语言变化
+     *  @param {String} command 当前语言种类
      */
-// js方法
-changeLocale (command) {
-  this.langen == command ?this.langen:this.langen=command;
-  // console.log(command)
-  var lang;
-      this.langen=="中文"?lang='zh':lang='en'
-      if(lang == 'zh'){
-        localStorage.setItem('locale', 'zh')
-        this.$i18n.locale = localStorage.getItem('locale')
-        this.$message({
-          message: '切换为中文！',
-          type: 'success'
-        })
-      } else if (lang == 'en') {
-        localStorage.setItem('locale', 'en')
-        this.$i18n.locale = localStorage.getItem('locale')
-        this.$message({
-          message: 'Switch to English!',
-          type: 'success'
-        })
+    // js方法
+    changeLocale(command) {
+      var _this = this;
+      _this.langen == command ? _this.langen : (_this.langen = command);
+      // console.log(command)
+      var lang;
+      _this.langen == "中文" ? (lang = "zh") : (lang = "en");
+      if (lang == "zh") {
+        localStorage.setItem("locale", "zh");
+        _this.$i18n.locale = localStorage.getItem("locale");
+        _this.$msg(_this, 1, "切换为中文！");
+      } else if (lang == "en") {
+        localStorage.setItem("locale", "en");
+        _this.$i18n.locale = localStorage.getItem("locale");
+        _this.$msg(_this, 1, "Switch to English!");
       }
-    
-}
+    }
   },
   created() {
-    this.user = eval("(" + sessionStorage.NowLoginUser + ")"); 
+    this.user = eval("(" + sessionStorage.NowLoginUser + ")");
   },
-   watch: {
-        language: function() {   //此处language对应上方的checkbox进行绑定的数据
-            this.$i18n.locale === "zh"     
-                ? (this.$i18n.locale = "en")
-                : (this.$i18n.locale = "zh");
-            // getLocalStore(LAGU) === "zh"   //本地存储的进行变化
-            //     ? setLocalStore(LAGU, "en")
-            //     : setLocalStore(LAGU, "zh");
-              
-        }
+  watch: {
+    language: function() {
+      //此处language对应上方的checkbox进行绑定的数据
+      var _this = this;
+      _this.$i18n.locale === "zh"
+        ? (_this.$i18n.locale = "en")
+        : (_this.$i18n.locale = "zh");
+      // getLocalStore(LAGU) === "zh"   //本地存储的进行变化
+      //     ? setLocalStore(LAGU, "en")
+      //     : setLocalStore(LAGU, "zh");
     }
-   
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -317,7 +321,7 @@ changeLocale (command) {
       border-bottom: 8px solid #409eff;
     }
     .el-button {
-      width:32px;
+      width: 32px;
       height: 100%;
       background-color: #008181;
       font-size: 25px;
@@ -338,7 +342,6 @@ changeLocale (command) {
     .el-icon-arrow-down {
       font-size: 12px;
     }
- 
   }
 
   .el-aside {
@@ -367,7 +370,7 @@ changeLocale (command) {
     /deep/ .el-menu-item {
       background-color: #545c64;
       color: white;
-         position: relative;
+      position: relative;
     }
 
     a {

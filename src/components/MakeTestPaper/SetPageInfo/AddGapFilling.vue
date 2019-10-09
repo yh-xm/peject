@@ -47,10 +47,10 @@
             <el-input
               v-if="item=='▁'"
               :key="index"
-              v-model="AddGapFillQuestion.domains[IndexArr[index]].value"
+              v-model="AddGapFillQuestion.domains[optionsIndexArr[index]].value"
               class="ShowDaAn"
             ></el-input>
-            <span v-if="item=='▁'">({{AddGapFillQuestion.domains[IndexArr[index]].onum}}分)</span>
+            <span v-if="item=='▁'">({{AddGapFillQuestion.domains[optionsIndexArr[index]].onum}}分)</span>
           </el-row>
         </el-form-item>
         <el-form-item>
@@ -75,7 +75,7 @@ export default {
       AddGapFillQuestion: {
         domains: [] //填空
       },
-      IndexArr: [] //填空下标位置
+      optionsIndexArr: [] //填空下标位置
     };
   },
   methods: {
@@ -258,7 +258,7 @@ export default {
         //填空为0
         _this.AddGapFillQuestion.domains = [];
       }
-      _this.IndexArr = narr; // 获取最新的分割题目数组
+      _this.optionsIndexArr = narr; // 获取最新的分割题目数组
     }
   }
 };

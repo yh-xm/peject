@@ -66,7 +66,7 @@ export default {
     return {
       nowOption: [], //当前题目信息
       oldOption: [], //克隆题目信息
-      odisabled: true, //禁用选项
+      odisabled: true, //编辑状态
       oshow: false //显示
     };
   },
@@ -138,7 +138,7 @@ export default {
               questionTypeId: 3,
               tpqScore: _this.AddEssayQuestiontList.tpqScore
             };
-            this.$emit("setQuestion", data);
+            _this.$emit("setQuestion", data);
           }
           _this.$msg(this, 1, res.data.message);
         });

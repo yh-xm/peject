@@ -63,6 +63,9 @@ export default {
     };
   },
   methods: {
+        /**
+     * 初始化题型
+     */
     questionInit() {
       var _this = this;
       _this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
@@ -81,6 +84,10 @@ export default {
         }
       });
     },
+        /**
+         *改变选项 
+         *
+     */
     changeQuestionType(type) {
       var index = 0;
       switch (type) {

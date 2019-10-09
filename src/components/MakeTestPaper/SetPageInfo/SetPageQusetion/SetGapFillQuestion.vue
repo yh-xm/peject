@@ -24,7 +24,7 @@
             <el-input
               v-if="item=='▁'"
               :key="index"
-              v-model="nowOption.fillQuestion[IndexArr[index]].fqAnswer"
+              v-model="nowOption.fillQuestion[optionsIndexArr[index]].fqAnswer"
               class="ShowDaAn"
             ></el-input>
             <el-input-number
@@ -33,7 +33,7 @@
               size="small"
               :min="1"
               :max="5"
-              v-model="nowOption.fillQuestion[IndexArr[index]].fillQuestionScore[0].fqsScore"
+              v-model="nowOption.fillQuestion[optionsIndexArr[index]].fillQuestionScore[0].fqsScore"
             ></el-input-number>
           </el-row>
           <!-- 题目预览/编辑  编辑状态-->
@@ -61,13 +61,13 @@
             <el-input
               v-if="item=='▁'"
               :key="index"
-              v-model="nowOption.fillQuestion[IndexArr[index]].fqAnswer"
+              v-model="nowOption.fillQuestion[optionsIndexArr[index]].fqAnswer"
               class="ShowDaAn"
               disabled
             ></el-input>
             <span
               v-if="item=='▁'"
-            >({{nowOption.fillQuestion[IndexArr[index]].fillQuestionScore[0].fqsScore}}分)</span>
+            >({{nowOption.fillQuestion[optionsIndexArr[index]].fillQuestionScore[0].fqsScore}}分)</span>
           </el-row>
         </el-form-item>
 
@@ -96,8 +96,8 @@ export default {
       title: "", //题目
       nowOption: {}, //当前数据
       oldOption: [], //历史数据
-      oshow: false,
-      IndexArr: [], //填空下标数组
+      oshow: false,//编辑状态
+      optionsIndexArr: [], //填空下标数组
       fillQuestion: [] //存储插入的填空下标数组
     };
   },
@@ -326,7 +326,7 @@ export default {
           narr[key] = "*"; //不是填空变为*
         }
       }
-      _this.IndexArr = narr; // 获取最新的分割题目数组
+      _this.optionsIndexArr = narr; // 获取最新的分割题目数组
       var textindex = _this.getCursortPosition(
         //获取文本下标
         document.getElementById("textarea" + _this.nowIndex3)
