@@ -3,7 +3,7 @@ const TestPaperManage = () => import('@/views/test/TestPaperManage')
 const TestResult = () => import('@/views/test/TestResult')
 const TestSetter = () => import('@/views/test/TestSetter')
 const ViewTestPaper = () => import('@/views/test/ViewTestPaper')
-
+const piYueTestPaper = () => import('@/views/test/piYueTestPaper')
 export default(
     [
         {
@@ -30,6 +30,11 @@ export default(
             path: '/ViewTestPaper',
             name: 'ViewTestPaper',
             component: ViewTestPaper
+        },
+        {
+            path: '/piYueTestPaper',
+            name: 'piYueTestPaper',
+            component: piYueTestPaper
         }
     ]
 )
