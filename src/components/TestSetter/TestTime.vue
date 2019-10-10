@@ -1,6 +1,8 @@
 <template>
   <div id="testTime">
+    {{parentRes3}}
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <!-- :title="parentRes3" -->
       <el-form-item label="考试时间" prop="seleClassId" size="small">
         <el-date-picker
         value-format="yyyy/MM/dd HH:mm:ss"
@@ -18,7 +20,6 @@
     </el-form>
   </div>
 </template>
-
 <script>
 export default {
   props:{
@@ -69,8 +70,11 @@ export default {
     let _this = this;
     console.log(this.parentRes3);
     // if(_this.required != true){
-      _this.ruleForm.tpId = _this.parentRes3;
+      // _this.ruleForm.tpId = _this.parentRes3;
     // }
+    // this.ruleForm.timeLimit = _this.parentRes3[0];
+    // console.log(_this.parentRes3);
+
     
   }
 };

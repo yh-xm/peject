@@ -240,15 +240,12 @@ export default {
       _this.dialogFormVisible = true;
       _this.pRes = row.taskTestPaperId;//试卷
       _this.cRes = row.classId;//班级
-      _this.timeRes[0] = row.taskStartTime//考试时间  开始
-      _this.timeRes[1] = row.taskEndTime//考试时间  结束
-      _this.timeRes[2] = row.taskEscapeTime//耗时
-
-
+      _this.timeRes[0] = row.taskStartTime;//考试时间  开始
+      _this.timeRes[1] = row.taskEndTime;//考试时间  结束
+      _this.timeRes[2] = row.taskEscapeTime;//耗时
+      console.log(_this.timeRes);
       // console.log(_this.pRes);
       // console.log(row.taskId);
-
-
     },
     /**
      * 删除当前行表格信息

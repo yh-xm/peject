@@ -1,9 +1,9 @@
 <template>
   <div id="testDrownBox-testSetter">
-    班级： {{parentRes2}}   
+    <!-- 班级： {{parentRes2}}    -->
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="班级" prop="classId" size="small">
-        <el-select v-model="ruleForm.classId" placeholder="请选择班级" @change="setClass">
+        <el-select v-model="ruleForm.classId" placeholder="请选择班级" @change="setClass" :title="parentRes2">
           <el-option
             v-for="item in options"
             :key="item.classId"
