@@ -173,7 +173,7 @@ export default {
               if (data.data.code == 1) {
                 _this.tableData.splice(index, 1); //用下标删除面板中单行的数据达到刷新
                 _this.$msg(_this, 1, "删除成功"); //成功提示
-                _this.pages=_this.pages-1 //总数量减一
+                _this.pages=_this.pages-1 //总数量也减一
                 for (let key in _this.tableData) {
                   if (index < _this.tableData[key].index) { //删除时会自动排序
                     _this.tableData[key].index = _this.tableData[key].index - 1;
