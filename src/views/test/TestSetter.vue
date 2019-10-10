@@ -117,8 +117,8 @@ export default {
               type: "success",
               message: "设置成功!"
             });
-            obj = {}; //清空值
-            _this.son = []; //清空值
+            // obj = {}; //清空值
+            // _this.son = []; //清空值
             // console.log( obj);
             // console.log(_this.son)
           } else if (res.data.code == -2) {
@@ -189,9 +189,9 @@ export default {
         m:{
           s:row.taskStartTime,//开始
           e:row.taskEndTime//结束
-        }
+        },
+        flag:false
       };
-
       _this.dialogFormVisible = true;
       // _this.row =
     },

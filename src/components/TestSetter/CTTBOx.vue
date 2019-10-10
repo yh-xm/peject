@@ -18,7 +18,12 @@ template
     <!-- 试卷 -->
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="试卷">
-        <el-select v-model="form.tpId" placeholder="请选择试卷" size="small" @change="testChange(form.tpId)">
+        <el-select
+          v-model="form.tpId"
+          placeholder="请选择试卷"
+          size="small"
+          @change="testChange(form.tpId)"
+        >
           <el-option
             v-for="item in options"
             :key="item.tpId"
@@ -31,7 +36,12 @@ template
       <!-- 班级 -->
 
       <el-form-item label="班级">
-        <el-select v-model="form.classId" placeholder="请选择班级" size="small" @change="classChange(form.classId)">
+        <el-select
+          v-model="form.classId"
+          placeholder="请选择班级"
+          size="small"
+          @change="classChange(form.classId)"
+        >
           <el-option
             v-for="item in options2"
             :key="item.classId"
@@ -55,18 +65,17 @@ template
         ></el-date-picker>
         <el-button type="danger" plain disabled size="small">用时：{{form.timeLimit}} 分钟</el-button>
       </el-form-item>
-
     </el-form>
-      {{obj1}}
-      {{Fir}}
+    {{obj1}}
+    {{Fir}}
   </div>
 </template>
 <script>
 export default {
   model: {
-    event: "cusChange",
+    event: "cusChange"
   },
-  props:['obj1'],
+  props: ["obj1"],
   data() {
     return {
       options: [], //试卷下拉框数组
@@ -87,7 +96,12 @@ export default {
           return time.getTime() < Date.now() - 8.64e7; //设置选择今天以及今天之后的日
         }
       },
-      Fir:"",//父传子
+      Fir:{
+        t: "",
+        c: "",
+        m: {s:"",e:""}
+      },//父传子
+      flag:false
     };
   },
   methods: {
@@ -110,7 +124,6 @@ export default {
           console.log("数据请求失败处理");
         }
       );
-      //  _this.form.tpId = _this.Fir.t;
     },
     /**
      * 获取所有班级信息
@@ -141,9 +154,10 @@ export default {
     testChange(val) {
       console.log(val);
       let _this = this;
+            _this.flag = true;
       _this.arr.t = val;
       _this.$emit("cusChange", _this.arr);
-      console.log(_this.Fir)//父传子的值
+      console.log(_this.Fir); //父传子的值
     },
     /**
      * 获取班级下拉框的值
@@ -153,6 +167,7 @@ export default {
     classChange(val) {
       // console.log(val);
       let _this = this;
+            _this.flag = true;
       _this.arr.c = val;
       _this.$emit("cusChange", _this.arr);
     },
@@ -165,6 +180,7 @@ export default {
     logTimeChange(val) {
       let _this = this;
       _this.form.logEnd = val;
+            _this.flag = true;
       // 计算耗时
       // Math.abs()取绝对值
       if (_this.form.logEnd == null) {
@@ -177,25 +193,42 @@ export default {
       }
       _this.arr.m = _this.form.logEnd;
       _this.$emit("cusChange", _this.arr);
-
     }
   },
-  watch:{
-    Fir(newVal,oldVal){
-        // console.log(newVal)
-        // _this.form.tpId = newVal.t;
+  // watch:{
+  //   Fir(newVal,oldVal){
+  //       // console.log(newVal)
+  //       // _this.form.tpId = newVal.t;
 
-        // console.log(oldVal)
+  //       // console.log(oldVal)
 
-      }
+  //     }
 
-  },
+  // },
   created() {
     let _this = this;
     _this.getAllTestPaper();
     _this.getAllClass();
     _this.Fir = _this.obj1;
-
+    console.log(_this.Fir)
+    
+  },
+   updated() {
+    var _this = this;
+    if (_this.flag != true) {
+      //判断是否进入过改变事件
+      if (_this.obj1 == null) {
+        //判断是否传过来的值为空
+        return;
+      }
+  // form.classId
+  _this.form.tpId = _this.obj1.t;
+  _this.form.classId = _this.obj1.c;
+  // _this.form.form.logEnd = _this.obj1.m;
+  // console.log(_this.obj1)
+    } else {
+      _this.flag = _this.obj1.flag;
+    }
   }
 };
 </script>
