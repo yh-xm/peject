@@ -4,6 +4,7 @@ const TestResult = () => import('@/views/test/TestResult')
 const TestSetter = () => import('@/views/test/TestSetter')
 const ViewTestPaper = () => import('@/views/test/ViewTestPaper')
 const piYueTestPaper = () => import('@/views/test/piYueTestPaper')
+const TestpageDetails = () => import("@/components/TestpageDetails") 
 export default(
     [
         {
