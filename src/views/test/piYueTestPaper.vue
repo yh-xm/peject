@@ -395,15 +395,13 @@ export default {
           if (noDone.filter(item => item.testUid == _this.testUid)[0] != undefined) {
             hasDone.push(noDone.filter(item=>item.testUid ==_this.testUid)[0])
             noDone.splice(noDone.lastIndexOf(noDone.filter(item=>item.testUid ==_this.testUid)[0]),1)
+            _this.piYue()
             _this.$message({
                   type: "success",
                   message: "批阅成功！"
                 })
           }else if(hasDone.filter(item => item.testUid == _this.testUid)[0]!= undefined){
-            _this.tableData1[0].fillQuestion = _this.computFillQuestion[2]; //填空题分数
-            _this.tableData1[0].answer = _this.answerdata[2]; //问答题分数
-            _this.tableData1[0].testScore = _this.stuScore; // //总分
-            _this.tableData1.splice(0, 1, _this.tableData1[0]); //替换数据
+            _this.piYue()
             // console.log("批阅成功！")
             _this.$message({
                   type: "success",
@@ -417,11 +415,22 @@ export default {
            }
           
        });
+    },
+    piYue(){
+      var _this=this
+      _this.tableData1[0].fillQuestion = _this.computFillQuestion[2]; //填空题分数
+      _this.tableData1[0].answer = _this.answerdata[2]; //问答题分数
+      _this.tableData1[0].testScore = _this.stuScore; // //总分
+      _this.tableData1.splice(0, 1, _this.tableData1[0]); //替换数据
     }
   },
   created:function() {
     var _this=this
     _this.getInfo();
+  },
+  updated:function () {
+  var _this=this
+   this.getInfo()
   }
 
 }
