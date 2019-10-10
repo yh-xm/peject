@@ -1,9 +1,9 @@
 <template>
   <div id="StudentManage">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/StudentManage' }">学生管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/StudentManage' }">{{$t('base.r2')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="StudentManage">
       <div class="StudentSelect">
