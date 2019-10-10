@@ -1,114 +1,172 @@
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%">
-    <el-table-column
-      label="#"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="角色"
-      width="180">
-      <template slot-scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>姓名: {{ scope.row.name }}</p>
-          <p>住址: {{ scope.row.address }}</p>
-          <div slot="reference" class="name-wrapper">
-            <el-tag size="medium">{{ scope.row.name }}</el-tag>
-          </div>
-        </el-popover>
-      </template>
-    </el-table-column>
-    <el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-           @click="handleDelete(scope.$index, scope.row)">删除</el-button> 
-
-<!-- <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
-<el-dialog
-  title="提示"
-  :visible.sync="dialogVisible"
-  width="30%"
-  :before-close="handleClose">
-  <span>这是一段信息</span>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-</el-dialog> -->
-
-      </template>
-    </el-table-column>
-  </el-table>
+  <div id="RoleManage">
+    <div slot="header" class="clearfix">
+      <el-button icon="el-icon-circle-plus" type="primary" @click="addUsers">新增角色</el-button>
+    </div>
+    <div class="text item">
+      <el-table :data="tableData" stripe style="width: 100%">
+        <el-table-column type="index" width="180"></el-table-column>
+        <!-- <el-table-column prop="userTypeId" label="#" width="180"></el-table-column> -->
+        <el-table-column prop="userTypeTypeName" label="角色名称" width="180"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              :disabled="scope.row.disable"
+              @click="handleDelete(scope.$index, scope.row)"
+            >删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-  
-
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
-      }
-      // 对话框
-      //  dialogVisible: false
+export default {
+  data() {
+    return {
+      tableData: []
+    };
+  },
+  methods: {
+    apply() {
+      //获取所有用
+      this.axios.get("api/UserType/GetUserRoles").then(res => {
+        // this.axios.get("api/Test/GetTest").then(res => {
+       this.tableData = res.data;
+      });
     },
-    methods: {
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
-
-
-       
+    handleEdit(index, row) {
+      //修改信息
+      this.$prompt("角色名称", "修改角色信息", {
+        confirmButtonText: "修改",
+        cancelButtonText: "取消",
+        inputPattern: /\S/,
+        inputValue: row.userTypeTypeName, //输入框原值
+        inputErrorMessage: "内容不能为空"
+      })
+        .then(({ value }) => {
+          this.axios
+            .post("/api/UserType/ModifyUserRole", null, {
+              params: {
+                userRoleName: value,
+                id: row.userTypeId
+              }
+            })
+            .then(res => {
+              let code = res.data.code; //返回代码
+              if (code == 1) {
+                this.apply(); //更新后重新渲染
+                this.$message({
+                  message: "修改成功",
+                  type: "success"
+                });
+              }
+              if (code == -1) {
+                this.$message.error("系统异常");
+              }
+              if (code == -2) {
+                this.$message.error("参数错误");
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消修改"
+          });
+        });
+    },
+    handleDelete(index, row) {
+      //删除信息
+      this.$confirm("确定删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.axios
+            .post("/api/UserType/RemoveUserRole", null, {
+              params: {
+                userRoleId: row.userTypeId
+              }
+            })
+            .then(res => {
+              let code = res.data.code; //返回代码
+              if (code == 1) {
+                this.tableData.splice(index, 1);
+                this.$message({
+                  message: "删除成功",
+                  type: "success"
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(() => {
+          console.log(index);
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    addUsers() {
+      this.$prompt("新增用户", "新增用户信息", {
+        confirmButtonText: "添加",
+        cancelButtonText: "取消",
+        inputPattern: /\S/,
+        inputErrorMessage: "内容不能为空"
+      })
+        .then(({ value }) => {
+          this.axios
+            .post("/api/UserType/AddUserRole", null, {
+              params: {
+                userRoleName: value
+              }
+            })
+            .then(res => {
+              let code = res.data.code; //返回代码
+              let data = res.data.data; //操作成功后，返回给前端有用的数据
+              if (code == 1) {
+                this.tableData.push(data);
+                this.$message({
+                  message: "增加成功",
+                  type: "success"
+                });
+              }
+              if (code == -1) {
+                this.$message.error("系统异常");
+              }
+              if (code == -2) {
+                this.$message.error("参数错误");
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消增加"
+          });
+        });
     }
- 
-
+  },
+  created() {
+    this.apply();
   }
-
-
-// export default {
-    // data() {
-      // return {
-      //   dialogVisible: false
-      // };
-    // },
-  //   methods: {
-  //     handleClose(done){
-  //       this.$confirm('确认关闭？')
-  //         .then(_ => {
-  //           done();
-  //         })
-  //         .catch(_ => {});
-  //     }
-   
-  // };
-
+};
 </script>
+
+<style lang="less" scoped>
+</style>
