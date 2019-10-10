@@ -2,9 +2,9 @@
   <div id="ClassManage">
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-      <el-breadcrumb-item>班级管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('base.r1')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
       <div>

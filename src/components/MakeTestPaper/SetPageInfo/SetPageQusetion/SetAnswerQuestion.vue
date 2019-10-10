@@ -115,9 +115,9 @@ export default {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
             _this.odisabled = !_this.odisabled;
             _this.oshow = !_this.oshow;
-            _this.$msg(this, 1, res.data.message);
+            _this.$msg(_this, 1, res.data.message);
           } else {
-            _this.$msg(this, -1, res.data.message);
+            _this.$msg(_this, -1, res.data.message);
           }
         });
     },
@@ -134,15 +134,15 @@ export default {
         .then(res => {
           if (res.data.message == "删除成功") {
             var data = {
-              index: _this.nowIndex2,
-              questionTypeId: 3,
-              tpqScore: _this.AddEssayQuestiontList.tpqScore
+              index: _this.nowIndex2, //题号
+              questionTypeId: 3, //题目类型
+              tpqScore: _this.AddEssayQuestiontList.tpqScore //题目分数
             };
             _this.$emit("setQuestion", data);
-          }else{
-                _this.$msg(this,-1, res.data.message)
-              }
-          _this.$msg(this, 1, res.data.message);
+            _this.$msg(_this, 1, res.data.message);
+          } else {
+            _this.$msg(_this, -1, res.data.message);
+          }
         });
     },
     /**
@@ -162,15 +162,15 @@ export default {
           if (res.data.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             var data = {
-              index: 2,
-              fqsScore: v,
-              fqIndex: _this.nowIndex2
+              index: 2,  //题目下标
+              fqsScore: v,  //题目分数
+              fqIndex: _this.nowIndex2 //题号
             };
             _this.$msg(_this, 1, "修改成功!");
             _this.$emit("changeScore", data);
-          }else{
-                _this.$msg(_this,-1, res.data.message)
-              }
+          } else {
+            _this.$msg(_this, -1, res.data.message);
+          }
         });
     },
     /**
@@ -178,7 +178,7 @@ export default {
      */
     init() {
       var _this = this;
-      _this.oldOption = JSON.parse(JSON.stringify(_this.AddEssayQuestiontList));//获取题目信息
+      _this.oldOption = JSON.parse(JSON.stringify(_this.AddEssayQuestiontList)); //获取题目信息
       _this.nowOption = _this.AddEssayQuestiontList; //获取题目信息
     }
   },

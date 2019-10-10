@@ -29,10 +29,7 @@
           <el-input type="textarea" v-model="AddMultipleChoice.title" :rows="1"></el-input>
         </el-form-item>
 
-        <el-form-item
-          v-for="(domain, index) in AddMultipleChoice.domains"
-          :key="domain.key"
-        >
+        <el-form-item v-for="(domain, index) in AddMultipleChoice.domains" :key="domain.key">
           <el-checkbox-group v-model="AddMultipleChoice.checked" :min="0" :max="2" @change="change">
             <el-checkbox :label="domain.options" :key="index"></el-checkbox>
           </el-checkbox-group>
@@ -72,7 +69,7 @@ export default {
         onum: 2, //默认分数
         nowAdd: 4, //默认添加个数
         domains: [], //选项
-        optionsActive: ["A、", "B、", "C、", "D、", "E、","F、"], //对应字母
+        optionsActive: ["A、", "B、", "C、", "D、", "E、", "F、"], //对应字母
         title: "" //题目
       }
     };
@@ -113,15 +110,19 @@ export default {
      */
     addDomain() {
       var _this = this;
-      if (_this.AddMultipleChoice.domains.length < _this.AddMultipleChoice.optionsActive.length) {
+      if (
+        _this.AddMultipleChoice.domains.length <
+        _this.AddMultipleChoice.optionsActive.length
+      ) {
         _this.AddMultipleChoice.domains.push({
           value: "",
-          options: _this.AddMultipleChoice.optionsActive[
-            _this.AddMultipleChoice.domains.length 
-          ]
+          options:
+            _this.AddMultipleChoice.optionsActive[
+              _this.AddMultipleChoice.domains.length
+            ]
         });
-      }else{
-        _this.$msg(_this,-1,"不能添加选项了！")
+      } else {
+        _this.$msg(_this, -1, "不能添加选项了！");
       }
     },
     /**
@@ -133,64 +134,63 @@ export default {
     submitForm(formName) {
       //提交表单
       var _this = this;
-       _this.$nextTick(function(){
-              _this.$refs[formName].validate(valid => {
-        if (valid) {
-          var tpqPaperId = sessionStorage.testPaperId;
-          var tpqScore = _this.$refs[formName].model.onum;
-          var title = _this.$refs[formName].model.title;
-          var arrs = [];
-          for (const key in _this.$refs[formName].model.domains) {
-            if (
-              _this.$refs[formName].model.domains[key].options ==
-                _this.AddMultipleChoice.checked[ //判断选中项
-                  _this.AddMultipleChoice.checked.length - 1
-                ] ||
-              _this.$refs[formName].model.domains[key].options ==
-                _this.AddMultipleChoice.checked[0]
-            ) {
-              arrs.push({
-                cqOption: _this.$refs[formName].model.domains[key].value,
-                cqIsRight: true //选中为true
-              });
-            } else {
-              arrs.push({
-                cqOption: _this.$refs[formName].model.domains[key].value,
-                cqIsRight: false //没选中为fasle
-              });
+      _this.$nextTick(function() {
+        _this.$refs[formName].validate(valid => {
+          if (valid) {
+            var tpqPaperId = sessionStorage.testPaperId;
+            var tpqScore = _this.$refs[formName].model.onum;
+            var title = _this.$refs[formName].model.title;
+            var arrs = [];
+            for (const key in _this.$refs[formName].model.domains) {
+              if (
+                _this.$refs[formName].model.domains[key].options ==
+                  _this.AddMultipleChoice.checked[ //判断选中项
+                    _this.AddMultipleChoice.checked.length - 1
+                  ] ||
+                _this.$refs[formName].model.domains[key].options ==
+                  _this.AddMultipleChoice.checked[0]
+              ) {
+                arrs.push({
+                  cqOption: _this.$refs[formName].model.domains[key].value,
+                  cqIsRight: true //选中为true
+                });
+              } else {
+                arrs.push({
+                  cqOption: _this.$refs[formName].model.domains[key].value,
+                  cqIsRight: false //没选中为fasle
+                });
+              }
             }
+            _this.axios
+              .post(`/api/TestPaper/AddQuestionToTestPaper`, {
+                tpqPaperId: tpqPaperId, //试卷主键编号
+                tpqScore: tpqScore, //分值
+                tpqQuestion: {
+                  questionTitle: title, //题目的标题
+                  questionTypeId: 1, //题目的类型 1=选择题 2=填空题 3=问答题
+                  chooseQuestion: arrs
+                }
+              })
+              .then(res => {
+                if (res.data.message == "添加成功") {
+                  var data = {
+                    bodys: res.data.data,
+                    questionTypeId: 1
+                  };
+                  _this.$emit("addMultipleChoice", data); //通知父组件
+                  _this.$msg(_this, 1, "添加成功!"); 
+                  _this.init(); //初始化
+                  _this.resetForm("AddMultipleChoice");
+                } else {
+                  _this.$msg(_this, -1, res.data.message);
+                }
+              });
+          } else {
+            console.log("error submit!!");
+            return false;
           }
-          _this.axios
-            .post(`/api/TestPaper/AddQuestionToTestPaper`, {
-              tpqPaperId: tpqPaperId, //试卷主键编号
-              tpqScore: tpqScore, //分值
-              tpqQuestion: {
-                questionTitle: title, //题目的标题
-                questionTypeId: 1, //题目的类型 1=选择题 2=填空题 3=问答题
-                chooseQuestion: arrs
-              }
-            })
-            .then(res => {
-              if (res.data.message == "添加成功") {
-                var data = {
-                  bodys: res.data.data,
-                  questionTypeId: 1
-                };
-                _this.$emit("addMultipleChoice", data);
-        _this.$msg(this,1, "添加成功!")
-                _this.init();
-                _this.resetForm("AddMultipleChoice");
-              }else{
-                _this.$msg(this,-1, res.data.message)
-              }
-            });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
+        });
       });
-       })
- 
     },
     /**
      * 初始化表单
@@ -199,9 +199,9 @@ export default {
      */
     init() {
       var _this = this;
-      _this.AddMultipleChoice.checked = [];
+      _this.AddMultipleChoice.checked = []; //初始化多选
       _this.AddMultipleChoice.domains = [];
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 4; i++) {  //初始化4个选项
         _this.AddMultipleChoice.domains.push({
           value: "",
           options: _this.AddMultipleChoice.optionsActive[i]
