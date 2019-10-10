@@ -1,3 +1,11 @@
+<!--
+老师出题
+  第一步组件
+
+  引用 import BeginMake 
+  from "@/components/MakeTestPaper/BeginMake";
+ 注册    components:{BeginMake},
+-->
 <template>
   <div id="PaperInfo">
     <!-- 表单 -->
@@ -61,7 +69,7 @@ export default {
             })
             .then(res => {
               if (res.data.message == "添加成功") {
-                _this.$parent.$parent.active = 1; //下一步操作
+              _this.$emit("changeType",1)
                 sessionStorage.testPaperId = res.data.data.testPaperId; //临时存储试卷Id
               }
             });

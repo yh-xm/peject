@@ -107,11 +107,10 @@ export default {
   },
   methods: {
     submitForm(formName) {
-       var _this = this;
+      var _this = this;
       _this.disbable = true;
       _this.$refs[formName].validate(valid => {
         if (valid) {
-         
           if (
             _this.numberValidateForm.username.trim() != "" &&
             _this.numberValidateForm.passworld.trim() != ""
@@ -150,14 +149,14 @@ export default {
                       name: "home"
                     });
                   }
-                   _this.$msg(_this,1, "登录成功!")
+                  _this.$msg(_this, 1, "登录成功!");
                 }
               })
               .catch(function(error) {
-                _this.$msg(_this,-1, "用户名或密码错误，请重新输入!")
+                _this.$msg(_this, -1, "用户名或密码错误，请重新输入!");
               });
           } else {
-             _this.$msg(_this,-1, "请填写用户名和密码")
+            _this.$msg(_this, -1, "请填写用户名和密码");
           }
         } else {
           return false;
@@ -169,9 +168,9 @@ export default {
   created() {},
   watch: {
     screenWidth(val) {
-       let that = this;
+      let that = this;
       that.screenWidth = val;
-     
+
       if (this.screenWidth <= 767) {
         that.showItem = true;
       } else {
@@ -181,7 +180,7 @@ export default {
   },
   mounted() {
     const that = this;
-      that.screenWidth = window.screenWidth;
+    that.screenWidth = window.screenWidth;
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -190,12 +189,20 @@ export default {
     };
     var serachArr = ["username", "password"];
     var obj = getCookie(serachArr);
-   if(obj.username&&obj.password){
-     that.numberValidateForm.username = obj.username;
-that.numberValidateForm.passworld = obj.password;
-that.lenrnPsw=true;
-   }
-
+    if (obj.username && obj.password) {
+      that.numberValidateForm.username = obj.username;
+      that.numberValidateForm.passworld = obj.password;
+      that.lenrnPsw = true;
+    }
+  },
+  //tkon失效时 重新登录回到之前页面
+    beforeRouteEnter: (to, from, next) => {
+      if(to.query.redirect=="warning"){
+        to.query.redirect=from.fullPath;
+           next();
+      }else{
+        next();
+      }
   }
 };
 </script>

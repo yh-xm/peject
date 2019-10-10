@@ -67,6 +67,12 @@
             closable
             @tab-remove="removeTab"
             @tab-click="benToUrl"
+           style="height: 30px;
+      overflow: hidden;
+      flex: 1 1 auto;
+      margin: 30px 1% 0px 2%;
+      "
+
           >
             <el-tab-pane
               v-for="item in editableTabs"
@@ -77,7 +83,7 @@
           </el-tabs>
           <div
             class="header-right"
-            style="display:flex;justify-content:space-around;padding-right:35px;min-width:150px;"
+            style="display:flex;justify-content:space-around;padding-right:35px;min-width:150px;line-height:56px;"
           >
             <el-dropdown  @command="changeLocale">
               <span class="el-dropdown-link">
@@ -92,7 +98,7 @@
             <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
              -->
-            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:15px;"></el-avatar>
+            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:15px;margin-top:10px;"></el-avatar>
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -271,36 +277,19 @@ changeLocale (command) {
     padding: 0px;
     color: #333;
     border-bottom: 1px solid #ccc;
-    line-height: 60px;
     width: 100%;
-    /deep/.el-avatar {
-      margin-top: 10px;
-    }
-    /deep/.el-tabs {
-      // transition: all 1s;
-      height: 30px;
-      overflow: hidden;
-      flex: 1 1 auto;
-      margin: 29px 1% 0px 2%;
-    }
-    /deep/.el-tabs__nav {
-      height: 40px;
-      background-color: white;
-    }
-    /deep/.el-tabs__nav-scroll {
-      height: 30px;
-      // margin-top: 2%;
-    }
-    /deep/.el-tabs__item {
-      top: -15px;
-      font-size: 12px;
-    }
+
+
     .el-tabs__nav .el-tabs__item:nth-child(1) span {
       display: none;
     }
-    /deep/.is-active {
+    .el-tabs__nav .el-tabs__item{
+      top:-6px;
+    }
+    .el-tabs__nav .el-tabs__item.is-active{
       border-bottom: 8px solid #409eff;
     }
+   
     .el-button {
       width:32px;
       height: 100%;
@@ -384,6 +373,7 @@ changeLocale (command) {
     .el-submenu .is-active:after {
       content: "◆";
       color: white;
+      width: 24px;
       font-size: 40px;
       position: absolute;
       right: -12px;
