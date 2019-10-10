@@ -118,63 +118,6 @@ export default {
       return  "【" + ChooseAnswer + "】";
     }
   },
-  computed: {
-    // 计算填空题
-    computFillQuestion: function() {
-      let _this = this;
-      let testPaperScore = 0; //计算填空题的总分数
-      let score = 0; //计算填空题所得到的分数
-      let result = ""; //用于存储数组添加标签转成字符串
-      let results = []; //存储添加好标签的字符串
-      let index = 0; //分数的下标
-      let fqAnswer = ""; //填空题的答案
-      let socre = 0; //填空题的分数
-      for (let i in _this.fillQuestion) {
-        for (let j in _this.fillQuestion[i].fillQuestion.myFill) {
-          score += _this.fillQuestion[i].fillQuestion.myFill[j].fillScore; //计算填空题所得到的分数
-        }
-        for (let j in _this.fillQuestion[i].questionTitle.split("")) {
-          if (_this.fillQuestion[i].questionTitle[j] == "▁") {
-            if (index < _this.fillQuestion[i].fillQuestion.questions.length) {
-              fqAnswer =_this.fillQuestion[i].fillQuestion.questions[index].fqAnswer;
-              socre = _this.fillQuestion[i].fillQuestion.questions[index].socre;
-            }
-            testPaperScore += socre;
-            result +=
-              "<i style='display: inline-block;padding: 0px 20px; border-bottom:1px solid #626262;text-align: center;'>" +fqAnswer +
-              "</i>(" +socre +"分)"
-            index++;
-            fqAnswer = "";
-            socre = 0;
-          } else {
-            result += _this.fillQuestion[i].questionTitle[j];
-          }
-        }
-        index = 0; //刷新下标
-        results.push(result); //把标签字符串添加到数组
-        result = ""; //刷新标签字符串
-      }
-      _this.totalPoints.fillQuestionscore = _this.fillQuestion; //获取所有填空题的内容
-      return [_this.fillQuestion.length, testPaperScore, score, results];
-    },
-    //计算问答题答案
-    answerdata: function() {
-      let _this = this;
-      let testPaperScore = 0;
-      let score = 0;
-      for (let i in _this.answer) {
-        testPaperScore += _this.answer[i].testPaperScore;
-        score += _this.answer[i].score;
-      }
-      _this.totalPoints.scoretestPaperScore = testPaperScore;
-      return [ _this.answer.length, testPaperScore, score];
-    },
-    //计算总分
-    resCount:function(){
-      var _this=this
-      return  _this.tableData1[0].fillQuestion +_this.tableData1[0].choseQuestions + _this.tableData1[0].answer
-    }
-  },
   methods: {
     /**
      * 分页获取所有试卷信息
