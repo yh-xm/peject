@@ -322,7 +322,7 @@ export default {
               _this.choseQuestions = choseQuestionsdata; //获取选择题的问题和答案
               _this.choseQuestions.totalpoints = choseQuestionstotalpoints; //计算选择题总共有多少分
               _this.choseQuestions.score = choseTiScore; //获取我所得到的分数
-              _this.choseQuestions.length = choseQuestionsdata.length; //获取选择题有多少道
+              // _this.choseQuestions.length = choseQuestionsdata.length; //获取选择题有多少道
               _this.stuScore =  _this.choseQuestions.score;//获取学生选择题的分数
               //判断题目是不是问答题
             } else if (res.data.questions[i].answer != null) {
@@ -395,6 +395,7 @@ export default {
           if (noDone.filter(item => item.testUid == _this.testUid)[0] != undefined) {
             hasDone.push(noDone.filter(item=>item.testUid ==_this.testUid)[0])
             noDone.splice(noDone.lastIndexOf(noDone.filter(item=>item.testUid ==_this.testUid)[0]),1)
+            // console.log("批阅成功！")
             _this.piYue()
             _this.$message({
                   type: "success",
@@ -402,7 +403,7 @@ export default {
                 })
           }else if(hasDone.filter(item => item.testUid == _this.testUid)[0]!= undefined){
             _this.piYue()
-            // console.log("批阅成功！")
+            // console.log("重新批阅成功！")
             _this.$message({
                   type: "success",
                   message: "批阅成功！"
@@ -427,10 +428,6 @@ export default {
   created:function() {
     var _this=this
     _this.getInfo();
-  },
-  updated:function () {
-  var _this=this
-   this.getInfo()
   }
 
 }
