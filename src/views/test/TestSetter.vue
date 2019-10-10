@@ -6,6 +6,7 @@
       <el-breadcrumb-item>在线测试</el-breadcrumb-item>
       <el-breadcrumb-item>安排测试</el-breadcrumb-item>
     </el-breadcrumb>
+     {{son}}
     <!-- Breadcrumb 面包屑 结束 -->
     <!-- 卡片 -->
     <el-card class="box-card">
@@ -68,6 +69,7 @@
         <el-button type="primary" @click="dialogFormVisible = false">修 改</el-button>
       </div>
     </el-dialog>
+   
     <!-- 添加对话框结束 -->
   </div>
 </template>
@@ -170,6 +172,7 @@ export default {
             console.log("请求失败处理");
           }
         );
+
     },
 
     /**
@@ -182,7 +185,11 @@ export default {
       console.log(index, row);
       _this.obj1 = {
         t: row.taskTestPaperId, //试卷
-        c: row.classId //班级
+        c: row.classId, //班级
+        m:{
+          s:row.taskStartTime,//开始
+          e:row.taskEndTime//结束
+        }
       };
 
       _this.dialogFormVisible = true;

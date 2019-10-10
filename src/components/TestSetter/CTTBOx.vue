@@ -18,7 +18,7 @@ template
     <!-- 试卷 -->
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="试卷">
-        <el-select v-model="form.tpId" placeholder="请选择试卷" size="small" @change="testChange">
+        <el-select v-model="form.tpId" placeholder="请选择试卷" size="small" @change="testChange(form.tpId)">
           <el-option
             v-for="item in options"
             :key="item.tpId"
@@ -31,7 +31,7 @@ template
       <!-- 班级 -->
 
       <el-form-item label="班级">
-        <el-select v-model="form.classId" placeholder="请选择班级" size="small" @change="classChange">
+        <el-select v-model="form.classId" placeholder="请选择班级" size="small" @change="classChange(form.classId)">
           <el-option
             v-for="item in options2"
             :key="item.classId"
@@ -51,7 +51,7 @@ template
           :picker-options="pickerOptions"
           size="small"
           value-format="yyyy/MM/dd HH:mm"
-          @change="logTimeChange"
+          @change="logTimeChange(form.logEnd)"
         ></el-date-picker>
         <el-button type="danger" plain disabled size="small">用时：{{form.timeLimit}} 分钟</el-button>
       </el-form-item>
@@ -87,7 +87,7 @@ export default {
           return time.getTime() < Date.now() - 8.64e7; //设置选择今天以及今天之后的日
         }
       },
-      Fir:this.obj1,
+      Fir:"",//父传子
     };
   },
   methods: {
@@ -110,6 +110,7 @@ export default {
           console.log("数据请求失败处理");
         }
       );
+      //  _this.form.tpId = _this.Fir.t;
     },
     /**
      * 获取所有班级信息
@@ -138,11 +139,11 @@ export default {
      * */
 
     testChange(val) {
-      // console.log(val);
+      console.log(val);
       let _this = this;
       _this.arr.t = val;
       _this.$emit("cusChange", _this.arr);
-      _this.form.tpId = _this.obj1.t;
+      console.log(_this.Fir)//父传子的值
     },
     /**
      * 获取班级下拉框的值
@@ -176,12 +177,24 @@ export default {
       }
       _this.arr.m = _this.form.logEnd;
       _this.$emit("cusChange", _this.arr);
+
     }
+  },
+  watch:{
+    Fir(newVal,oldVal){
+        // console.log(newVal)
+        // _this.form.tpId = newVal.t;
+
+        // console.log(oldVal)
+
+      }
+
   },
   created() {
     let _this = this;
     _this.getAllTestPaper();
     _this.getAllClass();
+    _this.Fir = _this.obj1;
   }
 };
 </script>
