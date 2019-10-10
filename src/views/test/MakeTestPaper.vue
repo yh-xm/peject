@@ -4,7 +4,7 @@
       <!-- 面包屑 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
-        <el-breadcrumb-item>{{$t('base.title')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('test.r1')}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
