@@ -92,7 +92,7 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="中文">中文</el-dropdown-item>
-                <el-dropdown-item command="英语">英语</el-dropdown-item>
+                <el-dropdown-item command="英语">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
             <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
@@ -153,6 +153,11 @@ export default {
     };
   },
   methods: {
+         /**
+       * 添加标签卡
+       * @param targetName {string} 标签名
+       * @param ourl {string} 路径
+       */
     addTab(targetName, ourl) {
       //添加标签卡
       var editableTabs = this.editableTabs;
@@ -179,8 +184,12 @@ export default {
         this.editableTabsValue = this.editableTabs[flag].name; // 有相同的标签
       }
     },
+       /**
+       *  删除标签卡
+       * @param targetName {string} 标签名
+       */
     removeTab(targetName) {
-      //删除标签卡
+     
 var _this =this;
       let tabs = _this.editableTabs;
       let activeName = _this.editableTabsValue;
@@ -199,6 +208,10 @@ var _this =this;
      
       _this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
     },
+      /**
+       *  点击切换路径
+       * @param tab {Object} 标签对象
+       */
     benToUrl(tab) {
       var _this = this
       //点击跳转路由
@@ -210,32 +223,40 @@ var _this =this;
       _this.isCollapse = ! _this.isCollapse; //是否折叠
       _this.isCollapse ? (_this.owidth = 64) : (_this.owidth = 190); //切换宽度
     },
-// js方法
+    /**
+       *  切换语言
+       * @param command {String} 语言种类
+       */
 changeLocale (command) {
-  this.langen == command ?this.langen:this.langen=command;
+  var _this =this;
+  _this.langen == command ?_this.langen:_this.langen=command;
   // console.log(command)
   var lang;
-      this.langen=="中文"?lang='zh':lang='en'
+      _this.langen=="中文"?lang='zh':lang='en'
       if(lang == 'zh'){
         localStorage.setItem('locale', 'zh')
-        this.$i18n.locale = localStorage.getItem('locale')
-        this.$message({
-          message: '切换为中文！',
-          type: 'success'
-        })
+        _this.$i18n.locale = localStorage.getItem('locale')
+
+        _this.$msg(_this,1,"已经切换为中文！")
       } else if (lang == 'en') {
         localStorage.setItem('locale', 'en')
-        this.$i18n.locale = localStorage.getItem('locale')
-        this.$message({
-          message: 'Switch to English!',
-          type: 'success'
-        })
+        _this.$i18n.locale = localStorage.getItem('locale')
+       _this.$msg(_this,1," Switch to English!")
       }
     
+},
+init(){
+  var _this = this;
+    _this.user = eval("(" + sessionStorage.NowLoginUser + ")"); 
+    if(localStorage.locale){
+      localStorage.locale == "zh"?_this.langen="中文":_this.langen="English"
+    }else{
+      _this.langen="中文"
+    }
 }
   },
   created() {
-    this.user = eval("(" + sessionStorage.NowLoginUser + ")"); 
+    this.init();
   },
    watch: {
         language: function() {   //此处language对应上方的checkbox进行绑定的数据
