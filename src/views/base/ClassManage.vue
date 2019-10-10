@@ -6,7 +6,6 @@
       <el-breadcrumb-item>基础数据</el-breadcrumb-item>
       <el-breadcrumb-item>班级管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 卡片 -->
     <el-card class="box-card">
       <div>
         <!-- 新增 -->
@@ -22,7 +21,9 @@
           <el-table-column label="授课老师" prop="userName"></el-table-column>
           <el-table-column label="专业" prop="courseName"></el-table-column>
           <el-table-column label="班级人数" prop="classStudents"></el-table-column>
-          <el-table-column label="开班日期" prop="classCreateTime"></el-table-column>
+          <el-table-column label="开班日期">
+            <template slot-scope="scope">{{scope.row.classCreateTime | firstSet}}</template>
+          </el-table-column>
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -50,16 +51,7 @@
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <!-- 弹出框 专业课程下拉框 -->
-            <el-form-item label="专业课程" prop="keChenId">
-              <el-select v-model="ruleForm.keChenId" placeholder="请选择">
-                <el-option
-                  v-for="(inte,index) in course"
-                  :key="index"
-                  :label="inte.courseName"
-                  :value="inte.courseId"
-                ></el-option>
-              </el-select>
-            </el-form-item>
+        <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId"></course-frame>
             <!-- 弹出框 授课老师下拉框 -->
             <el-form-item label="授课老师" prop="usName">
               <el-select v-model="ruleForm.usName" placeholder="请选择">
@@ -74,9 +66,9 @@
           </el-form>
           <!-- 弹出框的确定取消按钮 -->
           <div slot="footer" class="dialog-footer">
+             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')" v-if="stuNewly==!true">添加</el-button>
-            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly==true">修改</el-button>
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly">修改</el-button>
           </div>
         </el-dialog>
       </div>
@@ -84,9 +76,14 @@
   </div>
 </template>
 <script>
+import CourseFrame from '@/components/CourseFrame.vue'
 export default {
+   components:{CourseFrame}, //注册
   data() {
     return {
+      nemuId:"100px",//传递给子组件用于命名
+      seed:"", //传递给子组件
+      lovingVue:[], //接收子组件传过来的值
       title: "", //弹出框标题
       tableData: [], //接收向后台请求的数据用渲染
       teacher: [], //接收后台传过来的老师信息
@@ -96,7 +93,6 @@ export default {
       ruleForm: {
         //新增的参数
         name: "", //班级名
-        keChenId: "", //课程编码
         usName: "" //老师编码
       },
       rules: {
@@ -106,20 +102,13 @@ export default {
           { required: true, message: "请输入班级名称", trigger: "blur" },
           { min: 1, trigger: "blur" }
         ],
-        keChenId: [
-          //表单验证课程
-          { required: true, message: "请选择课程", trigger: "change" }
-        ],
         usName: [
           //表单验证授课老师
           { required: true, message: "请选择老师", trigger: "change" }
         ]
       },
       stuNewly: true, //新增按钮
-      message: "", //"接收通知框文字"
-      type: "", //接收通知框颜色类型
       index: "", //修改所需要的下标
-      keCen: "", //用来接收课程名字
       laoShi: "" //用来接收老师名字
     };
   },
@@ -129,18 +118,13 @@ export default {
      */
     minZhi() {
       var _this = this;
-      var usKeChen = _this.course.filter(function(data) {
-        //过滤器过滤课程
-        return data.courseId == _this.ruleForm.keChenId;
-      });
-      _this.keCen = usKeChen[0].courseName;
-
       var usLaoShi = _this.teacher.filter(function(data) {
         //过滤器过滤名字
         return data.userId == _this.ruleForm.usName;
       });
       _this.laoShi = usLaoShi[0].userName;
     },
+    
     /**
      * 修改弹出框并赋值
      * @param {Number} index 当前行的下标
@@ -153,9 +137,16 @@ export default {
       _this.stuNewly = true; //弹出框的新增按钮为true时
       _this.ruleForm.name = row.className; //点击获取的班级名字赋值给输入框
       _this.classId = row.classId; //获取的班级主键赋值
-      _this.ruleForm.keChenId = row.classCourseId; //获取的课程编码赋值给原课程编码 就能默认选中
+      
+      _this.seed = {
+        index:row.classCourseId,//获取的课程编码赋值给原课程编码 就能默认选中
+        flag:false
+      }; 
       _this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
+      
       _this.title = "修改班级信息";
+     
+      
     },
     /**
      * 点击修改数据
@@ -171,35 +162,30 @@ export default {
             .post("/api/Class/ModifyClass", {
               classId: _this.classId,
               className: _this.ruleForm.name,
-              classCourseId: _this.ruleForm.keChenId,
+              classCourseId:_this.lovingVue[0].courseId,
               classTeacherId: _this.ruleForm.usName
             })
             .then(function(data) {
               //deta 接收的值为 1 时修改成功， -1 为异常，0 为没有改变
               if (data.data.code == 1) {
-                _this.message = data.data.message;
-                _this.type = "success";
-
+                  _this.$msg(_this, 1, "修改成功");//成功提示
                 var banJi = _this.tableData[_this.index]; //获取要修改的那组数据并赋值了一个变量
-                banJi.courseName = _this.keCen; //课程名字
+                banJi.courseName =_this.lovingVue[0].courseName; //课程名字
+                banJi.classCourseId =_this.lovingVue[0].courseId
                 banJi.userName = _this.laoShi; //授课老师
                 banJi.className = _this.ruleForm.name; //班级名字
-                banJi.classCourseId = _this.ruleForm.keChenId; //课程编码
                 banJi.classTeacherId = _this.ruleForm.usName; //授课老师编码
               } else if (data.data.code == -1) {
-                _this.message = "数据异常";
-                _this.type = "warning";
+                 _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+              _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
             });
           _this.dialogFormVisible = false; //关闭弹出框
         } else {
           //输入框为空时执行
           return false;
-        }
+        } 
       });
     },
     /**
@@ -208,7 +194,9 @@ export default {
      * @param {object} row 点击当前行的所有数据
      */
     handleDelete(index, row) {
+        
       var _this = this;
+     
       _this
         .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
           confirmButtonText: "确定",
@@ -218,30 +206,22 @@ export default {
         })
         .then(() => {
           //删除axios
-          console.log(row.classId);
           _this
             .axios("/api/Class/RemoveClass?classId=" + row.classId)
             .then(function(data) {
               //deta 接收的值为 1 时删除成功， -1 为异常表示不能删除，0 为没有改变
               if (data.data.code == 1) {
                 _this.tableData.splice(index, 1);
-                _this.message = "删除班级成功";
-                _this.type = "success";
+               _this.$msg(_this, 1, "删除成功");//成功提示
               } else if (data.data.code == -1) {
-                _this.message = "此班级不能删除，如要删除请联系管理员";
-                _this.type = "warning";
+               _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+                 _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
             });
         })
         .catch(() => {
-          _this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          _this.$msg(_this, 2, "已取消删除");//成功提示
         });
     },
     /**
@@ -251,10 +231,13 @@ export default {
       var _this = this;
       _this.dialogFormVisible = true; //当为true时弹出弹出框
       _this.stuNewly = false; //弹出框的新增按钮为false
-      _this.ruleForm.name = ""; //点击获取的班级名字赋值给输入框
-      _this.ruleForm.keChenId = ""; //清除修改时赋的值
+      _this.ruleForm.name = ""; //点击获取的班级名字赋值给输入
       _this.ruleForm.usName = ""; //清除修改时赋的值
       _this.title = "新增班级信息";
+      _this.seed={
+        index:null,
+         flag:false
+      } //赋值为空用以清除
     },
     /**
      * 点击新增
@@ -264,36 +247,27 @@ export default {
       var _this = this;
       _this.$refs[formName].validate(valid => {
         if (valid) {
+         
           _this.minZhi(); //调用 获取下拉框选中的名字 方法
           _this.axios
             .post("/api/Class/AddClass", {
               className: _this.ruleForm.name,
-              classCourseId: _this.ruleForm.keChenId,
+              classCourseId: _this.lovingVue[0].courseId,
               classTeacherId: _this.ruleForm.usName
             })
             .then(function(data) {
-              console.log(data.data.data);
               //deta 接收的值为 1 时新增成功， -1 为异常，0 为没有改变
               var quanBu = data.data.data; //后台返回的数据赋值了一个变量
               if (data.data.code == 1) {
-                quanBu.courseName = _this.keCen; //获取的课程名字
+                quanBu.courseName =_this.lovingVue[0].courseName; //获取的课程名字
                 quanBu.userName = _this.laoShi; //获取的课程名字
-                quanBu.classCreateTime = new Date(
-                  quanBu.classCreateTime
-                ).toLocaleDateString(); //把返回的时间给转本地时间格式
                 _this.tableData.unshift(quanBu); // 把后台的数据从渲染的数组第一个位置插入
-
-                _this.message = "新增班级成功";
-                _this.type = "success";
+                 _this.$msg(_this, 1, "新增成功");//成功提示
               } else if (data.data.code == -1) {
-                _this.message = "数据异常";
-                _this.type = "warning";
+                  _this.$msg(_this, -1, "系统异常"); //错误提示 
               } else if (data.data.code == 0) {
-                _this.message = "数据没做改变";
-                _this.type = "";
+                _this.$msg(_this, 0, "数据没做修改"); //警告提示 
               }
-              _this.open2();
-              // _this.overall();
             });
           _this.dialogFormVisible = false;
         } else {
@@ -303,29 +277,12 @@ export default {
       });
     },
     /**
-     * 用于被删除新增修改调用
-     */
-    open2() {
-      var _this = this;
-      _this.$message({
-        message: _this.message,
-        type: _this.type
-      });
-    },
-    /**
      * 分装的axios班级信息用来调用刷新
      */
     overall() {
       var _this = this;
       _this.axios.get("/api/Class/GetAllClass").then(function(data) {
-        var stu = data.data;
-        for (const key in stu) {
-          //可根据本地时间把 Date 对象的日期部分转换为字符串，并返回结果
-          stu[key].classCreateTime = new Date(
-            stu[key].classCreateTime
-          ).toLocaleDateString();
-        }
-        _this.tableData = stu;
+       _this.tableData = data.data;
       });
     },
     /**
@@ -337,15 +294,6 @@ export default {
         _this.teacher = data.data;
       });
     },
-    /**
-     *  获取课程信息
-     */
-    usCourse() {
-      var _this = this;
-      _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
-        _this.course = data.data;
-      });
-    }
   },
   /**
    * 生命周期创建后
@@ -354,17 +302,19 @@ export default {
     var _this = this;
     _this.overall(); //调用封装渲染axios
     _this.usTeacher(); //授课老师信息
-    _this.usCourse(); //课程信息
+  
+   
   }
 };
 </script>
 
 <style lang="less" scoped>
+//面包屑导航统一向下20px
 /deep/.el-breadcrumb {
   margin-bottom: 20px;
 }
 
-// 新增按钮
+// 新增班级按钮
 .newly {
   border-bottom: 1px solid #ebeef5;
   text-align: left;
@@ -374,11 +324,8 @@ export default {
   }
 }
 
-// 弹出框
+// 弹出框 form 表单
 /deep/.el-form-item {
-  span {
-    text-align: center;
-  }
   div {
     width: 300px;
     .el-input.el-input--suffix {
@@ -386,10 +333,12 @@ export default {
     }
   }
 }
+//弹出框宽度
 /deep/.el-dialog {
   width: 448px;
   .el-dialog__footer {
     text-align: center;
   }
 }
+
 </style>

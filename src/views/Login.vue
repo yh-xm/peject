@@ -150,14 +150,14 @@ export default {
                       name: "home"
                     });
                   }
-                   this.message(this,1, "登录成功!")
+                   _this.$msg(_this,1, "登录成功!")
                 }
               })
               .catch(function(error) {
-                this.message(this,-1, "用户名或密码错误，请重新输入!")
+                _this.$msg(_this,-1, "用户名或密码错误，请重新输入!")
               });
           } else {
-             this.message(this,-1, "请填写用户名和密码")
+             _this.$msg(_this,-1, "请填写用户名和密码")
           }
         } else {
           return false;
@@ -181,6 +181,7 @@ export default {
   },
   mounted() {
     const that = this;
+      that.screenWidth = window.screenWidth;
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -208,10 +209,7 @@ that.lenrnPsw=true;
   .From {
     margin: auto;
     border: 1px solid transparent;
-
-    // width: 450px;
     height: 300px;
-    // width: 500px;
     min-width: 250px;
     position: absolute;
     left: 50%;
@@ -262,8 +260,8 @@ that.lenrnPsw=true;
     .from-right {
       width: 50%;
       .el-form {
-        margin: 20px auto;
-        width: 80%;
+        margin: 14px 20px;
+        width: 90%;
         position: relative;
         text-align: center;
         /deep/.el-form-item__content {

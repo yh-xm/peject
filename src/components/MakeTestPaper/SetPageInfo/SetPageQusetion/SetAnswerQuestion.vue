@@ -1,4 +1,15 @@
+/** 
+维护问答题组件
 
+  引用  import SetAnswerQuestion from 
+  "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetAnswerQuestion"; 
+   注册    components:{SetAnswerQuestion},
+     当标签使用    
+ :AddChooseQuestionList="items" 传入题目信息
+:nowIndex="indexs" 传入题号
+@setQuestion="setQuestion" 进行维护时触发的方法
+ @changeScore="changeScore" 修改分数时触发的方法
+*/
 <template>
   <div>
     <div class="essat-content">
@@ -7,17 +18,17 @@
       <div class="option-content">
         <!-- 题目 -->
         <el-form :model="nowOption" ref="nowOption" class="demo-dynamic">
-          <el-form-item prop="title" >
-              <span v-if="odisabled">
-            {{nowOption.tpqQuestion.questionTitle}}
-            <el-input-number
-              size="small"
-              v-model="nowOption.tpqScore"
-              :min="1"
-              :max="10"
-              @change="changeScore"
-            ></el-input-number>
-              </span>
+          <el-form-item prop="title">
+            <span v-if="odisabled">
+              {{nowOption.tpqQuestion.questionTitle}}
+              <el-input-number
+                size="small"
+                v-model="nowOption.tpqScore"
+                :min="1"
+                :max="50"
+                @change="changeScore"
+              ></el-input-number>
+            </span>
             <el-input
               type="textarea"
               v-model="nowOption.tpqQuestion.questionTitle"
@@ -26,10 +37,14 @@
             ></el-input>
           </el-form-item>
           <!-- 答案 -->
-          <el-form-item >
+          <el-form-item>
             <el-tag type="info">参考答案</el-tag>
             <div v-if="odisabled">{{nowOption.tpqQuestion.answerQuestion.aqAnswer}}</div>
-            <el-input v-if="!odisabled" v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer" :disabled="odisabled"></el-input>
+            <el-input
+              v-if="!odisabled"
+              v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer"
+              :disabled="odisabled"
+            ></el-input>
           </el-form-item>
           <el-form-item>
             <!-- 编辑 -->
@@ -85,8 +100,9 @@ export default {
     saveOption() {
       var _this = this;
       var nowOption = _this.nowOption;
+      var value = _this.AddEssayQuestiontList.tpqId; //获取题目Id
       _this.axios
-        .post(`/api/TestPaper/ModifyQuestion`, {
+        .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
           questionId: nowOption.tpqQuestion.questionId, //题目Id
           questionTitle: nowOption.tpqQuestion.questionTitle, //题目名称
           questionTypeId: nowOption.tpqQuestion.questionTypeId, //题目类型
@@ -99,12 +115,9 @@ export default {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
             _this.odisabled = !_this.odisabled;
             _this.oshow = !_this.oshow;
-            _this.$message({
-              type: "success",
-              message: "修改成功!"
-            });
+            _this.$msg(this, 1, res.data.message);
           } else {
-       _this.message(this,1, res.data.message)
+            _this.$msg(this, 1, res.data.message);
           }
         });
     },
@@ -127,7 +140,7 @@ export default {
             };
             this.$emit("setQuestion", data);
           }
-         _this.message(this,1, res.data.message)
+          _this.$msg(this, 1, res.data.message);
         });
     },
     /**
@@ -145,7 +158,14 @@ export default {
         )
         .then(res => {
           if (res.data.message == "修改成功") {
-            this.$emit("changeScore", 2);
+            _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
+            var data = {
+              index: 2,
+              fqsScore: v,
+              fqIndex: _this.nowIndex2
+            };
+            _this.$msg(this, 1, "修改成功!");
+            _this.$emit("changeScore", data);
           }
         });
     },
@@ -154,8 +174,8 @@ export default {
      */
     init() {
       var _this = this;
-      _this.oldOption = JSON.parse(JSON.stringify(_this.AddEssayQuestiontList));
-      _this.nowOption = _this.AddEssayQuestiontList;
+      _this.oldOption = JSON.parse(JSON.stringify(_this.AddEssayQuestiontList));//获取题目信息
+      _this.nowOption = _this.AddEssayQuestiontList; //获取题目信息
     }
   },
   created() {
