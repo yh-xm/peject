@@ -10,6 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
 import i18n from './i18n/i18n';
 import {message} from './api/MessageTips.js'
+import echarts from 'echarts'
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
@@ -19,6 +20,7 @@ Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
 Vue.prototype.$msg = message;
+Vue.use(echarts)
 
 /**
  * 过滤器过滤时间 格式为'YYYY-MM-DD

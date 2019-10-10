@@ -199,11 +199,15 @@ export default {
     beforeRouteEnter: (to, from, next) => {
       if(to.query.redirect=="warning"){
         to.query.redirect=from.fullPath;
+        next();
       }else{
         next();
       }
   }
 };
+
+
+
 </script>
 <style lang="less" scoped>
 #Login {
