@@ -195,6 +195,7 @@ export default {
     _this.getAllTestPaper();
     _this.getAllClass();
     _this.Fir = _this.obj1;
+
   }
 };
 </script>
