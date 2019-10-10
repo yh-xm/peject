@@ -18,13 +18,26 @@
           <el-table-column label="课程" prop="courseName"></el-table-column>
           <el-table-column label="出卷日期">
             <template slot-scope="scope">{{scope.row.tpDate | firstSet}}</template>
-          </el-table-column> 
+          </el-table-column>
           <el-table-column align="left" label="操作">
             <template slot-scope="scope">
               <!-- hasTest -->
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" :disabled="scope.row.hasTest">编辑</el-button>
-              <el-button size="mini" @click="handleGet(scope.$index, scope.row)" :disabled="scope.row.hasTest">详情</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" :disabled="scope.row.hasTest">删除</el-button>
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+                :disabled="scope.row.hasTest"
+              >编辑</el-button>
+              <el-button
+                size="mini"
+                @click="handleGet(scope.$index, scope.row)"
+                :disabled="scope.row.hasTest"
+              >详情</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+                :disabled="scope.row.hasTest"
+              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -60,7 +73,7 @@
 <script>
 import CourseFrame from "@/components/CourseFrame.vue";
 export default {
-  components: { CourseFrame },//组件注册
+  components: { CourseFrame }, //组件注册
   data() {
     return {
       lovingVue: [], //接收子组件的值
@@ -125,7 +138,6 @@ export default {
                 alter.tpTitle = _this.ruleForm.name;
                 alter.courseName = _this.lovingVue[0].courseName;
                 alter.tpCourseId = _this.lovingVue[0].courseId;
-
               } else if (data.data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
@@ -158,9 +170,13 @@ export default {
             .post("api/TestPaper/RemoveTestPaper?id=" + row.tpId)
             .then(function(data) {
               if (data.data.code == 1) {
-                _this.$msg(_this, 1, "删除成功"); //成功提示
                 _this.tableData.splice(index, 1); //用下标删除面板中单行的数据达到刷新
-
+                _this.$msg(_this, 1, "删除成功"); //成功提示
+                for (let key in _this.tableData) {
+                  if (index < _this.tableData[key].index) { //删除时会自动排序
+                    _this.tableData[key].index = _this.tableData[key].index - 1;
+                  }
+                }
               } else if (data.data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
@@ -210,7 +226,10 @@ export default {
           var stu = data.data.data; //赋值给定义的变量用于渲染
           for (const key in stu) {
             //计算位置下标并赋值
-            stu[key].index=Number(_this.each) * (Number(_this.fewPages)-1) + Number(key) + 1
+            stu[key].index =
+              Number(_this.each) * (Number(_this.fewPages) - 1) +
+              Number(key) +
+              1;
           }
           _this.tableData = stu;
           _this.pages = data.data.items; //赋值给显示的条数
@@ -228,7 +247,7 @@ export default {
   },
   created() {
     var _this = this;
-    _this.testPaper();//调用数据渲染
+    _this.testPaper(); //调用数据渲染
   }
 };
 </script>
@@ -260,9 +279,9 @@ export default {
 }
 //把表单的小 *点变成白色的
 /deep/.el-form-item__label:before {
-    content: '*';
-    color: #fff !important;
-    margin-right: 4px;
+  content: "*";
+  color: #fff !important;
+  margin-right: 4px;
 }
 
 //弹出弹出框的宽度
