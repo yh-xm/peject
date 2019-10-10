@@ -14,7 +14,7 @@
 
 
 <template>
-  <div class="GapFilnpmling">
+  <div class="GapFilling">
     <div class="gapContent">
       <el-form
         :model="AddGapFillQuestion"
@@ -37,8 +37,8 @@
         >
           <el-tag type="danger" effect="dark" size="mini">{{index+1}}</el-tag>
 
-          <el-input v-model="domain.value" :placeholder="'请输入第'+(index+1)+'个空的答案'"></el-input>
-          <el-input-number v-model="domain.onum" :min="1" :max="10" :key="index"></el-input-number>
+          <el-input v-model="domain.value" :placeholder="'请输入第'+(index+1)+'个空的答案'" ></el-input>
+          <el-input-number v-model="domain.onum" :min="1" :max="10" :key="index" ></el-input-number>
         </el-form-item>
         <el-form-item label="题目预览" class="view-options">
           <el-row v-for="(item,index) in title" :key="index">
@@ -49,6 +49,7 @@
               :key="index"
               v-model="AddGapFillQuestion.domains[optionsIndexArr[index]].value"
               class="ShowDaAn"
+              :style="{width:`${AddGapFillQuestion.domains[optionsIndexArr[index]].olength}`}"
             ></el-input>
             <span v-if="item=='▁'">({{AddGapFillQuestion.domains[optionsIndexArr[index]].onum}}分)</span>
           </el-row>
@@ -180,7 +181,11 @@ export default {
         //支持firefox
         CaretPos = element.selectionStart;
       return CaretPos;
-    }
+    },
+    /**
+     * 改变填空的答案长度
+     */
+  
   },
   /**
    * 监听题目的变化
@@ -261,6 +266,18 @@ export default {
         _this.AddGapFillQuestion.domains = [];
       }
       _this.optionsIndexArr = narr; // 获取最新的分割题目数组
+    },
+    AddGapFillQuestion:{
+      handler(n,o){
+             var that = this;
+      for(let i=0;i<that.AddGapFillQuestion.domains.length;i++){
+          that.AddGapFillQuestion.domains[i].olength =  parseInt(that.AddGapFillQuestion.domains[i].value.length)*14+30+"px"
+        
+      }
+      console.log(n)
+      },
+       immediate: true,
+       deep: true
     }
   }
 };
@@ -313,9 +330,7 @@ export default {
         border-radius: 50%;
         margin-top: 12px;
       }
-      .ShowDaAn {
-        max-width: 50px;
-      }
+   
       .ShowFen {
         width: 20px;
       }

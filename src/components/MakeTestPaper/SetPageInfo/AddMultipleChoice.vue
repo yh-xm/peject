@@ -137,26 +137,26 @@ export default {
       _this.$nextTick(function() {
         _this.$refs[formName].validate(valid => {
           if (valid) {
-            var tpqPaperId = sessionStorage.testPaperId;
-            var tpqScore = _this.$refs[formName].model.onum;
-            var title = _this.$refs[formName].model.title;
+            var tpqPaperId = sessionStorage.testPaperId; //获取试卷ID
+            var tpqScore = _this.$refs[formName].model.onum; //获取表单的分数
+            var title = _this.$refs[formName].model.title; //获取题目
             var arrs = [];
             for (const key in _this.$refs[formName].model.domains) {
               if (
                 _this.$refs[formName].model.domains[key].options ==
-                  _this.AddMultipleChoice.checked[ //判断选中项
+                  _this.AddMultipleChoice.checked[ //判断选中项 是不是多选中的其中之一
                     _this.AddMultipleChoice.checked.length - 1
                   ] ||
                 _this.$refs[formName].model.domains[key].options ==
                   _this.AddMultipleChoice.checked[0]
               ) {
                 arrs.push({
-                  cqOption: _this.$refs[formName].model.domains[key].value,
-                  cqIsRight: true //选中为true
+                  cqOption: _this.$refs[formName].model.domains[key].value, //选项的值
+                  cqIsRight: true //选中为true 
                 });
               } else {
                 arrs.push({
-                  cqOption: _this.$refs[formName].model.domains[key].value,
+                  cqOption: _this.$refs[formName].model.domains[key].value, //选项的值
                   cqIsRight: false //没选中为fasle
                 });
               }
