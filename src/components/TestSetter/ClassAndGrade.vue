@@ -1,24 +1,33 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <div class="seleBox">
-      <div class="seleName">班级</div>
-      <el-select v-model="classId" placeholder="请选择" size="small" @change="setClass">
-        <el-option
-          v-for="item in options"
-          :key="item.classId"
-          :label="item.className"
-          :value="item.classId"
-        ></el-option>
-      </el-select>
-    </div>
+    班级： {{parentRes2}}   
+    <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form-item label="班级" prop="classId" size="small">
+        <el-select v-model="ruleForm.classId" placeholder="请选择班级" @change="setClass">
+          <el-option
+            v-for="item in options"
+            :key="item.classId"
+            :label="item.className"
+            :value="item.classId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
 export default {
+  props:{
+    parentRes2:Number,
+    required:true
+  },
   data() {
+    
     return {
-      options: [], //下拉框数组
-      classId: "" //下拉框绑定值
+      ruleForm: {
+        classId: "" //表单绑定的值
+      },
+      options: [] //下拉框数组
     };
   },
   //定义方法
@@ -35,7 +44,7 @@ export default {
       _this.axios.get("/api/Class/GetAllClass").then(
         function(res) {
           //tableData等于回调函数返回的res（值）
-        //   console.log(res);
+          //   console.log(res);
           _this.options = res.data;
         },
         function() {
@@ -47,37 +56,30 @@ export default {
      * 选择班级信息
      *
      * */
-    setClass(val){
-      // console.log(val)
-     this.$emit("getGrade",val);
-
-
+    setClass(v) {
+      console.log(v);
+      let _this = this;
+      //childByValue2是父组件on监听子组件传过去的值
+      //第二个参数 v 是子组件传到父组件的值 
+      _this.$emit("childByValue2",v);
     }
   },
   created() {
     let _this = this;
     _this.getAllClass();
+  },
+  updated(){
+    let _this = this;
+    console.log(_this.parentRes2);
+    _this.ruleForm.classId = _this.parentRes2;
+    console.log(_this.ruleForm.classId)
   }
 };
 </script>
 <style lang="less" scoped>
 #testDrownBox-testSetter {
-  .seleBox {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    .seleName {
-      flex: none;
-      text-align: right;
-      margin-right: 15px;
-      color: #606266;
-      width: 70px;
-      font-size: 13px;
-      line-height: 30px;
-    }
-    .el-select {
-      width: 100%;
-    }
+  .el-select {
+    width: 100%;
   }
 }
 </style>

@@ -6,21 +6,25 @@
       <el-breadcrumb-item>在线测试</el-breadcrumb-item>
       <el-breadcrumb-item>安排测试</el-breadcrumb-item>
     </el-breadcrumb>
+    <!-- 试卷：{{childRes1}}
+    班级：{{childRes2}}
+    考试时间：{{childRes3}} -->
     <!-- Breadcrumb 面包屑 结束 -->
+
     <!-- 卡片 -->
     <el-card class="box-card">
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <test-drop-down-box @getInfo="getInfo"></test-drop-down-box>
-          <class-and-grade @getGrade="getGrade"></class-and-grade>
-          <test-time></test-time>
+          <test-drop-down-box @childByValue="childByValue"></test-drop-down-box>
+          <class-and-grade @childByValue2="childByValue2"></class-and-grade>
+          <test-time @childByValue3="childByValue3"></test-time>
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
           <!-- 圆角按钮 -->
           <el-button round @click="cancelTest()">取消</el-button>
-          <el-button type="primary" round @click="setTest()">设置</el-button>
+          <el-button type="primary" round @click="setAddInfo()">设置</el-button>
           <!-- 圆角按钮结束 -->
         </el-row>
       </div>
@@ -60,12 +64,12 @@
     </div>
     <!-- 分页结束 -->
     <!-- 添加对话框 -->
-    <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="30%">
+    <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
       <el-form :model="form">
-        <test-drop-down-box></test-drop-down-box>
-        <class-and-grade></class-and-grade>
-        <test-time></test-time>
+        <test-drop-down-box :parentRes="pRes"></test-drop-down-box>
+        <class-and-grade :parentRes2="cRes"></class-and-grade>
+        <test-time :parentRes3="timeRes"></test-time>
       </el-form>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
@@ -79,75 +83,122 @@
 <script>
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
 import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
-// import TestTime from "@/components/TestSetter/TestTime"; //考试时间
+import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 
 export default {
   data() {
     return {
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
-      form: {
-        name: ""
-      },
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
-      total: null //总条目
+      total: null, //总条目
+      form: {},
+      childRes1: "", //接收子组件传的值  试卷
+      childRes2: "", //接收子组件传的值 班级
+      childRes3: {}, //接收子组件传的值 考试时间
+      pRes:"",//父级组件下发给子组件的值 试卷
+      cRes:"",//父级组件下发给子组件的值 班级
+      timeRes:[],//父级组件下发给子组件的值 考试时间
     };
   },
   //定义组件
   components: {
     TestDropDownBox,
     ClassAndGrade,
-    // TestTime
+    TestTime
   },
   //定义方法
   methods: {
-
     /**
      * 获取子组件的数据
      * 试卷
+     * @param {String} childValue 就是子组件传过来的值
      *
      * */
-    getInfo(data){
-      console.log(data)
+    childByValue(childValue) {
+      // childValue就是子组件传过来的值
+      let _this = this;
+      _this.childRes1 = childValue;
     },
- /**
+    /**
      * 获取子组件的数据
      * 班级
+     *@param {String} cVal 就是子组件传过来的值
+     * */
+    childByValue2(cVal) {
+      let _this = this;
+      // cVal就是子组件传过来的值
+      _this.childRes2 = cVal;
+    },
+    /**
+     * 获取子组件的数据
+     * 考试时间
+     *  @param {Object} tVal 就是子组件传过来的值
      *
      * */
-    getGrade(data){
-      console.log(data)
+    childByValue3(tVal) {
+       // tVal就是子组件传过来的值
+      let _this = this;
+      // console.log(tVal);
+      // console.log(tVal.a)
+     
+      // console.log(tVal);
+      // _this.childRes3[0] = tVal[0];
+      _this.childRes3 = tVal;
     },
-
     /**
      * 安排测试
      *
      *
      * */
-
-    setTest() {
-      console.log("安排测试");
+    setAddInfo() {
       let _this = this;
-      var obj = {
-
-
+      let obj = {
+        taskTestPaperId: _this.childRes1, //试卷编号
+        taskClassId: _this.childRes2, //班级编号
+        taskStartTime: _this.childRes3[0], //开始时间
+        taskEndTime: _this.childRes3[1] //结束时间
       };
+      // console.log(obj);
+      let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
+      // console.log(uId);
       // 调用接口
-      // _this.axios.post("/api/TestPaper/SetTest",obj).then((res) => {
-      //       console.log(res);
+      _this.axios.post("/api/TestPaper/SetTest?uid=" + uId, obj).then(
+        res => {
+          let dataCu = res.data.data;
+          console.log(dataCu);
+          if (res.data.code == 1) {
+            _this.$message({
+              type: "success",
+              message: "设置成功!"
+            });
+            _this.SetTest.unshift(dataCu);
 
-      // })
+          } else if (res.data.code == -2) {
+            _this.$message({
+              type: "error",
+              message: "参数错误!设置失败！"
+            });
+          }
+        },
+        () => {
+          _this.$message({
+            type: "error",
+            message: "系统错误!"
+          });
+        }
+      );
     },
 
     /**
      * 取消安排测试
-     * 
-     * */ 
-    cancelTest(){
+     *
+     * */
+
+    cancelTest() {
       console.log("取消安排测试");
       let _this = this;
-
     },
 
     /**
@@ -187,7 +238,17 @@ export default {
       let _this = this;
       console.log(index, row);
       _this.dialogFormVisible = true;
-      // _this.row =
+      _this.pRes = row.taskTestPaperId;//试卷
+      _this.cRes = row.classId;//班级
+      _this.timeRes[0] = row.taskStartTime//考试时间  开始
+      _this.timeRes[1] = row.taskEndTime//考试时间  结束
+      _this.timeRes[2] = row.taskEscapeTime//耗时
+
+
+      // console.log(_this.pRes);
+      // console.log(row.taskId);
+
+
     },
     /**
      * 删除当前行表格信息
