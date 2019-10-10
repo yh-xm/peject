@@ -16,7 +16,8 @@ template
 <template>
   <div id="cctbox">
     <!-- 试卷 -->
-    <el-form ref="form" :model="form" label-width="80px">
+  
+    <el-form ref="form" :model="form" label-width="80px" :name="obj1">
       <el-form-item label="试卷">
         <el-select
           v-model="form.tpId"
@@ -66,8 +67,6 @@ template
         <el-button type="danger" plain disabled size="small">用时：{{form.timeLimit}} 分钟</el-button>
       </el-form-item>
     </el-form>
-    {{obj1}}
-    {{Fir}}
   </div>
 </template>
 <script>
@@ -97,9 +96,11 @@ export default {
         }
       },
       Fir:{
-        t: "",
-        c: "",
-        m: {s:"",e:""}
+        tPaper: "",
+        cGrade: "",
+        m: {s:"",e:""},
+        time:""
+        
       },//父传子
       flag:false
     };
@@ -157,7 +158,7 @@ export default {
             _this.flag = true;
       _this.arr.t = val;
       _this.$emit("cusChange", _this.arr);
-      console.log(_this.Fir); //父传子的值
+      // console.log(_this.Fir); //父传子的值
     },
     /**
      * 获取班级下拉框的值
@@ -195,22 +196,12 @@ export default {
       _this.$emit("cusChange", _this.arr);
     }
   },
-  // watch:{
-  //   Fir(newVal,oldVal){
-  //       // console.log(newVal)
-  //       // _this.form.tpId = newVal.t;
-
-  //       // console.log(oldVal)
-
-  //     }
-
-  // },
   created() {
     let _this = this;
     _this.getAllTestPaper();
     _this.getAllClass();
     _this.Fir = _this.obj1;
-    console.log(_this.Fir)
+    // console.log(_this.Fir)
     
   },
    updated() {
@@ -221,11 +212,12 @@ export default {
         //判断是否传过来的值为空
         return;
       }
-  // form.classId
-  _this.form.tpId = _this.obj1.t;
-  _this.form.classId = _this.obj1.c;
-  // _this.form.form.logEnd = _this.obj1.m;
-  // console.log(_this.obj1)
+  _this.form.tpId = _this.obj1.tPaper;//试卷
+  _this.form.classId = _this.obj1.cGrade;//班级
+
+  console.log(_this.form);
+  console.log(_this.obj1)
+
     } else {
       _this.flag = _this.obj1.flag;
     }

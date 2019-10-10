@@ -84,7 +84,12 @@ export default {
       pageSize: 10, //每页大小
       total: null, //总条目
       son: [], //接收子值
-      obj1: {} //父传子
+      obj1:{
+        tPaper:"",
+        cGrade:"",
+        m:{s:"",e:""},
+        time:"",
+      } //父传子
     };
   },
   components: {
@@ -164,7 +169,7 @@ export default {
         .then(
           function(res) {
             // roles等于回调函数返回的res（值）
-            console.log(res);
+            // console.log(res);
             _this.SetTest = res.data.data; //表格数据
             _this.total = res.data.items; //总条数
           },
@@ -182,14 +187,15 @@ export default {
      * */
     handleEdit(index, row) {
       let _this = this;
-      console.log(index, row);
+      // console.log(index, row);
       _this.obj1 = {
-        t: row.taskTestPaperId, //试卷
-        c: row.classId, //班级
+        tPaper: row.taskTestPaperId, //试卷
+        cGrade: row.classId, //班级
         m:{
           s:row.taskStartTime,//开始
           e:row.taskEndTime//结束
         },
+        time:row.taskEscapeTime,//耗时
         flag:false
       };
       _this.dialogFormVisible = true;
