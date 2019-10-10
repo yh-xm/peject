@@ -140,7 +140,7 @@ export default {
           cqOption: ""
         });
       }else{
-         _this.$msg(this, -1, "不能再添加选项了！");
+         _this.$msg(_this, -1, "不能再添加选项了！");
       }
     },
     /**
@@ -163,9 +163,9 @@ export default {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             _this.odisabled = !_this.odisabled; //成功禁用
             _this.oshow = !_this.oshow;
-            _this.$msg(this, 1, res.data.message);
+            _this.$msg(_this, 1, res.data.message);
           } else {
-            _this.$msg(this, -1, res.data.message);
+            _this.$msg(_this, -1, res.data.message);
           }
         });
     },
@@ -196,10 +196,10 @@ export default {
               questionTypeId: 1, //题目类型
               tpqScore: _this.AddChooseQuestionList.tpqScore //题目分数
             };
-            _this.$msg(this,1, res.data.message)
-            this.$emit("setQuestion", data); //改变父组件的分数
+            _this.$msg(_this,1, res.data.message)
+            _this.$emit("setQuestion", data); //改变父组件的分数
           }else{
-                _this.$msg(this,-1, res.data.message)
+                _this.$msg(_this,-1, res.data.message)
               }
         });
     },
@@ -209,22 +209,23 @@ export default {
      *
      */
     checkboxChange(item) {
+      var _this =this;
       var arr = [];
-      for (const key in this.optionsActive) {
+      for (const key in _this.optionsActive) {
         if (
-          this.optionsActive[key] == item[0] ||
-          this.optionsActive[key] == item[1]
+          _this.optionsActive[key] == item[0] ||  //多选的2个选项
+          _this.optionsActive[key] == item[1]
         ) {
-          arr.push(key);
+          arr.push(key); 
         }
       }
-      for (let key in this.nowOption.tpqQuestion.chooseQuestion) {
+      for (let key in _this.nowOption.tpqQuestion.chooseQuestion) {
         //全部不选中
-        this.nowOption.tpqQuestion.chooseQuestion[key].cqIsRight = false;
+        _this.nowOption.tpqQuestion.chooseQuestion[key].cqIsRight = false;
       }
       for (let i = 0; i < arr.length; i++) {
         //选中当前选中的
-        this.nowOption.tpqQuestion.chooseQuestion[arr[i]].cqIsRight = true;
+        _this.nowOption.tpqQuestion.chooseQuestion[arr[i]].cqIsRight = true;
       }
     },
     /**
@@ -248,10 +249,10 @@ export default {
               fqsScore: v, //分数
               fqIndex: _this.nowIndex //题号
             };
-            _this.$msg(this, 1, "修改成功!");
+            _this.$msg(_this, 1, "修改成功!");
             _this.$emit("changeScore", data);
           }else{
-                _this.$msg(this,-1, res.data.message)
+                _this.$msg(_this,-1, res.data.message)
               }
         });
     },
@@ -259,8 +260,9 @@ export default {
      * 初始化
      */
     init() {
-      this.oldOption = JSON.parse(JSON.stringify(this.AddChooseQuestionList)); //克隆信息
-      this.nowOption = this.AddChooseQuestionList;
+      var _this = this;
+      _this.oldOption = JSON.parse(JSON.stringify(_this.AddChooseQuestionList)); //克隆信息
+      _this.nowOption = _this.AddChooseQuestionList;
     }
   },
   created() {

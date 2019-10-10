@@ -124,12 +124,12 @@ export default {
                   bodys: res.data.data,
                   questionTypeId: 2
                 };
-                this.$emit("addGapFilling", data);  //改变父组件的值
-                _this.$msg(this, 1, "添加成功!"); 
-                this.resetForm("AddGapFillQuestion"); //重置表单
-                this.title = ""; //重置题目
+                _this.$emit("addGapFilling", data);  //改变父组件的值
+                _this.$msg(_this, 1, "添加成功!"); 
+                _this.resetForm("AddGapFillQuestion"); //重置表单
+                _this.title = ""; //重置题目
               }else{
-                _this.$msg(this,-1, res.data.message)
+                _this.$msg(_this,-1, res.data.message)
               }
             });
         } else {

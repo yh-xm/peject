@@ -74,7 +74,7 @@
         <el-form-item>
           <el-button type="primary" plain @click.prevent="compile">编辑</el-button>
           <el-row v-show="oshow">
-            <el-button round @click.prevent="out" size="small">取消</el-button>
+            <el-button round @click.prevent="cancel" size="small">取消</el-button>
             <el-button
               type="primary"
               plain
@@ -96,7 +96,7 @@ export default {
       title: "", //题目
       nowOption: {}, //当前数据
       oldOption: [], //历史数据
-      oshow: false,//编辑状态
+      oshow: false, //编辑状态
       optionsIndexArr: [], //填空下标数组
       fillQuestion: [] //存储插入的填空下标数组
     };
@@ -117,10 +117,11 @@ export default {
      * 点击取消
      *
      */
-    out() {
-      this.oshow = !this.oshow;
-      this.title = this.oldOption.questionTitle;
-      this.nowOption = JSON.parse(JSON.stringify(this.oldOption)); //点击取消
+    cancel() {
+      var _this = this;
+      _this.oshow = !_this.oshow;
+      _this.title = _this.oldOption.questionTitle;
+      _this.nowOption = JSON.parse(JSON.stringify(_this.oldOption)); //点击取消
     },
     /**
      * 点击保存修改
@@ -150,37 +151,36 @@ export default {
               });
             }
           }
-        
-            //是否添加填空
-            var value = _this.AddGapFillQuestionList.tpqId;//获取题目Id
-            this.axios
-              .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
-                questionId: _this.nowOption.questionId, //题目Id
-                questionTitle: _this.title, //题目
-                questionTypeId: _this.nowOption.questionTypeId, //题目类型
-                fillQuestion: changeQuestion //题目信息
-              })
-              .then(res => {
-                if (res.data.code == undefined) {
-                  console.log(res);
-                  var data = res.data + "}]}}";
-                  data = eval("(" + data + ")");
-                  console.log(data);
-                  _this.nowOption.questionTitle = _this.title; //更新题目
-                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
-                  _this.oshow = !_this.oshow;
-                  _this.$msg(_this, 1, data.message);
-                  _this.changeScore();
-                } else {
-                  console.log(666)
-                  _this.$msg(_this, res.data.code, res.data.message);
-                      _this.nowOption.questionTitle = _this.title; //更新题目
-                  _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
-                  _this.oshow = !_this.oshow;
-                }
-              });
-            _this.fillQuestion = [];
-          
+
+          //是否添加填空
+          var value = _this.AddGapFillQuestionList.tpqId; //获取题目Id
+          _this.axios
+            .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
+              questionId: _this.nowOption.questionId, //题目Id
+              questionTitle: _this.title, //题目
+              questionTypeId: _this.nowOption.questionTypeId, //题目类型
+              fillQuestion: changeQuestion //题目信息
+            })
+            .then(res => {
+              if (res.data.code == undefined) {
+                console.log(res);
+                var data = res.data + "}]}}";
+                data = eval("(" + data + ")");
+                console.log(data);
+                _this.nowOption.questionTitle = _this.title; //更新题目
+                _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
+                _this.oshow = !_this.oshow;
+                _this.$msg(_this, 1, data.message);
+                _this.changeScore();
+              } else {
+                console.log(666);
+                _this.$msg(_this, res.data.code, res.data.message);
+                _this.nowOption.questionTitle = _this.title; //更新题目
+                _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
+                _this.oshow = !_this.oshow;
+              }
+            });
+          _this.fillQuestion = [];
         } else {
           console.log("error submit!!");
           return false;
@@ -199,16 +199,21 @@ export default {
      *
      */
     addDomain() {
-      var index = this.getCursortPosition(
-        document.getElementById("textarea" + this.nowIndex3) //获取文本域
+      var that = this;
+      var index = that.getCursortPosition(
+        document.getElementById("textarea" + that.nowIndex3) //获取文本域
       );
-      this.title = this.title.split("");
-      this.title.splice(index, 0, "▁"); //插入填空
-      this.title = this.title.join("");
+      that.title = that.title.split("");
+      that.title.splice(index, 0, "▁"); //插入填空
+      that.title = that.title.join("");
     },
     /**
-     * 获取文本域下标
-     *
+     * 获取文本光标
+     *  getCursortPosition 获取文本光标
+     * document.selection.createRange()
+     * 根据当前文字选择返回 TextRange 对象
+     * moveStart 更改范围开始位置
+     * selectionStart --兼容所有浏览器
      */
     getCursortPosition(element) {
       var CaretPos = 0;
@@ -231,7 +236,7 @@ export default {
       var _this = this;
       _this.axios
         .post(
-          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}`//获取题目Id
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}` //获取题目Id
         )
         .then(res => {
           if (res.data.message == "删除成功") {
@@ -241,12 +246,11 @@ export default {
               questionTypeId: 2,
               tpqScore: _this.AddGapFillQuestionList.tpqScore
             };
-                  _this.$msg(this,1, res.data.message)
+            _this.$msg(_this, 1, res.data.message);
             _this.$emit("setQuestion", data);
-          }else{
-                _this.$msg(this,-1, res.data.message)
-              }
-         
+          } else {
+            _this.$msg(_this, -1, res.data.message);
+          }
         });
     },
     /**
@@ -275,17 +279,17 @@ export default {
         )
         .then(res => {
           if (res.data.message == "修改成功") {
-            this.oldOption = JSON.parse(JSON.stringify(this.nowOption)); //更新题目信息
+            _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新题目信息
             var data = {
               index: 1, //问题所在下标
               fqsScore: _this.AddGapFillQuestionList.fqsScore, //问题分数
               fqIndex: _this.nowIndex3 //问题题号
             };
-            _this.$msg(this, 1, "修改成功!");
-            _this.$emit("changeScore", data);  //修改父组件的分数信息
-          }else{
-                _this.$msg(this,-1,"分数没有变化")
-              }
+            _this.$msg(_this, 1, "修改成功!");
+            _this.$emit("changeScore", data); //修改父组件的分数信息
+          } else {
+            _this.$msg(_this, -1, "分数没有变化");
+          }
         });
     },
     /**
@@ -307,26 +311,26 @@ export default {
       var oindexArr = []; //旧填空数组
       var nindexArr = []; //新填空数组
       var oarr = o.split(""); //旧题目字符串变成数组
-      var narr = n.split("");//新题目字符串变成数组
+      var narr = n.split(""); //新题目字符串变成数组
       var nowAddOption = {
-                fqAnswer: "", //插入填空答案
-                fillQuestionScore: [
-                 {
-                   fqsScore: 1 //默认分数
-                 }
-            ]
-      }
+        fqAnswer: "", //插入填空答案
+        fillQuestionScore: [
+          {
+            fqsScore: 1 //默认分数
+          }
+        ]
+      };
       for (const key in oarr) {
         if (oarr[key] == "▁") {
           oarr[key] = oindex++; //填空的下标 第几个填空
           oindexArr.push(key); //存入旧填空数组
         } else {
-          oarr[key] = "*";//存入旧填空数组
+          oarr[key] = "*"; //存入旧填空数组
         }
       }
       for (const key in narr) {
         if (narr[key] == "▁") {
-          narr[key] = nindex++;//填空的下标 第几个填空
+          narr[key] = nindex++; //填空的下标 第几个填空
           nindexArr.push(key); //存入旧填空数组
         } else {
           narr[key] = "*"; //不是填空变为*
@@ -342,21 +346,34 @@ export default {
         if (_this.oshow == false) {
           return;
         } else {
-          if (nindexArr.length - oindexArr.length > 1 ||narr.length - oarr.length > 1) {
+          if (
+            nindexArr.length - oindexArr.length > 1 ||
+            narr.length - oarr.length > 1
+          ) {
             //一次性复制粘贴填空
             var max = 0;
             for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
               //添加多少填空
-              for (let x in oindexArr) { //添加填空的位置
-                if ( textindex - (narr.length - oarr.length) <parseInt(oindexArr[x])) { //在最后之前位置插入填空
-                  _this.nowOption.fillQuestion.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption);
+              for (let x in oindexArr) {
+                //添加填空的位置
+                if (
+                  textindex - (narr.length - oarr.length) <
+                  parseInt(oindexArr[x])
+                ) {
+                  //在最后之前位置插入填空
+                  _this.nowOption.fillQuestion.splice(
+                    oarr[parseInt(oindexArr[x])],
+                    0,
+                    nowAddOption
+                  );
                   _this.fillQuestion.push(oarr[parseInt(oindexArr[x])]); //获取插入填空的位置
                   break;
                 } else {
                   max++;
                 }
               }
-              if (max == oindexArr.length) { //在末尾插入填空
+              if (max == oindexArr.length) {
+                //在末尾插入填空
                 //往后添加空格
                 _this.nowOption.fillQuestion.push(nowAddOption);
                 _this.fillQuestion.push(
@@ -367,8 +384,12 @@ export default {
             }
           } else {
             // 按插入按钮进行插入
-            _this.nowOption.fillQuestion.splice(narr[textindex], 0, nowAddOption);
-            _this.fillQuestion.push(narr[textindex]);//获取插入填空的位置
+            _this.nowOption.fillQuestion.splice(
+              narr[textindex],
+              0,
+              nowAddOption
+            );
+            _this.fillQuestion.push(narr[textindex]); //获取插入填空的位置
           }
         }
       }
@@ -378,10 +399,16 @@ export default {
           //获取文本下标
           document.getElementById("textarea" + _this.nowIndex3)
         );
-     
+
         for (let i in oindexArr) {
-          if (parseInt(oindexArr[i]) >= textindex && parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
-            _this.nowOption.fillQuestion.splice(i,oindexArr.length - nindexArr.length);  //一次性删除多个填空
+          if (
+            parseInt(oindexArr[i]) >= textindex &&
+            parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length
+          ) {
+            _this.nowOption.fillQuestion.splice(
+              i,
+              oindexArr.length - nindexArr.length
+            ); //一次性删除多个填空
             break;
           }
         }

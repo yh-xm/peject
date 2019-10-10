@@ -97,12 +97,12 @@ export default {
               bodys:res.data.data,
               questionTypeId:3
             }
-            this.$emit('addEssayQuestion',data)
-             _this.$msg(this,1, "添加成功!")
+            _this.$emit('addEssayQuestion',data)
+             _this.$msg(_this,1, "添加成功!")
             _this.resetForm("AddEssayQuestion"); //重置表单
             _this.AddEssayQuestion.value = "";
           }else{
-                _this.$msg(this,-1, res.data.message)
+                _this.$msg(_this,-1, res.data.message)
               }
         });
     }

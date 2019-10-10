@@ -47,27 +47,27 @@
               </span>
             </div>
             <div v-for="(items,indexs) in item.bodys" :key="indexs" class="text item">
-              <SetChooseQuestion
+              <set-choose-question
                 v-if="items.tpqQuestion.questionTypeId=='1'?true:false"
                 :AddChooseQuestionList="items"
                 :nowIndex="indexs"
                 @setQuestion="setQuestion"
                 @changeScore="changeScore"
-              ></SetChooseQuestion>
-              <SetGapFillQuestion
+              ></set-choose-question>
+              <setGap-fill-question
                 v-if="items.tpqQuestion.questionTypeId=='2'?true:false"
                 :AddGapFillQuestionList="items"
                 :nowIndex3="indexs"
                 @setQuestion="setQuestion"
                 @changeScore="changeScore"
-              ></SetGapFillQuestion>
-              <SetAnswerQuestion
+              ></setGap-fill-question>
+              <set-answer-question
                 v-if="items.tpqQuestion.questionTypeId=='3'?true:false"
                 :AddEssayQuestiontList="items"
                 :nowIndex2="indexs"
                 @setQuestion="setQuestion"
                 @changeScore="changeScore"
-              ></SetAnswerQuestion>
+              ></set-answer-question>
             </div>
           </el-card>
         </div>
