@@ -153,6 +153,9 @@ export default {
         .get("/api/TestPaper/GetTestPaper?id=" + _this.id)
         .then(res => {
           var data = res.data;
+          if(data.questions.length==0){
+            return;
+          }
           for (const key in data.questions) {
             if (data.questions[key].tpqQuestion.questionTypeId == "1") {
               //选择题
