@@ -421,10 +421,6 @@ export default {
       _this.dialogFormVisible = false; //关闭对话框
     }
   },
-<<<<<<< HEAD
-
-=======
->>>>>>> lizhitong
     //定义计算属性
   computed: {
     /**
