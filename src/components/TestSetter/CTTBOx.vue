@@ -55,14 +55,18 @@ template
         ></el-date-picker>
         <el-button type="danger" plain disabled size="small">用时：{{form.timeLimit}} 分钟</el-button>
       </el-form-item>
+
     </el-form>
+      {{obj1}}
+      {{Fir}}
   </div>
 </template>
 <script>
 export default {
   model: {
-    event: "cusChange",//input自定义事件
+    event: "cusChange",
   },
+  props:['obj1'],
   data() {
     return {
       options: [], //试卷下拉框数组
@@ -82,7 +86,8 @@ export default {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7; //设置选择今天以及今天之后的日
         }
-      }
+      },
+      Fir:this.obj1,
     };
   },
   methods: {
@@ -137,6 +142,7 @@ export default {
       let _this = this;
       _this.arr.t = val;
       _this.$emit("cusChange", _this.arr);
+      _this.form.tpId = _this.obj1.t;
     },
     /**
      * 获取班级下拉框的值

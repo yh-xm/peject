@@ -13,6 +13,7 @@
         <div class="impComp">
           <!-- 组件引用 -->
           <c-t-t-box v-model="son"></c-t-t-box>
+          <!-- <h1>{{son}}</h1> -->
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -60,9 +61,7 @@
     <!-- 添加对话框 -->
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="30%">
       <!-- 嵌套的表单 -->
-      <el-form :model="form">
-        <c-t-t-box></c-t-t-box>
-      </el-form>
+      <c-t-t-box v-model="son" :obj1="obj1"></c-t-t-box>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -79,14 +78,11 @@ export default {
     return {
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
-      form: {
-        name: ""
-      },
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
       total: null, //总条目
       son: [], //接收子值
-      fuCZ: {} //父传子
+      obj1: {} //父传子
     };
   },
   components: {
@@ -184,6 +180,11 @@ export default {
     handleEdit(index, row) {
       let _this = this;
       console.log(index, row);
+      _this.obj1 = {
+        t: row.taskTestPaperId, //试卷
+        c: row.classId //班级
+      };
+
       _this.dialogFormVisible = true;
       // _this.row =
     },
