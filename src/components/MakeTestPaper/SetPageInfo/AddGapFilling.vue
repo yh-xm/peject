@@ -112,8 +112,8 @@ export default {
               tpqScore: tpqScore, //题目的分值
               tpqQuestion: {
                 questionTitle: _this.title, //填空题的标题
-                questionTypeId: 3,
-                fillQuestion: fillQuestion
+                questionTypeId: 3, //题目类型编号
+                fillQuestion: fillQuestion //题目信息
               }
             })
             .then(res => {
@@ -121,8 +121,8 @@ export default {
               if (res.data.message == "添加成功") {
                 res.data.data.tpqQuestion.questionTypeId = 2;
                 var data = {
-                  bodys: res.data.data,
-                  questionTypeId: 2
+                  bodys: res.data.data, //传递题目信息
+                  questionTypeId: 2 //题目类型Id
                 };
                 _this.$emit("addGapFilling", data);  //改变父组件的值
                 _this.$msg(_this, 1, "添加成功!"); 
@@ -222,25 +222,25 @@ export default {
       var textindex = _this.getCursortPosition(//获取文本下标
         document.getElementById("textarea")
       );
-      if (nindexArr.length > oindexArr.length) {
+      if (nindexArr.length > oindexArr.length) { //新的字符串长度大于旧字符串的长度
         //如果添加填空
-        if (nindexArr.length - oindexArr.length > 1 ||narr.length - oarr.length > 1) {
+        if (nindexArr.length - oindexArr.length > 1 ||narr.length - oarr.length > 1) { //更改的长度大于1 复制粘贴操作
           //一次性复制粘贴填空
-          var max = 0;
+          var max = 0; 
           for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
             //添加多少填空
             for (let x in oindexArr) {//添加填空的位置
-              if (textindex - (narr.length - oarr.length) < parseInt(oindexArr[x])) {
-                this.AddGapFillQuestion.domains.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption);
+              if (textindex - (narr.length - oarr.length) < parseInt(oindexArr[x])) { //在哪个位置插入
+                this.AddGapFillQuestion.domains.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption); 
                 break;
               } else {
                 max++;
               }
             }
-            if (max == oindexArr.length) {
+            if (max == oindexArr.length) { //大于所有旧填空下标，则是往后插入。
               //往后添加空格
               _this.AddGapFillQuestion.domains.push(nowAddOption);
-              max = 0;
+              max = 0; //清空
             }
           }
         } else {
@@ -249,7 +249,7 @@ export default {
         }
       }
       if (nindexArr.length < oindexArr.length) { //填空减少了
-        for (let i in oindexArr) {
+        for (let i in oindexArr) { //从哪里开始减少  减少了多少个填空
           if (parseInt(oindexArr[i]) >= textindex &&parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
             _this.AddGapFillQuestion.domains.splice(i,oindexArr.length - nindexArr.length);
             break;

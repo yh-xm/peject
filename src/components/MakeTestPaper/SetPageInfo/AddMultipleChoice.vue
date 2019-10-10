@@ -177,9 +177,9 @@ export default {
                     bodys: res.data.data,
                     questionTypeId: 1
                   };
-                  _this.$emit("addMultipleChoice", data);
-                  _this.$msg(_this, 1, "添加成功!");
-                  _this.init();
+                  _this.$emit("addMultipleChoice", data); //通知父组件
+                  _this.$msg(_this, 1, "添加成功!"); 
+                  _this.init(); //初始化
                   _this.resetForm("AddMultipleChoice");
                 } else {
                   _this.$msg(_this, -1, res.data.message);
@@ -199,9 +199,9 @@ export default {
      */
     init() {
       var _this = this;
-      _this.AddMultipleChoice.checked = [];
+      _this.AddMultipleChoice.checked = []; //初始化多选
       _this.AddMultipleChoice.domains = [];
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 4; i++) {  //初始化4个选项
         _this.AddMultipleChoice.domains.push({
           value: "",
           options: _this.AddMultipleChoice.optionsActive[i]
