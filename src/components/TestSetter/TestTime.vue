@@ -1,6 +1,6 @@
 <template>
   <div id="testTime">
-    {{parentRes3}}
+    <!-- {{parentRes3}} -->
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <!-- :title="parentRes3" -->
       <el-form-item label="考试时间" prop="seleClassId" size="small">
@@ -51,7 +51,7 @@ export default {
      */
     logTimeChange(val) {
       let _this = this;
-      // console.log(val);
+      console.log(val);
       if(_this.ruleForm.logTime == null){
         _this.ruleForm.timeLimit = 0;
       }else{
@@ -68,14 +68,12 @@ export default {
   },
   updated(){
     let _this = this;
-    console.log(this.parentRes3);
+    // console.log(this.parentRes3);
     // if(_this.required != true){
       // _this.ruleForm.tpId = _this.parentRes3;
     // }
     // this.ruleForm.timeLimit = _this.parentRes3[0];
     // console.log(_this.parentRes3);
-
-    
   }
 };
 </script>
