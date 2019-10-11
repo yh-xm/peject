@@ -70,11 +70,10 @@ export default {
  * 在使用方法的时候直接this.$refs.（ref值）.方法（） 就可以使用了
  * 
  * */ 
-    // classFun(formName) {
-    //   console.log(formName);
-    //     this.$refs[formName].resetFields();
-    //   }
-    
+    classFun(formName) {
+      console.log(formName);
+        this.$refs[formName].resetFields();
+      }
   },
   created() {
     let _this = this;
@@ -82,9 +81,9 @@ export default {
   },
   // updated(){
   //   let _this = this;
-  //   // console.log(_this.parentRes2);
+  // //   // console.log(_this.parentRes2);
   //   _this.classDropFrom.classId = _this.parentRes2;
-  //   console.log(_this.classDropFrom.classId)
+  // //   console.log(_this.classDropFrom.classId)
   // }
 };
 </script>

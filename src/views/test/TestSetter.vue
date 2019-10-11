@@ -13,9 +13,6 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <!-- :parentRes="pRes"
-          :parentRes2="cRes"
-          :parentRes3="timeRes" -->
           <test-drop-down-box @childByValue="childByValue" ref="testDropFrom"></test-drop-down-box>
           <class-and-grade @childByValue2="childByValue2" ref="classDropFrom"></class-and-grade>
           <test-time @childByValue3="childByValue3" ref="timeSelectFrom"></test-time>
@@ -98,7 +95,11 @@ export default {
       childRes3: [], //接收子组件传的值 考试时间
       pRes:0,//父级组件下发给子组件的值 试卷 编辑
       cRes:0,//父级组件下发给子组件的值 班级 编辑
-      timeRes:{},//父级组件下发给子组件的值 考试时间 编辑
+      timeRes:{
+        begin:"",
+        end:"",
+        escape:""
+      },//父级组件下发给子组件的值 考试时间 编辑
     };
   },
   //定义组件
@@ -140,6 +141,7 @@ export default {
        // tVal就是子组件传过来的值
       let _this = this;
       _this.childRes3 = tVal;
+      // console.log(tVal);
     },
     /**
      * 安排测试
@@ -148,6 +150,15 @@ export default {
      * */
     setAddInfo() {
       let _this = this;
+      // 判断输入框是否有值  是否符合条件
+
+      if(_this.childRes1==""||_this.childRes2==""||_this.childRes3 ==""){
+        _this.$msg(_this,-1,'信息不能为空！')
+        return;
+      }else if(_this.childRes3.a<=30){
+          _this.$msg(_this,-1,'考试时间不能少于30分钟！')
+            return;
+      }         
       let obj = {
         taskTestPaperId: _this.childRes1, //试卷编号
         taskClassId: _this.childRes2, //班级编号
@@ -166,7 +177,7 @@ export default {
               message: "设置成功!"
             });
             _this.SetTest.unshift(dataCu);
-
+_this.cancelTest()
           } else if (res.data.code == -2) {
             _this.$message({
               type: "error",
@@ -192,10 +203,15 @@ export default {
       console.log("取消安排测试");
       let _this = this;
       // testDropFrom是试卷下拉框表单的值
-      _this.$refs.testDropFrom.resetForm("testDropFrom");
-      // _this.$refs.classDropFrom.classFun("classDropFrom");
-      // _this.$refs.timeSelectFrom.resetForm("timeSelectFrom");
+      _this.$refs.testDropFrom.resetForm("testDropFrom");//重置表单 试卷
+      _this.$refs.classDropFrom.classFun("classDropFrom");//重置表单 班级
+      _this.$refs.timeSelectFrom.espTime();//重置表单 考试时间
+            _this.childRes1 = "";
+            _this.childRes2 = "";
+            _this.childRes3[0] ="";
+             _this.childRes3[1]="";
     },
+
 
     /**
      * 分页获取测试任务表
@@ -236,12 +252,9 @@ export default {
       _this.dialogFormVisible = true;
       _this.pRes = row.taskTestPaperId;//试卷
       _this.cRes = row.classId;//班级
-      _this.timeRes.begin = row.taskStartTime;//考试时间  开始
-      _this.timeRes.end = row.taskEndTime;//考试时间  结束
-      _this.timeRes.escape = row.taskEscapeTime;//耗时
-      console.log(_this.pRes);
-      console.log(_this.cRes);
-      console.log(_this.timeRes);
+      _this.$set(_this.timeRes,'begin',row.taskStartTime)
+        _this.$set(_this.timeRes,'end',row.taskEndTime)
+          _this.$set(_this.timeRes,'escape',row.taskEscapeTime)
     },
     /**
      * 删除当前行表格信息
