@@ -1,9 +1,8 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <!-- 子组件:{{parentRes}} -->
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="试卷" prop="tpId" size="small">
-        <el-select v-model="ruleForm.tpId" placeholder="请选择试卷" @change="setInfo" :title="parentRes">
+        <el-select v-model="ruleForm.tpId" placeholder="请选择试卷" @change="setInfo">
           <el-option
             v-for="item in options"
             :key="item.tpId"
@@ -15,7 +14,7 @@
       <!-- <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">设置</el-button>
         <el-button @click="resetForm('ruleForm')">取消</el-button>
-      </el-form-item>-->
+      </el-form-item> -->
     </el-form>
   </div>
 </template>
@@ -70,14 +69,14 @@ export default {
     let _this = this;
     _this.getAllTestPaper();
   },
-  // updated(){
-  //   let _this = this;
-  //   console.log(this.parentRes);
+  updated(){
+    let _this = this;
+    console.log(this.parentRes);//输出父组件传过来的值
   //   // if(_this.required != true){
-  //     _this.ruleForm.tpId = _this.parentRes;
+      _this.ruleForm.tpId = _this.parentRes;
   //   // }
     
-  // }
+  }
 };
 </script>
 <style lang="less" scoped>

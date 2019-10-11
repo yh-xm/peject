@@ -1,9 +1,8 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <!-- 班级： {{parentRes2}}    -->
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="班级" prop="classId" size="small">
-        <el-select v-model="ruleForm.classId" placeholder="请选择班级" @change="setClass" :title="parentRes2">
+        <el-select v-model="ruleForm.classId" placeholder="请选择班级" @change="setClass">
           <el-option
             v-for="item in options"
             :key="item.classId"
@@ -68,12 +67,12 @@ export default {
     let _this = this;
     _this.getAllClass();
   },
-  // updated(){
-  //   let _this = this;
-  //   console.log(_this.parentRes2);
-  //   _this.ruleForm.classId = _this.parentRes2;
-  //   console.log(_this.ruleForm.classId)
-  // }
+  updated(){
+    let _this = this;
+    // console.log(_this.parentRes2);
+    _this.ruleForm.classId = _this.parentRes2;
+    console.log(_this.ruleForm.classId)
+  }
 };
 </script>
 <style lang="less" scoped>

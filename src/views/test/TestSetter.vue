@@ -6,9 +6,6 @@
       <el-breadcrumb-item>在线测试</el-breadcrumb-item>
       <el-breadcrumb-item>安排测试</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 试卷：{{childRes1}}
-    班级：{{childRes2}}
-    考试时间：{{childRes3}} -->
     <!-- Breadcrumb 面包屑 结束 -->
 
     <!-- 卡片 -->
@@ -16,9 +13,12 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <test-drop-down-box @childByValue="childByValue" :parentRes="pRes"></test-drop-down-box>
-          <class-and-grade @childByValue2="childByValue2" :parentRes2="cRes"></class-and-grade>
-          <test-time @childByValue3="childByValue3" :parentRes3="timeRes"></test-time>
+          <!-- :parentRes="pRes"
+          :parentRes2="cRes"
+          :parentRes3="timeRes" -->
+          <test-drop-down-box @childByValue="childByValue"></test-drop-down-box>
+          <class-and-grade @childByValue2="childByValue2"></class-and-grade>
+          <test-time @childByValue3="childByValue3"></test-time>
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -92,13 +92,13 @@ export default {
       dialogFormVisible: false, //对话框隐藏
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
-      total: null, //总条目
+      total: 0, //总条目
       form: {},
       childRes1: "", //接收子组件传的值  试卷
       childRes2: "", //接收子组件传的值 班级
       childRes3: {}, //接收子组件传的值 考试时间
-      pRes:"",//父级组件下发给子组件的值 试卷
-      cRes:"",//父级组件下发给子组件的值 班级
+      pRes:0,//父级组件下发给子组件的值 试卷
+      cRes:0,//父级组件下发给子组件的值 班级
       timeRes:[],//父级组件下发给子组件的值 考试时间
     };
   },
@@ -140,11 +140,6 @@ export default {
     childByValue3(tVal) {
        // tVal就是子组件传过来的值
       let _this = this;
-      // console.log(tVal);
-      // console.log(tVal.a)
-     
-      // console.log(tVal);
-      // _this.childRes3[0] = tVal[0];
       _this.childRes3 = tVal;
     },
     /**
@@ -160,10 +155,7 @@ export default {
         taskStartTime: _this.childRes3[0], //开始时间
         taskEndTime: _this.childRes3[1] //结束时间
       };
-      // console.log(obj)
-      // console.log(obj);
       let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
-      // console.log(uId);
       // 调用接口
       _this.axios.post("/api/TestPaper/SetTest?uid=" + uId, obj).then(
         res => {
@@ -237,10 +229,11 @@ export default {
      * */
     handleEdit(index, row) {
       let _this = this;
-      console.log(index, row);
+      // console.log(index, row);
       _this.dialogFormVisible = true;
       _this.pRes = row.taskTestPaperId;//试卷
       _this.cRes = row.classId;//班级
+      // console.log( typeof(_this.pRes));//检测数据类型
       _this.timeRes[0] = row.taskStartTime;//考试时间  开始
       _this.timeRes[1] = row.taskEndTime;//考试时间  结束
       _this.timeRes[2] = row.taskEscapeTime;//耗时
