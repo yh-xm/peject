@@ -10,6 +10,7 @@
     <!-- 卡片 -->
     <el-card class="box-card">
       <!-- 表格 -->
+      {{lovingVue}}
       <div slot="header" class="clearfix">
         <el-table :data="tableData" style="width:100%" :border="true">
           <el-table-column label="#" prop="index"></el-table-column>
@@ -60,7 +61,7 @@
             <el-form-item label="试卷标题" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId" class="selectOptions"></course-frame>
+            <course-frame @update="keCenFanFa" :oindex="seed" :oname="nemuId" class="selectOptions"></course-frame>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -101,6 +102,15 @@ export default {
   },
   methods: {
     /**
+     * 子组件绑定的方法
+     * 
+     */
+    keCenFanFa(all){
+        var _this=this
+       _this.lovingVue=all //
+    }
+    ,
+    /**
      * 点击编辑
      * @param {Number} index 当前行的下标
      * @param {object} row 当前行的用户数据
@@ -125,10 +135,11 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          console.log( _this.lovingVue)
           _this.axios
             .post("api/TestPaper/ModifyTestPaper", {
               tpId: _this.tpId, //试卷编号
-              tpCourseId: _this.lovingVue[0].courseId, //课程编号
+              tpCourseId: _this.lovingVue.courseId, //课程编号
               tpTitle: _this.ruleForm.name //试卷标题
             })
             .then(function(data) {
@@ -137,8 +148,8 @@ export default {
 
                 var alter = _this.tableData[_this.usIndex]; //数据赋值以达到刷新
                 alter.tpTitle = _this.ruleForm.name;
-                alter.courseName = _this.lovingVue[0].courseName;
-                alter.tpCourseId = _this.lovingVue[0].courseId;
+                alter.courseName = _this.lovingVue.courseName;
+                alter.tpCourseId = _this.lovingVue.courseId;
               } else if (data.data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
