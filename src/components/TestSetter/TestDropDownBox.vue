@@ -69,14 +69,13 @@ export default {
     let _this = this;
     _this.getAllTestPaper();
   },
-  updated(){
-    let _this = this;
-    console.log(this.parentRes);//输出父组件传过来的值
-  //   // if(_this.required != true){
-      _this.ruleForm.tpId = _this.parentRes;
-  //   // }
-    
-  }
+  // updated(){
+  //   let _this = this;
+  //   console.log(this.parentRes);//输出父组件传过来的值
+  // //   // if(_this.required != true){
+  //     _this.ruleForm.tpId = _this.parentRes;
+  // //   // }0
+  // }
 };
 </script>
 <style lang="less" scoped>

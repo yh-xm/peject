@@ -1,5 +1,6 @@
 <template>
   <div id="testTime">
+    <!-- {{parentRes3}} -->
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <!-- :title="parentRes3" -->
       <el-form-item label="考试时间" prop="seleClassId" size="small">
