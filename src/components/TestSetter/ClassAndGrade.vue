@@ -70,10 +70,10 @@ export default {
  * 在使用方法的时候直接this.$refs.（ref值）.方法（） 就可以使用了
  * 
  * */ 
-    classFun(formName) {
-      console.log(formName);
-        this.$refs[formName].resetFields();
-      }
+    // classFun(formName) {
+    //   console.log(formName);
+    //     this.$refs[formName].resetFields();
+    //   }
     
   },
   created() {

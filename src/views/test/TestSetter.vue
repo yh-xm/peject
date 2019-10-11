@@ -193,7 +193,7 @@ export default {
       let _this = this;
       // testDropFrom是试卷下拉框表单的值
       _this.$refs.testDropFrom.resetForm("testDropFrom");
-      _this.$refs.classDropFrom.classFun("classDropFrom");
+      // _this.$refs.classDropFrom.classFun("classDropFrom");
       // _this.$refs.timeSelectFrom.resetForm("timeSelectFrom");
     },
 
