@@ -20,7 +20,12 @@
       <div id="TestInfo" v-if="active==1">
         <div class="tabs">
           <div class="left-list">
-              <question-sectect :select="true" @changeOption="changeQuestionType" @init="init" />
+              <question-sectect 
+              :select="false" 
+              :defaultSelect="0"
+              v-model="nowAddOption"
+              @questionInit="questionInit" 
+              />
             </div>
         
 
@@ -100,7 +105,7 @@ export default {
       active: 0, //当前步奏
       pageInfo: [], //试卷信息
       radio: 3, //选项
-      nowAddOption: -1 //当前所在题型
+      nowAddOption: 0 //当前所在题型
     };
   },
   computed: {
@@ -123,14 +128,6 @@ export default {
   },
   methods: {
     /**
-     * 切换题型
-     * @param {Number} v 题目所在下标
-     */
-    changeQuestionType(v) {
-      console.log(v);
-      this.nowAddOption = v;
-    },
-    /**
      * 点击完成制作
      */
     fnover() {
@@ -143,9 +140,12 @@ export default {
      *  {Number} nowScroe 每种题目类型总分
      * {Number} nowAdd 每种题目类型总个数
      */
-    init(data) {
+    questionInit(data) {
       var _this = this;
-      _this.pageInfo = data;
+      
+      if(_this.pageInfo.length==0){
+          _this.pageInfo = data
+      }
     },
        /**
      * 添加题目
@@ -181,17 +181,10 @@ export default {
      */
     changeScore(data){
       var _this = this;
-       var index = data.index;
-       console.log(data.fqIndex)
-       if(data.fqIndex!=undefined){
-         var fqIndex = data.fqIndex;
-         var fqsScore = data.fqsScore;
-        _this.sumScore(index,fqIndex,fqsScore)
-       }else{
-        _this.sumScore(data)
-       
-       }
-
+       var index = data.index; //获取传递的题目下标
+         var fqIndex = data.fqIndex; //获取传递的题目题号
+         var fqsScore = data.fqsScore;//获取传递的题目分数
+        _this.sumScore(index,fqIndex,fqsScore) //调用算分数方法
     },
     /**
      * 计算分数
@@ -199,23 +192,19 @@ export default {
      */
     sumScore(index,fqIndex,fqsScore){
       var _this = this;
-      console.log(index)
-       _this.pageInfo[index].nowScroe = 0;
+       _this.pageInfo[index].nowScroe = 0; //清空分数
        if(fqIndex!=undefined){
-         _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
+         _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore; //修改题目的分数
        }
        
-      for (const key in _this.pageInfo[index].bodys) {
+      for (const key in _this.pageInfo[index].bodys) { //累加分数 
          _this.pageInfo[index].nowScroe += _this.pageInfo[index].bodys[key].tpqScore //改变父组件的问答题的分数
-          console.log(_this.pageInfo[index].bodys[key])
       }
-      _this.pageInfo = [...this.pageInfo]
+      _this.pageInfo = [...this.pageInfo] //重新解构赋值
     }
-
   },
-
   filters: {
-    questionsIndex(data) {
+    questionsIndex(data) { //过滤题号
       switch (data) {
         case 1:
           return "一、";
@@ -227,7 +216,6 @@ export default {
     }
   },
   created() {
-    this.init(); //初始化题型
   }
 };
 </script>
@@ -253,11 +241,9 @@ export default {
       .text {
         font-size: 14px;
       }
-
       .item {
         margin-bottom: 18px;
       }
-
       .clearfix:before,
       .clearfix:after {
         display: table;
@@ -266,7 +252,6 @@ export default {
       .clearfix:after {
         clear: both;
       }
-
       .box-card {
         min-height: 20px;
       }

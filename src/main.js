@@ -18,7 +18,20 @@ Vue.use(i18n);
 Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
-Vue.prototype.message = message;
+Vue.prototype.$msg = message;
+
+/**
+ * 过滤器过滤时间 格式为'YYYY-MM-DD
+ */
+Vue.filter("firstSet",function(val){
+        var value=new Date(val);
+        var year=value.getFullYear();
+      var m = value.getMonth() + 1;
+      var d = value.getDate();
+      m < 10 && (m = "0" + m);
+      d < 10 && (d = "0" + d);
+      return year + '-' + m +'-'+ d
+})
 
 router.beforeEach((to, from, next) => {
     if(to.path == '/login' ){
@@ -47,7 +60,7 @@ axios.interceptors.response.use(response=>{
  var url = error.config.url.toLocaleLowerCase();
  if(error.response.status === 401 && ! url.endsWith("oauth/authenticate")){ //过期登录
   // console.log(1111)
-   router.replace({
+   router.push({
      name:'login',
      query: {
       redirect: router.fullPath
