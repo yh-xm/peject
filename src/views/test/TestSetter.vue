@@ -16,9 +16,9 @@
           <!-- :parentRes="pRes"
           :parentRes2="cRes"
           :parentRes3="timeRes" -->
-          <test-drop-down-box @childByValue="childByValue"></test-drop-down-box>
-          <class-and-grade @childByValue2="childByValue2"></class-and-grade>
-          <test-time @childByValue3="childByValue3"></test-time>
+          <test-drop-down-box @childByValue="childByValue" ref="testDropFrom"></test-drop-down-box>
+          <class-and-grade @childByValue2="childByValue2" ref="classDropFrom"></class-and-grade>
+          <test-time @childByValue3="childByValue3" ref="timeSelectFrom"></test-time>
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -93,12 +93,12 @@ export default {
       pageSize: 10, //每页大小
       total: 0, //总条目
       form: {},
-      childRes1: "", //接收子组件传的值  试卷
-      childRes2: "", //接收子组件传的值 班级
+      childRes1: 0, //接收子组件传的值  试卷
+      childRes2: 0, //接收子组件传的值 班级
       childRes3: [], //接收子组件传的值 考试时间
-      pRes:0,//父级组件下发给子组件的值 试卷
-      cRes:0,//父级组件下发给子组件的值 班级
-      timeRes:{},//父级组件下发给子组件的值 考试时间
+      pRes:0,//父级组件下发给子组件的值 试卷 编辑
+      cRes:0,//父级组件下发给子组件的值 班级 编辑
+      timeRes:{},//父级组件下发给子组件的值 考试时间 编辑
     };
   },
   //定义组件
@@ -191,6 +191,10 @@ export default {
     cancelTest() {
       console.log("取消安排测试");
       let _this = this;
+      // testDropFrom是试卷下拉框表单的值
+      _this.$refs.testDropFrom.resetForm("testDropFrom");
+      _this.$refs.classDropFrom.classFun("classDropFrom");
+      // _this.$refs.timeSelectFrom.resetForm("timeSelectFrom");
     },
 
     /**
@@ -238,11 +242,6 @@ export default {
       console.log(_this.pRes);
       console.log(_this.cRes);
       console.log(_this.timeRes);
-      // console.log( typeof(_this.pRes));//检测数据类型
-      
-      // console.log(_this.timeRes);
-      // console.log(_this.pRes);
-      // console.log(row.taskId);
     },
     /**
      * 删除当前行表格信息

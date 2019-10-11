@@ -1,8 +1,8 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="classDropFrom" ref="classDropFrom" label-width="100px" class="demo-classDropFrom">
       <el-form-item label="班级" prop="classId" size="small">
-        <el-select v-model="ruleForm.classId" placeholder="请选择班级" @change="setClass">
+        <el-select v-model="classDropFrom.classId" placeholder="请选择班级" @change="setClass">
           <el-option
             v-for="item in options"
             :key="item.classId"
@@ -23,7 +23,7 @@ export default {
   data() {
     
     return {
-      ruleForm: {
+      classDropFrom: {
         classId: "" //表单绑定的值
       },
       options: [] //下拉框数组
@@ -61,7 +61,20 @@ export default {
       //childByValue2是父组件on监听子组件传过去的值
       //第二个参数 v 是子组件传到父组件的值 
       _this.$emit("childByValue2",v);
-    }
+    },
+/**
+ * 清空表单赋值
+ * resetFields()是element的重置表单方法
+ * ref 加在子组件上，用this.$refs.（ref值） 获取到的是组件实例，
+ * 可以使用组件的所有方法
+ * 在使用方法的时候直接this.$refs.（ref值）.方法（） 就可以使用了
+ * 
+ * */ 
+    classFun(formName) {
+      console.log(formName);
+        this.$refs[formName].resetFields();
+      }
+    
   },
   created() {
     let _this = this;
@@ -70,8 +83,8 @@ export default {
   // updated(){
   //   let _this = this;
   //   // console.log(_this.parentRes2);
-  //   _this.ruleForm.classId = _this.parentRes2;
-  //   console.log(_this.ruleForm.classId)
+  //   _this.classDropFrom.classId = _this.parentRes2;
+  //   console.log(_this.classDropFrom.classId)
   // }
 };
 </script>

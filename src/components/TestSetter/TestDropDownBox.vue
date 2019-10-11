@@ -1,8 +1,8 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="testDropFrom" ref="testDropFrom" label-width="100px" class="demo-testDropFrom">
       <el-form-item label="试卷" prop="tpId" size="small">
-        <el-select v-model="ruleForm.tpId" placeholder="请选择试卷" @change="setInfo">
+        <el-select v-model="testDropFrom.tpId" placeholder="请选择试卷" @change="setInfo">
           <el-option
             v-for="item in options"
             :key="item.tpId"
@@ -12,8 +12,8 @@
         </el-select>
       </el-form-item>
       <!-- <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">设置</el-button>
-        <el-button @click="resetForm('ruleForm')">取消</el-button>
+        <el-button type="primary" @click="submitForm('testDropFrom')">设置</el-button>
+        <el-button @click="resetForm('testDropFrom')">取消</el-button>
       </el-form-item> -->
     </el-form>
   </div>
@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      ruleForm: {
+      testDropFrom: {
         tpId: "" //表单绑定的值
       },
       options: [] //下拉框数据
@@ -63,7 +63,10 @@ export default {
       console.log(v);
       let _this = this;
       _this.$emit('childByValue',v);
-    }
+    },
+     resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
   },
   created() {
     let _this = this;
@@ -73,7 +76,7 @@ export default {
   //   let _this = this;
   //   console.log(this.parentRes);//输出父组件传过来的值
   // //   // if(_this.required != true){
-  //     _this.ruleForm.tpId = _this.parentRes;
+  //     _this.testDropFrom.tpId = _this.parentRes;
   // //   // }0
   // }
 };
