@@ -16,9 +16,9 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <test-drop-down-box @childByValue="childByValue"></test-drop-down-box>
-          <class-and-grade @childByValue2="childByValue2"></class-and-grade>
-          <test-time @childByValue3="childByValue3"></test-time>
+          <test-drop-down-box @childByValue="childByValue" :parentRes="pRes"></test-drop-down-box>
+          <class-and-grade @childByValue2="childByValue2" :parentRes2="cRes"></class-and-grade>
+          <test-time @childByValue3="childByValue3" :parentRes3="timeRes"></test-time>
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -67,9 +67,9 @@
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
       <el-form :model="form">
-        <test-drop-down-box :parentRes="pRes"></test-drop-down-box>
-        <class-and-grade :parentRes2="cRes"></class-and-grade>
-        <test-time :parentRes3="timeRes"></test-time>
+        <test-drop-down-box @childByValue="childByValue" :parentRes="pRes"></test-drop-down-box>
+        <class-and-grade @childByValue2="childByValue2" :parentRes2="cRes"></class-and-grade>
+        <test-time @childByValue3="childByValue3" :parentRes3="timeRes"></test-time>
       </el-form>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
