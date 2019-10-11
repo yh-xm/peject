@@ -162,8 +162,8 @@ export default {
           if (res.data.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             var data = {
-              index: 2,  //题目下标
-              fqsScore: v,  //题目分数
+              index: 2, //题目下标
+              fqsScore: v, //题目分数
               fqIndex: _this.nowIndex2 //题号
             };
             _this.$msg(_this, 1, "修改成功!");

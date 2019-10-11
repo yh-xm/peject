@@ -31,7 +31,7 @@
 
         <el-form-item v-for="(domain, index) in AddMultipleChoice.domains" :key="domain.key">
           <el-checkbox-group v-model="AddMultipleChoice.checked" :min="0" :max="2" @change="change">
-            <el-checkbox :label="domain.options" :key="index"></el-checkbox>
+            <el-checkbox :label="domain.options" :key="index" :checked="domain.cqIsRight"></el-checkbox>
           </el-checkbox-group>
 
           <el-input v-model="domain.value"></el-input>
@@ -136,31 +136,34 @@ export default {
       var _this = this;
       _this.$nextTick(function() {
         _this.$refs[formName].validate(valid => {
+          console.log(_this.$refs[formName].model.domains);
           if (valid) {
             var tpqPaperId = sessionStorage.testPaperId; //获取试卷ID
             var tpqScore = _this.$refs[formName].model.onum; //获取表单的分数
             var title = _this.$refs[formName].model.title; //获取题目
             var arrs = [];
-            for (const key in _this.$refs[formName].model.domains) {
-              if (
-                _this.$refs[formName].model.domains[key].options ==
-                  _this.AddMultipleChoice.checked[ //判断选中项 是不是多选中的其中之一
-                    _this.AddMultipleChoice.checked.length - 1
-                  ] ||
-                _this.$refs[formName].model.domains[key].options ==
-                  _this.AddMultipleChoice.checked[0]
-              ) {
-                arrs.push({
-                  cqOption: _this.$refs[formName].model.domains[key].value, //选项的值
-                  cqIsRight: true //选中为true 
-                });
-              } else {
-                arrs.push({
-                  cqOption: _this.$refs[formName].model.domains[key].value, //选项的值
-                  cqIsRight: false //没选中为fasle
-                });
+            var newAddMultipleChoice = _this.$refs[formName].model.domains.map(
+              v => {
+                if (
+                  v.options ==
+                    _this.AddMultipleChoice.checked[ //判断选中项 是不是多选中的其中之一
+                      _this.AddMultipleChoice.checked.length - 1
+                    ] ||
+                  v.options == _this.AddMultipleChoice.checked[0]
+                ) {
+                  return {
+                    cqOption: v.value, //选项的值
+                    cqIsRight: true //选中为true
+                  };
+                } else {
+                  return {
+                    cqOption: v.value, //选项的值
+                    cqIsRight: false //没选中为fasle
+                  };
+                }
               }
-            }
+            );
+
             _this.axios
               .post(`/api/TestPaper/AddQuestionToTestPaper`, {
                 tpqPaperId: tpqPaperId, //试卷主键编号
@@ -168,7 +171,7 @@ export default {
                 tpqQuestion: {
                   questionTitle: title, //题目的标题
                   questionTypeId: 1, //题目的类型 1=选择题 2=填空题 3=问答题
-                  chooseQuestion: arrs
+                  chooseQuestion: newAddMultipleChoice
                 }
               })
               .then(res => {
@@ -178,7 +181,7 @@ export default {
                     questionTypeId: 1
                   };
                   _this.$emit("addMultipleChoice", data); //通知父组件
-                  _this.$msg(_this, 1, "添加成功!"); 
+                  _this.$msg(_this, 1, "添加成功!");
                   _this.init(); //初始化
                   _this.resetForm("AddMultipleChoice");
                 } else {
@@ -201,10 +204,12 @@ export default {
       var _this = this;
       _this.AddMultipleChoice.checked = []; //初始化多选
       _this.AddMultipleChoice.domains = [];
-      for (let i = 0; i < 4; i++) {  //初始化4个选项
+      for (let i = 0; i < 4; i++) {
+        //初始化4个选项
         _this.AddMultipleChoice.domains.push({
           value: "",
-          options: _this.AddMultipleChoice.optionsActive[i]
+          options: _this.AddMultipleChoice.optionsActive[i],
+          cqIsRight: false
         });
       }
     },

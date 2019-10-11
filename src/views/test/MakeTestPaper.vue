@@ -23,7 +23,7 @@
               <question-sectect 
               :select="false" 
               :defaultSelect="0"
-              v-model="nowAddOption"
+              @changeOption="changeOption"
               @questionInit="questionInit" 
               />
             </div>
@@ -208,6 +208,10 @@ this.active = v;
          _this.pageInfo[index].nowScroe += _this.pageInfo[index].bodys[key].tpqScore //改变父组件的问答题的分数
       }
       _this.pageInfo = [...this.pageInfo] //重新解构赋值
+    },
+    changeOption(v){
+      var _this = this;
+      _this.nowAddOption = v;
     }
   },
   filters: {

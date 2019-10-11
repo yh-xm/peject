@@ -23,8 +23,7 @@
         class="demo-dynamic"
       >
         <!-- 题目 -->
-        <el-form-item label="题干"
-        >
+        <el-form-item label="题干">
           <el-button round icon="el-icon-document-checked" @click="addDomain" size="small">插入填空</el-button>
         </el-form-item>
         <el-form-item>
@@ -37,8 +36,8 @@
         >
           <el-tag type="danger" effect="dark" size="mini">{{index+1}}</el-tag>
 
-          <el-input v-model="domain.value" :placeholder="'请输入第'+(index+1)+'个空的答案'" ></el-input>
-          <el-input-number v-model="domain.onum" :min="1" :max="10" :key="index" ></el-input-number>
+          <el-input v-model="domain.value" :placeholder="'请输入第'+(index+1)+'个空的答案'"></el-input>
+          <el-input-number v-model="domain.onum" :min="1" :max="10" :key="index"></el-input-number>
         </el-form-item>
         <el-form-item label="题目预览" class="view-options">
           <el-row v-for="(item,index) in title" :key="index">
@@ -100,7 +99,8 @@ export default {
             fillQuestion.push({
               fqOrder: key, //序号
               fqAnswer: domains[key].value, //答案
-              fillQuestionScore: [ //分数
+              fillQuestionScore: [
+                //分数
                 {
                   fqsScore: domains[key].onum
                 }
@@ -125,12 +125,12 @@ export default {
                   bodys: res.data.data, //传递题目信息
                   questionTypeId: 2 //题目类型Id
                 };
-                _this.$emit("addGapFilling", data);  //改变父组件的值
-                _this.$msg(_this, 1, "添加成功!"); 
+                _this.$emit("addGapFilling", data); //改变父组件的值
+                _this.$msg(_this, 1, "添加成功!");
                 _this.resetForm("AddGapFillQuestion"); //重置表单
                 _this.title = ""; //重置题目
-              }else{
-                _this.$msg(_this,-1, res.data.message)
+              } else {
+                _this.$msg(_this, -1, res.data.message);
               }
             });
         } else {
@@ -181,11 +181,10 @@ export default {
         //支持firefox
         CaretPos = element.selectionStart;
       return CaretPos;
-    },
+    }
     /**
      * 改变填空的答案长度
      */
-  
   },
   /**
    * 监听题目的变化
@@ -201,62 +200,90 @@ export default {
     //监听题目变化
     title: function(n, o) {
       var _this = this;
-      var oindex = 0;//旧字符串数组下标
+      var oindex = 0; //旧字符串数组下标
       var nindex = 0; //新字符串数组下标
-      var oindexArr = [];//旧填空数组
-      var nindexArr = [];//新填空数组
-      var oarr = o.split("");//旧题目字符串变成数组
-      var narr = n.split("");//新题目字符串变成数组
-      var nowAddOption = {value: "",onum: 2} //需要添加的填空信息
+      var oindexArr = []; //旧填空数组
+      var nindexArr = []; //新填空数组
+      var oarr = o.split(""); //旧题目字符串变成数组
+      var narr = n.split(""); //新题目字符串变成数组
+      var nowAddOption = { value: "", onum: 2 }; //需要添加的填空信息
       for (const key in oarr) {
         if (oarr[key] == "▁") {
-          oarr[key] = oindex++;//填空的下标 第几个填空
-          oindexArr.push(key);//存入旧填空数组
+          oarr[key] = oindex++; //填空的下标 第几个填空
+          oindexArr.push(key); //存入旧填空数组
         } else {
-          oarr[key] = "*";//存入旧填空数组
+          oarr[key] = "*"; //存入旧填空数组
         }
       }
       for (const key in narr) {
         if (narr[key] == "▁") {
-          narr[key] = nindex++;//填空的下标 第几个填空
-          nindexArr.push(key);//存入旧填空数组
+          narr[key] = nindex++; //填空的下标 第几个填空
+          nindexArr.push(key); //存入旧填空数组
         } else {
-          narr[key] = "*";//不是填空变为*
+          narr[key] = "*"; //不是填空变为*
         }
       }
-      var textindex = _this.getCursortPosition(//获取文本下标
+      var textindex = _this.getCursortPosition(
+        //获取文本下标
         document.getElementById("textarea")
       );
-      if (nindexArr.length > oindexArr.length) { //新的字符串长度大于旧字符串的长度
+      if (nindexArr.length > oindexArr.length) {
+        //新的字符串长度大于旧字符串的长度
         //如果添加填空
-        if (nindexArr.length - oindexArr.length > 1 ||narr.length - oarr.length > 1) { //更改的长度大于1 复制粘贴操作
+        if (
+          nindexArr.length - oindexArr.length > 1 ||
+          narr.length - oarr.length > 1
+        ) {
+          //更改的长度大于1 复制粘贴操作
           //一次性复制粘贴填空
-          var max = 0; 
+          var max = 0;
           for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
             //添加多少填空
-            for (let x in oindexArr) {//添加填空的位置
-              if (textindex - (narr.length - oarr.length) < parseInt(oindexArr[x])) { //在哪个位置插入
-                this.AddGapFillQuestion.domains.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption); 
+            for (let x in oindexArr) {
+              //添加填空的位置
+              if (
+                textindex - (narr.length - oarr.length) <
+                parseInt(oindexArr[x])
+              ) {
+                //在哪个位置插入
+                this.AddGapFillQuestion.domains.splice(
+                  oarr[parseInt(oindexArr[x])],
+                  0,
+                  nowAddOption
+                );
                 break;
               } else {
                 max++;
               }
             }
-            if (max == oindexArr.length) { //大于所有旧填空下标，则是往后插入。
+            if (max == oindexArr.length) {
+              //大于所有旧填空下标，则是往后插入。
               //往后添加空格
               _this.AddGapFillQuestion.domains.push(nowAddOption);
               max = 0; //清空
             }
           }
         } else {
-           //按按钮操作添填空
-          _this.AddGapFillQuestion.domains.splice(narr[textindex], 0, nowAddOption);
+          //按按钮操作添填空
+          _this.AddGapFillQuestion.domains.splice(
+            narr[textindex],
+            0,
+            nowAddOption
+          );
         }
       }
-      if (nindexArr.length < oindexArr.length) { //填空减少了
-        for (let i in oindexArr) { //从哪里开始减少  减少了多少个填空
-          if (parseInt(oindexArr[i]) >= textindex &&parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
-            _this.AddGapFillQuestion.domains.splice(i,oindexArr.length - nindexArr.length);
+      if (nindexArr.length < oindexArr.length) {
+        //填空减少了
+        for (let i in oindexArr) {
+          //从哪里开始减少  减少了多少个填空
+          if (
+            parseInt(oindexArr[i]) >= textindex &&
+            parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length
+          ) {
+            _this.AddGapFillQuestion.domains.splice(
+              i,
+              oindexArr.length - nindexArr.length
+            );
             break;
           }
         }
@@ -267,17 +294,19 @@ export default {
       }
       _this.optionsIndexArr = narr; // 获取最新的分割题目数组
     },
-    AddGapFillQuestion:{
-      handler(n,o){
-             var that = this;
-      for(let i=0;i<that.AddGapFillQuestion.domains.length;i++){
-          that.AddGapFillQuestion.domains[i].olength =  parseInt(that.AddGapFillQuestion.domains[i].value.length)*14+30+"px"
-        
-      }
-      console.log(n)
+    AddGapFillQuestion: {
+      handler(n, o) {
+        var that = this;
+        for (let i = 0; i < that.AddGapFillQuestion.domains.length; i++) {
+          that.AddGapFillQuestion.domains[i].olength =
+            parseInt(that.AddGapFillQuestion.domains[i].value.length) * 12 +
+            35 +
+            "px";
+        }
+        console.log(n);
       },
-       immediate: true,
-       deep: true
+      immediate: true,
+      deep: true
     }
   }
 };
@@ -320,7 +349,6 @@ export default {
         }
         .ShowFen {
           /deep/.el-input__inner {
-    
             border-bottom: none;
             padding: 0px !important;
           }
@@ -330,7 +358,7 @@ export default {
         border-radius: 50%;
         margin-top: 12px;
       }
-   
+
       .ShowFen {
         width: 20px;
       }

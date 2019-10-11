@@ -49,6 +49,7 @@
             :defaultSelect="0"
              v-model="nowAddOption"
             @questionInit="questionInit"
+            @changeOption="changeOption"
           />
         </div>
       </div>
@@ -279,6 +280,10 @@ export default {
             _this.score.chooseScore = parseInt(_this.pageInfo[0].nowScroe );
          _this.score.gapfillScore  = parseInt(_this.pageInfo[1].nowScroe);
        _this.score.answerScore  = parseInt( _this.pageInfo[2].nowScroe );
+    },
+    changeOption(v){
+     var _this = this;
+      _this.nowAddOption = v;
     }
   },
   filters: {

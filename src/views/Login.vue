@@ -134,12 +134,14 @@ export default {
                   sessionStorage.userId = r.data.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
 
-                  if (_this.$route.query.redirect) {
+                  if(sessionStorage.redirect){
+                      _this.$router.push({
+                      path: sessionStorage.redirect
+                    });
+                  }else if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);
-
                     let redirect = _this.$route.query.redirect;
-                    console.log(redirect);
                     _this.$router.push({
                       path: redirect
                     });
@@ -154,6 +156,7 @@ export default {
               })
               .catch(function(error) {
                 _this.$msg(_this, -1, "用户名或密码错误，请重新输入!");
+                console.log(_this.$route.query.redirect)
               });
           } else {
             _this.$msg(_this, -1, "请填写用户名和密码");
@@ -198,7 +201,7 @@ export default {
   //tkon失效时 重新登录回到之前页面
     beforeRouteEnter: (to, from, next) => {
       if(to.query.redirect=="warning"){
-        to.query.redirect=from.fullPath;
+        sessionStorage.redirect=from.fullPath;
            next();
       }else{
         next();
