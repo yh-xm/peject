@@ -16,7 +16,7 @@
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <!-- 选择课程名称 -->
-      <course-frame v-model="lovingVue" class="dropBlock"></course-frame>
+      <course-frame @update="changeClassId" class="dropBlock"></course-frame>
         <!-- 进行下一步操作 -->
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">下一步</el-button>
@@ -44,7 +44,7 @@ export default {
           { required: true, message: "请选择课程名称", trigger: "change" } //对应验证信息
         ]
       },
-      lovingVue:[]
+      selectOption:[]
     };
   },
   methods: {
@@ -58,7 +58,7 @@ export default {
       var _this = this;
       var userId = sessionStorage.userId; //当前老师的唯一标识符
       _this.$refs[formName].validate(valid => {
-        var tpCourseId = _this.lovingVue[0].courseId //获取下拉选中的课程Id
+        var tpCourseId = _this.selectOption[0].courseId //获取下拉选中的课程Id
         var name = _this.$refs[formName].model.name; //试卷名称
         if (valid) {
           _this.axios
@@ -79,6 +79,10 @@ export default {
         }
       });
     },
+    changeClassId(v){
+      var _this = this;
+      _this.selectOption = v
+    }
   },
   created() {
   }
