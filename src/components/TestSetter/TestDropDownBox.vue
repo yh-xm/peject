@@ -1,6 +1,6 @@
 <template>
   <div id="testDrownBox-testSetter">
-    子组件:{{parentRes}}
+    <!-- 子组件:{{parentRes}} -->
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="试卷" prop="tpId" size="small">
         <el-select v-model="ruleForm.tpId" placeholder="请选择试卷" @change="setInfo" :title="parentRes">
@@ -61,7 +61,7 @@ export default {
     setInfo(v) {
       // childByValue 是在父组件on监听的方法
       //第二个参数 v 是需要传的值
-      // console.log(v);
+      console.log(v);
       let _this = this;
       _this.$emit('childByValue',v);
     }
@@ -70,14 +70,14 @@ export default {
     let _this = this;
     _this.getAllTestPaper();
   },
-  updated(){
-    let _this = this;
-    console.log(this.parentRes);
-    // if(_this.required != true){
-      _this.ruleForm.tpId = _this.parentRes;
-    // }
+  // updated(){
+  //   let _this = this;
+  //   console.log(this.parentRes);
+  //   // if(_this.required != true){
+  //     _this.ruleForm.tpId = _this.parentRes;
+  //   // }
     
-  }
+  // }
 };
 </script>
 <style lang="less" scoped>

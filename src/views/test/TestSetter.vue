@@ -160,6 +160,7 @@ export default {
         taskStartTime: _this.childRes3[0], //开始时间
         taskEndTime: _this.childRes3[1] //结束时间
       };
+      // console.log(obj)
       // console.log(obj);
       let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
       // console.log(uId);
