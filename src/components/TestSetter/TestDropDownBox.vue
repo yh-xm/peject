@@ -61,7 +61,7 @@ export default {
     setInfo(v) {
       // childByValue 是在父组件on监听的方法
       //第二个参数 v 是需要传的值
-      // console.log(v);
+      console.log(v);
       let _this = this;
       _this.$emit('childByValue',v);
     }
@@ -70,14 +70,14 @@ export default {
     let _this = this;
     _this.getAllTestPaper();
   },
-  updated(){
-    let _this = this;
-    console.log(this.parentRes);
-    // if(_this.required != true){
-      _this.ruleForm.tpId = _this.parentRes;
-    // }
+  // updated(){
+  //   let _this = this;
+  //   console.log(this.parentRes);
+  //   // if(_this.required != true){
+  //     _this.ruleForm.tpId = _this.parentRes;
+  //   // }
     
-  }
+  // }
 };
 </script>
 <style lang="less" scoped>

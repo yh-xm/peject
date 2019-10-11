@@ -68,12 +68,12 @@ export default {
     let _this = this;
     _this.getAllClass();
   },
-  updated(){
-    let _this = this;
-    console.log(_this.parentRes2);
-    _this.ruleForm.classId = _this.parentRes2;
-    console.log(_this.ruleForm.classId)
-  }
+  // updated(){
+  //   let _this = this;
+  //   console.log(_this.parentRes2);
+  //   _this.ruleForm.classId = _this.parentRes2;
+  //   console.log(_this.ruleForm.classId)
+  // }
 };
 </script>
 <style lang="less" scoped>
