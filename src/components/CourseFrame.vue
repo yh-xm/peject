@@ -15,7 +15,7 @@ seed = {
 <template>
   <div id="CourseFrame">
     <el-form
-    :name="oindex"
+      :name="oindex"
       :model="ruleForm"
       :rules="rules"
       ref="ruleForm"
@@ -37,19 +37,19 @@ seed = {
 </template>
 <script>
 export default {
-  model: {
-    event: "update" //传递父组件的方法
-  },
+
   props: {
-    oindex: { // 父组件传过来的类型 用于编辑操作 
-       type: Object,
-      default:function(){
-        return{ //默认值
-          index:null,
-          flag:false
-        }
-      } 
-    }, 
+    oindex: {
+      // 父组件传过来的类型 用于编辑操作
+      type: Object,
+      default: function() {
+        return {
+          //默认值
+          index: null,
+          flag: false
+        };
+      }
+    },
     oname: String //父组件传过来的  用于标题名的宽度
   },
 
@@ -78,31 +78,28 @@ export default {
       var _this = this;
       _this.flag = true;
       _this.ruleForm.keChenId = price;
-      _this.repeTition(_this.ruleForm.keChenId)
+      _this.repeTition(_this.ruleForm.keChenId);
     },
 
     /**
      * 课程信息加首次赋值id
      */
-    usCourse(){
+    usCourse() {
       var _this = this;
       _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
         _this.course = data.data;
         _this.ruleForm.keChenId = _this.oindex; //首次赋值id
-    _this.repeTition(_this.ruleForm.keChenId)
+        _this.repeTition(_this.ruleForm.keChenId);
       });
     },
     /**
      * 封装好的过滤以达到重复调用
      * @param {Number} subscript 被调用时传过来的id
      */
-    repeTition(subscript){
-      var _this=this
-         var singular = _this.course.filter(function(data) {
-          //过滤
-          return data.courseId == subscript;
-        });
-        _this.$emit("update", singular); //传递到父组件
+    repeTition(subscript) {
+      var _this = this;
+      var singular = _this.course.find(keCen => keCen.courseId == subscript); //数组find（）查找
+      _this.$emit("update", singular); //传递到父组件
     }
   },
   /**
@@ -121,7 +118,7 @@ export default {
         return;
       }
       _this.ruleForm.keChenId = _this.oindex.index;
-       _this.repeTition(_this.ruleForm.keChenId)
+      _this.repeTition(_this.ruleForm.keChenId);
     } else {
       _this.flag = _this.oindex.flag;
     }
