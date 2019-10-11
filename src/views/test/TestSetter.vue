@@ -6,14 +6,7 @@
       <el-breadcrumb-item>在线测试</el-breadcrumb-item>
       <el-breadcrumb-item>安排测试</el-breadcrumb-item>
     </el-breadcrumb>
-<<<<<<< HEAD
     <!-- Breadcrumb 面包屑 结束 -->
-=======
-    试卷：{{childRes1}}
-    班级：{{childRes2}}
-    考试时间：{{childRes3}}
-    <!-- Breadcrumb 面包屑 结束
->>>>>>> master
 
     <!-- 卡片 -->
     <el-card class="box-card">
