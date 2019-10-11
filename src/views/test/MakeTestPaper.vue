@@ -4,7 +4,7 @@
       <!-- 面包屑 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
-        <el-breadcrumb-item>{{$t('base.title')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('test.r1')}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -16,9 +16,9 @@
         <el-step title="完成制作"></el-step>
       </el-steps>
 
-      <begin-make v-if="active==0"></begin-make>
+      <begin-make v-if="active==0" @changeType="changeActive"></begin-make>
       <div id="TestInfo" v-if="active==1">
-        <div class="tabs">
+        <div class="tabs" >
           <div class="left-list">
               <question-sectect 
               :select="false" 
@@ -47,32 +47,32 @@
               </span>
             </div>
             <div v-for="(items,indexs) in item.bodys" :key="indexs" class="text item">
-              <SetChooseQuestion
+              <set-choose-question
                 v-if="items.tpqQuestion.questionTypeId=='1'?true:false"
                 :AddChooseQuestionList="items"
                 :nowIndex="indexs"
                 @setQuestion="setQuestion"
                 @changeScore="changeScore"
-              ></SetChooseQuestion>
-              <SetGapFillQuestion
+              ></set-choose-question>
+              <setGap-fill-question
                 v-if="items.tpqQuestion.questionTypeId=='2'?true:false"
                 :AddGapFillQuestionList="items"
                 :nowIndex3="indexs"
                 @setQuestion="setQuestion"
                 @changeScore="changeScore"
-              ></SetGapFillQuestion>
-              <SetAnswerQuestion
+              ></setGap-fill-question>
+              <set-answer-question
                 v-if="items.tpqQuestion.questionTypeId=='3'?true:false"
                 :AddEssayQuestiontList="items"
                 :nowIndex2="indexs"
                 @setQuestion="setQuestion"
                 @changeScore="changeScore"
-              ></SetAnswerQuestion>
+              ></set-answer-question>
             </div>
           </el-card>
         </div>
       </div>
-      <MakeOver v-if="active==2"></MakeOver>
+      <MakeOver v-if="active==2"  @changeType="changeActive"></MakeOver>
     </el-card>
   </div>
 </template>
@@ -132,6 +132,13 @@ export default {
      */
     fnover() {
       this.active = 2;
+    },
+     /**
+     * 改变步奏
+     * @param {Number} v 当前步奏
+     */
+    changeActive(v){
+this.active = v;
     },
     /**
      * 初始化试卷
@@ -221,6 +228,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #MakeTestPaper {
+  min-width: 450px;
   .box-card {
     margin-top: 25px;
   }

@@ -1,9 +1,8 @@
-/** 
+<!--
 试卷详情组件
 通过路由传参 
 需要传入 试卷Id 
-*/
-
+-->
 <template>
   <div class="TestInfo">
     <!-- 面包屑导航 -->
@@ -142,6 +141,7 @@ export default {
           sum += _this.pageInfo[i].nowScroe;
         }
       }
+             _this.score.sum = sum;
       return sum;
     }
   },
@@ -153,6 +153,9 @@ export default {
         .get("/api/TestPaper/GetTestPaper?id=" + _this.id)
         .then(res => {
           var data = res.data;
+          if(data.questions.length==0){
+            return;
+          }
           for (const key in data.questions) {
             if (data.questions[key].tpqQuestion.questionTypeId == "1") {
               //选择题
@@ -217,6 +220,7 @@ export default {
       var index = data.questionTypeId - 1;
       _this.pageInfo[index].bodys.push(data.bodys); //改变父组件的问答题的试卷信息
       _this.pageInfo[index].nowAdd += 1; //改变父组件的问答题的问题个数
+      _this.changeTableScore();
       _this.sumScore(index);
     },
     /**
@@ -232,6 +236,7 @@ export default {
       _this.pageInfo[index].bodys.splice(data.index, 1); //改变父组件的问答题的试卷信息
       _this.pageInfo[index].nowAdd -= 1; //改变父组件的问答题的问题个数
       _this.pageInfo[index].nowScroe -= parseInt(data.tpqScore); //改变父组件的问答题的分数
+      _this.changeTableScore();
       _this.pageInfo = [..._this.pageInfo]; //解构渲染
     },
     /**
@@ -256,13 +261,24 @@ export default {
       }
       _this.pageInfo[index].nowScroe = 0;
       if (fqIndex != undefined) {
-        _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore;
+        _this.pageInfo[index].bodys[fqIndex].tpqScore = fqsScore; //修改题目的分数
       }
       for (const key in _this.pageInfo[index].bodys) {
         _this.pageInfo[index].nowScroe +=
           _this.pageInfo[index].bodys[key].tpqScore; //改变父组件的问答题的分数
       }
-      _this.pageInfo = [...this.pageInfo];
+      _this.changeTableScore();
+      _this.pageInfo = [..._this.pageInfo];
+    },
+    /**
+     * 表格分数重新赋值
+     *
+     */
+    changeTableScore(){
+      var _this = this;
+            _this.score.chooseScore = parseInt(_this.pageInfo[0].nowScroe );
+         _this.score.gapfillScore  = parseInt(_this.pageInfo[1].nowScroe);
+       _this.score.answerScore  = parseInt( _this.pageInfo[2].nowScroe );
     }
   },
   filters: {
@@ -284,6 +300,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .TestInfo {
+  min-width: 450px;
   .table-content {
     width: 80%;
     margin: 30px auto;

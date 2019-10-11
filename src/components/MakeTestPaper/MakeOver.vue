@@ -1,3 +1,11 @@
+<!--
+老师出题
+  第三步组件
+
+  引用 import MakeOver 
+  from "@/components/MakeTestPaper/MakeOver"; 
+ 注册    components:{MakeOver},
+-->
 <template>
   <div id="MakeOver">
     <div class="content-make">
@@ -40,18 +48,19 @@ export default {
   },
   methods:{
       goback(){ //上一步
- this.$parent.$parent.active = 1;
- console.log(6666)
+
+   this.$emit("changeType",1)
       }
   },
   created() { //获取试卷信息
+  var _this =this;
     var pageId = sessionStorage.testPaperId;
     var chooseScore = 0; //选择题分数
     var answerScore = 0; //问答题分数
     var gapfillScore = 0;//填空题分数
-    this.axios.get(`/api/TestPaper/GetTestPaper?id=${pageId}`).then(res => {
+    _this.axios.get(`/api/TestPaper/GetTestPaper?id=${pageId}`).then(res => {
       var data = res.data;
-      this.data = data;
+      _this.data = data;
       for (const key in data.questions) {
         if (data.questions[key].tpqQuestion.questionTypeId == "1") {  //选择题
           chooseScore += data.questions[key].tpqScore;
@@ -65,7 +74,7 @@ export default {
       }
       var osum =
         parseInt(chooseScore) + parseInt(gapfillScore) + parseInt(answerScore);
-      this.tableData.push({
+      _this.tableData.push({
         name: data.courseName,
         choose: `<el-tag type="danger" effect="dark" size="mini" class="el-tag el-tag--danger el-tag--mini el-tag--dark">${chooseScore +
           "`"}</el-tag>`,
@@ -76,7 +85,7 @@ export default {
         sum: `<el-tag type="danger" effect="dark" size="mini" class="el-tag el-tag--danger el-tag--mini el-tag--dark">${osum +
           "`"}</el-tag>`,
       });
-      this.title = data.tpTitle;
+      _this.title = data.tpTitle;
     });
   }
 };

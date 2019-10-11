@@ -1,4 +1,4 @@
-/** 
+<!--
 添加填空题组件
 
   引用 import AddGapFilling 
@@ -10,7 +10,7 @@
           @addGapFilling="addQuestion" 添加题目时触发的事件
            />
 
-*/
+-->
 
 
 <template>
@@ -37,8 +37,8 @@
         >
           <el-tag type="danger" effect="dark" size="mini">{{index+1}}</el-tag>
 
-          <el-input v-model="domain.value" :placeholder="'请输入第'+(index+1)+'个空的答案'"></el-input>
-          <el-input-number v-model="domain.onum" :min="1" :max="10" :key="index"></el-input-number>
+          <el-input v-model="domain.value" :placeholder="'请输入第'+(index+1)+'个空的答案'" ></el-input>
+          <el-input-number v-model="domain.onum" :min="1" :max="10" :key="index" ></el-input-number>
         </el-form-item>
         <el-form-item label="题目预览" class="view-options">
           <el-row v-for="(item,index) in title" :key="index">
@@ -47,10 +47,11 @@
             <el-input
               v-if="item=='▁'"
               :key="index"
-              v-model="AddGapFillQuestion.domains[IndexArr[index]].value"
+              v-model="AddGapFillQuestion.domains[optionsIndexArr[index]].value"
               class="ShowDaAn"
+              :style="{width:`${AddGapFillQuestion.domains[optionsIndexArr[index]].olength}`}"
             ></el-input>
-            <span v-if="item=='▁'">({{AddGapFillQuestion.domains[IndexArr[index]].onum}}分)</span>
+            <span v-if="item=='▁'">({{AddGapFillQuestion.domains[optionsIndexArr[index]].onum}}分)</span>
           </el-row>
         </el-form-item>
         <el-form-item>
@@ -75,7 +76,7 @@ export default {
       AddGapFillQuestion: {
         domains: [] //填空
       },
-      IndexArr: [] //填空下标位置
+      optionsIndexArr: [] //填空下标位置
     };
   },
   methods: {
@@ -112,8 +113,8 @@ export default {
               tpqScore: tpqScore, //题目的分值
               tpqQuestion: {
                 questionTitle: _this.title, //填空题的标题
-                questionTypeId: 3,
-                fillQuestion: fillQuestion
+                questionTypeId: 3, //题目类型编号
+                fillQuestion: fillQuestion //题目信息
               }
             })
             .then(res => {
@@ -121,13 +122,15 @@ export default {
               if (res.data.message == "添加成功") {
                 res.data.data.tpqQuestion.questionTypeId = 2;
                 var data = {
-                  bodys: res.data.data,
-                  questionTypeId: 2
+                  bodys: res.data.data, //传递题目信息
+                  questionTypeId: 2 //题目类型Id
                 };
-                this.$emit("addGapFilling", data);  //改变父组件的值
-                _this.$msg(this, 1, "添加成功!"); 
-                this.resetForm("AddGapFillQuestion"); //重置表单
-                this.title = ""; //重置题目
+                _this.$emit("addGapFilling", data);  //改变父组件的值
+                _this.$msg(_this, 1, "添加成功!"); 
+                _this.resetForm("AddGapFillQuestion"); //重置表单
+                _this.title = ""; //重置题目
+              }else{
+                _this.$msg(_this,-1, res.data.message)
               }
             });
         } else {
@@ -178,7 +181,11 @@ export default {
         //支持firefox
         CaretPos = element.selectionStart;
       return CaretPos;
-    }
+    },
+    /**
+     * 改变填空的答案长度
+     */
+  
   },
   /**
    * 监听题目的变化
@@ -220,25 +227,25 @@ export default {
       var textindex = _this.getCursortPosition(//获取文本下标
         document.getElementById("textarea")
       );
-      if (nindexArr.length > oindexArr.length) {
+      if (nindexArr.length > oindexArr.length) { //新的字符串长度大于旧字符串的长度
         //如果添加填空
-        if (nindexArr.length - oindexArr.length > 1 ||narr.length - oarr.length > 1) {
+        if (nindexArr.length - oindexArr.length > 1 ||narr.length - oarr.length > 1) { //更改的长度大于1 复制粘贴操作
           //一次性复制粘贴填空
-          var max = 0;
+          var max = 0; 
           for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
             //添加多少填空
             for (let x in oindexArr) {//添加填空的位置
-              if (textindex - (narr.length - oarr.length) < parseInt(oindexArr[x])) {
-                this.AddGapFillQuestion.domains.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption);
+              if (textindex - (narr.length - oarr.length) < parseInt(oindexArr[x])) { //在哪个位置插入
+                this.AddGapFillQuestion.domains.splice(oarr[parseInt(oindexArr[x])],0,nowAddOption); 
                 break;
               } else {
                 max++;
               }
             }
-            if (max == oindexArr.length) {
+            if (max == oindexArr.length) { //大于所有旧填空下标，则是往后插入。
               //往后添加空格
               _this.AddGapFillQuestion.domains.push(nowAddOption);
-              max = 0;
+              max = 0; //清空
             }
           }
         } else {
@@ -247,7 +254,7 @@ export default {
         }
       }
       if (nindexArr.length < oindexArr.length) { //填空减少了
-        for (let i in oindexArr) {
+        for (let i in oindexArr) { //从哪里开始减少  减少了多少个填空
           if (parseInt(oindexArr[i]) >= textindex &&parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length) {
             _this.AddGapFillQuestion.domains.splice(i,oindexArr.length - nindexArr.length);
             break;
@@ -258,7 +265,19 @@ export default {
         //填空为0
         _this.AddGapFillQuestion.domains = [];
       }
-      _this.IndexArr = narr; // 获取最新的分割题目数组
+      _this.optionsIndexArr = narr; // 获取最新的分割题目数组
+    },
+    AddGapFillQuestion:{
+      handler(n,o){
+             var that = this;
+      for(let i=0;i<that.AddGapFillQuestion.domains.length;i++){
+          that.AddGapFillQuestion.domains[i].olength =  parseInt(that.AddGapFillQuestion.domains[i].value.length)*14+30+"px"
+        
+      }
+      console.log(n)
+      },
+       immediate: true,
+       deep: true
     }
   }
 };
@@ -311,9 +330,7 @@ export default {
         border-radius: 50%;
         margin-top: 12px;
       }
-      .ShowDaAn {
-        max-width: 50px;
-      }
+   
       .ShowFen {
         width: 20px;
       }

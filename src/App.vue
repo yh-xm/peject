@@ -3,6 +3,16 @@
     <router-view/>
   </div>
 </template>
+<script>
+  export default {
+    name: 'App',
+    data () {
+      return {
+        isRouterAlive: true
+      }
+    }
+  }
+</script>
 <style lang="less">
 * {
   margin: 0px;
