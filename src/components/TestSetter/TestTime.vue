@@ -23,7 +23,7 @@
 <script>
 export default {
   props:{
-    parentRes3:Array,
+    parentRes3:Object,
     required:true
   },
   data() {
@@ -62,7 +62,7 @@ export default {
       }
       //childByValue 定义在父组件on监听子组件传过去的值
       //第二参数val是子组件要传给父组件的值
-      val.a=_this.ruleForm.timeLimit;
+      // val.a=_this.ruleForm.timeLimit;
       _this.$emit("childByValue3",val);//把开始时间和结束时间传给父级组件
     }
   },

@@ -84,7 +84,6 @@
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
 import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
 import TestTime from "@/components/TestSetter/TestTime"; //考试时间
-
 export default {
   data() {
     return {
@@ -99,7 +98,7 @@ export default {
       childRes3: [], //接收子组件传的值 考试时间
       pRes:0,//父级组件下发给子组件的值 试卷
       cRes:0,//父级组件下发给子组件的值 班级
-      timeRes:[],//父级组件下发给子组件的值 考试时间
+      timeRes:{},//父级组件下发给子组件的值 考试时间
     };
   },
   //定义组件
@@ -229,15 +228,19 @@ export default {
      * */
     handleEdit(index, row) {
       let _this = this;
-      // console.log(index, row);
+      console.log(row);
       _this.dialogFormVisible = true;
       _this.pRes = row.taskTestPaperId;//试卷
       _this.cRes = row.classId;//班级
-      // console.log( typeof(_this.pRes));//检测数据类型
-      _this.timeRes[0] = row.taskStartTime;//考试时间  开始
-      _this.timeRes[1] = row.taskEndTime;//考试时间  结束
-      _this.timeRes[2] = row.taskEscapeTime;//耗时
+      _this.timeRes.begin = row.taskStartTime;//考试时间  开始
+      _this.timeRes.end = row.taskEndTime;//考试时间  结束
+      _this.timeRes.escape = row.taskEscapeTime;//耗时
+      console.log(_this.pRes);
+      console.log(_this.cRes);
       console.log(_this.timeRes);
+      // console.log( typeof(_this.pRes));//检测数据类型
+      
+      // console.log(_this.timeRes);
       // console.log(_this.pRes);
       // console.log(row.taskId);
     },
