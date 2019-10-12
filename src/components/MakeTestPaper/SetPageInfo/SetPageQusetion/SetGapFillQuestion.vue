@@ -346,10 +346,7 @@ export default {
         if (_this.oshow == false) {
           return;
         } else {
-          if (
-            nindexArr.length - oindexArr.length > 1 ||
-            narr.length - oarr.length > 1
-          ) {
+          if (nindexArr.length - oindexArr.length > 1) {
             //一次性复制粘贴填空
             var max = 0;
             for (let i = 0; i < nindexArr.length - oindexArr.length; i++) {
@@ -383,12 +380,22 @@ export default {
               }
             }
           } else {
-            // 按插入按钮进行插入
-            _this.nowOption.fillQuestion.splice(
-              narr[textindex],
-              0,
-              nowAddOption
-            );
+            if (narr.length - oarr.length > 1) {
+              for (let i in oindexArr) {
+                if (textindex < oindexArr[i]) {
+                  _this.nowOption.fillQuestion.splice(i, 0, nowAddOption); // 粘贴多个文字一个填空
+                  break;
+                }
+              }
+            } else {
+              // 按插入按钮进行插入
+              _this.nowOption.fillQuestion.splice( 
+                narr[textindex],
+                0,
+                nowAddOption
+              );
+            }
+
             _this.fillQuestion.push(narr[textindex]); //获取插入填空的位置
           }
         }
