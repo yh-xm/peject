@@ -60,7 +60,7 @@
             <el-form-item label="试卷标题" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <course-frame  v-model="lovingVue"  :oname="nemuId" class="selectOptions"></course-frame>
+            <course-frame  v-model="bothWay"  :oname="nemuId" class="selectOptions"></course-frame>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -77,7 +77,7 @@ export default {
   components: { CourseFrame }, //组件注册
   data() {
     return {
-      lovingVue:{courseId:0,courseName:""}, //接收子组件的值
+      bothWay:{courseId:0,courseName:""}, //接收子组件的值
       seed: "", //发送给子组件的对象
       nemuId: "", //用于发送给子组件的宽度
       tableData: [], //接收渲染的数据
@@ -109,10 +109,10 @@ export default {
     handleEdit(index, row) {
    
       var _this = this;
-        // console.log(row, _this.lovingVue)
+        // console.log(row, _this.bothWay)
       _this.ruleForm.name = row.tpTitle; //获取的名字赋值给弹出框
       //   //赋值给子组件
-        _this.lovingVue={
+        _this.bothWay={
           courseId:row.tpCourseId, //把课程id 赋值给子组件
           courseName:row.courseName
         }
@@ -132,7 +132,7 @@ export default {
           _this.axios
             .post("api/TestPaper/ModifyTestPaper", {
               tpId: _this.tpId, //试卷编号
-              tpCourseId: _this.lovingVue.courseId, //课程编号
+              tpCourseId: _this.bothWay.courseId, //课程编号
               tpTitle: _this.ruleForm.name //试卷标题
             })
             .then(function(data) {
@@ -141,8 +141,8 @@ export default {
 
                 var alter = _this.tableData[_this.usIndex]; //数据赋值以达到刷新
                 alter.tpTitle = _this.ruleForm.name;
-                alter.courseName = _this.lovingVue.courseName;
-                alter.tpCourseId = _this.lovingVue.courseId;
+                alter.courseName = _this.bothWay.courseName;
+                alter.tpCourseId = _this.bothWay.courseId;
               } else if (data.data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
               } else if (data.data.code == -1) {
