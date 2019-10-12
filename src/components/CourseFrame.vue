@@ -3,10 +3,10 @@
 
   引用  import CourseFrame from '@/components/CourseFrame.vue'
    注册    components:{CourseFrame},
-     当标签使用       <course-frame  v-model="lovingVue"  :oname="nemuId" class="selectOptions"></course-frame>
+     当标签使用       <course-frame  v-model="bothWay"  :oname="nemuId" class="selectOptions"></course-frame>
 locingVue 是对象类型 接收子组件的值
 
-         _this.lovingVue={
+         _this.bothWay={
           courseId:row.tpCourseId, //把课程id 赋值给子组件
           courseName:row.courseName //名字也赋值
         }
@@ -38,11 +38,11 @@ locingVue 是对象类型 接收子组件的值
 <script>
 export default {
     model:{
-         prop:'lovingVue',
+         prop:'bothWay',
           event:'update'
     },
   props: {
-    lovingVue:Object,
+    bothWay:Object,
     oname: String //父组件传过来的  用于标题名的宽度
   },
   data() {
@@ -67,8 +67,8 @@ export default {
       var _this = this;
       _this.ruleForm.keChenId = price;
        var singular = _this.course.find(keCen => keCen.courseId == price); //数组find（）查找
-      var fo=JSON.parse(JSON.stringify(singular))
-      _this.$emit("update",fo);
+      var copyCourse=JSON.parse(JSON.stringify(singular))
+      _this.$emit("update",copyCourse);
     },
     /**
      * 课程信息加首次赋值id
@@ -78,13 +78,13 @@ export default {
       _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
         _this.course = data.data;
         _this.$nextTick(()=>{
-      _this.ruleForm.keChenId =_this.lovingVue.courseId; //首次赋值id
+      _this.ruleForm.keChenId =_this.bothWay.courseId; //首次赋值id
         })
       });
     },
   },
   watch:{
-"lovingVue.courseId":function(id){
+"bothWay.courseId":function(id){
   var _this= this
  _this.ruleForm.keChenId =id
 }
@@ -96,6 +96,5 @@ export default {
     var _this = this;
     _this.usCourse(); //调用方法
   },
-  
 };
 </script>
