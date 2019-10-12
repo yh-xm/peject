@@ -2,7 +2,7 @@
 * 密码修改
 */
 <template>
-    <div class="Modify">
+    <div class="Modify" >
         <div slot="header" class="clearfix">
             <span><i class="el-icon-edit"></i> 修改密码</span>
         </div>

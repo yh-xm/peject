@@ -16,7 +16,7 @@
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <!-- 选择课程名称 -->
-      <course-frame @update="changeClassId" class="dropBlock"></course-frame>
+      <course-frame v-model="bothWay" class="dropBlock"></course-frame>
         <!-- 进行下一步操作 -->
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">下一步</el-button>
@@ -39,12 +39,9 @@ export default {
         name: [
           { required: true, message: "请输入试卷名称", trigger: "blur" }, //对应验证信息
           { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
-        ],
-        region: [
-          { required: true, message: "请选择课程名称", trigger: "change" } //对应验证信息
         ]
       },
-      selectOption:[]
+      bothWay:{}
     };
   },
   methods: {
@@ -58,7 +55,7 @@ export default {
       var _this = this;
       var userId = sessionStorage.userId; //当前老师的唯一标识符
       _this.$refs[formName].validate(valid => {
-        var tpCourseId = _this.selectOption[0].courseId //获取下拉选中的课程Id
+           var tpCourseId = _this.bothWay.courseId //获取下拉选中的课程Id
         var name = _this.$refs[formName].model.name; //试卷名称
         if (valid) {
           _this.axios
@@ -69,7 +66,7 @@ export default {
             })
             .then(res => {
               if (res.data.message == "添加成功") {
-              _this.$emit("changeType",1)
+              _this.$emit("changeType",{tpTitle:name,tpCourseName:_this.bothWay.courseName,index:1})
                 sessionStorage.testPaperId = res.data.data.testPaperId; //临时存储试卷Id
               }
             });
@@ -78,10 +75,6 @@ export default {
           return false;
         }
       });
-    },
-    changeClassId(v){
-      var _this = this;
-      _this.selectOption = v
     }
   },
   created() {

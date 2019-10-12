@@ -151,6 +151,8 @@ export default {
                       name: "home"
                     });
                   }
+                   _this.$store.dispatch('changeUserId',r.data.profile.userUserTypeId)
+                  
                   _this.$msg(_this, 1, "登录成功!");
                 }
               })

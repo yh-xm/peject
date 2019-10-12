@@ -6,6 +6,8 @@ import axios from 'axios'
 import vueaxios from 'vue-axios'
 import ElementUI from 'element-ui'
 import { setCookie, getCookie, clearCookie } from "@/api/SetCookie.js";
+import has from './directive/btnPermissions.js';
+import { mapState } from 'vuex'
 import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
 import i18n from './i18n/i18n';
@@ -46,7 +48,7 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
+// axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
 
 axios.interceptors.request.use(config=>{
   config.headers['Authorization'] = sessionStorage.getItem('tkon'); //默认请求携带tkon
@@ -73,5 +75,8 @@ new Vue({
   router,
   store,
   i18n,
+  computed:  mapState([
+    'userId'
+  ]),
   render: h => h(App)
 }).$mount('#app')

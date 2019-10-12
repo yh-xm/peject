@@ -16,6 +16,7 @@
               type="danger"
               :disabled="scope.row.disable"
               @click="handleDelete(scope.$index, scope.row)"
+              v-has
             >删除</el-button>
           </template>
         </el-table-column>
