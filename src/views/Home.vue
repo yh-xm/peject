@@ -159,8 +159,9 @@ export default {
        * @param ourl {string} 路径
        */
     addTab(targetName, ourl) {
+      var _this = this;
       //添加标签卡
-      var editableTabs = this.editableTabs;
+      var editableTabs = _this.editableTabs;
       var flag = 0;
       for (let key in editableTabs) {
         // 查找相同标签
@@ -173,15 +174,15 @@ export default {
       }
       if (flag == editableTabs.length) {
         //没有相同标签
-        let newTabName = ++this.tabIndex + "";
+        let newTabName = ++_this.tabIndex + "";
         editableTabs.push({
           title: targetName,
           name: newTabName,
           url: ourl
         });
-        this.editableTabsValue = newTabName;
+        _this.editableTabsValue = newTabName;
       } else {
-        this.editableTabsValue = this.editableTabs[flag].name; // 有相同的标签
+        _this.editableTabsValue = _this.editableTabs[flag].name; // 有相同的标签
       }
     },
        /**
@@ -258,18 +259,6 @@ init(){
   created() {
     this.init();
   },
-   watch: {
-        language: function() {   //此处language对应上方的checkbox进行绑定的数据
-            this.$i18n.locale === "zh"     
-                ? (this.$i18n.locale = "en")
-                : (this.$i18n.locale = "zh");
-            // getLocalStore(LAGU) === "zh"   //本地存储的进行变化
-            //     ? setLocalStore(LAGU, "en")
-            //     : setLocalStore(LAGU, "zh");
-              
-        }
-    }
-   
 };
 </script>
 <style lang="less" scoped>

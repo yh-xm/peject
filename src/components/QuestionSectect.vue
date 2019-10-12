@@ -24,7 +24,7 @@ defaultSelect  需传入Number 选中第几个
         <el-radio
           v-for="(item,index) in pageInfo"
           :key="index"
-          :label="item.typeName"
+          :label="index"
         >{{item.typeName}}</el-radio>
       </el-radio-group>
     </div>
@@ -32,10 +32,10 @@ defaultSelect  需传入Number 选中第几个
       <span class="list-title">题目类型</span>
       <el-select v-model="value" clearable placeholder="请选择" @change="changeQuestionType">
         <el-option
-          v-for="item in pageInfo"
+          v-for="(item,index) in pageInfo"
           :key="item.value"
-          :label="item.value"
-          :value="item.typeName"
+          :label="item.typeName"
+          :value="index"
         ></el-option>
       </el-select>
     </div>
@@ -70,28 +70,16 @@ export default {
           _this.pageInfo[i].nowAdd = 0;
           _this.pageInfo[i].nowScroe = 0;
         }
-        this.$emit("questionInit", _this.pageInfo);
+         this.$emit("questionInit", _this.pageInfo);
         if (_this.select == true) {
-          _this.value = _this.pageInfo[_this.defaultSelect].typeName;
+          _this.value = _this.defaultSelect
         } else {
-          _this.radio = _this.pageInfo[_this.defaultSelect].typeName;
+          _this.radio = _this.defaultSelect
         }
       });
     },
     changeQuestionType(type) {
-      var index = 0;
-      switch (type) {
-        case "选择题":
-          index = 0;
-          break;
-        case "填空题":
-          index = 1;
-          break;
-        case "问答题":
-          index = 2;
-          break;
-      }
-      this.$emit("changeOption", index);
+      this.$emit("changeOption", type);
     }
   },
   created() {

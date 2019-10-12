@@ -230,10 +230,7 @@ export default {
       if (nindexArr.length > oindexArr.length) {
         //新的字符串长度大于旧字符串的长度
         //如果添加填空
-        if (
-          nindexArr.length - oindexArr.length > 1 ||
-          narr.length - oarr.length > 1
-        ) {
+        if (nindexArr.length - oindexArr.length > 1) {
           //更改的长度大于1 复制粘贴操作
           //一次性复制粘贴填空
           var max = 0;
@@ -264,12 +261,23 @@ export default {
             }
           }
         } else {
+          console.log(textindex)
+          console.log(oindexArr)
+          if (narr.length - oarr.length > 1) {
+            for (let i in oindexArr) {
+              if (textindex < oindexArr[i]) {
+                _this.AddGapFillQuestion.domains.splice(i, 0, nowAddOption); // 粘贴多个文字一个填空
+                break;
+              }
+            }
+          } else {
+            _this.AddGapFillQuestion.domains.splice(
+              narr[textindex],
+              0,
+              nowAddOption
+            );
+          }
           //按按钮操作添填空
-          _this.AddGapFillQuestion.domains.splice(
-            narr[textindex],
-            0,
-            nowAddOption
-          );
         }
       }
       if (nindexArr.length < oindexArr.length) {

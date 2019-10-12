@@ -47,7 +47,7 @@
           <question-sectect
             :select="false"
             :defaultSelect="0"
-             v-model="nowAddOption"
+            v-model="nowAddOption"
             @questionInit="questionInit"
             @changeOption="changeOption"
           />
@@ -142,7 +142,7 @@ export default {
           sum += _this.pageInfo[i].nowScroe;
         }
       }
-             _this.score.sum = sum;
+      _this.score.sum = sum;
       return sum;
     }
   },
@@ -154,10 +154,11 @@ export default {
         .get("/api/TestPaper/GetTestPaper?id=" + _this.id)
         .then(res => {
           var data = res.data;
-          if(data.questions.length==0){
+          if (data.questions.length == 0) {
             return;
           }
-          for (const key in data.questions) {
+_this.$nextTick(()=>{
+            for (const key in data.questions) {
             if (data.questions[key].tpqQuestion.questionTypeId == "1") {
               //选择题
               _this.score.chooseScore += data.questions[key].tpqScore;
@@ -189,13 +190,8 @@ export default {
           _this.courseName = data.courseName;
           _this.tpTitle = data.tpTitle;
           _this.pageInfo = [..._this.pageInfo];
+})
         });
-    },
-    /**
-     * 点击完成制作
-     */
-    fnover() {
-      this.active = 2;
     },
     /**
      * 初始化试卷
@@ -257,8 +253,8 @@ export default {
      */
     sumScore(index, fqIndex, fqsScore) {
       var _this = this;
-      if(index==undefined){
-          return;
+      if (index == undefined) {
+        return;
       }
       _this.pageInfo[index].nowScroe = 0;
       if (fqIndex != undefined) {
@@ -275,14 +271,14 @@ export default {
      * 表格分数重新赋值
      *
      */
-    changeTableScore(){
+    changeTableScore() {
       var _this = this;
-            _this.score.chooseScore = parseInt(_this.pageInfo[0].nowScroe );
-         _this.score.gapfillScore  = parseInt(_this.pageInfo[1].nowScroe);
-       _this.score.answerScore  = parseInt( _this.pageInfo[2].nowScroe );
+      _this.score.chooseScore = parseInt(_this.pageInfo[0].nowScroe);
+      _this.score.gapfillScore = parseInt(_this.pageInfo[1].nowScroe);
+      _this.score.answerScore = parseInt(_this.pageInfo[2].nowScroe);
     },
-    changeOption(v){
-     var _this = this;
+    changeOption(v) {
+      var _this = this;
       _this.nowAddOption = v;
     }
   },
