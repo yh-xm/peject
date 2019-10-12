@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
+// axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
 
 axios.interceptors.request.use(config=>{
   config.headers['Authorization'] = sessionStorage.getItem('tkon'); //默认请求携带tkon

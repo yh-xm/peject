@@ -13,9 +13,15 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <test-drop-down-box @childByValue="childByValue" ref="testDropFrom"></test-drop-down-box>
-          <class-and-grade @childByValue2="childByValue2" ref="classDropFrom"></class-and-grade>
-          <test-time @childByValue3="childByValue3" ref="timeSelectFrom"></test-time>
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+            <el-form-item label="试卷">
+              <test-drop-down-box v-model="testObj"></test-drop-down-box>
+
+            </el-form-item>
+            <!-- <class-and-grade></class-and-grade>
+            <test-time></test-time>-->
+          </el-form>
+
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -63,11 +69,6 @@
     <!-- 添加对话框 -->
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
-      <el-form :model="form">
-        <test-drop-down-box @childByValue="childByValue" :parentRes="pRes"></test-drop-down-box>
-        <class-and-grade @childByValue2="childByValue2" :parentRes2="cRes"></class-and-grade>
-        <test-time @childByValue3="childByValue3" :parentRes3="timeRes"></test-time>
-      </el-form>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -84,22 +85,14 @@ import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 export default {
   data() {
     return {
+      ruleForm: {},//表单绑定的数据
+      rules: {},//表单验证
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
-      total: 0, //总条目
-      form: {},
-      childRes1: 0, //接收子组件传的值  试卷
-      childRes2: 0, //接收子组件传的值 班级
-      childRes3: [], //接收子组件传的值 考试时间
-      pRes:0,//父级组件下发给子组件的值 试卷 编辑
-      cRes:0,//父级组件下发给子组件的值 班级 编辑
-      timeRes:{
-        begin:"",
-        end:"",
-        escape:""
-      },//父级组件下发给子组件的值 考试时间 编辑
+      total: 0,//总条目
+      testObj:null,//父组件下发给子组件的值
     };
   },
   //定义组件
@@ -111,39 +104,6 @@ export default {
   //定义方法
   methods: {
     /**
-     * 获取子组件的数据
-     * 试卷
-     * @param {String} childValue 就是子组件传过来的值
-     *
-     * */
-    childByValue(childValue) {
-      // childValue就是子组件传过来的值
-      let _this = this;
-      _this.childRes1 = childValue;
-    },
-    /**
-     * 获取子组件的数据
-     * 班级
-     *@param {String} cVal 就是子组件传过来的值
-     * */
-    childByValue2(cVal) {
-      let _this = this;
-      // cVal就是子组件传过来的值
-      _this.childRes2 = cVal;
-    },
-    /**
-     * 获取子组件的数据
-     * 考试时间
-     *  @param {Object} tVal 就是子组件传过来的值
-     *
-     * */
-    childByValue3(tVal) {
-       // tVal就是子组件传过来的值
-      let _this = this;
-      _this.childRes3 = tVal;
-      // console.log(tVal);
-    },
-    /**
      * 安排测试
      *
      *
@@ -152,50 +112,54 @@ export default {
       let _this = this;
       // 判断输入框是否有值  是否符合条件
 
-      if(_this.childRes1==""||_this.childRes2==""||_this.childRes3 ==""){
-        _this.$msg(_this,-1,'信息不能为空！')
-        return;
-      }else if(_this.childRes3.a<=30){
-          _this.$msg(_this,-1,'考试时间不能少于30分钟！')
-            return;
-      }         
-      let obj = {
-        taskTestPaperId: _this.childRes1, //试卷编号
-        taskClassId: _this.childRes2, //班级编号
-        taskStartTime: _this.childRes3[0], //开始时间
-        taskEndTime: _this.childRes3[1] //结束时间
-      };
-      let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
-      // 调用接口
-      _this.axios.post("/api/TestPaper/SetTest?uid=" + uId, obj).then(
-        res => {
-          let dataCu = res.data.data;
-          console.log(dataCu);
-          if (res.data.code == 1) {
-            _this.$message({
-              type: "success",
-              message: "设置成功!"
-            });
-            _this.SetTest.unshift(dataCu);
-_this.cancelTest()
-          } else if (res.data.code == -2) {
-            _this.$message({
-              type: "error",
-              message: "参数错误!设置失败！"
-            });
-          }
-        },
-        () => {
-          _this.$message({
-            type: "error",
-            message: "系统错误!"
-          });
-        }
-      );
+      // if (
+      //   _this.childRes1 == "" ||
+      //   _this.childRes2 == "" ||
+      //   _this.childRes3 == ""
+      // ) {
+      //   _this.$msg(_this, -1, "信息不能为空！");
+      //   return;
+      // } else if (_this.childRes3.a <= 30) {
+      //   _this.$msg(_this, -1, "考试时间不能少于30分钟！");
+      //   return;
+      // }
+      // let obj = {
+      //   // taskTestPaperId: _this.childRes1, //试卷编号
+      //   // taskClassId: _this.childRes2, //班级编号
+      //   // taskStartTime: _this.childRes3[0], //开始时间
+      //   // taskEndTime: _this.childRes3[1] //结束时间
+      // };
+      // let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
+      // // 调用接口
+      // _this.axios.post("/api/TestPaper/SetTest?uid=" + uId, obj).then(
+      //   res => {
+      //     let dataCu = res.data.data;
+      //     console.log(dataCu);
+      //     if (res.data.code == 1) {
+      //       _this.$message({
+      //         type: "success",
+      //         message: "设置成功!"
+      //       });
+      //       _this.SetTest.unshift(dataCu);
+      //       // _this.cancelTest();//调用清空表单方法
+      //     } else if (res.data.code == -2) {
+      //       _this.$message({
+      //         type: "error",
+      //         message: "参数错误!设置失败！"
+      //       });
+      //     }
+      //   },
+      //   () => {
+      //     _this.$message({
+      //       type: "error",
+      //       message: "系统错误!"
+      //     });
+      //   }
+      // );
     },
-
     /**
      * 取消安排测试
+     * 清空表单
      *
      * */
 
@@ -203,15 +167,14 @@ _this.cancelTest()
       console.log("取消安排测试");
       let _this = this;
       // testDropFrom是试卷下拉框表单的值
-      _this.$refs.testDropFrom.resetForm("testDropFrom");//重置表单 试卷
-      _this.$refs.classDropFrom.classFun("classDropFrom");//重置表单 班级
-      _this.$refs.timeSelectFrom.espTime();//重置表单 考试时间
-            _this.childRes1 = "";
-            _this.childRes2 = "";
-            _this.childRes3[0] ="";
-             _this.childRes3[1]="";
+      // _this.$refs.testDropFrom.resetForm("testDropFrom"); //重置表单 试卷
+      // _this.$refs.classDropFrom.classFun("classDropFrom"); //重置表单 班级
+      // _this.$refs.timeSelectFrom.espTime(); //重置表单 考试时间
+      // _this.childRes1 = "";
+      // _this.childRes2 = "";
+      // _this.childRes3[0] = "";
+      // _this.childRes3[1] = "";
     },
-
 
     /**
      * 分页获取测试任务表
@@ -250,11 +213,11 @@ _this.cancelTest()
       let _this = this;
       console.log(row);
       _this.dialogFormVisible = true;
-      _this.pRes = row.taskTestPaperId;//试卷
-      _this.cRes = row.classId;//班级
-      _this.$set(_this.timeRes,'begin',row.taskStartTime)
-        _this.$set(_this.timeRes,'end',row.taskEndTime)
-          _this.$set(_this.timeRes,'escape',row.taskEscapeTime)
+      // _this.pRes = row.taskTestPaperId; //试卷
+      // _this.cRes = row.classId; //班级
+      // _this.$set(_this.timeRes, "begin", row.taskStartTime);
+      // _this.$set(_this.timeRes, "end", row.taskEndTime);
+      // _this.$set(_this.timeRes, "escape", row.taskEscapeTime);
     },
     /**
      * 删除当前行表格信息
@@ -265,7 +228,6 @@ _this.cancelTest()
     handleDelete(index, row) {
       let taskId = row.taskId;
       let _this = this;
-
       _this
         .$confirm("此操作将永久删除该数据,是否继续", "提示", {
           congirmButtonText: "确定",

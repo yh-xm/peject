@@ -16,10 +16,6 @@
 </template>
 <script>
 export default {
-  props:{
-    parentRes2:Number,
-    required:true
-  },
   data() {
     
     return {
@@ -79,12 +75,6 @@ export default {
     let _this = this;
     _this.getAllClass();
   },
-  // updated(){
-  //   let _this = this;
-  // //   // console.log(_this.parentRes2);
-  //   _this.classDropFrom.classId = _this.parentRes2;
-  // //   console.log(_this.classDropFrom.classId)
-  // }
 };
 </script>
 <style lang="less" scoped>

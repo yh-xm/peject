@@ -1,35 +1,31 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <el-form :model="testDropFrom" ref="testDropFrom" label-width="100px" class="demo-testDropFrom">
-      <el-form-item label="试卷" prop="tpId" size="small">
-        <el-select v-model="testDropFrom.tpId" placeholder="请选择试卷" @change="setInfo">
-          <el-option
-            v-for="item in options"
-            :key="item.tpId"
-            :label="item.tpTitle"
-            :value="item.tpId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item>
-        <el-button type="primary" @click="submitForm('testDropFrom')">设置</el-button>
-        <el-button @click="resetForm('testDropFrom')">取消</el-button>
-      </el-form-item> -->
-    </el-form>
+    <!-- multiple
+      filterable
+      allow-create
+      default-first-option -->
+    <el-select
+      
+      placeholder="请选择试卷"
+      @change="setInfo"
+      size="small"
+    >
+      <el-option v-for="item in options" :key="item.tpId" :label="item.tpTitle" :value="item.tpId"></el-option>
+    </el-select>
   </div>
 </template>
 <script>
 export default {
-  //接受父组件的值
+  model:{
+    prop:"testObj",//接受父级组件下发给子组件的值
+    event:"testChange"
+  },
   props:{
-    parentRes:Number,
-    required:true
+    testObj:Object,//声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
   },
   data() {
     return {
-      testDropFrom: {
-        tpId: "" //表单绑定的值
-      },
+        tpId: "", //下拉框 绑定的值
       options: [] //下拉框数据
     };
   },
@@ -60,25 +56,20 @@ export default {
     setInfo(v) {
       // childByValue 是在父组件on监听的方法
       //第二个参数 v 是需要传的值
-      console.log(v);
       let _this = this;
-      _this.$emit('childByValue',v);
+      console.log(v);
+      console.log(_this.tpId);
+      _this.$emit("childByValue", v);
+      // _this.$emit("testChange",$event.target.tpId);
     },
-     resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
+    // resetForm(formName) {
+    //   this.$refs[formName].resetFields();
+    // }
   },
   created() {
     let _this = this;
     _this.getAllTestPaper();
-  },
-  // updated(){
-  //   let _this = this;
-  //   console.log(this.parentRes);//输出父组件传过来的值
-  // //   // if(_this.required != true){
-  //     _this.testDropFrom.tpId = _this.parentRes;
-  // //   // }0
-  // }
+  }
 };
 </script>
 <style lang="less" scoped>
