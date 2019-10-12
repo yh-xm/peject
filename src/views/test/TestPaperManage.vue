@@ -10,7 +10,6 @@
     <!-- 卡片 -->
     <el-card class="box-card">
       <!-- 表格 -->
-      {{lovingVue}}
       <div slot="header" class="clearfix">
         <el-table :data="tableData" style="width:100%" :border="true">
           <el-table-column label="#" prop="index"></el-table-column>
@@ -61,7 +60,7 @@
             <el-form-item label="试卷标题" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <course-frame @update="keCenFanFa" :oindex="seed" :oname="nemuId" class="selectOptions"></course-frame>
+            <course-frame  v-model="lovingVue"  :oname="nemuId" class="selectOptions"></course-frame>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -78,7 +77,7 @@ export default {
   components: { CourseFrame }, //组件注册
   data() {
     return {
-      lovingVue: [], //接收子组件的值
+      lovingVue:{courseId:0,courseName:""}, //接收子组件的值
       seed: "", //发送给子组件的对象
       nemuId: "", //用于发送给子组件的宽度
       tableData: [], //接收渲染的数据
@@ -101,28 +100,22 @@ export default {
     };
   },
   methods: {
-    /**
-     * 子组件绑定的方法
-     * 
-     */
-    keCenFanFa(all){
-        var _this=this
-       _this.lovingVue=all //
-    }
-    ,
+  
     /**
      * 点击编辑
      * @param {Number} index 当前行的下标
      * @param {object} row 当前行的用户数据
      */
     handleEdit(index, row) {
+   
       var _this = this;
+        // console.log(row, _this.lovingVue)
       _this.ruleForm.name = row.tpTitle; //获取的名字赋值给弹出框
-      _this.seed = {
-        //赋值给子组件
-        index: row.tpCourseId, //把课程id 赋值给子组件
-        flag: false
-      };
+      //   //赋值给子组件
+        _this.lovingVue={
+          courseId:row.tpCourseId, //把课程id 赋值给子组件
+          courseName:row.courseName
+        }
       _this.tpId = row.tpId; //当前行的试卷id
       _this.usIndex = index; //当前行的下标
       _this.dialogFormVisible = true;
@@ -132,10 +125,10 @@ export default {
      * @param {boolean} formName 表单的验证
      */
     amend(formName) {
+      
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log( _this.lovingVue)
           _this.axios
             .post("api/TestPaper/ModifyTestPaper", {
               tpId: _this.tpId, //试卷编号
