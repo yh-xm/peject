@@ -3,19 +3,19 @@
 
   引用  import CourseFrame from '@/components/CourseFrame.vue'
    注册    components:{CourseFrame},
-     当标签使用    <course-frame v-model="lovingVue" :oindex="seed" :oname="nemuId"></course-frame>
-locingVue 是数组类型 接收子组件的值
-seed 用于传递给子组件值 传递当前行的课程id {Object} 类型 
-seed = {
-        index:row.classCourseId,//获取的课程编码赋值给原课程编码 就能默认选中 ，不需要的话请赋值 null
-        flag:false //用于清除change 事件的影响
+     当标签使用       <course-frame  v-model="lovingVue"  :oname="nemuId" class="selectOptions"></course-frame>
+locingVue 是对象类型 接收子组件的值
+
+         _this.lovingVue={
+          courseId:row.tpCourseId, //把课程id 赋值给子组件
+          courseName:row.courseName //名字也赋值
+        }
       }; 
 :oname="nemuId" 是用于给下拉框的名字 的宽度 后面要加像素单位px
 -->
 <template>
   <div id="CourseFrame">
     <el-form
-      :name="oindex"
       :model="ruleForm"
       :rules="rules"
       ref="ruleForm"
@@ -37,22 +37,14 @@ seed = {
 </template>
 <script>
 export default {
-
-  props: {
-    oindex: {
-      // 父组件传过来的类型 用于编辑操作
-      type: Object,
-      default: function() {
-        return {
-          //默认值
-          index: null,
-          flag: false
-        };
-      }
+    model:{
+         prop:'lovingVue',
+          event:'update'
     },
+  props: {
+    lovingVue:Object,
     oname: String //父组件传过来的  用于标题名的宽度
   },
-
   data() {
     return {
       course: [], //课程信息
@@ -60,15 +52,12 @@ export default {
         keChenId: "" //课程编码
       },
       rules: {
-        keChenId: [
-          //表单验证课程
-          { required: true, message: "请选择课程", trigger: "change" }
+        keChenId: [  
+          { required: true, message: "请选择课程", trigger: "change" } //表单验证课程
         ]
       },
-      flag: false //用于被掉用赋值
     };
   },
-
   methods: {
     /**
      * 改变事件
@@ -76,11 +65,11 @@ export default {
      */
     tranSmit(price) {
       var _this = this;
-      _this.flag = true;
       _this.ruleForm.keChenId = price;
-      _this.repeTition(_this.ruleForm.keChenId);
+       var singular = _this.course.find(keCen => keCen.courseId == price); //数组find（）查找
+      var fo=JSON.parse(JSON.stringify(singular))
+      _this.$emit("update",fo);
     },
-
     /**
      * 课程信息加首次赋值id
      */
@@ -88,19 +77,17 @@ export default {
       var _this = this;
       _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
         _this.course = data.data;
-        _this.ruleForm.keChenId = _this.oindex; //首次赋值id
-        _this.repeTition(_this.ruleForm.keChenId);
+        _this.$nextTick(()=>{
+      _this.ruleForm.keChenId =_this.lovingVue.courseId; //首次赋值id
+        })
       });
     },
-    /**
-     * 封装好的过滤以达到重复调用
-     * @param {Number} subscript 被调用时传过来的id
-     */
-    repeTition(subscript) {
-      var _this = this;
-      var singular = _this.course.find(keCen => keCen.courseId == subscript); //数组find（）查找
-      _this.$emit("update", singular); //传递到父组件
-    }
+  },
+  watch:{
+"lovingVue.courseId":function(id){
+  var _this= this
+ _this.ruleForm.keChenId =id
+}
   },
   /**
    * 钩子函数创建后
@@ -109,19 +96,6 @@ export default {
     var _this = this;
     _this.usCourse(); //调用方法
   },
-  updated() {
-    var _this = this;
-    if (_this.flag != true) {
-      //判断是否进入过改变事件
-      if (_this.oindex == null) {
-        //判断是否传过来的值为空
-        return;
-      }
-      _this.ruleForm.keChenId = _this.oindex.index;
-      _this.repeTition(_this.ruleForm.keChenId);
-    } else {
-      _this.flag = _this.oindex.flag;
-    }
-  }
+  
 };
 </script>
