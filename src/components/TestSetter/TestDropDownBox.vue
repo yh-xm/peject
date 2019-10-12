@@ -5,7 +5,7 @@
       allow-create
       default-first-option -->
     <el-select
-      
+    v-model="tpId"
       placeholder="请选择试卷"
       @change="setInfo"
       size="small"
