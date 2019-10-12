@@ -1,11 +1,9 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <!-- multiple
-      filterable
-      allow-create
-      default-first-option -->
     <el-select
-    v-model="tpId"
+      filterable
+      default-first-option
+      v-model="tpId"
       placeholder="请选择试卷"
       @change="setInfo"
       size="small"
@@ -16,16 +14,16 @@
 </template>
 <script>
 export default {
-  model:{
-    prop:"testObj",//接受父级组件下发给子组件的值
-    event:"testChange"
+  model: {
+    prop: "testObj", //接受父级组件下发给子组件的值
+    event: "testChange"
   },
-  props:{
-    testObj:Object,//声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
+  props: {
+    testObj: Object //声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
   },
   data() {
     return {
-        tpId: "", //下拉框 绑定的值
+      tpId: "", //下拉框 绑定的值
       options: [] //下拉框数据
     };
   },
@@ -59,9 +57,9 @@ export default {
       let _this = this;
       console.log(v);
       console.log(_this.tpId);
-      _this.$emit("childByValue", v);
+      // _this.$emit("childByValue", v);
       // _this.$emit("testChange",$event.target.tpId);
-    },
+    }
     // resetForm(formName) {
     //   this.$refs[formName].resetFields();
     // }
