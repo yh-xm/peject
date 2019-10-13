@@ -19,7 +19,7 @@ export default {
     event: "testChange"
   },
   props: {
-    testObj: Object //声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
+    testObj: Number //声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
   },
   data() {
     return {
@@ -59,6 +59,8 @@ export default {
       console.log(_this.tpId);
       // _this.$emit("childByValue", v);
       // _this.$emit("testChange",$event.target.tpId);
+      _this.$emit("testChange",v);
+
     }
     // resetForm(formName) {
     //   this.$refs[formName].resetFields();
