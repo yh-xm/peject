@@ -1,6 +1,13 @@
 <template>
   <div>
-    <el-select v-model="value" @change="getClassName(value)" placeholder="请选择" >
+    <el-select
+      v-model="classId"
+      filterable
+      placeholder="请选择"
+      ref="txtClass"
+      @change="handleChange"
+    >
+    <el-option :key="0" label="请选择班级" :value="0"></el-option>
       <el-option
         v-for="item in options"
         :key="item.classId"
@@ -12,53 +19,72 @@
 </template>
 <script>
   export default {
-    data() {
-      return {
-        options:[],
-        value:"",
-        polist:[]
+    name:"classNameSelect",
+    model:{
+      prop:'classSe',//班级对象，使用v-model，给这个属性赋值
+      event:'change'//触发事件，名称可自定义，作用：触发这个事件，将事件的值传递给prop属性
+    },
+    props:{
+      //组件的属性,在父组件里，可以使用v-bind赋值，如果在model有定义使用v-model赋值
+      classSe:{
+        required:true,
+        type:Object
       }
     },
-    methods: {
-      
+    data() {
+      return {
+        options:[],//所有班级
+        classId: undefined,//班级编号
+      }
     },
-    props: {
-      
+    watch:{
+      //监听classId的变化，从而改变当前选项
+      'classSe.classId':function(value,old) {
+        this.classId=value
+      }
     },
     methods:{
       public(){
         var _this = this;
       _this.axios.get("api/Class/GetAllClass").then(r => {
-      _this.options = r.data;
-      _this.className=r.data[0].className
-      // console.log(r.data)
+        // console.log(r.data)
+      // _this.options = r.data;
+      _this.options=r.data.map(value=>{
+        return{
+          classId:value.classId,
+          className:value.className
+        }
+      })
+      //等待绑定的数据渲染后，重新改变当前选中的值
+      _this.$nextTick(()=>{
+        //使用v-model传进来的值，表示当前选中的项
+        _this.classId=_this.classSe.classId
+          })
         });
       },
-      getClassName(value){
+      focus(){
+        this.$refs.txtClass.focus()
+      },
+      /**
+     * 选项框改变事件，改变之后传给v-model绑定的对象
+     */
+      handleChange(){
          var _this=this;
-          _this.axios.get("/api/Student/GetClassStudent?classId="+value).then(r => {
-            _this.polist=r.data
-            _this.$emit('selectData',_this.polist)
-      });
+         var classes =_this.options.find( p => p.classId==_this.classId)
+         if (!classes) {
+           classes={classes:0,className:"请选择课程"}
+         } else {
+           //深度拷贝副本,目的防止被外界改变
+           classes=JSON.parse(JSON.stringify(classes))
+         }
+         _this.$emit("change",classes)
       }
-      //初始话下拉框的值
-      //远程请求回来的数据
-     /* this.$fetch(this.url)
-        .then((response) => {
-          this.options=this._dataTransform(response);
-        })*/
   },
   created(){
     this.public()
-    this.getClassName()
   }
   }
 </script>
 <style lang="less" scoped>
-/deep/.el-table_1_column_5,
-/deep/.el-table_1_column_1,
-/deep/.el-table_1_column_6,
-/deep/.el-table_1_column_8 {
-  text-align: center;
-}
+
 </style>

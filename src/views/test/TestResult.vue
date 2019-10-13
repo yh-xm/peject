@@ -1,296 +1,251 @@
+/** 
+* 测试成绩
+*/
 <template>
-  <div class="all">
-    <div id="StudentManage">
-      <!-- head 面包屑 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right">
+  <div id="testResult">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>在线测试</el-breadcrumb-item>
         <el-breadcrumb-item>测试成绩</el-breadcrumb-item>
       </el-breadcrumb>
-    
-      <!-- class下拉框 -->
-
-      <div class="StudentManage">
-        <div class="StudentSelect">
-          <!-- getClassName改变事件 -->
-          <el-select v-model="classId" @change="getClassName" placeholder="请选择班级">
-            <el-option
-              v-for="item in options"
-              :key="item.classId"
-              :label="item.className"
-              :value="item.classId"
-            ></el-option>
-          </el-select>
-        </div>
-        <!-- 下拉框结束 -->
-        <!-- 第一个文本框 
-        根据下拉框中所选中的class 显示相对应的测试任务
-        -->
-        <div class="main">
-          <el-table :data="tableData" style="width: 100%" @row-click="Mary">
-            <el-table-column label="#" width="80">
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{scope.$index+1}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="课程" width="130">
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ scope.row.courseName}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="试卷" width="130">
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ scope.row.tpTitle }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="日期" width="80">
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="提交人数" width="180">
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ scope.row.counter}}</span>
-              </template>
-            </el-table-column>
+    <el-row>
+      <el-col :span="11">
+        <el-card class="box-card">
+          <!-- 班级下拉框 -->
+          <div slot="header" class="clearfix">
+            <el-select v-model="classId" placeholder="请选择" @change="elect($event)">
+              <el-option
+                v-for="item in options"
+                :key="item.classId"
+                :label="item.courseName"
+                :value="item.classId"
+              ></el-option>
+            </el-select>
+          </div>
+          <!-- 左列表 -->
+          <el-table
+            :data="tableData1"
+            v-loading="tableLoading"
+            highlight-current-row
+            @row-click="choose"
+            style="width: 100%;height:300px"
+          >
+            <el-table-column prop="courseName" label="课程"></el-table-column>
+            <el-table-column prop="tpTitle" label="试卷"></el-table-column>
+            <el-table-column prop="date" label="日期"></el-table-column>
+            <el-table-column prop="counter" label="提交人数"></el-table-column>
           </el-table>
-        </div>
-        <!-- 结束 -->
-      </div>
-    </div>
-    <div class="jolin">
-      <div slot="header" class="clearfix">
-        <!-- 切换的 按钮 -->
-        <!-- 改变事件 -->
-        <template>
-          <el-radio v-model="radio" label="1" @change="One">列表</el-radio>
-          <el-radio v-model="radio" label="2" @change="One">图表</el-radio>
-        </template>
-      </div>
-      <div>
-          <!-- 按钮结束 -->
-          <!-- 按钮的显示和隐藏 -->
-        <div id="main" v-show="hidde==!true"></div>
-
-      </div>
-      <!-- 第二个文本框 -->
-      <div class="clearfix1" v-show="hidde">
-        <el-table :data="Jack" style="width: 100%">
-          <el-table-column type="index"></el-table-column>
-          <!-- :index="indexMethod" -->
-          <el-table-column label="姓名" prop="stuName"></el-table-column>
-          <el-table-column label="提交时间" prop="submitTime"></el-table-column>
-          <el-table-column label="成绩" prop="testScore"></el-table-column>
-
-          <el-table-column label="阅卷" prop="userName"></el-table-column>
-        </el-table>
-      </div>
-    </div>
+        </el-card>
+      </el-col>
+      <el-col :span="13">
+        <el-card class="box-card" 
+          ref=print
+          id="classResult"
+        >
+          <!-- 单选切换 -->
+          <div slot="header" class="clearfix" @change="switcher">
+            <template>
+              <el-radio v-model="radio" label="1">列表</el-radio>
+              <el-radio v-model="radio" label="2">图表</el-radio>
+               <el-button type="primary"  v-print="'#classResult'">打印</el-button>
+            </template>
+          </div>
+          <h3 style="text-align:center;margin:10px">{{title}}</h3>
+          <!-- 右列表 -->
+          <!-- v-print="'#classResult'" -->
+          <el-table
+            :data="tableData2"
+            v-show="show"
+            v-loading="tableLoading"
+            style="width:100%;height:200px"
+          >
+             <el-table-column label="#" width="80" >
+              <template slot-scope="scope">
+                <span style="margin-left: 10px">{{scope.$index+ 1}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="stuName" label="姓名"></el-table-column>
+            <el-table-column prop="submitTime" label="提交时间"></el-table-column>
+            <el-table-column prop="testScore" label="成绩"></el-table-column>
+            <el-table-column prop="userName" label="阅卷老师"></el-table-column>
+          </el-table>
+          <!-- 图表 -->
+          <div id="main" ref="barchart" v-show="!show" style="height:300px;"></div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
-
-
-
 <script>
-var echarts = require("echarts/lib/echarts");
-// echarts引入柱状图
-require("echarts/lib/chart/bar");
+let echarts = require("echarts/lib/echarts"); // 引入 ECharts 主模块
+require("echarts/lib/chart/bar"); //引入条形图组件
 export default {
+  name: "testResult",
   data() {
     return {
-      
-      options: [], //班级选择
-    
-      tableData: [], //第一个表单数据
-      Jack: [], //   渲染班级提交人数
+      options: [], //班级下拉框
+      classId: "", //班级下拉框值
+      chart: "",
+      isShow:true,
       radio: "1", //单选按钮
-    
-      hidde: true, //单选隐藏显示
-      name:[],  // 图表的数据
-      series:[],
-      // 成绩
-    
+      tableData1: [], //左列表
+      tableData2: [], //右列表
+      show: true, //隐藏显示
+      title:'',
+      tableLoading: false //表格加载中
     };
   },
-  // 方法
+  created() {
+    var _this = this;
+    //班级下拉框
+    _this.axios.get("/api/Class/GetAllClass").then(res => {
+      _this.options = res.data;
+    });
+  },
   methods: {
-    /**封装渲染下拉框
-     */
-    public() {
-      //获取所有班级
-      var _this = this;
-      //   连接API 接口 所有class 的接口
-      _this.axios("api/Class/GetAllClass").then(function(a) {
-        //   获取classID  通过点出来找classid
-        _this.options = a.data;
-      });
+    printTest () {
+      this.isShow = false  // 隐藏因素
+      setTimeout(() => {
+        this.$print(this.$refs.print)
+        this.showBtn = true // 显示元素
+      }, 50)
     },
     /**
-     * 改变事件 选中当前的iD
-     * @param {number} all 是选中的classID
+     * 左列表
+     * @param{string} event 当前班级的classId
      */
-    getClassName(all) {
+    elect(event) {
       var _this = this;
-      //
-      _this
-      // 根据classID  来显示 不同class
-        .axios("api/TestResult/GetTestPaperByClassId?classId=" + all)
-        .then(function(t) {
-          // console.log(t.data)
-          _this.tableData = t.data;
-        });
-    },
-    /**
-     * 点击选中当前数据  调用当前class
-     * @param {object} row 当前行所有数据
-     */
-    Mary(row) {
-      // console.log(row.taskId)
-
-      var _this = this;
-      _this
-      // taskId是任务的ID
-        .axios("api/TestResult/GetTestResultByTaskId?taskId=" + row.taskId)
-        .then(function(p) {
-          // console.log(p)
-          _this.Jack = p.data;
-          var stu=p.data
-          // 用于 echara 的图表调用数据
-          for (const key in stu) {
-            // 名字的插入
-             _this.name.push(stu[key].stuName) 
-            //  push 插入数据 
-            // 成绩的插入
-            _this.series.push(stu[key].testScore)
+      _this.tableLoading = true; //表格加载中
+      _this.axios
+        .get("/api/TestResult/GetTestPaperByClassId", {
+          params: {
+            classId: event
           }
+        })
+        .then(res => {
+          _this.tableLoading = false; //表格加载中
+          _this.tableData1 = res.data; //渲染左列表
+        })
+        .catch(error => {
+          console.log(error);
         });
-
     },
-
-    // 按钮的显示隐藏
-
-    One(m) {
-      console.log(m);
+    /**
+     * 右列表
+     * @param{string} row 对应左表行的数据
+     */
+    choose(row) {
       var _this = this;
-      _this.drawLine()
-      if (m == 1) {
-        _this.hidde = true;
-      } else {
-        _this.hidde = false;
-      }
-    },
-        drawLine() {
-            var _this=this
-            
-				   // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
-
-        // 指定图表的配置项和数据
-        var option = {
+      // console.log(row)
+      _this.tableLoading = true; //表格加载中
+      _this.title=row.tpTitle
+      _this.axios
+        .get("/api/TestResult/GetTestResultByTaskId", {
+          params: {
+            taskId: row.taskId
+          }
+        })
+        .then(res => {
+          _this.tableLoading = false; //表格加载中
+          _this.tableData2 = res.data; //渲染右列表
+          var stuName = []; //学生姓名
+          var testScore = []; //学生成绩
+          var myChart = document.getElementById("main"); //获取图表ID
+          myChart.style.width = myChart.parentNode.offsetWidth + "px"; //让图表的宽度等于它的父节点的宽
+          //根据屏幕大小改变图表大小
+          window.onresize = function() {
+            myChart.resize({
+              width: myChart._dom.parentNode.offsetWidth + "px"
+            });
+          };
+          myChart = echarts.init(myChart);
+          for (let i = 0; i < _this.tableData2.length; i++) {
+            stuName.push(_this.tableData2[i].stuName); //循环出每个下标的学生姓名
+            testScore.push(_this.tableData2[i].testScore); //循环出每个下标的学生成绩
+          }
+          myChart.setOption({
             title: {
-                text: 'ECharts 成绩表'
+              text: row.tpTitle + "(成绩表)", //标题
+              left: "center" //标题居中
             },
             tooltip: {},
-            legend: {
-                data:['成绩表']
-            },
-            xAxis: {
-              // 名字的数据
-                data: _this.name
-            },
+            xAxis: [
+              {
+                type: "category",
+                data: stuName, //x轴的学生姓名
+                axisLabel: {
+                  interval: 0, //横轴信息全部显示
+                  /**
+                   * 奇数下标标签下移
+                   * @param{string} labelX x轴的标签
+                   * @param{number} index 标签下标
+                   */
+                  formatter: function(labelX, index) {
+                    if (index % 2 == 1) {
+                      return "\n\n" + labelX;
+                    } else {
+                      return labelX;
+                    }
+                  }
+                }
+              }
+            ],
             yAxis: {},
-            series: [{
-                name: '成绩表',
-                type: 'bar',
-                data: _this.series
-            }]
-        };
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-			}
-		
-
-
-
+            series: [
+              {
+                name: "成绩",
+                type: "bar",
+                barWidth: "40%", //条的宽度
+                data: testScore //学生的成绩
+              }
+            ],
+            label: {
+              show: true, //开启显示
+              position: "top" //在上方显示
+            }
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    //切换
+    switcher() {
+      let _this = this;
+      _this.show = !_this.show;
+    }
   },
-
-  created() {
-    this.public(); //调用班级数据
-   
-  }
 };
 </script>
 
- 
-
 <style lang="less" scoped>
-#main {
-		height: 500px;
-		width: 500px;
-	}
-#StudentManage {
-  float: left;
-  width: 50%;
-  height: 100%;
-  .StudentManage {
-    float: left;
-    width: 100%;
-    height: 100%;
-    border: 1px solid #ccc;
-    margin-top: 30px;
-    .StudentSelect {
-      width: 100%;
-      height: 70px;
-      // border-bottom: 1px solid #ccc;
-      line-height: 70px;
-      padding-left: 3%;
-      .addStudent {
-        color: rgb(36, 156, 211);
-        margin-left: 1%;
-      }
-    }
-    .dialog-footer {
-      text-align: center;
-    }
-  }
-  /deep/.el-dialog__header {
-    text-align: center;
-  }
-  /deep/.el-dialog__body {
-    margin-top: -30px;
-  }
+.text {
+  font-size: 14px;
 }
-/deep/.el-input {
-  width: 100%;
-}
-/deep/.el-form-item__content {
-  width: 45%;
-}
-/deep/.el-table_1_column_5,
-/deep/.el-table_1_column_1,
-/deep/.el-table_1_column_6,
-/deep/.el-table_1_column_8 {
-  text-align: center;
-}
-// .all{
 
-//   width:100%;
-//   height:900px;
-//   background-color: black;
+.item {
+  margin-bottom: 18px;
+}
 
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.box-card {
+  height: 400px;
+  margin: 5px;
+}
+// #main{
+//   canvas{
+//     width: 100% !important;
+//   }
 // }
-.jolin {
-  width: 480px;
-  height: 100%;
-
-  border: 1px solid #e8e8e8;
-
-  float: right;
-  margin-top: 50px;
-}
-.clearfix1 {
-  margin-top: 20px;
-}
-</style> 
+</style>

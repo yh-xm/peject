@@ -163,16 +163,23 @@ export default {
      */
     piYueTest(index, row) {
       let _this = this;
-      _this.axios
-        .get("/api/TestResult/GetStudentTest?taskId=" + row.taskId)
-        .then(res => {
           _this.$router.push({
             path:'/piYueTestPaper',
             query:{
-              dataInfo:res.data
+              taskId:row.taskId
             }
           })
-        });
+      // _this.axios
+      //   .get("/api/TestResult/GetStudentTest?taskId=" + row.taskId)
+      //   .then(res => {
+      //     _this.$router.push({
+      //       path:'/piYueTestPaper',
+      //       query:{
+      //         dataInfo:res.data,
+      //         taskId:row.taskId
+      //       }
+      //     })
+      //   });
      }
   },
   created:function() {
