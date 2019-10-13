@@ -24,7 +24,7 @@
         </template>
         </test-page>
       </div>
-      <make-over v-if="active==2"  @changeType="changeActive" :testInfo="testInfo" :AllPageInfo="AllPageInfo">
+      <make-over v-if="active==2"  :testInfo="testInfo" :AllPageInfo="AllPageInfo">
       <template slot="preActive">
         <el-button type="primary" @click="active--">上一步</el-button>
          </template>

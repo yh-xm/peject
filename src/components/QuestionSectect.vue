@@ -71,6 +71,7 @@ export default {
           _this.pageInfo[i].nowScroe = 0;
         }
          this.$emit("questionInit", _this.pageInfo);
+         console.log(JSON.stringify(_this.pageInfo))
         if (_this.select == true) {
           _this.value = _this.defaultSelect
         } else {

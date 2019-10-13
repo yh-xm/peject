@@ -35,17 +35,17 @@
               :rows="1"
               v-if="!odisabled"
             ></el-input>
+           
           </el-form-item>
           <!-- 答案 -->
           <el-form-item>
             <el-tag type="info">参考答案</el-tag>
-            <div v-if="odisabled">{{nowOption.tpqQuestion.answerQuestion.aqAnswer}}</div>
-            <el-input
-              v-if="!odisabled"
-              v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer"
-              :disabled="odisabled"
-            ></el-input>
+        
           </el-form-item>
+          <el-form-item>
+             <Editor  v-if="!odisabled" v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer"/>
+              <p v-if="odisabled" v-html="nowOption.tpqQuestion.answerQuestion.aqAnswer"></p>
+               </el-form-item>
           <el-form-item>
             <!-- 编辑 -->
             <el-button type="primary" plain @click.prevent="compile" size="small">编辑</el-button>
@@ -61,7 +61,11 @@
   </div>
 </template>
 <script>
+ import Editor from '../TextEditor'
 export default {
+      components: {
+      Editor
+    },
   data() {
     return {
       nowOption: [], //当前题目信息

@@ -95,7 +95,7 @@
                 <el-dropdown-item command="英语">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="getOut" style="font-size:16px;"><i class="el-icon-s-custom"></i>退出</span>
+            <span class="getOut" style="font-size:16px;" @click="exit">退出</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
              -->
             <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:15px;margin-top:10px;"></el-avatar>
@@ -246,6 +246,27 @@ changeLocale (command) {
       }
     
 },
+ /**
+       *  退出后台
+       * 
+       */
+   exit() {
+     var that = this;
+        that.$confirm('确定要退出后台吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+        that.$router.push({name:'login'})
+        sessionStorage.clear()
+        that.$msg(that,1,"退出成功！")
+        }).catch(() => {
+          that.$msg(that,1,"已取消！")
+        });
+      },
+       /**
+       *  初始化
+       */
 init(){
   var _this = this;
     _this.user = eval("(" + sessionStorage.NowLoginUser + ")"); 
@@ -254,11 +275,22 @@ init(){
     }else{
       _this.langen="中文"
     }
+
+if(sessionStorage.store&&_this.$store.state.userInfo==""){
+    _this.$store.replaceState(Object.assign({},_this.$store.state,JSON.parse(sessionStorage.store)));
+    sessionStorage.removeItem("store")
+}
+
 }
   },
   created() {
     this.init();
   },
+  mounted(){
+    window.addEventListener("beforeunload",(e)=>{
+      sessionStorage.store = JSON.stringify(this.$store.state)
+    })
+  }
 };
 </script>
 <style lang="less" scoped>

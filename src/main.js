@@ -7,6 +7,7 @@ import vueaxios from 'vue-axios'
 import ElementUI from 'element-ui'
 import { setCookie, getCookie, clearCookie } from "@/api/SetCookie.js";
 import has from './directive/btnPermissions.js';
+import http from "@/until/http.js"
 import { mapState } from 'vuex'
 import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
@@ -17,6 +18,12 @@ const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 } 
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor);
+
 Vue.use(i18n);
 Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
@@ -48,27 +55,8 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-// axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
-
-axios.interceptors.request.use(config=>{
-  config.headers['Authorization'] = sessionStorage.getItem('tkon'); //默认请求携带tkon
-  return config;
-},error=>{
-  return Promise.reject(error)
-})
 
 
-axios.interceptors.response.use(response=>{
-  return response;
-},error=>{
- var url = error.config.url.toLocaleLowerCase();
- if(error.response.status === 401 && ! url.endsWith("oauth/authenticate")){ //过期登录
-   router.push({
-    path: '/login',query: {redirect:"warning"} 
-    })
- }
- return Promise.reject(error);
-})
 
 
 new Vue({
@@ -76,7 +64,8 @@ new Vue({
   store,
   i18n,
   computed:  mapState([
-    'userId'
+    'userInfo',
+    'tkon'
   ]),
   render: h => h(App)
 }).$mount('#app')

@@ -80,6 +80,7 @@ export default {
       that.title = that.testInfo.tpTitle
       that.tpCourseName =  that.testInfo.tpCourseName
       that.pageInfo = that.AllPageInfo
+      
     }
   },
   created() {

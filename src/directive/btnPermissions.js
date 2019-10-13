@@ -1,17 +1,17 @@
 import Vue from 'vue'
 /**权限指令**/
 const has = Vue.directive('has', {
- bind: function (el, binding, vnode) {
+   inserted: function (el, binding, vnode) {
   // 获取按钮权限
   let btnPermissions = vnode.context.$route.meta.btnPermissions;
 
-  let userId = vnode.context.$root.userId;
-  console.log(btnPermissions)
-  console.log(userId)
-  console.log(el)
+  let userId = vnode.context.$root.userInfo;
+  console.log(vnode.context.$root)
+//   console.log(btnPermissions)
+//   console.log(userId)
+//   console.log(el)
   if (!Vue.prototype.$_has(btnPermissions,userId)&&el.parentElement) {
-      console.log(666)
-   // el.parentElement.remove();
+   el.parentElement.removeChild(el);
   }
  }
 });
@@ -23,7 +23,7 @@ Vue.prototype.$_has = function (idArr,id) {
   return false;
  }
  if (idArr.indexOf(id) > -1) {
-    console.log(6666)
+   //  console.log(6666)
   isExist = true;
  }
  return isExist;
