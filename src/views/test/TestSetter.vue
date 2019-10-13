@@ -2,16 +2,16 @@
   <div id="TestSetter">
     <!-- Breadcrumb 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>在线测试</el-breadcrumb-item>
-      <el-breadcrumb-item>安排测试</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('test.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
     试卷：{{childRes1}}
     班级：{{childRes2}}
     考试时间：{{childRes3}}
-    <!-- Breadcrumb 面包屑 结束
+    <!-- Breadcrumb 面包屑 结束-->
 
-    <!-- 卡片 -->
+
     <el-card class="box-card">
       <div slot="header">
         <div class="impComp">
