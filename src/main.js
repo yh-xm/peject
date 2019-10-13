@@ -11,6 +11,8 @@ import Router from 'vue-router'
 import i18n from './i18n/i18n';
 import {message} from './api/MessageTips.js'
 import echarts from 'echarts'
+import Print from 'vue-print-nb'//打印插件
+　　
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
@@ -18,6 +20,7 @@ Router.prototype.push = function push(location) {
 Vue.use(i18n);
 Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
+Vue.use(Print); //注册
 Vue.config.productionTip = false;
 Vue.prototype.$msg = message;
 Vue.use(echarts)
