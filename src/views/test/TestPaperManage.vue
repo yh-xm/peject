@@ -78,7 +78,6 @@ export default {
   data() {
     return {
       bothWay:{courseId:0,courseName:""}, //接收子组件的值
-      seed: "", //发送给子组件的对象
       nemuId: "", //用于发送给子组件的宽度
       tableData: [], //接收渲染的数据
       pages: 0, //总条数
