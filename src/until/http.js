@@ -5,8 +5,9 @@ import router from '../router'
 
 axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
 axios.interceptors.request.use(config=>{
-    
-    config.headers['Authorization'] = sessionStorage.getItem('token'); //默认请求携带token
+    var token = sessionStorage.getItem('token') 
+    // || store.state.userModule.token;
+    config.headers['Authorization'] =token;  //默认请求携带token
     return config;
   },error=>{
     return Promise.reject(error)
@@ -14,9 +15,7 @@ axios.interceptors.request.use(config=>{
   axios.interceptors.response.use(response=>{
     return response;
   },error=>{
-   var url = error.config.url.toLocaleLowerCase();
-   if(error.response.status === 401 && ! url.endsWith("oauth/authenticate")){ //过期登录
-    
+   if(error.response.status === 401 && router.history.current.name!="login"){ //过期登录
     var obj = reUserInfo()
     if (obj.username && obj.password) {
           return reGetTkoen(obj,error)
@@ -44,7 +43,6 @@ axios.interceptors.request.use(config=>{
  */
 
  async function reGetTkoen(userInfo,error){
-     console.log(userInfo)
      var res = await get("/api/OAuth/authenticate",{
         userMobile:userInfo.username,
         userPassword:userInfo.password
@@ -53,11 +51,12 @@ axios.interceptors.request.use(config=>{
          console.log(666)
          reLogin();
      })
-     if(res.access_token){
+     if(res.access_token){ 
          var token = res.token_type +" "+res.access_token;
          sessionStorage.token = token
-         store.dispatch('changeUserInfo',res.profile);
-         store.dispatch('changeTkon',"Bearer" + " " + token);
+         sessionStorage.NowLoginUser = JSON.stringify(res.profile);
+         store.dispatch('userModule/changeUserInfo',res.profile);
+         store.dispatch('userModule/changeTkon',token);
          error.config.headers["Authorization"] = token;
          var config = error.config;
          return await axios(config)
@@ -68,8 +67,9 @@ axios.interceptors.request.use(config=>{
 function reLogin(){
     clearCookie();
     sessionStorage.clear();
+    console.log(666)
     router.push({
-        path: '/login',query: {redirect:"warning"} 
+        path: '/login',query: {redirect:router.history.current.fullPath} 
   })
 }
 
