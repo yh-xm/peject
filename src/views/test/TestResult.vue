@@ -10,72 +10,108 @@
         <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('test.r5')}}</el-breadcrumb-item>
       </el-breadcrumb>
-    <el-row>
-      <el-col :span="11">
-        <el-card class="box-card">
-          <!-- 班级下拉框 -->
-          <div slot="header" class="clearfix">
-            <el-select v-model="classId" placeholder="请选择" @change="elect($event)">
-              <el-option
-                v-for="item in options"
-                :key="item.classId"
-                :label="item.courseName"
-                :value="item.classId"
-              ></el-option>
-            </el-select>
-          </div>
-          <!-- 左列表 -->
-          <el-table
-            :data="tableData1"
-            v-loading="tableLoading"
-            highlight-current-row
-            @row-click="choose"
-            style="width: 100%;height:300px"
-          >
-            <el-table-column prop="courseName" label="课程"></el-table-column>
-            <el-table-column prop="tpTitle" label="试卷"></el-table-column>
-            <el-table-column prop="date" label="日期"></el-table-column>
-            <el-table-column prop="counter" label="提交人数"></el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-      <el-col :span="13">
-        <el-card class="box-card" 
-          ref=print
-          id="classResult"
-        >
-          <!-- 单选切换 -->
-          <div slot="header" class="clearfix" @change="switcher">
-            <template>
-              <el-radio v-model="radio" label="1">列表</el-radio>
-              <el-radio v-model="radio" label="2">图表</el-radio>
-               <el-button type="primary"  v-print="'#classResult'">打印</el-button>
-            </template>
-          </div>
-          <h3 style="text-align:center;margin:10px">{{title}}</h3>
-          <!-- 右列表 -->
-          <!-- v-print="'#classResult'" -->
-          <el-table
-            :data="tableData2"
-            v-show="show"
-            v-loading="tableLoading"
-            style="width:100%;height:200px"
-          >
-             <el-table-column label="#" width="80" >
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{scope.$index+ 1}}</span>
+      <el-row>
+        <el-col :span="11">
+          <el-card class="box-card">
+            <!-- 班级下拉框 -->
+            <div slot="header" class="clearfix">
+              <el-select v-model="classId" placeholder="请选择" @change="elect($event)">
+                <el-option
+                  v-for="item in options"
+                  :key="item.classId"
+                  :label="item.courseName"
+                  :value="item.classId"
+                ></el-option>
+              </el-select>
+            </div>
+            <!-- 左列表 -->
+            <el-table
+              :data="tableData1"
+              v-loading="tableLoading"
+              highlight-current-row
+              @row-click="choose"
+              style="width: 100%;height:350px"
+            >
+              <el-table-column label="课程" width="120">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.courseName }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="试卷" width="230">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.tpTitle }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="日期" width="110">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="提交人数" width="80">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.counter }}</span>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column prop="courseName" label="课程"></el-table-column>
+              <el-table-column prop="tpTitle" label="试卷"></el-table-column>
+              <el-table-column prop="date" label="日期"></el-table-column>
+              <el-table-column prop="counter" label="提交人数"></el-table-column> -->
+            </el-table>
+          </el-card>
+        </el-col>
+        <el-col :span="13">
+          <el-card class="box-card" ref="print" id="classResult">
+            <!-- 单选切换 -->
+            <div slot="header" class="clearfix" @change="switcher">
+              <template>
+                <el-radio v-model="radio" label="1">列表</el-radio>
+                <el-radio v-model="radio" label="2">图表</el-radio>
+                <el-button type="primary" v-print="'#classResult'">打印</el-button>
               </template>
-            </el-table-column>
-            <el-table-column prop="stuName" label="姓名"></el-table-column>
-            <el-table-column prop="submitTime" label="提交时间"></el-table-column>
-            <el-table-column prop="testScore" label="成绩"></el-table-column>
-            <el-table-column prop="userName" label="阅卷老师"></el-table-column>
-          </el-table>
-          <!-- 图表 -->
-          <div id="main" ref="barchart" v-show="!show" style="height:300px;"></div>
-        </el-card>
-      </el-col>
-    </el-row>
+            </div>
+            <h3 style="text-align:center;margin:10px" v-show="show">{{title}}</h3>
+            <!-- 右列表 -->
+            <!-- v-print="'#classResult'" -->
+            <el-table
+              :data="tableData2"
+              v-show="show"
+              v-loading="tableLoading"
+              style="width:100%;height:300px;margin-right:0px"
+            >
+              <el-table-column label="#" width="50">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{scope.$index+ 1}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="姓名">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.stuName }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="提交时间" width="180">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.submitTime }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="成绩" width="130">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.testScore }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="阅卷老师">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ scope.row.userName }}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- 图表 -->
+            <div id="main" ref="barchart" v-show="!show" style="height:350px;">
+              <h3 style="text-align:center;margin:10px">{{title}}</h3>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -89,12 +125,12 @@ export default {
       options: [], //班级下拉框
       classId: "", //班级下拉框值
       chart: "",
-      isShow:true,
+      isShow: true,
       radio: "1", //单选按钮
       tableData1: [], //左列表
       tableData2: [], //右列表
       show: true, //隐藏显示
-      title:'',
+      title: "",
       tableLoading: false //表格加载中
     };
   },
@@ -106,12 +142,12 @@ export default {
     });
   },
   methods: {
-    printTest () {
-      this.isShow = false  // 隐藏因素
+    printTest() {
+      this.isShow = false; // 隐藏因素
       setTimeout(() => {
-        this.$print(this.$refs.print)
-        this.showBtn = true // 显示元素
-      }, 50)
+        this.$print(this.$refs.print);
+        this.showBtn = true; // 显示元素
+      }, 50);
     },
     /**
      * 左列表
@@ -142,7 +178,7 @@ export default {
       var _this = this;
       // console.log(row)
       _this.tableLoading = true; //表格加载中
-      _this.title=row.tpTitle
+      _this.title = row.tpTitle;
       _this.axios
         .get("/api/TestResult/GetTestResultByTaskId", {
           params: {
@@ -218,11 +254,17 @@ export default {
       let _this = this;
       _this.show = !_this.show;
     }
-  },
+  }
 };
 </script>
 
 <style lang="less" scoped>
+@media print {
+  html,
+  body {
+    height: inherit;
+  }
+}
 .text {
   font-size: 14px;
 }
@@ -242,12 +284,10 @@ export default {
 }
 
 .box-card {
-  height: 400px;
   margin: 5px;
 }
-// #main{
-//   canvas{
-//     width: 100% !important;
-//   }
-// }
+/deep/.is-leaf,/deep/.cell
+{
+  text-align: center;
+}
 </style>
