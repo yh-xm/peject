@@ -247,6 +247,12 @@ export default {
           margin-right: 12px;
           margin-left: 12px;
         }
+        .el-input-number__decrease{
+          left: 15px;
+        }
+        .el-input-number__increase{
+          left: 150px;
+        }
       }
     }
   }

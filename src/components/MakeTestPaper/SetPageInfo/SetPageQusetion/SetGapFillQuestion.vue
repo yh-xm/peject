@@ -361,7 +361,7 @@ export default {
                   _this.nowOption.fillQuestion.splice(
                     oarr[parseInt(oindexArr[x])],
                     0,
-                    nowAddOption
+                    JSON.parse(JSON.stringify(nowAddOption))
                   );
                   _this.fillQuestion.push(oarr[parseInt(oindexArr[x])]); //获取插入填空的位置
                   break;
@@ -372,7 +372,7 @@ export default {
               if (max == oindexArr.length) {
                 //在末尾插入填空
                 //往后添加空格
-                _this.nowOption.fillQuestion.push(nowAddOption);
+                _this.nowOption.fillQuestion.push(JSON.parse(JSON.stringify(nowAddOption)));
                 _this.fillQuestion.push(
                   _this.nowOption.fillQuestion.length - 1
                 ); //获取插入填空的位置
@@ -383,7 +383,7 @@ export default {
             if (narr.length - oarr.length > 1) {
               for (let i in oindexArr) {
                 if (textindex < oindexArr[i]) {
-                  _this.nowOption.fillQuestion.splice(i, 0, nowAddOption); // 粘贴多个文字一个填空
+                  _this.nowOption.fillQuestion.splice(i, 0, JSON.parse(JSON.stringify(nowAddOption))); // 粘贴多个文字一个填空
                   break;
                 }
               }
