@@ -54,14 +54,14 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <el-button round @click="resetForm('AddGapFillQuestion')" size="small">重置</el-button>
+          <el-button round @click="resetForm('AddGapFillQuestion')" size="small">{{$t('btn.r')}}</el-button>
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
             @click="submitForm('AddGapFillQuestion')"
             size="small"
-          >新增题目</el-button>
+          >{{$t('btn.s')}}</el-button>
         </el-form-item>
       </el-form>
     </div>

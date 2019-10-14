@@ -19,7 +19,7 @@
           <el-table-column :label="$t('tableName.td')">
             <template slot-scope="scope">{{scope.row.tpDate | firstSet}}</template>
           </el-table-column>
-          <el-table-column align="left" :label="$t('tableName.tm')">
+          <el-table-column align="left" :label="$t('tableName.tm')" width="320">
             <template slot-scope="scope">
               <!-- hasTest -->
               <el-button

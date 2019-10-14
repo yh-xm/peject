@@ -35,14 +35,14 @@
         </el-form-item>
         <el-form-item>
           <!-- 重置 -->
-          <el-button round @click="resetForm('AddEssayQuestion')">重置</el-button>
+          <el-button round @click="resetForm('AddEssayQuestion')">{{$t('btn.r')}}</el-button>
           <!-- 新增题目 -->
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
             @click="submitForm('AddEssayQuestion')"
-          >新增题目</el-button>
+          >{{$t('btn.s')}}</el-button>
         </el-form-item>
       </el-form>
     </div>

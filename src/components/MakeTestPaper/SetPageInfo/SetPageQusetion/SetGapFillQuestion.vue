@@ -72,16 +72,16 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" plain @click.prevent="compile">编辑</el-button>
+          <el-button type="primary" plain @click.prevent="compile">{{$t('btn.c')}}</el-button>
           <el-row v-show="oshow">
-            <el-button round @click.prevent="cancel" size="small">取消</el-button>
+            <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
             <el-button
               type="primary"
               plain
               @click.prevent="submitForm('nowOption')"
               size="small"
-            >保存修改</el-button>
-            <el-button type="danger" plain @click.prevent="removeChoose" size="small">删除题目</el-button>
+            >{{$t('btn.s')}}</el-button>
+            <el-button type="danger" plain @click.prevent="removeChoose" size="small">{{$t('btn.d')}}</el-button>
           </el-row>
         </el-form-item>
       </el-form>

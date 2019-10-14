@@ -9,7 +9,7 @@ export const zh = {
       a:'添加',
       s:'提交',
       addclass:"添加班级",
-      addjs:"新增角色",
+      addjs:"新增",
       res:"取消",
       detail:"详情"
     },
