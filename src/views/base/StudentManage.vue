@@ -24,7 +24,7 @@
         >新增学生</el-button>
         <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
           <el-form :model="form" :rules="addRules" ref="form">
-            <el-form-item :label="$t('tableName.tcn')" :label-width="formLabelWidth" prop="classes.classId">
+            <el-form-item :label="$t('tableName.tcn')" :label-width="formLabelWidth" >
               <!-- <el-select v-model.trim="classId2" placeholder="请选择" @change="resClassName(classId2)">
                 <el-option
                   v-for="item in options"
@@ -33,7 +33,7 @@
                   :value="item.classId"
                 ></el-option>
               </el-select> -->
-              <classNameSelect v-model="classes" ref="classNameSelect"  style="display:inline"></classNameSelect>
+              <classNameSelect v-model="classes2" style="display:inline" ></classNameSelect>
             </el-form-item>
             <el-form-item :label="$t('tableName.name')" :label-width="formLabelWidth" prop="stuName">
               <el-input v-model.trim="form.stuName" autocomplete="true"></el-input>
@@ -173,6 +173,7 @@ export default {
       }, 100);
     };
     return {
+      classes2:"",
       classes:'',
       showBoth: true, //判断新增还是修改
       dialogStatus: "", //判断标题
@@ -214,6 +215,7 @@ export default {
   methods: {
     addEquipment() {//新增学生
       var _this = this;
+        _this.classes2 = {classId:"0"};
       _this.showBoth = true;//显示新增按钮
       _this.dialogFormVisible = true; //显示弹框
       _this.dialogStatus = "addEquipment"; //新增弹框标题
@@ -231,6 +233,7 @@ export default {
     addStuName(ruleForm) {
       //新增
       var _this = this;
+    
       _this.$refs[ruleForm].validate(valid => {
         if (valid) {
           _this.dialogFormVisible = false;
@@ -274,6 +277,7 @@ export default {
      */
     handleEdit(index, row) {
       var _this = this;
+       _this.classes2 = row;
       _this.showBoth = false;//隐藏模态框
       _this.index = index;//传过来的值赋值重新赋值
       _this.show2 = true; //显示修改按钮
@@ -296,6 +300,7 @@ export default {
      */
     upDate(ruleForm, index) {
       var _this = this;
+   
       console.log(_this.form)
       _this.$refs[ruleForm].validate(valid => {
         if (valid) {
@@ -369,6 +374,7 @@ export default {
     classInfo() {
       //获取班级学生
       var _this = this;
+        // if()
       // console.log(_this.classes.classId)//班级编号
       _this.axios.get('/api/Student/GetClassStudent?classId='+_this.classes.classId).then(r => {
         //  console.log(r.data)//班级所有学生
@@ -382,7 +388,8 @@ export default {
     // this.$refs["classNameSelect"].focus();
   
     // this.public(); //调用班级数据
-  }
+  },
+  
 };
 </script>
 <style lang="less" scoped>
