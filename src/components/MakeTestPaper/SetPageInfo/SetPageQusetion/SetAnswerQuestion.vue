@@ -138,13 +138,6 @@ export default {
         .then(res => {
           if (res.data.message == "删除成功") {
             var data = {
-<<<<<<< HEAD
-              index: _this.nowIndex2,//题号
-              questionTypeId: 3,//题目类型
-              tpqScore: _this.AddEssayQuestiontList.tpqScore//题目分数
-            };
-            this.$emit("setQuestion", data);//改变父组件的分数
-=======
               index: _this.nowIndex2, //题号
               questionTypeId: 3, //题目类型
               tpqScore: _this.AddEssayQuestiontList.tpqScore //题目分数
@@ -153,7 +146,6 @@ export default {
             _this.$msg(_this, 1, res.data.message);
           } else {
             _this.$msg(_this, -1, res.data.message);
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
           }
         });
     },

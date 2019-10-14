@@ -136,11 +136,6 @@ export default {
                   }
                   sessionStorage.token = "Bearer" + " " + r.data.access_token; //获取token
                   sessionStorage.userId = r.data.profile.userUid;
-<<<<<<< HEAD
-                  sessionStorage.nowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
-
-                  if (_this.$route.query.redirect) {
-=======
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
                   _this.$parent.$parent.changeUserInfo(r.data.profile)
                   _this.$parent.$parent.changeTkon("Bearer" + " " + r.data.access_token)
@@ -150,7 +145,6 @@ export default {
                     });
                    sessionStorage.removeItem("redirect")
                   }else if (_this.$route.query.redirect) {
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);
                     let redirect = _this.$route.query.redirect;
@@ -163,20 +157,14 @@ export default {
                       name: "home"
                     });
                   }
-<<<<<<< HEAD
-=======
                    
                   
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
                   _this.$msg(_this, 1, "登录成功!");
                 }
               })
               .catch(function(error) {
                 _this.$msg(_this, -1, "用户名或密码错误，请重新输入!");
-<<<<<<< HEAD
-=======
                 console.log(_this.$route.query.redirect)
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
               });
           } else {
             _this.$msg(_this, -1, "请填写用户名和密码");
@@ -221,12 +209,6 @@ export default {
     var serachArr = ["username", "password"]; //查找是否有记住密码
     var obj = getCookie(serachArr);
     if (obj.username && obj.password) {
-<<<<<<< HEAD
-      that.numberValidateForm.username = obj.username; //有记住密码赋值
-      that.numberValidateForm.passworld = obj.password;//有记住密码赋值
-      that.lenrnPsw = true;
-    }
-=======
       that.numberValidateForm.username = obj.username;
       that.numberValidateForm.passworld = obj.password;
       that.lenrnPsw = true;
@@ -241,7 +223,6 @@ export default {
       }else{
         next();
       }
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
   }
 };
 
@@ -309,13 +290,8 @@ export default {
     .from-right {
       width: 50%;
       .el-form {
-<<<<<<< HEAD
-        margin: 14px auto;
-        width: 80%;
-=======
         margin: 14px 20px;
         width: 90%;
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
         position: relative;
         text-align: center;
         /deep/.el-form-item__content {

@@ -81,11 +81,7 @@
           </el-tabs>
           <div
             class="header-right"
-<<<<<<< HEAD
-            style="display:flex;justify-content:space-around;padding-right:35px;min-width:150px;"
-=======
             style="display:flex;justify-content:space-around;padding-right:35px;min-width:200px;line-height:56px;"
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
           >
             <el-dropdown @command="changeLocale">
               <span class="el-dropdown-link">
@@ -99,10 +95,6 @@
             </el-dropdown>
             <span class="getOut" style="font-size:16px;" @click="exit">退出</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
-<<<<<<< HEAD
-             -->
-            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:25px;"></el-avatar>
-=======
             -->
             <el-avatar
               size="medium"
@@ -110,7 +102,6 @@
               fit="contain "
               style="margin-left:15px;margin-top:10px;"
             ></el-avatar>
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -167,13 +158,8 @@ export default {
   methods: {
     /**
      * 添加标签卡
-<<<<<<< HEAD
-     *  @param {String} targetName 当前标签名称
-     *  @param {String} ourl 当前路径
-=======
      * @param targetName {string} 标签名
      * @param ourl {string} 路径
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
      */
     addTab(targetName, ourl) {
       var _this = this;
@@ -202,15 +188,9 @@ export default {
         _this.editableTabsValue = _this.editableTabs[flag].name; // 有相同的标签
       }
     },
-<<<<<<< HEAD
-       /**
-     * 删除标签卡
-     *  @param {String} targetName 当前标签名称
-=======
     /**
      *  删除标签卡
      * @param targetName {string} 标签名
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
      */
     removeTab(targetName) {
       var _this = this;
@@ -231,15 +211,9 @@ export default {
 
       _this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
     },
-<<<<<<< HEAD
-        /**
-     * 删除标签卡
-     *  @param {Object} tab 当前跳转的路由对象
-=======
     /**
      *  点击切换路径
      * @param tab {Object} 标签对象
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
      */
     benToUrl(tab) {
       var _this = this;
@@ -274,24 +248,6 @@ export default {
         _this.$msg(_this, 1, " Switch to English!");
       }
     },
-<<<<<<< HEAD
-// js方法
-       /**
-     * 切换中英文
-     *  @param {Object} command 当前语言类型
-     */
-changeLocale (command) {
-  this.langen == command ?this.langen:this.langen=command;
-  // console.log(command)
-  var lang;
-      this.langen=="中文"?lang='zh':lang='en'
-      if(lang == 'zh'){
-        localStorage.setItem('locale', 'zh')
-        this.$i18n.locale = localStorage.getItem('locale')
-        this.$message({
-          message: '切换为中文！',
-          type: 'success'
-=======
     /**
      *  退出后台
      *
@@ -303,7 +259,6 @@ changeLocale (command) {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
->>>>>>> ed7669cc707a9d36ef26660a2f502e57043e568b
         })
         .then(() => {
           that.$router.push({ name: "login" });
