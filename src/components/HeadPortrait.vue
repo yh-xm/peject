@@ -1,4 +1,8 @@
-<!--头像上传组件-->
+<!--头像上传组件
+引入 import HeadPortrait from "@/components/HeadPortrait.vue"
+注册  components:{HeadPortrait},
+使用 <router-view></router-view>
+-->
 
 <template>
   <div>
@@ -60,8 +64,10 @@ export default {
        
     var userUid=JSON.parse(sessionStorage.getItem("NowLoginUser")).userUid //获取用户唯一标示
         _this.axios.post("api/User/UploadHeader?userUid="+userUid,fm).then((data)=>{ //axios post请求更换图片
+            
             var msg=data.data.message //获取返回的提示
                         if(data.data.code==1){
+                        
                   _this.user=data.data.data + '?t=' + new Date().getTime() //图片路径拼接最新的时间戳以达到更新
                         }
                   _this.$message({type:"success",message:msg}) //提示框
