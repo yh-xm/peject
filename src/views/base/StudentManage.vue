@@ -1,9 +1,9 @@
 <template>
   <div id="StudentManage">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/StudentManage' }">学生管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('base.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('base.r2')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="StudentManage">
       {{classes}}
@@ -24,7 +24,7 @@
         >新增学生</el-button>
         <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
           <el-form :model="form" :rules="addRules" ref="form">
-            <el-form-item label="班级" :label-width="formLabelWidth" prop="classes.classId">
+            <el-form-item :label="$t('tableName.tcn')" :label-width="formLabelWidth" prop="classes.classId">
               <!-- <el-select v-model.trim="classId2" placeholder="请选择" @change="resClassName(classId2)">
                 <el-option
                   v-for="item in options"
@@ -35,32 +35,32 @@
               </el-select> -->
               <classNameSelect v-model="classes" ref="classNameSelect"  @change="resClassName()" style="display:inline"></classNameSelect>
             </el-form-item>
-            <el-form-item label="学生名称" :label-width="formLabelWidth" prop="stuName">
+            <el-form-item :label="$t('tableName.name')" :label-width="formLabelWidth" prop="stuName">
               <el-input v-model.trim="form.stuName" autocomplete="true"></el-input>
             </el-form-item>
-            <el-form-item label="生日" :label-width="formLabelWidth" prop="born">
+            <el-form-item :label="$t('tableName.birth')" :label-width="formLabelWidth" prop="born">
               <div class="block" style="width:160px">
                 <span class="demonstration"></span>
                 <el-date-picker v-model="form.born" type="date" placeholder="选择日期"></el-date-picker>
               </div>
             </el-form-item> 
-            <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
+            <el-form-item :label="$t('tableName.phone')" :label-width="formLabelWidth" prop="phone">
               <el-input v-model.trim="form.phone" autocomplete="true"></el-input>
             </el-form-item>
-            <el-form-item label="*性别" :label-width="formLabelWidth" prop="radio">
+            <el-form-item :label="$t('tableName.sex')" :label-width="formLabelWidth" prop="radio">
               <template>
                 <el-radio v-model="form.radio" label="男">男</el-radio>
                 <el-radio v-model="form.radio" label="女">女</el-radio>
               </template>
             </el-form-item>
-            <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+            <el-form-item :label="$t('tableName.psw')" :label-width="formLabelWidth" prop="password">
               <el-input v-model.trim="form.password" autocomplete="true" type="password"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addStuName('form')" v-if="showBoth == true">添加</el-button>
-            <el-button type="primary" @click="upDate('form',index)" v-if="showBoth == false">修改</el-button>
+            <el-button @click="dialogFormVisible = false">{{$t('btn.res')}}</el-button>
+            <el-button type="primary" @click="addStuName('form')" v-if="showBoth == true">{{$t('btn.a')}}</el-button>
+            <el-button type="primary" @click="upDate('form',index)" v-if="showBoth == false">{{$t('btn.c')}}</el-button>
           </div>
         </el-dialog>
       </div>
@@ -71,40 +71,40 @@
               <span style="margin-left: 10px">{{scope.$index+1}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="班级名称" width="110">
+          <el-table-column :label="$t('tableName.tcn')" width="110">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.className }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="学生姓名" width="110">
+          <el-table-column :label="$t('tableName.name')" width="110">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="性别" width="100">
+          <el-table-column :label="$t('tableName.sex')" width="100">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuSex }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="手机号" width="180">
+          <el-table-column :label="$t('tableName.phone')" width="180">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuMobile }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="出生日期" width="210" style="text-align:center">
+          <el-table-column :label="$t('tableName.birth')" width="210" style="text-align:center">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuBirthDay }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="年龄" width="120" style="padding-left: 60px;">
+          <el-table-column :label="$t('tableName.age')" width="120" style="padding-left: 60px;">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuAge }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="180">
+          <el-table-column :label="$t('tableName.tm')" width="180">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">{{$t('btn.c')}}</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>

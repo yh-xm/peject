@@ -22,22 +22,22 @@
               <span style="margin-left: 10px">{{ scope.row.tpTitle }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="班级" width="100">
+          <el-table-column :label="$t('tableName.tcn')" width="100">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.className }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="出卷人">
+          <el-table-column :label="$t('tableName.tp')">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.userName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="测试开始时间" width="180">
+          <el-table-column :label="$t('tableName.tts')" width="180">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.taskStartTime  | cutTimeT}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="测试结束时间" width="180">
+          <el-table-column :label="$t('tableName.tte')" width="180">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.taskEndTime  | cutTimeT}}</span>
             </template>
@@ -52,7 +52,7 @@
               <span style="margin-left: 10px">{{ scope.row.counter }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column :label="$t('tableName.tm')">
             <template slot-scope="scope">
               <el-button
                 @click="piYueTest(scope.$index, scope.row)"

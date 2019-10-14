@@ -22,7 +22,7 @@ locingVue 是对象类型 接收子组件的值
       :label-width="oname"
       class="demo-ruleForm"
     >
-      <el-form-item label="专业课程" prop="keChenId">
+      <el-form-item :label="$t('tableName.tc')" prop="keChenId">
         <el-select v-model="ruleForm.keChenId" placeholder="请选择" @change="tranSmit">
           <el-option
             v-for="(inte,index) in course"

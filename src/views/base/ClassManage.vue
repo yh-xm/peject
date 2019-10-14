@@ -3,7 +3,7 @@
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('base.title')}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{$t('base.r1')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
@@ -11,22 +11,22 @@
         <!-- 新增 -->
         <div class="newly">
           <el-button type="text" @click="newly">
-            <i class="el-icon-circle-plus-outline"></i> 新增班级
+            <i class="el-icon-circle-plus-outline"></i> {{$t('btn.addclass')}}
           </el-button>
         </div>
         <!-- 班级表格 -->
         <el-table :data="tableData" style="width: 100%">
           <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column label="班级名称" prop="className"></el-table-column>
-          <el-table-column label="授课老师" prop="userName"></el-table-column>
-          <el-table-column label="专业" prop="courseName"></el-table-column>
-          <el-table-column label="班级人数" prop="classStudents"></el-table-column>
-          <el-table-column label="开班日期">
+          <el-table-column :label="$t('tableName.tcn')" prop="className"></el-table-column>
+          <el-table-column :label="$t('tableName.tte')" prop="userName"></el-table-column>
+          <el-table-column :label="$t('tableName.tc')" prop="courseName"></el-table-column>
+          <el-table-column :label="$t('tableName.tcp')" prop="classStudents"></el-table-column>
+          <el-table-column :label="$t('tableName.tcs')">
             <template slot-scope="scope">{{scope.row.classCreateTime | firstSet}}</template>
           </el-table-column>
-          <el-table-column align="left" label="操作">
+          <el-table-column align="left" :label="$t('tableName.tm')">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">{{$t('btn.c')}}</el-button>
          
           <el-button
                 size="mini"
@@ -34,7 +34,7 @@
                 @click="handleDelete(scope.$index, scope.row)"
                 :disabled="scope.row.classStudents >0"
                 v-has
-              >删除</el-button>
+              >{{$t('btn.d')}}</el-button>
           
     
             </template>
@@ -51,13 +51,13 @@
             class="demo-ruleForm"
           >
             <!-- 弹出框 班级名称框 -->
-            <el-form-item label="班级名称" prop="name">
+            <el-form-item :label="$t('tableName.tcn')" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <!-- 弹出框 专业课程下拉框 -->
         <course-frame v-model="lovingVue"  :oname="nemuId"></course-frame>
             <!-- 弹出框 授课老师下拉框 -->
-            <el-form-item label="授课老师" prop="usName">
+            <el-form-item :label="$t('tableName.tte')" prop="usName">
               <el-select v-model="ruleForm.usName" placeholder="请选择">
                 <el-option
                   v-for="(inte,index) in teacher"
@@ -70,9 +70,9 @@
           </el-form>
           <!-- 弹出框的确定取消按钮 -->
           <div slot="footer" class="dialog-footer">
-             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')" v-if="stuNewly==!true">添加</el-button>
-            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly">修改</el-button>
+             <el-button @click="dialogFormVisible = false">{{$t('btn.r')}}</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')" v-if="stuNewly==!true">{{$t('btn.a')}}</el-button>
+            <el-button type="primary" @click="amend('ruleForm')" v-if="stuNewly">{{$t('btn.c')}}</el-button>
           </div>
         </el-dialog>
       </div>

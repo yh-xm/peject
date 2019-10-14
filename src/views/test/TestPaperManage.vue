@@ -13,31 +13,31 @@
       <div slot="header" class="clearfix">
         <el-table :data="tableData" style="width:100%" :border="true">
           <el-table-column label="#" prop="index"></el-table-column>
-          <el-table-column label="标题" prop="tpTitle"></el-table-column>
-          <el-table-column label="出卷人" prop="userName"></el-table-column>
-          <el-table-column label="课程" prop="courseName"></el-table-column>
-          <el-table-column label="出卷日期">
+          <el-table-column :label="$t('tableName.tt')" prop="tpTitle"></el-table-column>
+          <el-table-column :label="$t('tableName.tp')" prop="userName"></el-table-column>
+          <el-table-column :label="$t('tableName.tc')" prop="courseName"></el-table-column>
+          <el-table-column :label="$t('tableName.td')">
             <template slot-scope="scope">{{scope.row.tpDate | firstSet}}</template>
           </el-table-column>
-          <el-table-column align="left" label="操作">
+          <el-table-column align="left" :label="$t('tableName.tm')">
             <template slot-scope="scope">
               <!-- hasTest -->
               <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
                 :disabled="scope.row.hasTest"
-              >编辑</el-button>
+              >{{$t('btn.c')}}</el-button>
               <el-button
                 size="mini"
                 @click="handleGet(scope.$index, scope.row)"
                 :disabled="scope.row.hasTest"
-              >详情</el-button>
+              >{{$t('btn.detail')}}</el-button>
               <el-button
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)"
                 :disabled="scope.row.hasTest"
-              >删除</el-button>
+              >{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,14 +57,14 @@
         <!-- 弹出框 -->
         <el-dialog center title="修改试卷信息" :visible.sync="dialogFormVisible">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-            <el-form-item label="试卷标题" prop="name">
+            <el-form-item :label="$t('tableName.tt')" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <course-frame  v-model="bothWay"  :oname="nemuId" class="selectOptions"></course-frame>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="amend('ruleForm')">修改</el-button>
+            <el-button @click="dialogFormVisible = false">{{$t('btn.res')}}</el-button>
+            <el-button type="primary" @click="amend('ruleForm')">{{$t('btn.s')}}</el-button>
           </div>
         </el-dialog>
       </div>

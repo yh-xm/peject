@@ -3,7 +3,7 @@
     <!-- Breadcrumb 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('base.title')}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{$t('base.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- Breadcrumb 面包屑 结束 -->
@@ -27,15 +27,15 @@
         <!-- 表格 -->
         <el-table :data="filtData" style="width: 100%">
           <el-table-column type="index"></el-table-column>
-          <el-table-column label="用户名称" prop="userName"></el-table-column>
-          <el-table-column label="手机号" prop="userMobile"></el-table-column>
-          <el-table-column label="密码" prop="userPassword"></el-table-column>
-          <el-table-column label="性别" prop="userSex"></el-table-column>
-          <el-table-column label="角色名称" prop="userTypeTypeName"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column :label="$t('tableName.user')" prop="userName"></el-table-column>
+          <el-table-column :label="$t('tableName.phone')" prop="userMobile"></el-table-column>
+          <el-table-column :label="$t('tableName.psw')" prop="userPassword"></el-table-column>
+          <el-table-column :label="$t('tableName.sex')" prop="userSex"></el-table-column>
+          <el-table-column :label="$t('tableName.tjs')" prop="userTypeTypeName"></el-table-column>
+          <el-table-column :label="$t('tableName.tm')">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"  >编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" v-has>删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"  >{{$t('btn.c')}}</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" v-has>{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -60,25 +60,25 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="用户名称" prop="userName">
+            <el-form-item :label="$t('tableName.user')" prop="userName">
               <el-input v-model="ruleForm.userName"></el-input>
             </el-form-item>
 
-            <el-form-item label="手机号" prop="userMobile">
+            <el-form-item :label="$t('tableName.phone')" prop="userMobile">
               <el-input v-model="ruleForm.userMobile"></el-input>
             </el-form-item>
 
-            <el-form-item label="密码" prop="userPassword">
+            <el-form-item :label="$t('tableName.psw')" prop="userPassword">
               <el-input v-model="ruleForm.userPassword"></el-input>
             </el-form-item>
 
-            <el-form-item label="性别" prop="userSex">
+            <el-form-item :label="$t('tableName.sex')" prop="userSex">
               <el-radio-group v-model="ruleForm.userSex">
                 <el-radio label="男"></el-radio>
                 <el-radio label="女"></el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="角色" prop="userTypeTypeName">
+            <el-form-item :label="$t('tableName.tjs')" prop="userTypeTypeName">
               <el-select v-model="ruleForm.userTypeTypeName" placeholder="请选择">
                 <el-option
                   v-for="item in roles"
@@ -91,7 +91,7 @@
           </el-form>
           <!-- 嵌套的表单结束 -->
           <div slot="footer" class="dialog-footer">
-            <el-button @click="cancel('ruleForm')">取 消</el-button>
+            <el-button @click="cancel('ruleForm')">{{$t('btn.res')}}</el-button>
             <el-button type="primary" @click="addClose('ruleForm')" v-show="flag ==! true ">添 加</el-button>
             <el-button type="primary" @click="editColse('ruleForm')" v-show="flag == true">修 改</el-button>
           </div>

@@ -18,7 +18,7 @@ template
     <!-- 试卷 -->
   
     <el-form ref="form" :model="form" label-width="80px" :name="obj1">
-      <el-form-item label="试卷">
+      <el-form-item :label="$t('tableName.tt')">
         <el-select
           v-model="form.tpId"
           placeholder="请选择试卷"
@@ -36,7 +36,7 @@ template
 
       <!-- 班级 -->
 
-      <el-form-item label="班级">
+      <el-form-item :label="$t('tableName.tcn')">
         <el-select
           v-model="form.classId"
           placeholder="请选择班级"

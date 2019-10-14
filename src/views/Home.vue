@@ -93,7 +93,7 @@
                 <el-dropdown-item command="英语">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="getOut" style="font-size:16px;" @click="exit">退出</span>
+            <span class="getOut" style="font-size:16px; cursor: pointer;" @click="exit">退出</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
             -->
             <el-avatar
@@ -332,6 +332,7 @@ export default {
     color: #333;
     border-bottom: 1px solid #ccc;
     width: 100%;
+   
 
     .el-tabs__nav .el-tabs__item:nth-child(1) span {
       display: none;
