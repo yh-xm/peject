@@ -7,8 +7,7 @@ import vueaxios from 'vue-axios'
 import ElementUI from 'element-ui'
 import { setCookie, getCookie, clearCookie } from "@/api/SetCookie.js";
 import has from './directive/btnPermissions.js';
-import http from "@/until/http.js"
-import { mapState } from 'vuex'
+import {get,post} from "@/until/http.js"
 import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
 import i18n from './i18n/i18n';
@@ -18,10 +17,15 @@ const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 } 
-import VueQuillEditor from 'vue-quill-editor'
+import VueQuillEditor from 'vue-quill-editor' //富文本
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+
+import { createNamespacedHelpers } from 'vuex'
+
+const { mapState, mapActions } = createNamespacedHelpers('userModule')
+
 Vue.use(VueQuillEditor);
 
 Vue.use(i18n);
@@ -29,6 +33,8 @@ Vue.use(ElementUI)
 Vue.use(vueaxios, axios)
 Vue.config.productionTip = false;
 Vue.prototype.$msg = message;
+Vue.prototype.$post = post;
+Vue.prototype.$get = get;
 Vue.use(echarts)
 
 /**
@@ -63,9 +69,15 @@ new Vue({
   router,
   store,
   i18n,
-  computed:  mapState([
+  computed: mapState([
     'userInfo',
     'tkon'
   ]),
+  methods:{
+    ...mapActions([
+      'changeUserInfo',
+      'changeTkon'
+    ])
+  },
   render: h => h(App)
 }).$mount('#app')

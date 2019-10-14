@@ -89,7 +89,8 @@
             }
           }
         },
-        serverUrl: "/api/Question/UploadImg", // 这里写你要上传的图片服务器地址
+        // serverUrl: "/api/Question/UploadImg", // 这里写你要上传的图片服务器地址
+        serverUrl:"http://192.168.1.188:12/api/Question/UploadImg"
       };
     },
   computed: {
@@ -149,7 +150,7 @@
   .editor {
     line-height: normal !important;
     height: 200px;
-    margin-bottom: 50px;
+    margin-bottom: 70px;
   }
   .ql-snow .ql-tooltip[data-mode=link]::before {
     content: "请输入链接地址:";

@@ -133,13 +133,13 @@ export default {
                   sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
                   sessionStorage.userId = r.data.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
-                  _this.$store.dispatch('changeUserInfo',r.data.profile)
-                  _this.$store.dispatch('changeTkon',"Bearer" + " " + r.data.access_token)
+                  _this.$parent.$parent.changeUserInfo(r.data.profile)
+                  _this.$parent.$parent.changeTkon("Bearer" + " " + r.data.access_token)
                   if(sessionStorage.redirect){
                       _this.$router.push({
                       path: sessionStorage.redirect
                     });
-                            sessionStorage.removeItem("redirect")
+                   sessionStorage.removeItem("redirect")
                   }else if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);

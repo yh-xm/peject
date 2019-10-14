@@ -276,7 +276,7 @@ init(){
       _this.langen="中文"
     }
 
-if(sessionStorage.store&&_this.$store.state.userInfo==""){
+if(sessionStorage.store){
     _this.$store.replaceState(Object.assign({},_this.$store.state,JSON.parse(sessionStorage.store)));
     sessionStorage.removeItem("store")
 }
