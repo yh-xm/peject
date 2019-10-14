@@ -1,3 +1,4 @@
+刘小林 14:24:09
 /** 
 * 测试成绩
 */
@@ -30,46 +31,39 @@
             v-loading="tableLoading"
             highlight-current-row
             @row-click="choose"
-            style="width: 100%;height:300px"
+            style="width: 100%"
           >
-            <el-table-column prop="courseName" :label="$t('tableName.tc')"></el-table-column>
-            <el-table-column prop="tpTitle" :label="$t('tableName.tt')"></el-table-column>
-            <el-table-column prop="date" :label="$t('tableName.time')"></el-table-column>
-            <el-table-column prop="counter" :label="$t('tableName.thp')"></el-table-column>
+            <el-table-column prop="courseName" label="课程"></el-table-column>
+            <el-table-column prop="tpTitle" label="试卷"></el-table-column>
+            <el-table-column prop="date" label="日期"></el-table-column>
+            <el-table-column prop="counter" label="提交人数"></el-table-column>
           </el-table>
         </el-card>
       </el-col>
       <el-col :span="13">
-        <el-card class="box-card" 
-          ref=print
-          id="classResult"
-        >
+        <el-card class="box-card">
           <!-- 单选切换 -->
           <div slot="header" class="clearfix" @change="switcher">
             <template>
               <el-radio v-model="radio" label="1">列表</el-radio>
               <el-radio v-model="radio" label="2">图表</el-radio>
-               <el-button type="primary"  v-print="'#classResult'">打印</el-button>
             </template>
+            <el-button type="primary" @click="exportToExcel()">导出</el-button>
+            <el-button type="primary" v-print="'#printTest'">打印</el-button>
           </div>
-          <h3 style="text-align:center;margin:10px">{{title}}</h3>
           <!-- 右列表 -->
-          <!-- v-print="'#classResult'" -->
           <el-table
             :data="tableData2"
             v-show="show"
             v-loading="tableLoading"
-            style="width:100%;height:200px"
+            height="300"
+            style="width: 100%"
+            id="printTest"
           >
-             <el-table-column label="#" width="80" >
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{scope.$index+ 1}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="stuName" :label="$t('tableName.name')"></el-table-column>
-            <el-table-column prop="submitTime" :label="$t('tableName.adTime')"></el-table-column>
-            <el-table-column prop="testScore" :label="$t('tableName.scroe')"></el-table-column>
-            <el-table-column prop="userName" :label="$t('tableName.seePage')"></el-table-column>
+            <el-table-column prop="stuName" label="姓名"></el-table-column>
+            <el-table-column prop="submitTime" width="180" label="提交时间"></el-table-column>
+            <el-table-column prop="testScore" label="成绩"></el-table-column>
+            <el-table-column prop="userName" label="阅卷老师"></el-table-column>
           </el-table>
           <!-- 图表 -->
           <div id="main" ref="barchart" v-show="!show" style="height:300px;"></div>
@@ -77,12 +71,12 @@
       </el-col>
     </el-row>
   </div>
-  </div>
 </template>
 
 <script>
 let echarts = require("echarts/lib/echarts"); // 引入 ECharts 主模块
 require("echarts/lib/chart/bar"); //引入条形图组件
+
 export default {
   name: "testResult",
   data() {
@@ -90,12 +84,10 @@ export default {
       options: [], //班级下拉框
       classId: "", //班级下拉框值
       chart: "",
-      isShow: true,
       radio: "1", //单选按钮
       tableData1: [], //左列表
       tableData2: [], //右列表
       show: true, //隐藏显示
-      title: "",
       tableLoading: false //表格加载中
     };
   },
@@ -107,12 +99,20 @@ export default {
     });
   },
   methods: {
-    printTest() {
-      this.isShow = false; // 隐藏因素
-      setTimeout(() => {
-        this.$print(this.$refs.print);
-        this.showBtn = true; // 显示元素
-      }, 50);
+    exportToExcel() {
+      require.ensure([], () => {
+        const {
+          export_json_to_excel
+        } = require("../../assets/js/Export2Excel");
+        const tHeader = ["姓名", "提交时间", "成绩", "阅卷老师"]; //标题
+        const filterVal = ["stuName", "submitTime", "testScore", "userName"]; //字段名
+        const list = this.tableData2; //前端请求的数据
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, "列表excel");
+      });
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]));
     },
     /**
      * 左列表
@@ -141,9 +141,7 @@ export default {
      */
     choose(row) {
       var _this = this;
-      // console.log(row)
       _this.tableLoading = true; //表格加载中
-      _this.title = row.tpTitle;
       _this.axios
         .get("/api/TestResult/GetTestResultByTaskId", {
           params: {
@@ -224,12 +222,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@media print {
-  html,
-  body {
-    height: inherit;
-  }
-}
 .text {
   font-size: 14px;
 }
@@ -249,8 +241,10 @@ export default {
 }
 
 .box-card {
+  height: 400px;
   margin: 5px;
 }
+//试卷任务列表居中
 /deep/.is-leaf,/deep/.cell
 {
   text-align: center;
