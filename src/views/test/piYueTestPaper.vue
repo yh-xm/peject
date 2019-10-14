@@ -49,7 +49,7 @@
           <div
           >选择题（本大题共{{choseQuestions.length}}道，共{{choseQuestions.totalpoints}}分，得分{{choseQuestions.score}}）</div>
           <div v-for="(row,index) in choseQuestions" :key="row.id" class="text item">
-            <h4>{{index+1}}.{{row.questionTitle}} ({{row.testPaperScore}}分)</h4>
+            <p>{{index+1}}.{{row.questionTitle}} ({{row.testPaperScore}}分)</p>
             <ul>
               <li v-for="(item,index) in row.choseQuestions.questions " :key="item.id">
                 {{result[index]}}. {{item.cqOption}}
@@ -77,10 +77,10 @@
             :key="item.id"
             class="text item fillQuestion-result"
           >
-            <h4>
+            <p>
               {{i+1}}.
               <span v-html="item"></span>
-            </h4>
+            </p>
             <el-tag type="warning">学生答案</el-tag>
             <ul>
               <li v-for="(row,index) in fillQuestion[i].fillQuestion.myFill" :key="row.id">
@@ -110,7 +110,7 @@
             <el-row>
               <el-col :span="24">
                 <div class="grid-content bg-purple">
-                  <h4>学生答案</h4>
+                  <p>学生答案</p>
                   <span>{{item.myAnswer}}</span>
                 </div>
               </el-col>
@@ -154,7 +154,8 @@
 export default {
   data(){
     return{
-      info:this.$route.query.dataInfo,
+      taskId:this.$route.query.taskId,
+      info:[],
       isShow:false,//考生详情隐藏和显示
       tableData1: [], //学员个人考试信息
       testUid:"",//学员考试标识符
@@ -270,20 +271,10 @@ export default {
     }
   },
   methods:{
-    getInfo(){
-      var _this=this
-      for (let i in _this.info) {
-            if ( _this.info[i].hasView) {
-              _this.tableDatas[1].stuName.push(_this.info[i]);
-            } else {
-              _this.tableDatas[0].stuName.push(_this.info[i]);
-            }
-          }
-    },
     //计算总分
     handleChange(value){
       var _this=this
-      console.log(_this.stuScore+_this.computFillQuestion[2]+_this.answerdata[2])
+      // console.log(_this.stuScore+_this.computFillQuestion[2]+_this.answerdata[2])
       _this.countScore=_this.stuScore+_this.answerdata[2]+_this.computFillQuestion[2]
     },
     /**
@@ -293,9 +284,8 @@ export default {
     getStuTestInfo(testUid) {
       let _this = this;
       _this.isShow = true
-      _this.testUid=testUid//
-      _this.axios
-        .get("/api/TestResult/GetStudentTestPaper?testUid=" + testUid)
+      _this.testUid=testUid
+      _this.axios.get("/api/TestResult/GetStudentTestPaper?testUid=" + testUid)
         .then(res => {
           // console.log(res.data);
           _this.tpTitle = res.data.tpTitle;
@@ -336,7 +326,6 @@ export default {
           _this.tableData1[0].choseQuestions = choseTiScore;
           _this.tableData1[0].answer = answerScore;
           _this.countScore=choseTiScore+fillTiScore+answerScore
-          console.log(_this.tableData1)
           // console.log(_this.choseQuestions.choseQuestions)
           // console.log(_this.answer.answer)
         });
@@ -347,48 +336,35 @@ export default {
       var _this = this;
       //  console.log(sessionStorage.getItem("uid"))
       let userUid = sessionStorage.getItem("uid");
-     let saveTest = "[";
-      for (let i in  _this.answer) {
-        saveTest +=
-          "{'id':" +
-          _this.answer[i].id +
-          ",'score':" +
-          _this.answer[i].score +
-          "},";
-      }
-      for (let i in _this.fillQuestion) {
-        saveTest +=
-          "{'id':" +
-          _this.fillQuestion[i].id +
-          ",'score':" +
-          _this.fillQuestion[i].score +
-          ",'fillOption': [";
-        for (let j in _this.fillQuestion[i].fillQuestion.myFill) {
-          saveTest +=
-            "{'id': " +
-            _this.fillQuestion[i].fillQuestion.myFill[j].id +
-            ",'fillScore': " +
-            _this.fillQuestion[i].fillQuestion.myFill[j]
-              .fillScore +
-            "},";
-        }
-        saveTest = saveTest.substring(0, saveTest.lastIndexOf(","));
-        saveTest += "]},";
-      }
-
-      saveTest = saveTest.substring(0, saveTest.lastIndexOf(","));//去掉最后一个逗号
-      saveTest += "]";//加上最后一个]
-      var info = eval("(" + saveTest + ")");
+      let answer= _this.answer.map(value=>{
+        return {
+            id:value.id,
+            score:value.score
+            }
+          })
+      let fillQuestion= _this.fillQuestion.map(value=>{
+        let fill = value.fillQuestion.myFill.map(item=>{
+          return {
+            id:item.id,
+            score:item.score
+          }
+        })
+        answer.push({
+          id:value.id,
+          score:value.score,
+          fillOption:fill
+        })
+        return value.fillQuestion.myFill
+      })
       let arr = {
         id: _this.totalPoints.id, //学生答卷的主键编号
-        testScore: 100, //总分
-        studentAnswer: info
+        testScore:_this.countScore, //总分
+        studentAnswer: answer
       };
       _this.axios
         .post("/api/TestResult/SetTestPaperScore?userUid=" + userUid, arr)
         .then(res => {
           document.querySelector(".el-main").scrollTop = 0; //保存阅卷回到顶部
-          console.log(_this.answerdata[2])
           // console.log(_this.tableDatas[0].stuName.filter(item=>item.testUid ==_this.testUid)[0])
           let noDone=_this.tableDatas[0].stuName
           let hasDone=_this.tableDatas[1].stuName
@@ -414,22 +390,30 @@ export default {
                   message: "修改失败！"
                 });
            }
-          
        });
     },
     piYue(){
       var _this=this
       _this.tableData1[0].fillQuestion = _this.computFillQuestion[2]; //填空题分数
       _this.tableData1[0].answer = _this.answerdata[2]; //问答题分数
-      _this.tableData1[0].testScore = _this.stuScore; // //总分
+      _this.tableData1[0].testScore = _this.countScore; // //总分
       _this.tableData1.splice(0, 1, _this.tableData1[0]); //替换数据
     }
   },
   created:function() {
     var _this=this
-    _this.getInfo();
+    _this.axios.get("/api/TestResult/GetStudentTest?taskId=" + _this.taskId )
+      .then((res) => {
+          _this.info=res.data
+          for (let i in _this.info) {
+            if ( _this.info[i].hasView) {
+              _this.tableDatas[1].stuName.push(_this.info[i]);
+            } else {
+              _this.tableDatas[0].stuName.push(_this.info[i]);
+            }
+          }
+      });
   }
-
 }
 </script>
 
