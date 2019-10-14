@@ -6,15 +6,17 @@
       <el-breadcrumb-item :to="{ path: '/StudentManage' }">学生管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="StudentManage">
+      {{classes}}
       <div class="StudentSelect">
-        <el-select v-model="classId" @change="getClassName(classId)" placeholder="请选择班级">
+        <!-- <el-select v-model="classId" @change="getClassName(classId)" placeholder="请选择班级">
           <el-option
             v-for="item in options"
             :key="item.classId"
             :label="item.className"
             :value="item.classId"
           ></el-option>
-        </el-select>
+        </el-select> -->
+        <classNameSelect v-model="classes" ref="classNameSelect" @change="classInfo" style="display:inline"></classNameSelect>
         <el-button
           type="text"
           @click="addEquipment"
@@ -22,27 +24,28 @@
         >新增学生</el-button>
         <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
           <el-form :model="form" :rules="addRules" ref="form">
-            <el-form-item label="班级" :label-width="formLabelWidth" prop="classId2">
-              <el-select v-model="classId2" placeholder="请选择" @change="resClassName(classId2)">
+            <el-form-item label="班级" :label-width="formLabelWidth" prop="classes.classId">
+              <!-- <el-select v-model.trim="classId2" placeholder="请选择" @change="resClassName(classId2)">
                 <el-option
                   v-for="item in options"
                   :key="item.classId"
                   :label="item.className"
                   :value="item.classId"
                 ></el-option>
-              </el-select>
+              </el-select> -->
+              <classNameSelect v-model="classes" ref="classNameSelect"  @change="resClassName()" style="display:inline"></classNameSelect>
             </el-form-item>
             <el-form-item label="学生名称" :label-width="formLabelWidth" prop="stuName">
-              <el-input v-model="form.stuName" autocomplete="true"></el-input>
+              <el-input v-model.trim="form.stuName" autocomplete="true"></el-input>
             </el-form-item>
             <el-form-item label="生日" :label-width="formLabelWidth" prop="born">
               <div class="block" style="width:160px">
                 <span class="demonstration"></span>
                 <el-date-picker v-model="form.born" type="date" placeholder="选择日期"></el-date-picker>
               </div>
-            </el-form-item>
+            </el-form-item> 
             <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model="form.phone" autocomplete="true"></el-input>
+              <el-input v-model.trim="form.phone" autocomplete="true"></el-input>
             </el-form-item>
             <el-form-item label="*性别" :label-width="formLabelWidth" prop="radio">
               <template>
@@ -51,7 +54,7 @@
               </template>
             </el-form-item>
             <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
-              <el-input v-model="form.password" autocomplete="true"></el-input>
+              <el-input v-model.trim="form.password" autocomplete="true" type="password"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -63,22 +66,22 @@
       </div>
       <div class="main">
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column label="#" width="80">
+          <el-table-column label="#" width="100">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{scope.$index+1}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="班级名称" width="130">
+          <el-table-column label="班级名称" width="110">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.className }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="学生姓名" width="130">
+          <el-table-column label="学生姓名" width="110">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="性别" width="80">
+          <el-table-column label="性别" width="100">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuSex }}</span>
             </template>
@@ -88,17 +91,17 @@
               <span style="margin-left: 10px">{{ scope.row.stuMobile }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="出生日期" width="200" style="text-align:center">
+          <el-table-column label="出生日期" width="210" style="text-align:center">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuBirthDay }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="年龄" width="80" style="padding-left: 60px;">
+          <el-table-column label="年龄" width="120" style="padding-left: 60px;">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuAge }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="180">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
@@ -110,8 +113,11 @@
   </div>
 </template>
 <script>
-import { METHODS } from "http";
+import classNameSelect from "@/components/classNameSelect"
 export default {
+  components:{
+      classNameSelect
+  },
   data() {
     var validateClassName = (rule, value, callback) => {
       setTimeout(() => {
@@ -156,17 +162,18 @@ export default {
     };
 
 
-    var passWord = /^[a-zA-Z0-9]{3,9}$/;
+    var passWord = /^[a-zA-Z0-9]{6,18}$/;
     var validatepassWord = (rule, value, callback) => {
       setTimeout(() => {
         if (!passWord.test(value)) {
-          callback(new Error("密码为3-9位字符"));
+          callback(new Error("密码为6-18位字符"));
         } else {
           callback();
         }
       }, 100);
     };
     return {
+      classes:'',
       showBoth: true, //判断新增还是修改
       dialogStatus: "", //判断标题
       index: "", //表格行的下标
@@ -177,27 +184,21 @@ export default {
       dialogFormVisible: false, //判断是否取消
       centerDialogVisible: false, //判断标题
       options: [], //班级选择
-      classId: "", //默认班级编号
       tableData: [], //表单数据
-      classId2: "",
       form: {
         //新增
         stuUid: "", //学生遍号
         class: "", //班级编号
         stuName: "", //学生姓名
         stuClassId: "",
-        born: "", //生日
+        born: new Date(), //生日
         phone: "",
         radio: "男", //男女默认值
         password: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
       },
       addRules: {
         // 校验班级名，主要通过validator来指定验证器名称
-        classId2: [{ required: true, validator: validateClassName, trigger: "blur" }],
+        classes: [{ required: true, validator: validateClassName, trigger: "blur" }],
         // 校验学生名，主要通过validator来指定验证器名称
         stuName: [{ required: true, validator: validateName, trigger: "blur" }],
         // 校验生日，主要通过validator来指定验证器名称
@@ -213,6 +214,7 @@ export default {
   methods: {
     addEquipment() {//新增学生
       var _this = this;
+
       _this.showBoth = true;//显示新增按钮
       _this.dialogFormVisible = true; //显示弹框
       _this.dialogStatus = "addEquipment"; //新增弹框标题
@@ -236,41 +238,38 @@ export default {
           let params = {
             //发送请求
             stuName: _this.form.stuName, //学生姓名
-            stuClassId: _this.classId2, //班级编号
+            stuClassId: _this.classes.classId, //班级编号
             stuBirthDay: new Date(_this.form.born), //生日
             stuMobile: _this.form.phone, //手机号
             stuPassword: _this.form.password, //登录密码,
             stuSex: _this.form.radio, //性别
-            className: _this.form.class,
-            stuAge: 18
+            className: _this.classes.className,
           };
           _this.axios.post("/api/Student/AddStudent", params).then(response => {
             // console.log(_this.tableData)
             //  console.log(_this.options)
-            //  console.log(params)
+             console.log(params)
             if (response.data.code == 1) {
-              _this.tableData.push(params);
-              _this.getClassName(_this.classId2); //跳转到所选班级，方便查看
               _this.$message({
                 type: "success",
                 message: "新增成功！"
               });
+              _this.tableData.push(params);
+              _this.classInfo(); //跳转到所选班级，方便查看
             } else {
               _this.$message({
                 type: "warning",
                 message: "新增失败！"
               });
+              // _this.classInfo(); //跳转到所选班级，方便查看
             }
           });
         }
       });
     },
-    resClassName() {
+     resClassName(){
       //获取所有班级名字
-      var _this = this;
-      _this.axios.get("api/Class/GetAllClass").then(r => {
-        _this.options = r.data;
-      });
+      
     },
     /**
      * @{argument} handleEdit()编辑学生信息
@@ -292,7 +291,7 @@ export default {
       _this.form.phone = row.stuMobile; //电话赋值给输入框
       _this.form.password = row.stuPassword; //密码赋值给输入框
       _this.form.radio = row.stuSex; //性别赋值给输入框
-      _this.form.classId = row.classId; //班级编号赋值给输入框
+      // _this.form.classId = row.classId; //班级编号赋值给输入框
     },
     /**
      * @{argument} upDate()点击修改
@@ -301,15 +300,16 @@ export default {
      */
     upDate(ruleForm, index) {
       var _this = this;
+      console.log(_this.form)
       _this.$refs[ruleForm].validate(valid => {
         if (valid) {
           _this.dialogFormVisible = false;
-          _this.axios
-            .post("/api/Student/ModifyStudent", {
+          _this.axios.post("/api/Student/ModifyStudent",
+             {
               stuUid: _this.form.stuUid, // 要修改学生的唯一标识符
               stuName: _this.form.stuName, //学生姓名
               stuBirthDay: new Date(_this.form.born), //生日
-              stuClassId: _this.classId2, //班级编号
+              stuClassId: _this.classes.classId, //班级编号
               stuMobile: _this.form.phone, //手机号
               stuPassword: _this.form.password, //登录密码,
               stuSex: _this.form.radio //性别
@@ -317,7 +317,7 @@ export default {
             .then(response => {
               if (response.data.code == 1) {
                 // console.log(_this.tableData[index])
-                _this.getClassName(_this.classId2); //修改成功后跳转到所选班级，方便查看
+                _this.classInfo(); //修改成功后跳转到所选班级，方便查看
                 _this.$message({
                   type: "success",
                   message: "修改成功！"
@@ -370,27 +370,22 @@ export default {
      * @{argument} getClassName改变监听班级编号事件
      * @param {Num} res 班级编号
      */
-    getClassName(res) {
+    classInfo() {
       //获取班级学生
       var _this = this;
-      // console.log(res)//班级编号
-      _this.axios.get(`/api/Student/GetClassStudent?classId=${res}`).then(r => {
-        _this.tableData = r.data;
-        _this.classId =_this.classId2 = r.data[0].classId; //报错是因为没有数据
-        // _this.public();
+      // console.log(_this.classes.classId)//班级编号
+      _this.axios.get('/api/Student/GetClassStudent?classId='+_this.classes.classId).then(r => {
         //  console.log(r.data)//班级所有学生
-      });
-    },
-    public() {
-      //获取所有班级
-      var _this = this;
-      _this.axios.get("api/Class/GetAllClass").then(r => {
-      _this.options = r.data;
+        _this.tableData = r.data;
       });
     }
   },
   created: function() {
-    this.public(); //调用班级数据
+
+
+    // this.$refs["classNameSelect"].focus();
+  
+    // this.public(); //调用班级数据
   }
 };
 </script>
@@ -404,7 +399,7 @@ export default {
     border: 1px solid #ccc;
     margin-top: 30px;
     .StudentSelect {
-      width: 100%;
+      width:97%;
       height: 70px;
       border-bottom: 1px solid #ccc;
       line-height: 70px;

@@ -1,4 +1,4 @@
-/** 
+<!--
 添加问答题组件
 
   引用 import AddEssayQuestion 
@@ -10,7 +10,7 @@
           @addEssayQuestion="addQuestion" 添加题目时触发的事件
            />
 
-*/
+-->
 <template>
   <div id="EssayQuestion">
     <div class="essat-content">
@@ -27,7 +27,7 @@
         </el-form-item>
         <!-- 参考答案 -->
         <el-form-item label="参考答案">
-          <el-input v-model="AddEssayQuestion.value"></el-input>
+            <editor  v-model="AddEssayQuestion.value" ref="editor"/>
         </el-form-item>
         <!-- 分值 -->
         <el-form-item label="分值">
@@ -49,7 +49,11 @@
   </div>
 </template>
 <script>
+ import Editor from './TextEditor'
 export default {
+        components: {
+      Editor
+    },
   data() {
     return {
       AddEssayQuestion: {
@@ -97,11 +101,14 @@ export default {
               bodys:res.data.data,
               questionTypeId:3
             }
-            this.$emit('addEssayQuestion',data)
-             _this.$msg(this,1, "添加成功!")
+            _this.$emit('addEssayQuestion',data)
+             _this.$msg(_this,1, "添加成功!")
             _this.resetForm("AddEssayQuestion"); //重置表单
             _this.AddEssayQuestion.value = "";
-          }
+            _this.$refs.editor.content ="";
+          }else{
+                _this.$msg(_this,-1, res.data.message)
+              }
         });
     }
   }

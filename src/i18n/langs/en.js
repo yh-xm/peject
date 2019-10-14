@@ -7,19 +7,22 @@ module.exports = {
       text: 'button'
     },
     base:{
-      title:"on-line testing",
+      title:"Basic data",
         r1:"ClassManage",
         r2:"StudentManage",
         r3:"TeacherManage",
         r4:"ModifyPassword",
-        r5:"UserManage"
+        r5:"UserManage",
+       
     },
     test:{
-      title:"Basic data",
+      title:"on-line testing",
         r1:"MakeTestPaper",
         r2:"TestPaperManage",
         r3:"TestSetter",
         r4:"ViewTestPaper",
-        r5:"TestResult"
+        r5:"TestResult",
+        r6:"Test Task",
+        r7:"TestpageDetails"
     }
   }

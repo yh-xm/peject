@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import baseModule from './static/base'
+import testModule from './static/test'
+import userModule from './static/user'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-
+  modules: {
+    baseModule,
+    testModule,
+    userModule
   },
-  mutations: {
-
-  },
-  actions: {
- 
-  }
+  state:{},
+  mutations:{},
+  actions:{},
+  getters:{}
 })

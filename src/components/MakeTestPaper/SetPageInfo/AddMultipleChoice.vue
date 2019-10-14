@@ -1,4 +1,4 @@
-/** 
+<!--
 添加选择题组件
 
   引用 import AddMultipleChoice 
@@ -9,7 +9,7 @@
           <add-multiple-choice 
           @addMultipleChoice="addQuestion" 添加题目时触发的事件
            />
-*/
+-->
 <template>
   <div id="MultipleChoice">
     <div class="Mult-Content">
@@ -29,13 +29,9 @@
           <el-input type="textarea" v-model="AddMultipleChoice.title" :rows="1"></el-input>
         </el-form-item>
 
-        <el-form-item
-          v-for="(domain, index) in AddMultipleChoice.domains"
-          :key="domain.key"
-          :prop="'domains.' + index + '.value'"
-        >
+        <el-form-item v-for="(domain, index) in AddMultipleChoice.domains" :key="domain.key">
           <el-checkbox-group v-model="AddMultipleChoice.checked" :min="0" :max="2" @change="change">
-            <el-checkbox :label="domain.options" :key="index"></el-checkbox>
+            <el-checkbox :label="domain.options" :key="index" :checked="domain.cqIsRight"></el-checkbox>
           </el-checkbox-group>
 
           <el-input v-model="domain.value"></el-input>
@@ -73,7 +69,7 @@ export default {
         onum: 2, //默认分数
         nowAdd: 4, //默认添加个数
         domains: [], //选项
-        optionsActive: ["A、", "B、", "C、", "D、", "E、"], //对应字母
+        optionsActive: ["A、", "B、", "C、", "D、", "E、", "F、"], //对应字母
         title: "" //题目
       }
     };
@@ -113,15 +109,20 @@ export default {
      *
      */
     addDomain() {
-      if (this.AddMultipleChoice.nowAdd < 5) {
-        //选项个数小于5执行添加
-        this.AddMultipleChoice.nowAdd++;
-        this.AddMultipleChoice.domains.push({
+      var _this = this;
+      if (
+        _this.AddMultipleChoice.domains.length <
+        _this.AddMultipleChoice.optionsActive.length
+      ) {
+        _this.AddMultipleChoice.domains.push({
           value: "",
-          options: this.AddMultipleChoice.optionsActive[
-            this.AddMultipleChoice.nowAdd - 1
-          ]
+          options:
+            _this.AddMultipleChoice.optionsActive[
+              _this.AddMultipleChoice.domains.length
+            ]
         });
+      } else {
+        _this.$msg(_this, -1, "不能添加选项了！");
       }
     },
     /**
@@ -133,58 +134,65 @@ export default {
     submitForm(formName) {
       //提交表单
       var _this = this;
-      _this.$refs[formName].validate(valid => {
-        if (valid) {
-          var tpqPaperId = sessionStorage.testPaperId;
-          var tpqScore = _this.$refs[formName].model.onum;
-          var title = _this.$refs[formName].model.title;
-          var arrs = [];
-          for (const key in _this.$refs[formName].model.domains) {
-            if (
-              _this.$refs[formName].model.domains[key].options ==
-                _this.AddMultipleChoice.checked[ //判断选中项
-                  _this.AddMultipleChoice.checked.length - 1
-                ] ||
-              _this.$refs[formName].model.domains[key].options ==
-                _this.AddMultipleChoice.checked[0]
-            ) {
-              arrs.push({
-                cqOption: _this.$refs[formName].model.domains[key].value,
-                cqIsRight: true //选中为true
+      _this.$nextTick(function() {
+        _this.$refs[formName].validate(valid => {
+          console.log(_this.$refs[formName].model.domains);
+          if (valid) {
+            var tpqPaperId = sessionStorage.testPaperId; //获取试卷ID
+            var tpqScore = _this.$refs[formName].model.onum; //获取表单的分数
+            var title = _this.$refs[formName].model.title; //获取题目
+            var arrs = [];
+            var newAddMultipleChoice = _this.$refs[formName].model.domains.map(
+              v => {
+                if (
+                  v.options ==
+                    _this.AddMultipleChoice.checked[ //判断选中项 是不是多选中的其中之一
+                      _this.AddMultipleChoice.checked.length - 1
+                    ] ||
+                  v.options == _this.AddMultipleChoice.checked[0]
+                ) {
+                  return {
+                    cqOption: v.value, //选项的值
+                    cqIsRight: true //选中为true
+                  };
+                } else {
+                  return {
+                    cqOption: v.value, //选项的值
+                    cqIsRight: false //没选中为fasle
+                  };
+                }
+              }
+            );
+
+            _this.axios
+              .post(`/api/TestPaper/AddQuestionToTestPaper`, {
+                tpqPaperId: tpqPaperId, //试卷主键编号
+                tpqScore: tpqScore, //分值
+                tpqQuestion: {
+                  questionTitle: title, //题目的标题
+                  questionTypeId: 1, //题目的类型 1=选择题 2=填空题 3=问答题
+                  chooseQuestion: newAddMultipleChoice
+                }
+              })
+              .then(res => {
+                if (res.data.message == "添加成功") {
+                  var data = {
+                    bodys: res.data.data,
+                    questionTypeId: 1
+                  };
+                  _this.$emit("addMultipleChoice", data); //通知父组件
+                  _this.$msg(_this, 1, "添加成功!");
+                  _this.init(); //初始化
+                  _this.resetForm("AddMultipleChoice");
+                } else {
+                  _this.$msg(_this, -1, res.data.message);
+                }
               });
-            } else {
-              arrs.push({
-                cqOption: _this.$refs[formName].model.domains[key].value,
-                cqIsRight: false //没选中为fasle
-              });
-            }
+          } else {
+            console.log("error submit!!");
+            return false;
           }
-          _this.axios
-            .post(`/api/TestPaper/AddQuestionToTestPaper`, {
-              tpqPaperId: tpqPaperId, //试卷主键编号
-              tpqScore: tpqScore, //分值
-              tpqQuestion: {
-                questionTitle: title, //题目的标题
-                questionTypeId: 1, //题目的类型 1=选择题 2=填空题 3=问答题
-                chooseQuestion: arrs
-              }
-            })
-            .then(res => {
-              if (res.data.message == "添加成功") {
-                var data = {
-                  bodys: res.data.data,
-                  questionTypeId: 1
-                };
-                _this.$emit("addMultipleChoice", data);
-        _this.$msg(this,1, "添加成功!")
-                _this.init();
-                _this.resetForm("AddMultipleChoice");
-              }
-            });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
+        });
       });
     },
     /**
@@ -194,12 +202,14 @@ export default {
      */
     init() {
       var _this = this;
-      _this.AddMultipleChoice.checked = [];
+      _this.AddMultipleChoice.checked = []; //初始化多选
       _this.AddMultipleChoice.domains = [];
       for (let i = 0; i < 4; i++) {
+        //初始化4个选项
         _this.AddMultipleChoice.domains.push({
           value: "",
-          options: _this.AddMultipleChoice.optionsActive[i]
+          options: _this.AddMultipleChoice.optionsActive[i],
+          cqIsRight: false
         });
       }
     },
@@ -236,6 +246,12 @@ export default {
           margin-right: auto;
           margin-right: 12px;
           margin-left: 12px;
+        }
+        .el-input-number__decrease{
+          left: 15px;
+        }
+        .el-input-number__increase{
+          left: 150px;
         }
       }
     }

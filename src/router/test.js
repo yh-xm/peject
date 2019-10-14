@@ -3,7 +3,8 @@ const TestPaperManage = () => import('@/views/test/TestPaperManage')
 const TestResult = () => import('@/views/test/TestResult')
 const TestSetter = () => import('@/views/test/TestSetter')
 const ViewTestPaper = () => import('@/views/test/ViewTestPaper')
-const TestpageDetails = () => import('@/components/TestpageDetails')
+const piYueTestPaper = () => import('@/views/test/piYueTestPaper')
+const TestpageDetails = () => import("@/components/TestpageDetails") 
 export default(
     [
         {
@@ -16,9 +17,9 @@ export default(
             name: 'TestPaperManage',
             component: TestPaperManage,
             meta: [
-                { name: '首页', url: '/' },
-                { name: '在线测试' , url: '/'},
-                { name: '试卷管理' }
+                { name: 'message.home', url: '/' },
+                { name: 'test.title' , url: '/'},
+                { name: 'test.r2' }
             ]        
         },
         {
@@ -26,10 +27,10 @@ export default(
             name: 'TestpageDetails',
             component: TestpageDetails,
             meta: [
-                { name: '首页', url: '/' },
-                { name: '在线测试', url: '/' },
-                { name: '试卷管理',url:'/TestPaperManage'},
-                { name: '试卷详情'}
+                { name: 'message.home', url: '/' },
+                { name: 'test.title', url: '/' },
+                { name: 'test.r2',url:'/TestPaperManage'},
+                { name: 'test.r7'}
             ],
         
         },
@@ -49,5 +50,10 @@ export default(
             component: ViewTestPaper
         },
         
+        {
+            path: '/piYueTestPaper',
+            name: 'piYueTestPaper',
+            component: piYueTestPaper
+        }
     ]
 )

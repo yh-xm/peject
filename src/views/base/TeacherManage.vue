@@ -2,9 +2,9 @@
   <div id="TeacherManage">
     <!-- Breadcrumb 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('base.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- Breadcrumb 面包屑 结束 -->
     <!-- 卡片 -->
@@ -34,8 +34,8 @@
           <el-table-column label="角色名称" prop="userTypeTypeName"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"  >编辑</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" v-has>删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -421,21 +421,6 @@ export default {
       _this.dialogFormVisible = false; //关闭对话框
     }
   },
-    watch: {
-    ruleForm: function(newval, val) {
-      let _this = this;
-      console.log(newval); //新值
-      console.log(val); //原值
-      // !function auto(){
-      //   // _this.addClose();
-      //   _this.editColse();
-      //   setTimeout(() =>{
-      //     auto()
-      //   },100);
-      // }
-    }
-  },
-
     //定义计算属性
   computed: {
     /**
@@ -451,7 +436,7 @@ export default {
      * 这是计算属性
      * 所以直接把这个方法名(也就是filtData)像data值一样绑定到显示结果的表格中;
      * */
-    filtData() {
+    filtData(){
       let _this = this;
       if (_this.filtRadio == "0") {
         return _this.tableData;
