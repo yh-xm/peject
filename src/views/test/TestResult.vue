@@ -1,16 +1,9 @@
-刘小林 14:24:09
+刘小林 15:22:25
 /** 
 * 测试成绩
 */
 <template>
-  <div class="all">
-    <div id="StudentManage">
-      <!-- head 面包屑 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
-        <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
-        <el-breadcrumb-item>{{$t('test.r5')}}</el-breadcrumb-item>
-      </el-breadcrumb>
+  <div id="testResult">
     <el-row>
       <el-col :span="11">
         <el-card class="box-card">
@@ -41,7 +34,7 @@
         </el-card>
       </el-col>
       <el-col :span="13">
-        <el-card class="box-card">
+        <el-card class="box-card" id="printTest">
           <!-- 单选切换 -->
           <div slot="header" class="clearfix" @change="switcher">
             <template>
@@ -58,7 +51,6 @@
             v-loading="tableLoading"
             height="300"
             style="width: 100%"
-            id="printTest"
           >
             <el-table-column prop="stuName" label="姓名"></el-table-column>
             <el-table-column prop="submitTime" width="180" label="提交时间"></el-table-column>
