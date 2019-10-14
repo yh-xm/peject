@@ -90,12 +90,12 @@ export default {
       options: [], //班级下拉框
       classId: "", //班级下拉框值
       chart: "",
-      isShow:true,
+      isShow: true,
       radio: "1", //单选按钮
       tableData1: [], //左列表
       tableData2: [], //右列表
       show: true, //隐藏显示
-      title:'',
+      title: "",
       tableLoading: false //表格加载中
     };
   },
@@ -107,12 +107,12 @@ export default {
     });
   },
   methods: {
-    printTest () {
-      this.isShow = false  // 隐藏因素
+    printTest() {
+      this.isShow = false; // 隐藏因素
       setTimeout(() => {
-        this.$print(this.$refs.print)
-        this.showBtn = true // 显示元素
-      }, 50)
+        this.$print(this.$refs.print);
+        this.showBtn = true; // 显示元素
+      }, 50);
     },
     /**
      * 左列表
@@ -143,7 +143,7 @@ export default {
       var _this = this;
       // console.log(row)
       _this.tableLoading = true; //表格加载中
-      _this.title=row.tpTitle
+      _this.title = row.tpTitle;
       _this.axios
         .get("/api/TestResult/GetTestResultByTaskId", {
           params: {
@@ -219,11 +219,17 @@ export default {
       let _this = this;
       _this.show = !_this.show;
     }
-  },
+  }
 };
 </script>
 
 <style lang="less" scoped>
+@media print {
+  html,
+  body {
+    height: inherit;
+  }
+}
 .text {
   font-size: 14px;
 }
@@ -243,12 +249,10 @@ export default {
 }
 
 .box-card {
-  height: 400px;
   margin: 5px;
 }
-// #main{
-//   canvas{
-//     width: 100% !important;
-//   }
-// }
+/deep/.is-leaf,/deep/.cell
+{
+  text-align: center;
+}
 </style>
