@@ -1,10 +1,10 @@
 <template>
   <div id="ViewTestPaper">
     <el-breadcrumb separator-class="el-icon-arrow-right" style="margin:20px">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>在线测试</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/ViewTestPaper'}">测试任务</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/piYueTestPaper'}">批阅试卷</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/ViewTestPaper'}">{{$t('test.r6')}}</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/piYueTestPaper'}">{{$t('test.r5')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="box-card">
       <div>

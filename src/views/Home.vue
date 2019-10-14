@@ -28,7 +28,7 @@
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-menu"></i>
-              <span slot="title">{{$t('base.title')}}</span>
+              <span slot="title">{{$t('test.title')}}</span>
             </template>
             <el-menu-item
               v-for="(item,index) in test"
@@ -40,7 +40,7 @@
           <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-menu"></i>
-              <span slot="title">{{$t('test.title')}}</span>
+              <span slot="title">{{$t('base.title')}}</span>
             </template>
             <el-menu-item
               v-for="(item,index) in base"
@@ -83,7 +83,7 @@
           </el-tabs>
           <div
             class="header-right"
-            style="display:flex;justify-content:space-around;padding-right:35px;min-width:150px;line-height:56px;"
+            style="display:flex;justify-content:space-around;padding-right:35px;min-width:200px;line-height:56px;"
           >
             <el-dropdown  @command="changeLocale">
               <span class="el-dropdown-link">

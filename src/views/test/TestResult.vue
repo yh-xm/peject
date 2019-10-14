@@ -3,9 +3,9 @@
     <div id="StudentManage">
       <!-- head 面包屑 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>在线测试</el-breadcrumb-item>
-        <el-breadcrumb-item>测试成绩</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">{{$t('message.home')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('test.r5')}}</el-breadcrumb-item>
       </el-breadcrumb>
     
       <!-- class下拉框 -->

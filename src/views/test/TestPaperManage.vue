@@ -3,8 +3,8 @@
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item v-for="(item,index) in $route.meta" :key="index">
-        <router-link v-if="item.url" :to="item.url">{{item.name}}</router-link>
-        <a v-else>{{item.name}}</a>
+        <router-link v-if="item.url" :to="item.url">{{$t(item.name)}}</router-link>
+        <a v-else>{{$t(item.name)}}</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片 -->

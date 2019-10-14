@@ -8,8 +8,8 @@
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item v-for="(item,index) in $route.meta" :key="index">
-        <router-link v-if="item.url" :to="item.url">{{item.name}}</router-link>
-        <a v-else>{{item.name}}</a>
+        <router-link v-if="item.url" :to="item.url">{{$t(item.name)}}</router-link>
+        <a v-else>{{$t(item.name)}}</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
       <div class="table-content">
@@ -43,12 +43,10 @@
   </div>
 </template>
 <script>
-import MakeOver from "@/components/MakeTestPaper/MakeOver"; //第三步组件
 import TestPage from  "@/components/TestPage";
 export default {
   components: {
-    TestPage,//试卷的操作
-    MakeOver //完成试卷
+    TestPage//试卷的操作
   },
   data() {
     return {
