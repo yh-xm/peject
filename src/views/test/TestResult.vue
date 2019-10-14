@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 刘小林 15:22:25
+=======
+>>>>>>> tanYiDong
 /** 
 * 测试成绩
 */
@@ -44,6 +47,7 @@
             <el-button type="primary" @click="exportToExcel()">导出</el-button>
             <el-button type="primary" v-print="'#printTest'">打印</el-button>
           </div>
+          <h4 style="text-align:center" v-show="show">{{tpTitle}}</h4>
           <!-- 右列表 -->
           <el-table
             :data="tableData2"
@@ -58,7 +62,7 @@
             <el-table-column prop="userName" label="阅卷老师"></el-table-column>
           </el-table>
           <!-- 图表 -->
-          <div id="main" ref="barchart" v-show="!show" style="height:300px;"></div>
+          <div id="main" ref="barchart" v-show="!show" style="height:300px;" ><h4>{{tpTitle}}</h4></div>
         </el-card>
       </el-col>
     </el-row>
@@ -132,7 +136,10 @@ export default {
      * @param{string} row 对应左表行的数据
      */
     choose(row) {
+      // console.log(row.tpTitle);
+
       var _this = this;
+      _this.tpTitle=row.tpTitle
       _this.tableLoading = true; //表格加载中
       _this.axios
         .get("/api/TestResult/GetTestResultByTaskId", {
