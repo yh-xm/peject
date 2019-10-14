@@ -5,7 +5,8 @@ import router from '../router'
 
 axios.defaults.baseURL='http://192.168.1.188:12';// 默认访问接口路径
 axios.interceptors.request.use(config=>{
-    config.headers['Authorization'] = sessionStorage.getItem('tkon'); //默认请求携带tkon
+    
+    config.headers['Authorization'] = sessionStorage.getItem('token'); //默认请求携带token
     return config;
   },error=>{
     return Promise.reject(error)
@@ -54,7 +55,7 @@ axios.interceptors.request.use(config=>{
      })
      if(res.access_token){
          var token = res.token_type +" "+res.access_token;
-         sessionStorage.tkon = token
+         sessionStorage.token = token
          store.dispatch('changeUserInfo',res.profile);
          store.dispatch('changeTkon',"Bearer" + " " + token);
          error.config.headers["Authorization"] = token;

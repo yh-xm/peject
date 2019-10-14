@@ -57,7 +57,7 @@ export default {
       _this.$refs[formName].validate(valid => {
            var tpCourseId = _this.bothWay.courseId //获取下拉选中的课程Id
         var name = _this.$refs[formName].model.name; //试卷名称
-        sessionStorage.tkon =""
+        sessionStorage.token =""
         if (valid) {
           _this.axios
             .post(`/api/TestPaper/MakeTestPaper?uid=${userId}`, {

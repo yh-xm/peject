@@ -71,7 +71,7 @@ new Vue({
   i18n,
   computed: mapState([
     'userInfo',
-    'tkon'
+    'token'
   ]),
   methods:{
     ...mapActions([

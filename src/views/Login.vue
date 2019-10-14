@@ -130,7 +130,7 @@ export default {
                   } else {
                     clearCookie();
                   }
-                  sessionStorage.tkon = "Bearer" + " " + r.data.access_token; //获取tkon
+                  sessionStorage.token = "Bearer" + " " + r.data.access_token; //获取token
                   sessionStorage.userId = r.data.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
                   _this.$parent.$parent.changeUserInfo(r.data.profile)
@@ -202,7 +202,7 @@ export default {
       that.lenrnPsw = true;
     }
   },
-  //tkon失效时 重新登录回到之前页面
+  //token失效时 重新登录回到之前页面
     beforeRouteEnter: (to, from, next) => {
       if(to.query.redirect=="warning"){
         sessionStorage.redirect=from.fullPath;

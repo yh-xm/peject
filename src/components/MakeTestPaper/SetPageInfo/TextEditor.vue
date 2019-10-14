@@ -96,7 +96,7 @@
   computed: {
 	headers() {
 		return{
-			"Authorization": sessionStorage.tkon // 直接从本地获取token就行
+			"Authorization": sessionStorage.token // 直接从本地获取token就行
 		}
 	}
 },

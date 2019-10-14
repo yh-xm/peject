@@ -13,7 +13,6 @@
           style="height:100%;"
           router
         >
-
           <el-row :gutter="20">
             <el-col :span="24">
               <div class="grid-content bg-purple">
@@ -24,7 +23,7 @@
               </div>
             </el-col>
           </el-row>
-  
+
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-menu"></i>
@@ -59,7 +58,7 @@
           <el-button
             type="primary"
             :icon="isCollapse?'el-icon-caret-right':'el-icon-caret-left'"
-                @click="fnisCollapse"
+            @click="fnisCollapse"
           ></el-button>
           <el-tabs
             v-model="editableTabsValue"
@@ -67,12 +66,11 @@
             closable
             @tab-remove="removeTab"
             @tab-click="benToUrl"
-           style="height: 30px;
+            style="height: 30px;
       overflow: hidden;
       flex: 1 1 auto;
       margin: 30px 1% 0px 2%;
       "
-
           >
             <el-tab-pane
               v-for="item in editableTabs"
@@ -85,7 +83,7 @@
             class="header-right"
             style="display:flex;justify-content:space-around;padding-right:35px;min-width:200px;line-height:56px;"
           >
-            <el-dropdown  @command="changeLocale">
+            <el-dropdown @command="changeLocale">
               <span class="el-dropdown-link">
                 {{langen}}
                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -97,8 +95,13 @@
             </el-dropdown>
             <span class="getOut" style="font-size:16px;" @click="exit">退出</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
-             -->
-            <el-avatar size="medium" :src="user.userHeader || circleUrl" fit="contain " style="margin-left:15px;margin-top:10px;"></el-avatar>
+            -->
+            <el-avatar
+              size="medium"
+              :src="user.userHeader || circleUrl"
+              fit="contain "
+              style="margin-left:15px;margin-top:10px;"
+            ></el-avatar>
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -119,13 +122,13 @@ export default {
   data() {
     return {
       user: {},
-      langen:"中文",
+      langen: "中文",
       base: [
         //导航栏数据测试
-        { name:"base.r1", url: "/ClassManage" },
+        { name: "base.r1", url: "/ClassManage" },
         { name: "base.r2", url: "/StudentManage" },
         { name: "base.r3", url: "/TeacherManage" },
-         { name: "base.r5", url: "/UserManage" },
+        { name: "base.r5", url: "/UserManage" },
         { name: "base.r4", url: "/ModifyPassword" }
       ],
       test: [
@@ -153,11 +156,11 @@ export default {
     };
   },
   methods: {
-         /**
-       * 添加标签卡
-       * @param targetName {string} 标签名
-       * @param ourl {string} 路径
-       */
+    /**
+     * 添加标签卡
+     * @param targetName {string} 标签名
+     * @param ourl {string} 路径
+     */
     addTab(targetName, ourl) {
       var _this = this;
       //添加标签卡
@@ -185,13 +188,12 @@ export default {
         _this.editableTabsValue = _this.editableTabs[flag].name; // 有相同的标签
       }
     },
-       /**
-       *  删除标签卡
-       * @param targetName {string} 标签名
-       */
+    /**
+     *  删除标签卡
+     * @param targetName {string} 标签名
+     */
     removeTab(targetName) {
-     
-var _this =this;
+      var _this = this;
       let tabs = _this.editableTabs;
       let activeName = _this.editableTabsValue;
       if (activeName === targetName) {
@@ -206,90 +208,100 @@ var _this =this;
         });
       }
       _this.editableTabsValue = activeName;
-     
+
       _this.editableTabs = tabs.filter(tab => tab.name !== targetName); //过滤改变当前tab标签数组
     },
-      /**
-       *  点击切换路径
-       * @param tab {Object} 标签对象
-       */
+    /**
+     *  点击切换路径
+     * @param tab {Object} 标签对象
+     */
     benToUrl(tab) {
-      var _this = this
+      var _this = this;
       //点击跳转路由
       var ourl = _this.editableTabs[tab.index].url;
       _this.$router.push({ path: ourl }); //跳转路由
     },
-        fnisCollapse() { //折叠侧边栏
-        var _this = this
-      _this.isCollapse = ! _this.isCollapse; //是否折叠
+    fnisCollapse() {
+      //折叠侧边栏
+      var _this = this;
+      _this.isCollapse = !_this.isCollapse; //是否折叠
       _this.isCollapse ? (_this.owidth = 64) : (_this.owidth = 190); //切换宽度
     },
     /**
-       *  切换语言
-       * @param command {String} 语言种类
-       */
-changeLocale (command) {
-  var _this =this;
-  _this.langen == command ?_this.langen:_this.langen=command;
-  // console.log(command)
-  var lang;
-      _this.langen=="中文"?lang='zh':lang='en'
-      if(lang == 'zh'){
-        localStorage.setItem('locale', 'zh')
-        _this.$i18n.locale = localStorage.getItem('locale')
+     *  切换语言
+     * @param command {String} 语言种类
+     */
+    changeLocale(command) {
+      var _this = this;
+      _this.langen == command ? _this.langen : (_this.langen = command);
+      // console.log(command)
+      var lang;
+      _this.langen == "中文" ? (lang = "zh") : (lang = "en");
+      if (lang == "zh") {
+        localStorage.setItem("locale", "zh");
+        _this.$i18n.locale = localStorage.getItem("locale");
 
-        _this.$msg(_this,1,"已经切换为中文！")
-      } else if (lang == 'en') {
-        localStorage.setItem('locale', 'en')
-        _this.$i18n.locale = localStorage.getItem('locale')
-       _this.$msg(_this,1," Switch to English!")
+        _this.$msg(_this, 1, "已经切换为中文！");
+      } else if (lang == "en") {
+        localStorage.setItem("locale", "en");
+        _this.$i18n.locale = localStorage.getItem("locale");
+        _this.$msg(_this, 1, " Switch to English!");
       }
-    
-},
- /**
-       *  退出后台
-       * 
-       */
-   exit() {
-     var that = this;
-        that.$confirm('确定要退出后台吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-        that.$router.push({name:'login'})
-        sessionStorage.clear()
-        that.$msg(that,1,"退出成功！")
-        }).catch(() => {
-          that.$msg(that,1,"已取消！")
+    },
+    /**
+     *  退出后台
+     *
+     */
+    exit() {
+      var that = this;
+      that
+        .$confirm("确定要退出后台吗?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(() => {
+          that.$router.push({ name: "login" });
+          sessionStorage.clear();
+          that.$msg(that, 1, "退出成功！");
+        })
+        .catch(() => {
+          that.$msg(that, 1, "已取消！");
         });
-      },
-       /**
-       *  初始化
-       */
-init(){
-  var _this = this;
-    _this.user = eval("(" + sessionStorage.NowLoginUser + ")"); 
-    if(localStorage.locale){
-      localStorage.locale == "zh"?_this.langen="中文":_this.langen="English"
-    }else{
-      _this.langen="中文"
+    },
+    /**
+     *  初始化
+     */
+    init() {
+      var _this = this;
+      _this.user = eval("(" + sessionStorage.NowLoginUser + ")");
+      if (localStorage.locale) {
+        localStorage.locale == "zh"
+          ? (_this.langen = "中文")
+          : (_this.langen = "English");
+      } else {
+        _this.langen = "中文";
+      }
+
+      if (sessionStorage.store) {
+        _this.$store.replaceState(
+          Object.assign(
+            {},
+            _this.$store.state,
+            JSON.parse(sessionStorage.store)
+          )
+        );
+        sessionStorage.removeItem("store");
+      }
     }
-
-if(sessionStorage.store){
-    _this.$store.replaceState(Object.assign({},_this.$store.state,JSON.parse(sessionStorage.store)));
-    sessionStorage.removeItem("store")
-}
-
-}
   },
   created() {
     this.init();
   },
-  mounted(){
-    window.addEventListener("beforeunload",(e)=>{
-      sessionStorage.store = JSON.stringify(this.$store.state)
-    })
+  mounted() {
+    window.addEventListener("beforeunload", e => {
+      sessionStorage.store = JSON.stringify(this.$store.state);
+    });
   }
 };
 </script>
@@ -321,19 +333,18 @@ if(sessionStorage.store){
     border-bottom: 1px solid #ccc;
     width: 100%;
 
-
     .el-tabs__nav .el-tabs__item:nth-child(1) span {
       display: none;
     }
-    .el-tabs__nav .el-tabs__item{
-      top:-6px;
+    .el-tabs__nav .el-tabs__item {
+      top: -6px;
     }
-    .el-tabs__nav .el-tabs__item.is-active{
+    .el-tabs__nav .el-tabs__item.is-active {
       border-bottom: 8px solid #409eff;
     }
-   
+
     .el-button {
-      width:32px;
+      width: 32px;
       height: 100%;
       background-color: #008181;
       font-size: 25px;
@@ -354,7 +365,6 @@ if(sessionStorage.store){
     .el-icon-arrow-down {
       font-size: 12px;
     }
- 
   }
 
   .el-aside {
@@ -383,7 +393,7 @@ if(sessionStorage.store){
     /deep/ .el-menu-item {
       background-color: #545c64;
       color: white;
-         position: relative;
+      position: relative;
     }
 
     a {
