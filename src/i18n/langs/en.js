@@ -1,6 +1,12 @@
 export const en = {
     message: {
-        home:"home"
+        home:"home",
+        login:"Login",
+        exit:"Exit",
+        repsw:"remember your password",
+        title:" ZXWY background system",
+        content:"IT education with the most attitude, responsibility and conscience ",
+        homeTitle:"ZXWY Education"
     },
     btn: {
       c: 'Compile',

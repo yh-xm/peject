@@ -19,7 +19,7 @@
                 <div class="asdImage">
                   <img src="../../public/favicon.gif" />
                 </div>
-                <span>智学无忧教育</span>
+                <span>{{$t('message.homeTitle')}}</span>
               </div>
             </el-col>
           </el-row>
@@ -93,7 +93,7 @@
                 <el-dropdown-item command="英语">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="getOut" style="font-size:16px; cursor: pointer;" @click="exit">退出</span>
+            <span class="getOut" style="font-size:16px; cursor: pointer;" @click="exit">{{$t('message.exit')}}</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
             -->
             <!-- 头像组件 -->

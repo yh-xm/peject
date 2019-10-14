@@ -9,8 +9,8 @@
           <dt>
             <img src="../../public/favicon.gif" />
           </dt>
-          <dd class="from-left-title">智学无忧后台系统</dd>
-          <dd class="from-left-content">做最有态度、责任、良心的IT教育</dd>
+          <dd class="from-left-title">{{$t('message.title')}}</dd>
+          <dd class="from-left-content">{{$t('message.content')}}</dd>
         </dl>
       </div>
       <!-- 左边盒子结束 -->
@@ -39,14 +39,14 @@
             <el-input placeholder="请输入密码" v-model="numberValidateForm.passworld" show-password></el-input>
           </el-form-item>
 
-          <el-checkbox v-model="lenrnPsw">记住密码</el-checkbox>
+          <el-checkbox v-model="lenrnPsw">{{$t('message.repsw')}}</el-checkbox>
           <el-form-item>
             <el-button
               type="primary"
               @click="submitForm('numberValidateForm')"
               size="medium"
               :loading="disbable"
-            >登录</el-button>
+            >{{$t('message.login')}}</el-button>
           </el-form-item>
         </el-form>
       </div>

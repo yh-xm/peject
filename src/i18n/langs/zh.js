@@ -1,6 +1,12 @@
 export const zh = {
     message: {
-      home:"首页"
+      home:"首页",
+      login:"登录",
+      exit:"退出",
+      repsw:"记住密码",
+      title:"智学无忧后台系统",
+      content:"做最有态度、责任、良心的IT教育 ",
+      homeTitle:"智学无忧教育"
     },
     btn: {
       c: '编辑',
