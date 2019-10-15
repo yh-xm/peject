@@ -6,7 +6,7 @@
       <el-breadcrumb-item>{{$t('base.r2')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="StudentManage">
-      {{classes}}
+      
       <div class="StudentSelect">
         <!-- <el-select v-model="classId" @change="getClassName(classId)" placeholder="请选择班级">
           <el-option
@@ -33,7 +33,7 @@
                   :value="item.classId"
                 ></el-option>
               </el-select> -->
-              <classNameSelect v-model="classes" ref="classNameSelect"  @change="resClassName()" style="display:inline"></classNameSelect>
+              <classNameSelect v-model="classes" ref="classNameSelect"  style="display:inline"></classNameSelect>
             </el-form-item>
             <el-form-item :label="$t('tableName.name')" :label-width="formLabelWidth" prop="stuName">
               <el-input v-model.trim="form.stuName" autocomplete="true"></el-input>
@@ -96,15 +96,15 @@
               <span style="margin-left: 10px">{{ scope.row.stuBirthDay }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('tableName.age')" width="120" style="padding-left: 60px;">
+          <el-table-column label="年龄" width="100" style="padding-left: 60px;">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuAge }}</span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tableName.tm')" width="180">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">{{$t('btn.c')}}</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">{{$t('btn.d')}}</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" v-has @click="handleDelete(scope.$index,scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -214,7 +214,6 @@ export default {
   methods: {
     addEquipment() {//新增学生
       var _this = this;
-
       _this.showBoth = true;//显示新增按钮
       _this.dialogFormVisible = true; //显示弹框
       _this.dialogStatus = "addEquipment"; //新增弹框标题
@@ -245,6 +244,7 @@ export default {
             stuSex: _this.form.radio, //性别
             className: _this.classes.className,
           };
+          console.log(params)
           _this.axios.post("/api/Student/AddStudent", params).then(response => {
             // console.log(_this.tableData)
             //  console.log(_this.options)
@@ -266,10 +266,6 @@ export default {
           });
         }
       });
-    },
-     resClassName(){
-      //获取所有班级名字
-      
     },
     /**
      * @{argument} handleEdit()编辑学生信息
@@ -426,10 +422,8 @@ export default {
 /deep/.el-form-item__content{
   width: 45%;
 }
-/deep/.el-table_1_column_5,
-/deep/.el-table_1_column_1,
-/deep/.el-table_1_column_6,
-/deep/.el-table_1_column_8 {
+/deep/.is-leaf,/deep/.cell
+{
   text-align: center;
 }
 </style> 
