@@ -3,7 +3,6 @@
     <el-select
       v-model="classId"
       filterable
-      
       ref="txtClass"
       @change="handleChange"
     >
@@ -45,7 +44,6 @@
     watch:{
       //监听classId的变化，从而改变当前选项
       'classSe.classId':function(value,old) {
-        // console.log(this);
         this.classId=value
       },
 
@@ -65,13 +63,8 @@
          } else {
           //  深度拷贝副本,目的防止被外界改变
              classes = { ...classes }
-            
          }
- 
-          _this.$emit("change",classes)
-          // _this.$emit('change1',Object1)
-
-        
+         _this.$emit("change",classes)
       }
   },
   created(){
@@ -91,7 +84,6 @@
       _this.$nextTick(()=>{
         //使用v-model传进来的值，表示当前选中的项
         _this.classId=_this.classSe.classId
-        _this.ovalue = _this.whoSelect
         // _this.classId=_this.polist
           })
         });
