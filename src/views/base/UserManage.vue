@@ -192,7 +192,7 @@ export default {
               {
                 if (res.data.code == 1) {
                   // _this.$msg(_this, 1, "移动成功！");
-               _this.$msg(_this, -1, "系统错误！");
+               _this.$msg(_this, 1, "移动成功！");
 
                 } else if (res.data.code == 0) {
                   _this.$msg(_this, 0, "数据没有变化！");
