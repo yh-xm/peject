@@ -33,13 +33,13 @@
       <div v-if="isShow">
         <h3 class="title">{{tpTitle}}</h3>
         <el-table :data="tableData1" border style="width: 100%">
-          <el-table-column prop="stuName" label="姓名" ></el-table-column>
-          <el-table-column prop="className" label="班级" ></el-table-column>
+          <el-table-column prop="stuName" :label="$t('tableName.name')" ></el-table-column>
+          <el-table-column prop="className" :label="$t('tableName.tcn')" ></el-table-column>
           <el-table-column prop="testSubmitTime" label="交卷"></el-table-column>
           <el-table-column prop="choseQuestions" label="选择题得分"></el-table-column>
           <el-table-column prop="fillQuestion" label="填空题得分"></el-table-column>
           <el-table-column prop="answer" label="问答题得分"></el-table-column>
-          <el-table-column prop="testScore" label="成绩"></el-table-column>
+          <el-table-column prop="testScore" :label="$t('tableName.scroe')"></el-table-column>
         </el-table>
         <!-- 个人考试信息结束 -->
 

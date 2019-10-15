@@ -19,7 +19,7 @@
                 <div class="asdImage">
                   <img src="../../public/favicon.gif" />
                 </div>
-                <span>智学无忧教育</span>
+                <span>{{$t('message.homeTitle')}}</span>
               </div>
             </el-col>
           </el-row>
@@ -93,15 +93,11 @@
                 <el-dropdown-item command="英语">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="getOut" style="font-size:16px;" @click="exit">退出</span>
+            <span class="getOut" style="font-size:16px; cursor: pointer;" @click="exit">{{$t('message.exit')}}</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
             -->
-            <el-avatar
-              size="medium"
-              :src="user.userHeader || circleUrl"
-              fit="contain "
-              style="margin-left:15px;margin-top:10px;"
-            ></el-avatar>
+            <!-- 头像组件 -->
+            <head-portrait></head-portrait>
           </div>
         </el-header>
         <!-- 顶部导航栏 结束-->
@@ -118,7 +114,9 @@
 
 
 <script>
+import HeadPortrait from "@/components/HeadPortrait.vue"
 export default {
+    components:{HeadPortrait},
   data() {
     return {
       user: {},
@@ -139,9 +137,6 @@ export default {
         { name: "test.r4", url: "/ViewTestPaper" },
         { name: "test.r5", url: "/TestResult" }
       ],
-      circleUrl:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png", //默认头像
-
       editableTabsValue: "1", //tab标签默认首页
       editableTabs: [
         {
@@ -332,6 +327,7 @@ export default {
     color: #333;
     border-bottom: 1px solid #ccc;
     width: 100%;
+   
 
     .el-tabs__nav .el-tabs__item:nth-child(1) span {
       display: none;

@@ -54,14 +54,14 @@
           </el-row>
         </el-form-item>
         <el-form-item>
-          <el-button round @click="resetForm('AddGapFillQuestion')" size="small">重置</el-button>
+          <el-button round @click="resetForm('AddGapFillQuestion')" size="small">{{$t('btn.r')}}</el-button>
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
             @click="submitForm('AddGapFillQuestion')"
             size="small"
-          >新增题目</el-button>
+          >{{$t('btn.s')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -246,7 +246,7 @@ export default {
                 this.AddGapFillQuestion.domains.splice(
                   oarr[parseInt(oindexArr[x])],
                   0,
-                  nowAddOption
+                  JSON.parse(JSON.stringify(nowAddOption))
                 );
                 break;
               } else {
@@ -256,7 +256,7 @@ export default {
             if (max == oindexArr.length) {
               //大于所有旧填空下标，则是往后插入。
               //往后添加空格
-              _this.AddGapFillQuestion.domains.push(nowAddOption);
+              _this.AddGapFillQuestion.domains.push(JSON.parse(JSON.stringify(nowAddOption)));
               max = 0; //清空
             }
           }
@@ -266,7 +266,7 @@ export default {
           if (narr.length - oarr.length > 1) {
             for (let i in oindexArr) {
               if (textindex < oindexArr[i]) {
-                _this.AddGapFillQuestion.domains.splice(i, 0, nowAddOption); // 粘贴多个文字一个填空
+                _this.AddGapFillQuestion.domains.splice(i, 0, JSON.parse(JSON.stringify(nowAddOption))); // 粘贴多个文字一个填空
                 break;
               }
             }
@@ -274,7 +274,7 @@ export default {
             _this.AddGapFillQuestion.domains.splice(
               narr[textindex],
               0,
-              nowAddOption
+              JSON.parse(JSON.stringify(nowAddOption))
             );
           }
           //按按钮操作添填空

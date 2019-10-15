@@ -12,7 +12,7 @@
     <div class="from">
       <!-- 填写试卷名称 -->
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <el-form-item label="试卷名称" prop="name">
+        <el-form-item :label="$t('tableName.tt')" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <!-- 选择课程名称 -->

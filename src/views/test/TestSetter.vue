@@ -6,15 +6,10 @@
       <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{$t('test.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 试卷：{{childRes1}}
-    班级：{{childRes2}}
-    考试时间：{{childRes3}}-->
     <!-- Breadcrumb 面包屑 结束-->
     <el-card class="box-card">
       <div slot="header">
         <div class="impComp">
-          <c-t-t-box></c-t-t-box>
-
           <!-- 组件引用 -->
           <test-drop-down-box @childByValue="childByValue"></test-drop-down-box>
           <class-and-grade @childByValue2="childByValue2"></class-and-grade>
@@ -23,8 +18,8 @@
         </div>
         <el-row style="margin-left: 85px;">
           <!-- 圆角按钮 -->
-          <el-button round @click="cancelTest()">取消</el-button>
-          <el-button type="primary" round @click="setAddInfo()">设置</el-button>
+          <el-button round @click="cancelTest()">{{$t('btn.res')}}</el-button>
+          <el-button type="primary" round @click="setAddInfo()">{{$t('btn.c')}}</el-button>
           <!-- 圆角按钮结束 -->
         </el-row>
       </div>
@@ -32,16 +27,16 @@
         <!-- 表格 -->
         <el-table :data="SetTest" style="width: 100%">
           <el-table-column type="index"></el-table-column>
-          <el-table-column label="试卷名称" prop="tpTitle" align="center"></el-table-column>
-          <el-table-column label="班级" prop="className" align="center"></el-table-column>
-          <el-table-column label="出卷人" prop="userName" align="center"></el-table-column>
-          <el-table-column label="测试开始时间" prop="taskStartTime" align="center"></el-table-column>
-          <el-table-column label="测试结束时间" prop="taskEndTime" align="center"></el-table-column>
-          <el-table-column label="耗时(分钟)" prop="taskEscapeTime" align="center"></el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column :label="$t('tableName.tt')" prop="tpTitle" align="center"></el-table-column>
+          <el-table-column :label="$t('tableName.tcn')" prop="className" align="center"></el-table-column>
+          <el-table-column :label="$t('tableName.tp')" prop="userName" align="center"></el-table-column>
+          <el-table-column :label="$t('tableName.tts')" prop="taskStartTime" align="center"></el-table-column>
+          <el-table-column :label="$t('tableName.tte')" prop="taskEndTime" align="center"></el-table-column>
+          <el-table-column :label="$t('tableName.ths')" prop="taskEscapeTime" align="center"></el-table-column>
+          <el-table-column :label="$t('tableName.tm')" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">{{$t('btn.c')}}</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -73,8 +68,8 @@
       </el-form>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">修 改</el-button>
+        <el-button @click="dialogFormVisible = false">{{$t('btn.res')}}</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">{{$t('btn.c')}}</el-button>
       </div>
     </el-dialog>
     <!-- 添加对话框结束 -->
@@ -84,7 +79,6 @@
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
 import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
 import TestTime from "@/components/TestSetter/TestTime"; //考试时间
-import CTTBox from "@/components/TestSetter/CTTBox"; //拖拽测试
 
 export default {
   data() {
@@ -108,7 +102,6 @@ export default {
     TestDropDownBox,
     ClassAndGrade,
     TestTime,
-    CTTBox
   },
   //定义方法
   methods: {

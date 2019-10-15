@@ -46,14 +46,14 @@
           <el-input-number v-model="AddMultipleChoice.onum" :min="1" :max="5" label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item>
-          <el-button round @click="resetForm('AddMultipleChoice')">重置</el-button>
-          <el-button type="info" round @click="addDomain">新增选项</el-button>
+          <el-button round @click="resetForm('AddMultipleChoice')">{{$t('btn.r')}}</el-button>
+          <el-button type="info" round @click="addDomain">{{$t('btn.addjs')}}</el-button>
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
             @click="submitForm('AddMultipleChoice')"
-          >保存题目</el-button>
+          >{{$t('btn.s')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -246,6 +246,12 @@ export default {
           margin-right: auto;
           margin-right: 12px;
           margin-left: 12px;
+        }
+        .el-input-number__decrease{
+          left: 15px;
+        }
+        .el-input-number__increase{
+          left: 150px;
         }
       }
     }

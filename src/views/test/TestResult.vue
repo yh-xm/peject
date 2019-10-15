@@ -32,10 +32,10 @@
             @row-click="choose"
             style="width: 100%;height:300px"
           >
-            <el-table-column prop="courseName" label="课程"></el-table-column>
-            <el-table-column prop="tpTitle" label="试卷"></el-table-column>
-            <el-table-column prop="date" label="日期"></el-table-column>
-            <el-table-column prop="counter" label="提交人数"></el-table-column>
+            <el-table-column prop="courseName" :label="$t('tableName.tc')"></el-table-column>
+            <el-table-column prop="tpTitle" :label="$t('tableName.tt')"></el-table-column>
+            <el-table-column prop="date" :label="$t('tableName.time')"></el-table-column>
+            <el-table-column prop="counter" :label="$t('tableName.thp')"></el-table-column>
           </el-table>
         </el-card>
       </el-col>
@@ -66,10 +66,10 @@
                 <span style="margin-left: 10px">{{scope.$index+ 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="stuName" label="姓名"></el-table-column>
-            <el-table-column prop="submitTime" label="提交时间"></el-table-column>
-            <el-table-column prop="testScore" label="成绩"></el-table-column>
-            <el-table-column prop="userName" label="阅卷老师"></el-table-column>
+            <el-table-column prop="stuName" :label="$t('tableName.name')"></el-table-column>
+            <el-table-column prop="submitTime" :label="$t('tableName.adTime')"></el-table-column>
+            <el-table-column prop="testScore" :label="$t('tableName.scroe')"></el-table-column>
+            <el-table-column prop="userName" :label="$t('tableName.seePage')"></el-table-column>
           </el-table>
           <!-- 图表 -->
           <div id="main" ref="barchart" v-show="!show" style="height:300px;"></div>

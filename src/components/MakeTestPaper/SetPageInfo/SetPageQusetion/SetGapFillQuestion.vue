@@ -72,16 +72,16 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" plain @click.prevent="compile">编辑</el-button>
+          <el-button type="primary" plain @click.prevent="compile">{{$t('btn.c')}}</el-button>
           <el-row v-show="oshow">
-            <el-button round @click.prevent="cancel" size="small">取消</el-button>
+            <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
             <el-button
               type="primary"
               plain
               @click.prevent="submitForm('nowOption')"
               size="small"
-            >保存修改</el-button>
-            <el-button type="danger" plain @click.prevent="removeChoose" size="small">删除题目</el-button>
+            >{{$t('btn.s')}}</el-button>
+            <el-button type="danger" plain @click.prevent="removeChoose" size="small">{{$t('btn.d')}}</el-button>
           </el-row>
         </el-form-item>
       </el-form>
@@ -241,10 +241,9 @@ export default {
         .then(res => {
           if (res.data.message == "删除成功") {
             var data = {
-              setType: -1,
-              index: _this.nowIndex3,
-              questionTypeId: 2,
-              tpqScore: _this.AddGapFillQuestionList.tpqScore
+              index: _this.nowIndex3,//题号
+              questionTypeId: 2,//题目类型
+              tpqScore: _this.AddGapFillQuestionList.tpqScore//题目分数
             };
             _this.$msg(_this, 1, res.data.message);
             _this.$emit("setQuestion", data);
@@ -361,7 +360,7 @@ export default {
                   _this.nowOption.fillQuestion.splice(
                     oarr[parseInt(oindexArr[x])],
                     0,
-                    nowAddOption
+                    JSON.parse(JSON.stringify(nowAddOption))
                   );
                   _this.fillQuestion.push(oarr[parseInt(oindexArr[x])]); //获取插入填空的位置
                   break;
@@ -372,7 +371,7 @@ export default {
               if (max == oindexArr.length) {
                 //在末尾插入填空
                 //往后添加空格
-                _this.nowOption.fillQuestion.push(nowAddOption);
+                _this.nowOption.fillQuestion.push(JSON.parse(JSON.stringify(nowAddOption)));
                 _this.fillQuestion.push(
                   _this.nowOption.fillQuestion.length - 1
                 ); //获取插入填空的位置
@@ -383,7 +382,7 @@ export default {
             if (narr.length - oarr.length > 1) {
               for (let i in oindexArr) {
                 if (textindex < oindexArr[i]) {
-                  _this.nowOption.fillQuestion.splice(i, 0, nowAddOption); // 粘贴多个文字一个填空
+                  _this.nowOption.fillQuestion.splice(i, 0, JSON.parse(JSON.stringify(nowAddOption))); // 粘贴多个文字一个填空
                   break;
                 }
               }

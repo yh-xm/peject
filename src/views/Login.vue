@@ -9,8 +9,8 @@
           <dt>
             <img src="../../public/favicon.gif" />
           </dt>
-          <dd class="from-left-title">智学无忧后台系统</dd>
-          <dd class="from-left-content">做最有态度、责任、良心的IT教育</dd>
+          <dd class="from-left-title">{{$t('message.title')}}</dd>
+          <dd class="from-left-content">{{$t('message.content')}}</dd>
         </dl>
       </div>
       <!-- 左边盒子结束 -->
@@ -39,14 +39,14 @@
             <el-input placeholder="请输入密码" v-model="numberValidateForm.passworld" show-password></el-input>
           </el-form-item>
 
-          <el-checkbox v-model="lenrnPsw">记住密码</el-checkbox>
+          <el-checkbox v-model="lenrnPsw">{{$t('message.repsw')}}</el-checkbox>
           <el-form-item>
             <el-button
               type="primary"
               @click="submitForm('numberValidateForm')"
               size="medium"
               :loading="disbable"
-            >登录</el-button>
+            >{{$t('message.login')}}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       lenrnPsw: false, //是否记住密码
-      NowLoginUser: {}, //当前登录用户信息
+      nowLoginUser: {}, //当前登录用户信息
       screenWidth: 0, //宽度
       showItem: false, // 响应式标识
       From: "From", //样式
@@ -106,8 +106,13 @@ export default {
     };
   },
   methods: {
+      /**
+     * 点击删除
+     * @param {object} formName 当前表单对象
+     */
     submitForm(formName) {
       var _this = this;
+
       _this.disbable = true;
       _this.$refs[formName].validate(valid => {
         if (valid) {
@@ -120,6 +125,7 @@ export default {
                 `/api/OAuth/authenticate?userMobile=${_this.numberValidateForm.username}&userPassword=${_this.numberValidateForm.passworld}`
               )
               .then(function(r) {
+                console.log(r)
                 if (r.status == "200") {
                   if (_this.lenrnPsw == true) {
                     var obj = {
@@ -135,12 +141,7 @@ export default {
                   sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
                   _this.$parent.$parent.changeUserInfo(r.data.profile)
                   _this.$parent.$parent.changeTkon("Bearer" + " " + r.data.access_token)
-                  if(sessionStorage.redirect){
-                      _this.$router.push({
-                      path: sessionStorage.redirect
-                    });
-                   sessionStorage.removeItem("redirect")
-                  }else if (_this.$route.query.redirect) {
+                  if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);
                     let redirect = _this.$route.query.redirect;
@@ -160,7 +161,6 @@ export default {
               })
               .catch(function(error) {
                 _this.$msg(_this, -1, "用户名或密码错误，请重新输入!");
-                console.log(_this.$route.query.redirect)
               });
           } else {
             _this.$msg(_this, -1, "请填写用户名和密码");
@@ -174,6 +174,10 @@ export default {
   },
   created() {},
   watch: {
+         /**
+     * 监听宽度变化
+     * @param {Number} val 当前页面宽度
+     */
     screenWidth(val) {
       let that = this;
       that.screenWidth = val;
@@ -186,6 +190,10 @@ export default {
     }
   },
   mounted() {
+             /**
+     * 监听宽度变化
+     * 
+     */
     const that = this;
     that.screenWidth = window.screenWidth;
     window.onresize = () => {
@@ -194,23 +202,13 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
-    var serachArr = ["username", "password"];
+    var serachArr = ["username", "password"]; //查找是否有记住密码
     var obj = getCookie(serachArr);
     if (obj.username && obj.password) {
       that.numberValidateForm.username = obj.username;
       that.numberValidateForm.passworld = obj.password;
       that.lenrnPsw = true;
     }
-  },
-  //token失效时 重新登录回到之前页面
-    beforeRouteEnter: (to, from, next) => {
-      if(to.query.redirect=="warning"){
-        sessionStorage.redirect=from.fullPath;
-           next();
-
-      }else{
-        next();
-      }
   }
 };
 

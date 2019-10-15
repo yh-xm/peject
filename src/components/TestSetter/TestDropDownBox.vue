@@ -2,7 +2,7 @@
   <div id="testDrownBox-testSetter">
     <!-- 子组件:{{parentRes}} -->
     <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="试卷" prop="tpId" size="small">
+      <el-form-item :label="$t('tableName.tt')" prop="tpId" size="small">
         <el-select v-model="ruleForm.tpId" placeholder="请选择试卷" @change="setInfo" :title="parentRes">
           <el-option
             v-for="item in options"

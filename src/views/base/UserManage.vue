@@ -1,23 +1,23 @@
 <template>
   <div id="RoleManage">
     <div slot="header" class="clearfix">
-      <el-button icon="el-icon-circle-plus" type="primary" @click="addUsers">新增角色</el-button>
+      <el-button icon="el-icon-circle-plus" type="primary" @click="addUsers"> {{$t('btn.addjs')}}</el-button>
     </div>
     <div class="text item">
       <el-table :data="tableData" stripe style="width: 100%" row-key="userTypeId">
         <el-table-column type="index" width="180"></el-table-column>
         <!-- <el-table-column prop="userTypeId" label="#" width="180"></el-table-column> -->
-        <el-table-column prop="userTypeTypeName" label="角色名称" width="180"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column prop="userTypeTypeName" :label="$t('tableName.tjs')" width="180"></el-table-column>
+        <el-table-column :label="$t('tableName.tm')">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">{{$t('btn.c')}}</el-button>
             <el-button
               size="mini"
               type="danger"
               :disabled="scope.row.disable"
               @click="handleDelete(scope.$index, scope.row)"
               v-has
-            >删除</el-button>
+            >{{$t('btn.d')}}</el-button>
           </template>
         </el-table-column>
       </el-table>

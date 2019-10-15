@@ -77,6 +77,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 初始化获取题目信息
+     */
     init() {
       var _this = this;
       sessionStorage.testPaperId = _this.id;

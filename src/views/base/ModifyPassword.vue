@@ -11,15 +11,15 @@
                <el-form-item label="旧密码" prop="oldpass" required>
                   <el-input type="password" v-model="ruleForm.oldpass" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="pass" required>
+                <el-form-item :label="$t('tableName.psw')" prop="pass" required>
                     <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="checkPass" required>
                     <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="resetForm('ruleForm')">重置</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')">{{$t('btn.s')}}</el-button>
+                    <el-button @click="resetForm('ruleForm')">{{$t('btn.r')}}</el-button>
                 </el-form-item>
             </el-form>
         </div>

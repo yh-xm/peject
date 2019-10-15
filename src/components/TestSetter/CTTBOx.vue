@@ -16,15 +16,11 @@
 </template>
 <script>
 import Sortable from "sortablejs";
-import draggable from "vuedraggable";
 export default {
   data() {
     return {
       tableData: []
     };
-  },
-  components: {
-    draggable
   },
   methods: {
     apply() {

@@ -27,7 +27,7 @@
         </el-form-item>
         <!-- 参考答案 -->
         <el-form-item label="参考答案">
-          <el-input v-model="AddEssayQuestion.value"></el-input>
+            <editor  v-model="AddEssayQuestion.value" ref="editor"/>
         </el-form-item>
         <!-- 分值 -->
         <el-form-item label="分值">
@@ -35,21 +35,25 @@
         </el-form-item>
         <el-form-item>
           <!-- 重置 -->
-          <el-button round @click="resetForm('AddEssayQuestion')">重置</el-button>
+          <el-button round @click="resetForm('AddEssayQuestion')">{{$t('btn.r')}}</el-button>
           <!-- 新增题目 -->
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
             @click="submitForm('AddEssayQuestion')"
-          >新增题目</el-button>
+          >{{$t('btn.s')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 <script>
+ import Editor from './TextEditor'
 export default {
+        components: {
+      Editor
+    },
   data() {
     return {
       AddEssayQuestion: {
@@ -101,6 +105,7 @@ export default {
              _this.$msg(_this,1, "添加成功!")
             _this.resetForm("AddEssayQuestion"); //重置表单
             _this.AddEssayQuestion.value = "";
+            _this.$refs.editor.content ="";
           }else{
                 _this.$msg(_this,-1, res.data.message)
               }

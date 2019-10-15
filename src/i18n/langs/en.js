@@ -1,10 +1,23 @@
-module.exports = {
+export const en = {
     message: {
-      'hello': 'hello',
-        home:"home"
+        home:"home",
+        login:"Login",
+        exit:"Exit",
+        repsw:"remember your password",
+        title:" ZXWY background system",
+        content:"IT education with the most attitude, responsibility and conscience ",
+        homeTitle:"ZXWY Education"
     },
     btn: {
-      text: 'button'
+      c: 'Compile',
+      d:'Delete',
+      r:'Reset',
+      a:'Added',
+      s:'Submit',
+      addclass:"AddClass",
+      addjs:"AddCharacter",
+      res:"Recel",
+      detail:"Detail",
     },
     base:{
       title:"Basic data",
@@ -12,8 +25,7 @@ module.exports = {
         r2:"StudentManage",
         r3:"TeacherManage",
         r4:"ModifyPassword",
-        r5:"UserManage",
-       
+        r5:"UserManage"
     },
     test:{
       title:"on-line testing",
@@ -22,7 +34,34 @@ module.exports = {
         r3:"TestSetter",
         r4:"ViewTestPaper",
         r5:"TestResult",
-        r6:"Test Task",
+        r6:"TestTask",
         r7:"TestpageDetails"
+    },
+    tableName:{
+      name:"Student Name",
+      sex:"Sex",
+      phone:"Mobile",
+      birth:"Birthdate",
+      age:"Age",
+      user:"UserName ",
+      psw:"PassWord",
+      tjs:"CharacterName",
+      tt:"Title",
+      tp:"A roll of people",
+      tc:"MajorCourses",
+      td:"The volume date",
+      tm:"Operation",
+      tcn:"Class Name",
+      tts:"Test start time",
+      tte:"Testendtime",
+      ths:"ElapsedTime",
+      thp:"Population",
+      tte:"Teacher",
+      tcp:"ClassSize",
+      tcs:"ClassTime",
+      time:"Time",
+      adTime:"AddTime",
+      scroe:"Scroe",
+      seePage:"Teacter"
     }
   }
