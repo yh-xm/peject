@@ -6,7 +6,6 @@
       <el-breadcrumb-item>{{$t('base.r2')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="StudentManage">
-      
       <div class="StudentSelect">
         <classNameSelect v-model="classesa" ref="classNameSelect" @change="classInfo(classesa)" style="display:inline"></classNameSelect>
         <el-button
