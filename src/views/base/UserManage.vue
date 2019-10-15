@@ -3,6 +3,7 @@
   <div id="RoleManage">
     <div slot="header" class="clearfix">
       <el-button icon="el-icon-circle-plus" type="primary" @click="addUsers"> {{$t('btn.addjs')}}</el-button>
+      <el-checkbox v-model="checked" @change="canDrag">拖拽排序</el-checkbox>
     </div>
     <div class="text item">
       <el-table :data="tableData" stripe style="width: 100%" row-key="userTypeId">
@@ -31,7 +32,9 @@ import Sortable from "sortablejs";
 export default {
   data() {
     return {
-      tableData: []
+      tableData: [],
+      rootDepart:"",//用于销毁排序
+      checked: true//控制拖拽按钮
     };
   },
   methods: {
@@ -165,13 +168,26 @@ export default {
         });
     },
     /**
+     * 控制拖拽
+     * **/ 
+    canDrag(evt){
+      let _this = this;
+      if (evt) {
+        _this.rowDrop();  //如果为true时调用checkedsp()方法
+      }else{
+        _this.rootDepart.destroy() //如果为false就用destroy()销毁拖拽方法
+      }
+
+    },
+    /**
      * 行拖拽
      *
      * ****/
     rowDrop() {
       const tbody = document.querySelector(".el-table__body-wrapper tbody");
       const _this = this;
-      Sortable.create(tbody, {
+      _this.rootDepart = Sortable.create(tbody, {
+          animation:300,
         onEnd({ newIndex, oldIndex }) {
           //拖拽结束后发生该事件
           _this.tableData.splice(
@@ -214,4 +230,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-checkbox{
+  margin-left: 50px;
+}
 </style>
