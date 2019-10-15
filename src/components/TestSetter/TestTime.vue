@@ -1,108 +1,82 @@
 <template>
   <div id="testTime">
-    {{parentRes3}}
-    <el-form :model="timeSelectFrom" label-width="100px">
-      <!-- :title="parentRes3" -->
-      <el-form-item label="考试时间" prop="seleClassId" size="small">
-        <el-date-picker
-          value-format="yyyy/MM/dd HH:mm:ss"
-          v-model="timeSelectFrom.logTime"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions"
-          @change="logTimeChange"
-          size="small"
-        ></el-date-picker>
-        <el-button type="danger" size="small" disabled plain>用时：{{timeSelectFrom.timeLimit}} 分钟</el-button>
-      </el-form-item>
-    </el-form>
+    <el-date-picker
+      ref="txtTime"
+      value-format="yyyy/MM/dd HH:mm:ss"
+      v-model="logTime"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      :picker-options="pickerOptions"
+      @change="logTimeChange"
+      size="small"
+    ></el-date-picker>
+    <el-button type="danger" size="small" disabled plain>用时：{{timeLimit}} 分钟</el-button>
   </div>
 </template>
 <script>
 export default {
+  name: "TestTime",
+  model: {
+    prop: "parentTimes", //班级对象，使用v-model，给这个属性赋值
+    event: "timeChange" //触发事件，名称可自定义，作用：触发这个事件，将事件的值传递给prop属性
+  },
   props: {
-    parentRes3: Object,
-    required: true
+    //组件的属性,在父组件里，可以使用v-bind赋值，如果在model有定义使用v-model赋值
+    parentTimes: {
+      required: true,
+      type: Array
+    }
   },
   data() {
     return {
-      timeSelectFrom: {
-        logTime: [], //表单时间 开始和结束
-        timeLimit: 0 //耗时（分钟）
-      },
+      logTime: [], //下拉框绑定的时间
+      timeLimit: 0, //耗时
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7; ////设置选择今天以及今天之后的日//如果没有后面的-8.64e7就是不可以选择今天的
+          return time.getTime() < Date.now() - 8.64e7; //设置选择今天以及今天之后的日//如果没有后面的-8.64e7就是不可以选择今天的
         }
       }
-      // arrTime:{//传给父级组件
-      //   times:[],
-      //   limit:0,
-      // },
     };
+  },
+  watch: {
+    "parentTimes": function(value, old) {
+      var _this = this ;
+      console.log(value)
+      if(value.length==0){
+       _this.logTime=[];
+       _this.timeLimit=0;
+      }else{
+        _this.logTime = value.slice(0,2)
+        this.timeLimit = value[2]
+      }
+       
+    }
   },
   methods: {
     /**
-     * 时间改变事件
-     * @param {Date} val input框值
+     * 选项框改变事件，改变之后传给v-model绑定的对象
      */
-    logTimeChange(val) {
-      let _this = this;
-      console.log(val);
-      if (_this.timeSelectFrom.logTime == null) {
-        _this.timeSelectFrom.timeLimit = 0;
-      } else {
-        let date1 = new Date(_this.timeSelectFrom.logTime[0]); //转格式
-        let date2 = new Date(_this.timeSelectFrom.logTime[1]); //转格式
-        var dates = date2.getTime() - date1.getTime(); //计算
-        _this.timeSelectFrom.timeLimit = dates / (60 * 1000); //赋值
-      }
-      //childByValue 定义在父组件on监听子组件传过去的值
-      //第二参数val是子组件要传给父组件的值
-      val.a = _this.timeSelectFrom.timeLimit;
-      _this.$emit("childByValue3", val); //把开始时间和结束时间传给父级组件
-    },
-    espTime() {
-      let _this = this;
-      _this.timeSelectFrom.logTime = "";
-      _this.timeSelectFrom.timeLimit = 0;
-    },
-    /**
-     * 把父组件传过来的时间格式转成子组件时间格式
-     * **/
-    changeInfo() {
+    logTimeChange(v) {
       var _this = this;
-      _this.timeSelectFrom.timeLimit = _this.parentRes3.escape;
-      _this.parentRes3.begin = _this.parentRes3.begin.replace(/T/g, " ");
-      _this.parentRes3.begin = _this.parentRes3.begin.replace(/-/g, "/");
-      _this.parentRes3.end = _this.parentRes3.end.replace(/T/g, " ");
-      _this.parentRes3.end = _this.parentRes3.end.replace(/-/g, "/");
-      _this.$set(this.timeSelectFrom, "logTime", [
-        _this.parentRes3.begin,
-        _this.parentRes3.end
-      ]);
+      if (_this.logTime == null) {
+        _this.timeLimit = 0;
+      } else {
+        let date1 = new Date(_this.logTime[0]); //转格式
+        let date2 = new Date(_this.logTime[1]); //转格式
+        _this.timeLimit = (date2.getTime() - date1.getTime()) / (60 * 1000); //计算
+      }
+      v.push(_this.timeLimit);
+      console.log(v);
+
+      _this.$emit("timeChange", v);
     }
   },
-  created() {
-    let _this = this;
-    console.log(_this.parentRes3);
-    // if (_this.parentRes3 == undefined) {
-    //   return;
-    // } else {
-    //   _this.changeInfo();
-    // }
+  created(){
+    this.logTime =this.parentTimes.slice(0,2);
+    console.log(this.logTime)
+    this.timeLimit = this.parentTimes[2]
   }
-  //   updated(){
-  //     let _this = this;
-  //     console.log(_this.parentRes3);
-  //     if(_this.required != true){
-  //  _this.changeInfo()
-  //     }
-
-  //   }
 };
 </script>
-<style lang="less" scoped>
-</style>
