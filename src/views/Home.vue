@@ -90,7 +90,7 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="中文">中文</el-dropdown-item>
-                <el-dropdown-item command="英语">English</el-dropdown-item>
+                <el-dropdown-item command="English">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
             <span
