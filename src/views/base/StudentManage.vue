@@ -349,7 +349,7 @@ export default {
      * @param {Num} res 班级编号
      */
     classInfo(classes) {
-      //获取班级学生
+      //获取班级学生aaa
       var _this = this;
       _this.$get('/api/Student/GetClassStudent?classId='+classes.classId).then(r => {
         _this.tableData = r;
