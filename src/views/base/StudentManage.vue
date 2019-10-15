@@ -8,19 +8,7 @@
     <div class="StudentManage">
       
       <div class="StudentSelect">
-<<<<<<< HEAD
-        <!-- <el-select v-model="classId" @change="getClassName(classId)" placeholder="请选择班级">
-          <el-option
-            v-for="item in options"
-            :key="item.classId"
-            :label="item.className"
-            :value="item.classId"
-          ></el-option>
-        </el-select> -->
-        <classNameSelect v-model="classes" ref="classNameSelect" @change="classInfo" style="display:inline"></classNameSelect>
-=======
         <classNameSelect v-model="classesa" ref="classNameSelect" @change="classInfo(classesa)" style="display:inline"></classNameSelect>
->>>>>>> tanYiDong
         <el-button
           type="text"
           @click="addEquipment"
@@ -177,12 +165,8 @@ export default {
       }, 100);
     };
     return {
-<<<<<<< HEAD
-      classes:'',
-=======
       classes2:{},
       classesa:'',
->>>>>>> tanYiDong
       showBoth: true, //判断新增还是修改
       dialogStatus: "", //判断标题
       index: "", //表格行的下标
@@ -398,13 +382,8 @@ export default {
      * @{argument} getClassName改变监听班级编号事件
      * @param {Num} res 班级编号
      */
-<<<<<<< HEAD
-    classInfo() {
-      //获取班级学生
-=======
     classInfo(classesa) {
       //获取班级学生aaa
->>>>>>> tanYiDong
       var _this = this;
       _this.$get('/api/Student/GetClassStudent?classId='+classesa.classId).then(r => {
         _this.tableData = r;
