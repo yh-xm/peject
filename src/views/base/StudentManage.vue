@@ -392,7 +392,6 @@ export default {
     classInfo() {
       //获取班级学生
       var _this = this;
-      console.log(classes)
       _this.$get('/api/Student/GetClassStudent?classId='+classes.classId).then(r => {
         _this.tableData = r;
         _this.classes=classes
