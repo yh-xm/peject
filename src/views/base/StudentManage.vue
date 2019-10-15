@@ -252,11 +252,11 @@ export default {
             className: _this.classes.className,
           };
           console.log(params)
-          _this.axios.post("/api/Student/AddStudent", params).then(response => {
+          _this.$post("/api/Student/AddStudent", params).then(response => {
             // console.log(_this.tableData)
             //  console.log(_this.options)
              console.log(params)
-            if (response.data.code == 1) {
+            if (response.code == 1) {
               _this.$message({
                 type: "success",
                 message: "新增成功！"
@@ -314,7 +314,7 @@ export default {
       _this.$refs[ruleForm].validate(valid => {
         if (valid) {
           _this.dialogFormVisible = false;
-          _this.axios.post("/api/Student/ModifyStudent",
+          _this.$post("/api/Student/ModifyStudent",
              {
               stuUid: _this.form.stuUid, // 要修改学生的唯一标识符
               stuName: _this.form.stuName, //学生姓名
@@ -325,9 +325,8 @@ export default {
               stuSex: _this.form.radio //性别
             })
             .then(response => {
-              if (response.data.code == 1) {
-                // console.log(_this.tableData[index])
-                _this.classInfo(); //修改成功后跳转到所选班级，方便查看
+              if (response.code == 1) {
+                _this.classInfo(_this.classes2); //修改成功后跳转到所选班级，方便查看
                 _this.$message({
                   type: "success",
                   message: "修改成功！"
@@ -363,13 +362,11 @@ export default {
       }
       var _this = this;
       // console.log(row1);
-      _this.axios
-        .get(`/api/Student/RemoveStudent?uid=${row1.stuUid}`)
+      _this.$get(`/api/Student/RemoveStudent?uid=${row1.stuUid}`)
         .then(res => {
-          _this
-            .$confirm(title,flag, {
-              confirmButtonText:fText,
-              cancelButtonText:fText2,
+            _this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
               type: "warning",
               center: true
             })
@@ -395,10 +392,9 @@ export default {
     classInfo() {
       //获取班级学生
       var _this = this;
-      // console.log(_this.classes.classId)//班级编号
-      _this.axios.get('/api/Student/GetClassStudent?classId='+_this.classes.classId).then(r => {
-        //  console.log(r.data)//班级所有学生
-        _this.tableData = r.data;
+      _this.$get('/api/Student/GetClassStudent?classId='+classes.classId).then(r => {
+        _this.tableData = r;
+        _this.classes=classes
       });
     }
   },

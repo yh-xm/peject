@@ -88,8 +88,9 @@ function reLogin(){
             resolve(res.data);
         }).catch(err =>{
             reject(err.data)        
-    })    
-});}
+        })    
+    })
+}
 /** 
  * post方法，对应post请求 
  * @param {String} url 请求的url地址

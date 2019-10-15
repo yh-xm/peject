@@ -5,7 +5,7 @@ const has = Vue.directive('has', {
   // 获取按钮权限
   let btnPermissions = vnode.context.$route.meta.btnPermissions;
   let userId = vnode.context.$root.userInfo.userUserTypeId;
-  console.log(userId)
+//   console.log(userId)
   if (!Vue.prototype.$_has(btnPermissions,userId)&&el.parentElement) {
    el.parentElement.removeChild(el);
   }

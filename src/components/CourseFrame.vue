@@ -75,8 +75,8 @@ export default {
      */
     usCourse() {
       var _this = this;
-      _this.axios.get("/api/Class/GetAllCourse").then(function(data) {
-        _this.course = data.data;
+      _this.$get("/api/Class/GetAllCourse").then(function(data) {
+        _this.course = data;
         _this.$nextTick(()=>{
       _this.ruleForm.keChenId =_this.bothWay.courseId; //首次赋值id
         })
