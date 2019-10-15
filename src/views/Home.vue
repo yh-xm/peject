@@ -93,7 +93,11 @@
                 <el-dropdown-item command="英语">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="getOut" style="font-size:16px; cursor: pointer;" @click="exit">{{$t('message.exit')}}</span>
+            <span
+              class="getOut"
+              style="font-size:16px; cursor: pointer;"
+              @click="exit"
+            >{{$t('message.exit')}}</span>
             <!-- <span style="margin-right: 15px">{{user.stuName}}</span>
             -->
             <!-- 头像组件 -->
@@ -114,9 +118,9 @@
 
 
 <script>
-import HeadPortrait from "@/components/HeadPortrait.vue"
+import HeadPortrait from "@/components/HeadPortrait.vue";
 export default {
-    components:{HeadPortrait},
+  components: { HeadPortrait },
   data() {
     return {
       user: {},
@@ -277,25 +281,21 @@ export default {
       } else {
         _this.langen = "中文";
       }
-      var nowLoginUser =  JSON.parse(sessionStorage.NowLoginUser);
-      var newUserId = nowLoginUser.userUid;
-      var oldLogin= JSON.parse(sessionStorage.store)
-      var oldUserId = oldLogin.userModule.userInfo.userUid;
-      if(newUserId==oldUserId){
-      if (sessionStorage.store) {
-        _this.$store.replaceState(
-          Object.assign(
-            {},
-            _this.$store.state,
-            oldLogin
-          )
-        );
-        sessionStorage.removeItem("store");
-      }
-      }else{
-         sessionStorage.removeItem("store");
-      }
 
+      if (sessionStorage.store) {
+        var nowLoginUser = JSON.parse(sessionStorage.NowLoginUser);
+        var newUserId = nowLoginUser.userUid;
+        var oldLogin = JSON.parse(sessionStorage.store);
+        var oldUserId = oldLogin.userModule.userInfo.userUid;
+        if (newUserId == oldUserId) {
+          _this.$store.replaceState(
+            Object.assign({}, _this.$store.state, oldLogin)
+          );
+          sessionStorage.removeItem("store");
+        } else {
+          sessionStorage.removeItem("store");
+        }
+      }
     }
   },
   created() {
@@ -335,7 +335,6 @@ export default {
     color: #333;
     border-bottom: 1px solid #ccc;
     width: 100%;
-   
 
     .el-tabs__nav .el-tabs__item:nth-child(1) span {
       display: none;
