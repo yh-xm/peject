@@ -1,22 +1,26 @@
+<!-- 试卷下拉框组件 
+
+  显示视图： 在父级组件的 js部分写入 
+    import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
+
+      export default{
+        components: {
+        TestDropDownBox,
+  },
+      }
+  在父级组件的 template 部分写入
+      <test-drop-down-box></test-drop-down-box>
+
+      传值:直接在标签中用v-model绑定要传的值
+      <test-drop-down-box v-model="testObj"></test-drop-down-box>
+-->
 <template>
+  <!--  -->
   <div id="testDrownBox-testSetter">
-    <!-- 子组件:{{parentRes}} -->
-    <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item :label="$t('tableName.tt')" prop="tpId" size="small">
-        <el-select v-model="ruleForm.tpId" placeholder="请选择试卷" @change="setInfo" :title="parentRes">
-          <el-option
-            v-for="item in options"
-            :key="item.tpId"
-            :label="item.tpTitle"
-            :value="item.tpId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">设置</el-button>
-        <el-button @click="resetForm('ruleForm')">取消</el-button>
-      </el-form-item>-->
-    </el-form>
+    <el-select v-model="tpId" placeholder="请选择试卷" @change="setInfo" size="small">
+      <el-option :key="0" label="请选择试卷" :value="0" disabled></el-option>
+      <el-option v-for="item in options" :key="item.tpId" :label="item.tpTitle" :value="item.tpId"></el-option>
+    </el-select>
   </div>
 </template>
 <script>
@@ -26,12 +30,14 @@ export default {
     event: "testChange"
   },
   props: {
+    required: true, //是否传值
     testObj: Number //声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
   },
   data() {
     return {
       tpId: "", //下拉框 绑定的值
-      options: [] //下拉框数据
+      options: [], //下拉框数据
+      parentRes: this.testObj //父级组件传给子组件的值
     };
   },
   //定义方法
@@ -44,34 +50,21 @@ export default {
     getAllTestPaper() {
       // 发送get请求
       let _this = this; //保存this对象
-      _this.axios.get("/api/TestPaper/GetAllTestPaper").then(
-        function(res) {
-          //tableData等于回调函数返回的res（值）
-          // console.log(res.data);
-          _this.options = res.data;
-        },
-        function() {
-          console.log("数据请求失败处理");
-        }
-      );
+      _this.axios.get("/api/TestPaper/GetAllTestPaper").then(function(res) {
+        //tableData等于回调函数返回的res（值）
+        _this.options = res.data;
+      });
     },
     /**
      *选择信息
      * */
     setInfo(v) {
-      // childByValue 是在父组件on监听的方法
-      //第二个参数 v 是需要传的值
-      let _this = this;
       console.log(v);
-      console.log(_this.tpId);
-      // _this.$emit("childByValue", v);
-      // _this.$emit("testChange",$event.target.tpId);
-      _this.$emit("testChange",v);
-
+      let _this = this;
+      console.log(_this.parentRes);
+      // testChange 是在父组件on监听的方法  第二个参数 v 是需要传的值
+      _this.$emit("testChange", v);
     }
-    // resetForm(formName) {
-    //   this.$refs[formName].resetFields();
-    // }
   },
   created() {
     let _this = this;

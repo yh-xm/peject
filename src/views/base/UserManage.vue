@@ -190,11 +190,14 @@ export default {
           animation:300,
         onEnd({ newIndex, oldIndex }) {
           //拖拽结束后发生该事件
+          // console.log(_this.tableData);
+
           _this.tableData.splice(
             newIndex,
             0,
             _this.tableData.splice(oldIndex, 1)[0]
           );
+          console.log(_this.tableData);
           var newArray = _this.tableData.slice(0);
           let newArr = newArray.map((value,i) => {
             return {

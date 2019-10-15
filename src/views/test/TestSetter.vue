@@ -6,6 +6,9 @@
       <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{$t('test.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
+    时间：{{ruleForm.tiemObj}}
+    <br />
+    试卷id：{{testObj}}
     <!-- Breadcrumb 面包屑 结束-->
     <el-card class="box-card">
       <div slot="header">
@@ -14,10 +17,14 @@
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
             <el-form-item label="试卷">
               <test-drop-down-box v-model="testObj"></test-drop-down-box>
-
             </el-form-item>
-            <!-- <class-and-grade></class-and-grade>
-            <test-time></test-time>-->
+
+            <el-form-item label="班级">
+              <class-name-select v-model="classObj"></class-name-select>
+            </el-form-item>
+            <el-form-item label="考试时间">
+              <test-time v-model="timeObj"></test-time>
+            </el-form-item>
           </el-form>
 
           <!-- 组件引用结束 -->
@@ -42,7 +49,11 @@
           <el-table-column :label="$t('tableName.tm')" align="center">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">{{$t('btn.c')}}</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index,scope.row)">{{$t('btn.d')}}</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index,scope.row)"
+              >{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -78,32 +89,33 @@
 </template>
 <script>
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
-import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
+import ClassNameSelect from "@/components/classNameSelect"; //班级
 import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 export default {
   data() {
     return {
-      ruleForm: {},//表单绑定的数据
-      rules: {},//表单验证
+      ruleForm: { testObj: 0, classObj: null, timeObj: null }, //表单绑定的数据
+      rules: {
+        testObj:[
+          {}
+        ]
+      }, //表单验证
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
       total: null, //总条目
       form: {},
-      childRes1: "", //接收子组件传的值  试卷
-      childRes2: "", //接收子组件传的值 班级
-      childRes3: {}, //接收子组件传的值 考试时间
-      pRes: "", //父级组件下发给子组件的值 试卷
-      cRes: "", //父级组件下发给子组件的值 班级
-      timeRes: [] //父级组件下发给子组件的值 考试时间
+      testObj: 0, // 父传子 试卷
+      classObj: {}, // 父传子  班级
+      timeObj: [] //父传子  考试时间
     };
   },
   //定义组件
   components: {
     TestDropDownBox,
-    ClassAndGrade,
-    TestTime,
+    ClassNameSelect,
+    TestTime
   },
   //定义方法
   methods: {
@@ -114,6 +126,16 @@ export default {
      * */
     setAddInfo() {
       let _this = this;
+      console.log(_this.ruleForm.tiemObj);
+      // if (_this.logTime == null) {
+      //   _this.timeLimit = 0;
+      // } else {
+      //   let date1 = new Date(_this.logTime[0]); //转格式
+      //   let date2 = new Date(_this.logTime[1]); //转格式
+      //   var dates = date2.getTime() - date1.getTime(); //计算
+      //   _this.timeLimit = dates / (60 * 1000); //赋值
+      // }
+
       // 判断输入框是否有值  是否符合条件
 
       // if (
@@ -170,14 +192,6 @@ export default {
     cancelTest() {
       console.log("取消安排测试");
       let _this = this;
-      // testDropFrom是试卷下拉框表单的值
-      // _this.$refs.testDropFrom.resetForm("testDropFrom"); //重置表单 试卷
-      // _this.$refs.classDropFrom.classFun("classDropFrom"); //重置表单 班级
-      // _this.$refs.timeSelectFrom.espTime(); //重置表单 考试时间
-      // _this.childRes1 = "";
-      // _this.childRes2 = "";
-      // _this.childRes3[0] = "";
-      // _this.childRes3[1] = "";
     },
 
     /**
@@ -301,6 +315,7 @@ export default {
       flex: none;
       text-align: right;
       margin-right: 10px;
+      width: 70px;
     }
     /deep/.el-form-item__content {
       width: 100%;

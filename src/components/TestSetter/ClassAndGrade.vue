@@ -1,18 +1,8 @@
 <template>
   <div id="testDrownBox-testSetter">
-    <!-- 班级： {{parentRes2}}    -->
-    <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item :label="$t('tableName.tcn')" prop="classId" size="small">
-        <el-select v-model="ruleForm.classId" placeholder="请选择班级" @change="setClass" :title="parentRes2">
-          <el-option
-            v-for="item in options"
-            :key="item.classId"
-            :label="item.className"
-            :value="item.classId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
+    <el-select v-model="classId" placeholder="请选择班级" @change="setClass" size="small">
+      <el-option v-for="item in options" :key="item.classId" :label="item.className" :value="item.classId"></el-option>
+    </el-select>
   </div>
 </template>
 <script>
@@ -24,9 +14,7 @@ export default {
   data() {
     
     return {
-      ruleForm: {
-        classId: "" //表单绑定的值
-      },
+      classId: "", //表单绑定的值
       options: [] //下拉框数组
     };
   },
