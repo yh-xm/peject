@@ -152,8 +152,6 @@ export default {
                       name: "home"
                     });
                   }
-                   
-                  
                   _this.$msg(_this, 1, "登录成功!");
                 }
               })

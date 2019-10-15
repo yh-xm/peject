@@ -277,17 +277,25 @@ export default {
       } else {
         _this.langen = "中文";
       }
-
+      var nowLoginUser =  JSON.parse(sessionStorage.NowLoginUser);
+      var newUserId = nowLoginUser.userUid;
+      var oldLogin= JSON.parse(sessionStorage.store)
+      var oldUserId = oldLogin.userModule.userInfo.userUid;
+      if(newUserId==oldUserId){
       if (sessionStorage.store) {
         _this.$store.replaceState(
           Object.assign(
             {},
             _this.$store.state,
-            JSON.parse(sessionStorage.store)
+            oldLogin
           )
         );
         sessionStorage.removeItem("store");
       }
+      }else{
+         sessionStorage.removeItem("store");
+      }
+
     }
   },
   created() {
