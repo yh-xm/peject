@@ -39,7 +39,7 @@
             <el-input placeholder="请输入密码" v-model="numberValidateForm.passworld" show-password></el-input>
           </el-form-item>
 
-          <el-checkbox v-model="lenrnPsw">{{$t('message.repsw')}}</el-checkbox>
+          <el-checkbox v-model="rempsw">{{$t('message.repsw')}}</el-checkbox>
           <el-form-item>
             <el-button
               type="primary"
@@ -59,7 +59,7 @@ import { setCookie, getCookie, clearCookie } from "@/api/SetCookie.js";
 export default {
   data() {
     return {
-      lenrnPsw: false, //是否记住密码
+      rempsw: false, //是否记住密码
       nowLoginUser: {}, //当前登录用户信息
       screenWidth: 0, //宽度
       showItem: false, // 响应式标识
@@ -112,7 +112,6 @@ export default {
      */
     submitForm(formName) {
       var _this = this;
-
       _this.disbable = true;
       _this.$refs[formName].validate(valid => {
         if (valid) {
@@ -125,9 +124,8 @@ export default {
                 `/api/OAuth/authenticate?userMobile=${_this.numberValidateForm.username}&userPassword=${_this.numberValidateForm.passworld}`
               )
               .then(function(r) {
-                console.log(r)
                 if (r.status == "200") {
-                  if (_this.lenrnPsw == true) {
+                  if (_this.rempsw == true) {
                     var obj = {
                       username: _this.numberValidateForm.username,
                       password: _this.numberValidateForm.passworld
@@ -207,7 +205,7 @@ export default {
     if (obj.username && obj.password) {
       that.numberValidateForm.username = obj.username;
       that.numberValidateForm.passworld = obj.password;
-      that.lenrnPsw = true;
+      that.rempsw = true;
     }
   }
 };
