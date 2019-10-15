@@ -6,15 +6,15 @@
       <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{$t('test.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
-    试卷：{{childRes1}}
+    <!-- 试卷：{{childRes1}}
     班级：{{childRes2}}
-    考试时间：{{childRes3}}
+    考试时间：{{childRes3}}-->
     <!-- Breadcrumb 面包屑 结束-->
-
-
     <el-card class="box-card">
       <div slot="header">
         <div class="impComp">
+          <c-t-t-box></c-t-t-box>
+
           <!-- 组件引用 -->
           <test-drop-down-box @childByValue="childByValue"></test-drop-down-box>
           <class-and-grade @childByValue2="childByValue2"></class-and-grade>
@@ -84,6 +84,7 @@
 import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
 import ClassAndGrade from "@/components/TestSetter/ClassAndGrade"; //班级
 import TestTime from "@/components/TestSetter/TestTime"; //考试时间
+import CTTBox from "@/components/TestSetter/CTTBox"; //拖拽测试
 
 export default {
   data() {
@@ -97,16 +98,17 @@ export default {
       childRes1: "", //接收子组件传的值  试卷
       childRes2: "", //接收子组件传的值 班级
       childRes3: {}, //接收子组件传的值 考试时间
-      pRes:"",//父级组件下发给子组件的值 试卷
-      cRes:"",//父级组件下发给子组件的值 班级
-      timeRes:[],//父级组件下发给子组件的值 考试时间
+      pRes: "", //父级组件下发给子组件的值 试卷
+      cRes: "", //父级组件下发给子组件的值 班级
+      timeRes: [] //父级组件下发给子组件的值 考试时间
     };
   },
   //定义组件
   components: {
     TestDropDownBox,
     ClassAndGrade,
-    TestTime
+    TestTime,
+    CTTBox
   },
   //定义方法
   methods: {
@@ -138,11 +140,11 @@ export default {
      *
      * */
     childByValue3(tVal) {
-       // tVal就是子组件传过来的值
+      // tVal就是子组件传过来的值
       let _this = this;
       // console.log(tVal);
       // console.log(tVal.a)
-     
+
       // console.log(tVal);
       // _this.childRes3[0] = tVal[0];
       _this.childRes3 = tVal;
@@ -175,7 +177,6 @@ export default {
               message: "设置成功!"
             });
             _this.SetTest.unshift(dataCu);
-
           } else if (res.data.code == -2) {
             _this.$message({
               type: "error",
@@ -239,11 +240,11 @@ export default {
       let _this = this;
       console.log(index, row);
       _this.dialogFormVisible = true;
-      _this.pRes = row.taskTestPaperId;//试卷
-      _this.cRes = row.classId;//班级
-      _this.timeRes[0] = row.taskStartTime;//考试时间  开始
-      _this.timeRes[1] = row.taskEndTime;//考试时间  结束
-      _this.timeRes[2] = row.taskEscapeTime;//耗时
+      _this.pRes = row.taskTestPaperId; //试卷
+      _this.cRes = row.classId; //班级
+      _this.timeRes[0] = row.taskStartTime; //考试时间  开始
+      _this.timeRes[1] = row.taskEndTime; //考试时间  结束
+      _this.timeRes[2] = row.taskEscapeTime; //耗时
       console.log(_this.timeRes);
       // console.log(_this.pRes);
       // console.log(row.taskId);

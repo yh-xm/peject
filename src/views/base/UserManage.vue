@@ -4,7 +4,7 @@
       <el-button icon="el-icon-circle-plus" type="primary" @click="addUsers">新增角色</el-button>
     </div>
     <div class="text item">
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%" row-key="userTypeId">
         <el-table-column type="index" width="180"></el-table-column>
         <!-- <el-table-column prop="userTypeId" label="#" width="180"></el-table-column> -->
         <el-table-column prop="userTypeTypeName" label="角色名称" width="180"></el-table-column>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import Sortable from "sortablejs";
+
 export default {
   data() {
     return {
@@ -37,7 +39,7 @@ export default {
       //获取所有用
       this.axios.get("api/UserType/GetUserRoles").then(res => {
         // this.axios.get("api/Test/GetTest").then(res => {
-       this.tableData = res.data;
+        this.tableData = res.data;
       });
     },
     handleEdit(index, row) {
@@ -161,10 +163,49 @@ export default {
             message: "取消增加"
           });
         });
+    },
+    /**
+     * 行拖拽
+     *
+     * ****/
+    rowDrop() {
+      const tbody = document.querySelector(".el-table__body-wrapper tbody");
+      const _this = this;
+      Sortable.create(tbody, {
+        onEnd({ newIndex, oldIndex }) {
+          //拖拽结束后发生该事件
+          _this.tableData.splice(
+            newIndex,
+            0,
+            _this.tableData.splice(oldIndex, 1)[0]
+          );
+          var newArray = _this.tableData.slice(0);
+          let newArr = newArray.map((value,i) => {
+            return {
+              userTypeSortNo: i++,
+              userTypeId: value.userTypeId
+            };
+          });
+          _this.axios
+            .post("/api/UserType/OrderUserRoleNo", newArr)
+            .then(function(res) {
+              {
+                if (res.data.code == 1) {
+                  _this.$msg(_this, 1, "移动成功！");
+                } else if (res.data.code == 0) {
+                  _this.$msg(_this, 0, "数据没有变化！");
+                }
+              }
+            });
+        }
+      });
     }
   },
   created() {
     this.apply();
+  },
+  mounted() {
+    this.rowDrop();
   }
 };
 </script>
