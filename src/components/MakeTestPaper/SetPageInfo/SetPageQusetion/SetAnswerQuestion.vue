@@ -48,12 +48,14 @@
                </el-form-item>
           <el-form-item>
             <!-- 编辑 -->
-            <el-button type="primary" plain @click.prevent="compile" size="small">{{$t('btn.c')}}</el-button>
+            <el-button type="primary" plain @click.prevent="compile">{{$t('btn.c')}}</el-button>
+            <transition name="slide-fade">
             <el-row v-show="oshow">
               <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
               <el-button type="primary" plain @click.prevent="saveOption" size="small">{{$t('btn.s')}}</el-button>
               <el-button type="danger" plain @click.prevent="removePageInfoItem" size="small">{{$t('btn.d')}}</el-button>
             </el-row>
+              </transition>
           </el-form-item>
         </el-form>
       </div>
@@ -212,5 +214,16 @@ export default {
       border-radius: 50px;
     }
   }
+  .slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(20px);
+  opacity: 0;
+}
 }
 </style>
