@@ -192,11 +192,11 @@ export default {
      * */
     getRole() {
       let _this = this; //保存this对象
-      _this.axios.get("/api/UserType/GetUserRoles").then(
+      _this.$get("/api/UserType/GetUserRoles").then(
         function(res) {
           //roles等于回调函数返回的res（值）
           // console.log(res);
-          _this.roles = res.data;
+          _this.roles = res;
         },
         function() {
           console.log("数据请求失败处理");
@@ -211,11 +211,11 @@ export default {
     getUserInfo() {
       // 发送get请求
       let _this = this; //保存this对象
-      _this.axios.get("/api/User/GetTeachers").then(
+      _this.$get("/api/User/GetTeachers").then(
         function(res) {
           //tableData等于回调函数返回的res（值）
           // console.log(res);
-          _this.tableData = res.data;
+          _this.tableData = res;
         },
         function() {
           console.log("数据请求失败处理");
@@ -242,8 +242,9 @@ export default {
         center: true
       })
         .then(() => {
-          _this.axios.post("api/User/RemoveTeacher?uid=" + uid).then(
+          _this.$post("api/User/RemoveTeacher?uid=" + uid).then(
             function(res) {
+              // console.log(res)
               if (res.status === 200) {
                 _this.$message({
                   type: "success",
@@ -308,14 +309,14 @@ export default {
       //调用添加接口
       _this.$refs[formName].validate(valid => {
         if (valid) {
-          _this.axios.post("api/User/AddTeacher", obj).then(function(res) {
-            console.log(res);
-            if (res.data.code == 1) {
+          _this.$post("api/User/AddTeacher", obj).then(function(res) {
+            // console.log(res);
+            if (res.code == 1) {
               _this.$message({
                 type: "success",
                 message: "添加成功!"
               });
-            } else if (res.data.code == 0) {
+            } else if (res.code == 0) {
               _this.$message({
                 type: "info",
                 message: "内容没有变化"
@@ -370,8 +371,8 @@ export default {
       _this.$refs[formName].validate(valid => {
         if (valid) {
           //调用添加接口
-          _this.axios
-            .post("/api/User/ModifyTeacher", {
+          _this.$post("/api/User/ModifyTeacher",
+            {
               userUid: _this.ruleForm.userUid, //要修改的用户标识符
               userName: _this.ruleForm.userName, //用户名，不能为空
               userMobile: _this.ruleForm.userMobile, //手机号
@@ -380,12 +381,12 @@ export default {
               userUserTypeId: _this.ruleForm.userTypeTypeName //角色id
             })
             .then(function(res) {
-              if (res.data.code == 1) {
+              if (res.code == 1) {
                 _this.$message({
                   type: "success",
                   message: "修改成功!"
                 });
-              } else if (res.data.code == 0) {
+              } else if (res.code == 0) {
                 _this.$message({
                   type: "info",
                   message: "内容没有变化"

@@ -88,8 +88,9 @@ function reLogin(){
             resolve(res.data);
         }).catch(err =>{
             reject(err.data)        
-    })    
-});}
+        })    
+    })
+}
 /** 
  * post方法，对应post请求 
  * @param {String} url 请求的url地址
@@ -97,7 +98,7 @@ function reLogin(){
  */
 export function post(url, params) {
     return new Promise((resolve, reject) => {
-         axios.post(url, {params: params})
+         axios.post(url,params)
         .then(res => {
             resolve(res.data);
         })

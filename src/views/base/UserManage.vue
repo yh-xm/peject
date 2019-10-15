@@ -40,9 +40,9 @@ export default {
   methods: {
     apply() {
       //获取所有用
-      this.axios.get("api/UserType/GetUserRoles").then(res => {
-        // this.axios.get("api/Test/GetTest").then(res => {
-        this.tableData = res.data;
+      this.$get("api/UserType/GetUserRoles").then(res => {
+        // this.$get("api/Test/GetTest").then(res => {
+        this.tableData = res;
       });
     },
     handleEdit(index, row) {
@@ -55,15 +55,14 @@ export default {
         inputErrorMessage: "内容不能为空"
       })
         .then(({ value }) => {
-          this.axios
-            .post("/api/UserType/ModifyUserRole", null, {
+          this.$post("/api/UserType/ModifyUserRole", null, {
               params: {
                 userRoleName: value,
                 id: row.userTypeId
               }
             })
             .then(res => {
-              let code = res.data.code; //返回代码
+              let code = res.code; //返回代码
               if (code == 1) {
                 this.apply(); //更新后重新渲染
                 this.$message({
@@ -97,14 +96,13 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.axios
-            .post("/api/UserType/RemoveUserRole", null, {
+          this.$post("/api/UserType/RemoveUserRole", null, {
               params: {
                 userRoleId: row.userTypeId
               }
             })
             .then(res => {
-              let code = res.data.code; //返回代码
+              let code = res.code; //返回代码
               if (code == 1) {
                 this.tableData.splice(index, 1);
                 this.$message({
@@ -133,15 +131,14 @@ export default {
         inputErrorMessage: "内容不能为空"
       })
         .then(({ value }) => {
-          this.axios
-            .post("/api/UserType/AddUserRole", null, {
+          this.$post("/api/UserType/AddUserRole", null, {
               params: {
                 userRoleName: value
               }
             })
             .then(res => {
-              let code = res.data.code; //返回代码
-              let data = res.data.data; //操作成功后，返回给前端有用的数据
+              let code = res.code; //返回代码
+              let data = res.data; //操作成功后，返回给前端有用的数据
               if (code == 1) {
                 this.tableData.push(data);
                 this.$message({
@@ -202,15 +199,14 @@ export default {
               userTypeId: value.userTypeId
             };
           });
-          _this.axios
-            .post("/api/UserType/OrderUserRoleNo", newArr)
+          _this.$post("/api/UserType/OrderUserRoleNo", newArr)
             .then(function(res) {
               {
-                if (res.data.code == 1) {
+                if (res.code == 1) {
                   // _this.$msg(_this, 1, "移动成功！");
                _this.$msg(_this, 1, "移动成功！");
 
-                } else if (res.data.code == 0) {
+                } else if (res.code == 0) {
                   _this.$msg(_this, 0, "数据没有变化！");
                 }
               }

@@ -69,12 +69,12 @@
   },
   created(){
       var _this = this;
-      _this.axios.get("api/Class/GetAllClass").then(r => {
-        _this.options=r.data
+      _this.$get("api/Class/GetAllClass").then(r => {
+        _this.options=r
         // console.log(r.data)
         // console.log(r.data)
       // _this.options = r.data;
-      _this.options=r.data.map(value=>{
+      _this.options=r.map(value=>{
         return{
           classId:value.classId,
           className:value.className
