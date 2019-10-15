@@ -8,6 +8,7 @@
     <div class="StudentManage">
       
       <div class="StudentSelect">
+<<<<<<< HEAD
         <!-- <el-select v-model="classId" @change="getClassName(classId)" placeholder="请选择班级">
           <el-option
             v-for="item in options"
@@ -17,6 +18,9 @@
           ></el-option>
         </el-select> -->
         <classNameSelect v-model="classes" ref="classNameSelect" @change="classInfo" style="display:inline"></classNameSelect>
+=======
+        <classNameSelect v-model="classesa" ref="classNameSelect" @change="classInfo(classesa)" style="display:inline"></classNameSelect>
+>>>>>>> tanYiDong
         <el-button
           type="text"
           @click="addEquipment"
@@ -173,7 +177,12 @@ export default {
       }, 100);
     };
     return {
+<<<<<<< HEAD
       classes:'',
+=======
+      classes2:{},
+      classesa:'',
+>>>>>>> tanYiDong
       showBoth: true, //判断新增还是修改
       dialogStatus: "", //判断标题
       index: "", //表格行的下标
@@ -198,7 +207,7 @@ export default {
       },
       addRules: {
         // 校验班级名，主要通过validator来指定验证器名称
-        classes: [{ required: true, validator: validateClassName, trigger: "blur" }],
+        classesa: [{ required: true, validator: validateClassName, trigger: "blur" }],
         // 校验学生名，主要通过validator来指定验证器名称
         stuName: [{ required: true, validator: validateName, trigger: "blur" }],
         // 校验生日，主要通过validator来指定验证器名称
@@ -244,12 +253,12 @@ export default {
           let params = {
             //发送请求
             stuName: _this.form.stuName, //学生姓名
-            stuClassId: _this.classes.classId, //班级编号
+            stuClassId: _this.classesa.classId, //班级编号
             stuBirthDay: new Date(_this.form.born), //生日
             stuMobile: _this.form.phone, //手机号
             stuPassword: _this.form.password, //登录密码,
             stuSex: _this.form.radio, //性别
-            className: _this.classes.className,
+            className: _this.classesa.className,
           };
           console.log(params)
           _this.$post("/api/Student/AddStudent", params).then(response => {
@@ -389,12 +398,17 @@ export default {
      * @{argument} getClassName改变监听班级编号事件
      * @param {Num} res 班级编号
      */
+<<<<<<< HEAD
     classInfo() {
       //获取班级学生
+=======
+    classInfo(classesa) {
+      //获取班级学生aaa
+>>>>>>> tanYiDong
       var _this = this;
-      _this.$get('/api/Student/GetClassStudent?classId='+classes.classId).then(r => {
+      _this.$get('/api/Student/GetClassStudent?classId='+classesa.classId).then(r => {
         _this.tableData = r;
-        _this.classes=classes
+        _this.classesa=classesa
       });
     }
   },
