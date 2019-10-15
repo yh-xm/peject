@@ -191,11 +191,15 @@ export default {
             .then(function(res) {
               {
                 if (res.data.code == 1) {
-                  _this.$msg(_this, 1, "移动成功！");
+                  // _this.$msg(_this, 1, "移动成功！");
+               _this.$msg(_this, -1, "系统错误！");
+
                 } else if (res.data.code == 0) {
                   _this.$msg(_this, 0, "数据没有变化！");
                 }
               }
+            },() => {
+               _this.$msg(_this, -1, "系统错误！");
             });
         }
       });
