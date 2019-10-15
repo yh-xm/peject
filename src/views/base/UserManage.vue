@@ -1,3 +1,4 @@
+  
 <template>
   <div id="RoleManage">
     <div slot="header" class="clearfix">
@@ -27,7 +28,6 @@
 
 <script>
 import Sortable from "sortablejs";
-
 export default {
   data() {
     return {
