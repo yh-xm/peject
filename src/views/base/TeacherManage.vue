@@ -156,6 +156,7 @@ export default {
       title: "", //对话框标题
       flag: false, //对话框确认按钮隐藏显示
       dialogFormVisible: false, //对话框隐藏显示
+      oindex: "",
       // 获取表单信息
       ruleForm: {
         userName: "", //用户名称
@@ -238,10 +239,7 @@ export default {
      * @method typName
      * @param v 下拉框的id
      */
-    getTypName(v) {
-      
-
-    },
+    getTypName(v) {},
 
     /**
      * 删除所在行的数
@@ -295,7 +293,6 @@ export default {
      * */
     handleAdd() {
       const _this = this;
-      
 
       var lang = localStorage.locale;
       if (lang == "en") {
@@ -323,7 +320,9 @@ export default {
      * */
     addClose(formName) {
       const _this = this;
-      var typNames = _this.roles.find(res=> res.userTypeId == _this.ruleForm.userTypeTypeName);
+      var typNames = _this.roles.find(
+        res => res.userTypeId == _this.ruleForm.userTypeTypeName
+      );
       var typName = typNames.userTypeTypeName;
       var obj = {
         userName: _this.ruleForm.userName, //用户名，不能为空
@@ -370,13 +369,14 @@ export default {
      */
 
     handleEdit(index, row) {
+      let _this = this;
+      _this.oindex = index;
       var lang = localStorage.locale;
       if (lang == "en") {
         var fText = "Edit User Information";
       } else {
         var fText = "编辑用户信息";
       }
-      let _this = this;
       _this.dialogFormVisible = true; //打开对话框
       _this.title = fText; //改变对话框标题
       _this.flag = true; //显示编辑按钮
@@ -402,12 +402,19 @@ export default {
               userUserTypeId: _this.ruleForm.userTypeTypeName //角色id
             })
             .then(function(res) {
+              console.log(res);
               if (res.code == 1) {
-
-
-
-
-                
+                var typNames = _this.roles.find(
+                  res => res.userTypeId == _this.ruleForm.userTypeTypeName
+                );
+                var typName = typNames.userTypeTypeName;
+                var rows = _this.tableData[_this.oindex];
+                rows.userName = _this.ruleForm.userName;
+                rows.userMobile = _this.ruleForm.userMobile;
+                rows.userSex = _this.ruleForm.userSex;
+                rows.userPassword = _this.ruleForm.userPassword;
+                rows.userTypeTypeName = typName;
+                rows.userUserTypeId = _this.ruleForm.userTypeTypeName;
                 _this.$msg(_this, 1, "修改成功");
               } else if (res.code == 0) {
                 _this.$msg(_this, 0, "内容没有变化");
