@@ -223,8 +223,7 @@ export default {
             0,
             _this.tableData.splice(oldIndex, 1)[0]
           );
-          console.log(_this.tableData);
-          var newArray = _this.tableData.slice(0);
+          var newArray = _this.tableData;
           let newArr = newArray.map((value,i) => {
             return {
               userTypeSortNo: i++,

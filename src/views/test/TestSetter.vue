@@ -289,6 +289,7 @@ export default {
      * */
 
     handleDelete(index, row) {
+      console.log(row)
       let taskId = row.taskId;
       let _this = this;
       var lang = localStorage.locale;

@@ -89,7 +89,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('tableName.tjs')" prop="userTypeTypeName">
-              <el-select v-model="ruleForm.userTypeTypeName" placeholder="请选择">
+              <el-select v-model="ruleForm.userTypeTypeName" placeholder="请选择" @change="getTypName">
                 <el-option
                   v-for="item in roles"
                   :key="item.userTypeId"
@@ -158,7 +158,6 @@ export default {
       dialogFormVisible: false, //对话框隐藏显示
       // 获取表单信息
       ruleForm: {
-        // userUid: "", //id
         userName: "", //用户名称
         userMobile: "", //手机号
         userPassword: "", //密码
@@ -234,6 +233,15 @@ export default {
         _this.tableData = res;
       });
     },
+    /**
+     * 渲染---获下拉框角色名称 可
+     * @method typName
+     * @param v 下拉框的id
+     */
+    getTypName(v) {
+      
+
+    },
 
     /**
      * 删除所在行的数
@@ -256,17 +264,17 @@ export default {
         var flag = "提示";
         var title = "此操作将永久删除该数据, 是否继续?";
       }
-      let _this = this;
+      const _this = this;
       let uid = (index, row.userUid);
-      this.$confirm(title, flag, {
-        confirmButtonText: fText,
-        cancelButtonText: fText2,
-        type: "warning",
-        center: true
-      })
+      _this
+        .$confirm(title, flag, {
+          confirmButtonText: fText,
+          cancelButtonText: fText2,
+          type: "warning",
+          center: true
+        })
         .then(() => {
           _this.$post("api/User/RemoveTeacher?uid=" + uid).then(function(res) {
-            console.log(res);
             if (res.code == 1) {
               _this.$msg(_this, 1, "删除成功!");
               _this.tableData.splice(index, 1);
@@ -286,13 +294,14 @@ export default {
      *
      * */
     handleAdd() {
+      const _this = this;
+      var typName = _this.ruleForm.userTypeTypeName;
       var lang = localStorage.locale;
       if (lang == "en") {
         var fText = "Add User Information";
       } else {
         var fText = "添加用户信息";
       }
-      let _this = this;
       _this.dialogFormVisible = true; //打开对话框
       _this.title = fText; //改变对话框标题
       _this.flag = !true; //显示添加按钮
@@ -312,7 +321,9 @@ export default {
      *
      * */
     addClose(formName) {
-      let _this = this;
+      const _this = this;
+      var typName = _this.roles.userTypeTypeName;
+      console.log(typName);
 
       var obj = {
         userName: _this.ruleForm.userName, //用户名，不能为空
@@ -325,7 +336,9 @@ export default {
       _this.$refs[formName].validate(valid => {
         if (valid) {
           _this.$post("api/User/AddTeacher", obj).then(function(res) {
+            console.log(res);
             if (res.code == 1) {
+              _this.tableData.unshift(res.data);
               _this.$msg(_this, 1, "添加成功!");
             } else if (res.code == 0) {
               _this.$msg(_this, 0, "内容没有变化");
