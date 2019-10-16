@@ -55,7 +55,7 @@
 
           <el-input v-model="domain.fqAnswer" :placeholder="'请输入第'+(index+1)+'个空的答案'"></el-input>
         </el-form-item>
-        <el-form-item label="题目预览" class="view-options" v-show="oshow">
+        <el-form-item :label="$t('test.makep17')" class="view-options" v-show="oshow">
           <el-row v-for="(item,index) in title" :key="index">
             <span v-if="item!='▁'">{{item}}</span>
             <el-input
@@ -72,18 +72,23 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" plain @click.prevent="compile" >{{$t('btn.c')}}</el-button>
+          <el-button type="primary" plain @click.prevent="compile">{{$t('btn.c')}}</el-button>
           <transition name="slide-fade">
-          <el-row v-show="oshow">
-            <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
-            <el-button
-              type="primary"
-              plain
-              @click.prevent="submitForm('nowOption')"
-              size="small"
-            >{{$t('btn.s')}}</el-button>
-            <el-button type="danger" plain @click.prevent="removeChoose" size="small">{{$t('btn.d')}}</el-button>
-          </el-row>
+            <el-row v-show="oshow">
+              <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
+              <el-button
+                type="primary"
+                plain
+                @click.prevent="submitForm('nowOption')"
+                size="small"
+              >{{$t('btn.s')}}</el-button>
+              <el-button
+                type="danger"
+                plain
+                @click.prevent="removeChoose"
+                size="small"
+              >{{$t('btn.d')}}</el-button>
+            </el-row>
           </transition>
         </el-form-item>
       </el-form>
@@ -156,7 +161,8 @@ export default {
 
           //是否添加填空
           var value = _this.AddGapFillQuestionList.tpqId; //获取题目Id
-          _this.$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
+          _this
+            .$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
               questionId: _this.nowOption.questionId, //题目Id
               questionTitle: _this.title, //题目
               questionTypeId: _this.nowOption.questionTypeId, //题目类型
@@ -171,14 +177,14 @@ export default {
                 _this.nowOption.questionTitle = _this.title; //更新题目
                 _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
                 _this.oshow = !_this.oshow;
-                _this.$msg(_this, 1, data.message);
+                _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
                 _this.changeScore();
               } else {
-                console.log(666);
-                _this.$msg(_this, res.code, res.message);
-                _this.nowOption.questionTitle = _this.title; //更新题目
-                _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
-                _this.oshow = !_this.oshow;
+                if (res.message == "数据没有变化") {
+                  _this.$msg(_this, -1, _this.$t("mesTips.dataChange"));
+                } else {
+                  _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+                }
               }
             });
           _this.fillQuestion = [];
@@ -235,20 +241,21 @@ export default {
      */
     removeChoose() {
       var _this = this;
-      _this.$post(
+      _this
+        .$post(
           `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}` //获取题目Id
         )
         .then(res => {
           if (res.message == "删除成功") {
             var data = {
-              index: _this.nowIndex3,//题号
-              questionTypeId: 2,//题目类型
-              tpqScore: _this.AddGapFillQuestionList.tpqScore//题目分数
+              index: _this.nowIndex3, //题号
+              questionTypeId: 2, //题目类型
+              tpqScore: _this.AddGapFillQuestionList.tpqScore //题目分数
             };
-            _this.$msg(_this, 1, res.message);
+            _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
             _this.$emit("setQuestion", data);
           } else {
-            _this.$msg(_this, -1, res.message);
+              _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
           }
         });
     },
@@ -267,7 +274,8 @@ export default {
           fillQuestion[key].fillQuestionScore[0].fqsScore;
         fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0]);
       }
-      _this.$post(
+      _this
+        .$post(
           `/api/TestPaper/ModifyScore`,
           {
             tpqId: _this.AddGapFillQuestionList.tpqId, //主键编号
@@ -276,6 +284,7 @@ export default {
           } //修改题目分值
         )
         .then(res => {
+        
           if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新题目信息
             var data = {
@@ -283,10 +292,14 @@ export default {
               fqsScore: _this.AddGapFillQuestionList.fqsScore, //问题分数
               fqIndex: _this.nowIndex3 //问题题号
             };
-            _this.$msg(_this, 1, "修改成功!");
+            _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
             _this.$emit("changeScore", data); //修改父组件的分数信息
           } else {
-            _this.$msg(_this, -1, "分数没有变化");
+             if (res.message == "数据没有变化") {
+                  _this.$msg(_this, -1, _this.$t("mesTips.changeSroce"));
+                } else {
+                  _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+             }
           }
         });
     },
@@ -370,7 +383,9 @@ export default {
               if (max == oindexArr.length) {
                 //在末尾插入填空
                 //往后添加空格
-                _this.nowOption.fillQuestion.push(JSON.parse(JSON.stringify(nowAddOption)));
+                _this.nowOption.fillQuestion.push(
+                  JSON.parse(JSON.stringify(nowAddOption))
+                );
                 _this.fillQuestion.push(
                   _this.nowOption.fillQuestion.length - 1
                 ); //获取插入填空的位置
@@ -381,13 +396,17 @@ export default {
             if (narr.length - oarr.length > 1) {
               for (let i in oindexArr) {
                 if (textindex < oindexArr[i]) {
-                  _this.nowOption.fillQuestion.splice(i, 0, JSON.parse(JSON.stringify(nowAddOption))); // 粘贴多个文字一个填空
+                  _this.nowOption.fillQuestion.splice(
+                    i,
+                    0,
+                    JSON.parse(JSON.stringify(nowAddOption))
+                  ); // 粘贴多个文字一个填空
                   break;
                 }
               }
             } else {
               // 按插入按钮进行插入
-              _this.nowOption.fillQuestion.splice( 
+              _this.nowOption.fillQuestion.splice(
                 narr[textindex],
                 0,
                 nowAddOption
@@ -492,16 +511,16 @@ export default {
       }
     }
   }
-    .slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(20px);
-  opacity: 0;
-}
+    transform: translateX(20px);
+    opacity: 0;
+  }
 }
 </style>

@@ -26,7 +26,7 @@
         </el-form-item>
         <!-- 参考答案 -->
         <el-form-item :label="$t('test.makep14')">
-            <editor  v-model="AddEssayQuestion.value" ref="editor"/>
+          <editor v-model="AddEssayQuestion.value" ref="editor" />
         </el-form-item>
         <!-- 分值 -->
         <el-form-item :label="$t('test.makep15')">
@@ -48,11 +48,11 @@
   </div>
 </template>
 <script>
- import Editor from './TextEditor'
+import Editor from "./TextEditor";
 export default {
-        components: {
-      Editor
-    },
+  components: {
+    Editor
+  },
   data() {
     return {
       AddEssayQuestion: {
@@ -63,18 +63,18 @@ export default {
     };
   },
   methods: {
-     /**
+    /**
      * 重置表单
      * @param {object} formName 当前表单
      */
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-      /**
+    /**
      * 新增题目
      *  {Number} userId 识别用户Id
      * @param {object} formName 点击当前表单
-     * 
+     *
      */
     submitForm(formName) {
       var _this = this;
@@ -82,32 +82,37 @@ export default {
       var aqAnswer = _this.$refs[formName].model.value;
       var tpqScore = _this.$refs[formName].model.onum;
       var title = _this.$refs[formName].model.title;
-      _this.$post(`/api/TestPaper/AddQuestionToTestPaper`, {
-          tpqPaperId: tpqPaperId, //试卷主键编号
-          tpqScore: tpqScore, //分值
-          tpqQuestion: {
-            questionTitle: title, //题目的标题
-            questionTypeId: 3, //题目的类型 1=选择题 2=填空题 3=问答题
-            answerQuestion: {
-              aqAnswer: aqAnswer //问答题的答案
-            }
-          }
-        })
-        .then(res => {
-          if (res.message == "添加成功") {
-            var data = {
-              bodys:res.data,
-              questionTypeId:3
-            }
-            _this.$emit('addEssayQuestion',data)
-             _this.$msg(_this,1, "添加成功!")
-            _this.resetForm("AddEssayQuestion"); //重置表单
-            _this.AddEssayQuestion.value = "";
-            _this.$refs.editor.content ="";
-          }else{
-                _this.$msg(_this,-1, res.message)
+      if ((title != "") & (aqAnswer != "")) {
+        _this
+          .$post(`/api/TestPaper/AddQuestionToTestPaper`, {
+            tpqPaperId: tpqPaperId, //试卷主键编号
+            tpqScore: tpqScore, //分值
+            tpqQuestion: {
+              questionTitle: title, //题目的标题
+              questionTypeId: 3, //题目的类型 1=选择题 2=填空题 3=问答题
+              answerQuestion: {
+                aqAnswer: aqAnswer //问答题的答案
               }
-        });
+            }
+          })
+          .then(res => {
+            if (res.message == "添加成功") {
+              var data = {
+                bodys: res.data,
+                questionTypeId: 3
+              };
+              _this.$emit("addEssayQuestion", data);
+              _this.$msg(_this, 1, _this.$t("mesTips.addSuccess"));
+              _this.resetForm("AddEssayQuestion"); //重置表单
+              _this.AddEssayQuestion.value = "";
+              _this.$refs.editor.content = "";
+            } else {
+              _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+            }
+          });
+      } else {
+        _this.$msg(_this, -1, _this.$t("mesTips.undefindData"));
+      }
     }
   }
 };

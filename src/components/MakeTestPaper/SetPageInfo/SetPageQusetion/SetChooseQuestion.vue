@@ -71,12 +71,22 @@
           <el-form-item>
             <el-button type="primary" plain @click.prevent="compile">{{$t('btn.c')}}</el-button>
             <transition name="slide-fade">
-            <el-row v-show="oshow">
-              <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
-              <el-button round @click.prevent="addOption" size="small">{{$t('btn.addjs')}}</el-button>
-              <el-button type="primary" plain @click.prevent="saveOption" size="small">{{$t('btn.s')}}</el-button>
-              <el-button type="danger" plain @click.prevent="removePageInfoItem" size="small">{{$t('btn.d')}}</el-button>
-            </el-row>
+              <el-row v-show="oshow">
+                <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
+                <el-button round @click.prevent="addOption" size="small">{{$t('btn.addjs')}}</el-button>
+                <el-button
+                  type="primary"
+                  plain
+                  @click.prevent="saveOption"
+                  size="small"
+                >{{$t('btn.s')}}</el-button>
+                <el-button
+                  type="danger"
+                  plain
+                  @click.prevent="removePageInfoItem"
+                  size="small"
+                >{{$t('btn.d')}}</el-button>
+              </el-row>
             </transition>
           </el-form-item>
         </el-form>
@@ -90,7 +100,7 @@ export default {
     return {
       odisabled: true, //禁用选项
       oshow: false, //显示
-      optionsActive: ["A、", "B、", "C、", "D、", "E、","F、"], //对应字母
+      optionsActive: ["A、", "B、", "C、", "D、", "E、", "F、"], //对应字母
       checked: [], //多选信息
       oldOption: [], //克隆题目信息
       nowOption: [], //当前题目信息
@@ -141,8 +151,6 @@ export default {
           cqIsRight: false,
           cqOption: ""
         });
-      }else{
-         _this.$msg(_this, -1, "不能再添加选项了！");
       }
     },
     /**
@@ -151,22 +159,21 @@ export default {
     saveOption() {
       var nowOption = this.nowOption;
       var _this = this;
-      var value = _this.AddChooseQuestionList.tpqId;//获取题目Id
-      _this.$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
-          //—修改选择题
-          questionId: nowOption.tpqQuestion.questionId, //题目Id
-          questionTitle: nowOption.tpqQuestion.questionTitle, //题目
-          questionTypeId: nowOption.tpqQuestion.questionTypeId, //题目类型
-          chooseQuestion: nowOption.tpqQuestion.chooseQuestion
-        })
+      var value = _this.AddChooseQuestionList.tpqId; //获取题目Id
+      _this
+        .$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, nowOption.tpqQuestion)
         .then(res => {
           if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             _this.odisabled = !_this.odisabled; //成功禁用
             _this.oshow = !_this.oshow;
-            _this.$msg(_this, 1, res.message);
+            _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
           } else {
-            _this.$msg(_this, -1, res.message);
+            if (res.message == "数据没有变化") {
+              _this.$msg(_this, -1, _this.$t("mesTips.dataChange"));
+            } else {
+              _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+            }
           }
         });
     },
@@ -185,7 +192,8 @@ export default {
      */
     removePageInfoItem() {
       var _this = this;
-      _this.$post(
+      _this
+        .$post(
           `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddChooseQuestionList.tpqId}` //删除题目
         )
         .then(res => {
@@ -195,11 +203,11 @@ export default {
               questionTypeId: 1, //题目类型
               tpqScore: _this.AddChooseQuestionList.tpqScore //题目分数
             };
-            _this.$msg(_this,1, res.message)
+            _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
             _this.$emit("setQuestion", data); //改变父组件的分数
-          }else{
-                _this.$msg(_this,-1, res.message)
-              }
+          } else {
+            _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+          }
         });
     },
     /**
@@ -208,14 +216,14 @@ export default {
      *
      */
     checkboxChange(item) {
-      var _this =this;
+      var _this = this;
       var arr = [];
       for (const key in _this.optionsActive) {
         if (
-          _this.optionsActive[key] == item[0] ||  //多选的2个选项
+          _this.optionsActive[key] == item[0] || //多选的2个选项
           _this.optionsActive[key] == item[1]
         ) {
-          arr.push(key); 
+          arr.push(key);
         }
       }
       for (let key in _this.nowOption.tpqQuestion.chooseQuestion) {
@@ -232,7 +240,8 @@ export default {
      */
     changeScore(v) {
       var _this = this;
-      _this.$post(
+      _this
+        .$post(
           `/api/TestPaper/ModifyScore`,
           {
             tpqId: _this.nowOption.tpqId, //主键编号
@@ -247,11 +256,11 @@ export default {
               fqsScore: v, //分数
               fqIndex: _this.nowIndex //题号
             };
-            _this.$msg(_this, 1, "修改成功!");
+            _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
             _this.$emit("changeScore", data);
-          }else{
-                _this.$msg(_this,-1, res.message)
-              }
+          } else {
+            _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+          }
         });
     },
     /**
@@ -296,16 +305,16 @@ export default {
       }
     }
   }
-    .slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(20px);
-  opacity: 0;
-}
+    transform: translateX(20px);
+    opacity: 0;
+  }
 }
 </style>

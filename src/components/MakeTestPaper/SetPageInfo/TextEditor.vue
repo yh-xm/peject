@@ -71,7 +71,6 @@
         quillUpdateImg: false, // 根据图片上传状态来确定是否显示loading动画，刚开始是false,不显示
         editorOption: {
           theme: "snow", // or 'bubble'
-          placeholder: "请填写答案！",
           modules: {
             toolbar: {
               container: toolbarOptions,

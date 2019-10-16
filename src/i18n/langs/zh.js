@@ -8,27 +8,42 @@ export const zh = {
       content:"做最有态度、责任、良心的IT教育 ",
       homeTitle:"智学无忧教育"
     },
+    mesTips:{
+      loginSuccess:"登录成功!",
+      loginEorr:"用户名或密码错误，请重新输入!",
+      modifySuccess:"修改成功！",
+      deleteSuccess:"删除成功！",
+      addSuccess:"新增成功！",
+      systemError:"系统错误！",
+      dataChange:"数据没有变化！",
+      fillIn:"请填写用户名和密码",
+      failed:"修改失败",
+      failure:"新增失败",
+      res:"取消修改",
+      resDelete:"取消删除",
+      parameter:"参数错误",
+      Cancel:"取消增加",
+      Move:"移动成功!",
+      oldCode:"旧密码错误",
+      empty:"选项不能为空请重新选择！",
+      time:"考试时间不能低于30分钟！",
+      set:"设置成功",
+      undefindData:"请正确填写内容！",
+      changeSroce:"分数没有变化!"
+     },
     btn: {
+      addclass:"添加班级",
+      addjs:"新增",
+      res:"取消",
+      detail:"详情",
+      modification:"修改",
       c: '编辑',
       d:'删除',
       r:'重置',
       a:'添加',
       s:'提交',
-      addclass:"添加班级",
-      addjs:"新增",
-      res:"取消",
-      detail:"详情",
-      modification:"修改"
     },
-   mesTips:{
-    loginSuccess:"登录成功!",
-    loginEorr:"用户名或密码错误，请重新输入!",
-    modifySuccess:"修改成功！",
-    deleteSuccess:"删除成功！",
-    addSuccess:"新增成功！",
-    systemError:"系统错误！",
-    dataChange:"数据没有变化！"
-   },
+
     base:{
       title:"基础数据 ",
         r1:"班级管理",
@@ -44,7 +59,10 @@ export const zh = {
         r11:"导出",
         r12:"打印",
         r13:"列表",
-        r14:"图表"
+        r14:"图表",
+        r15:"课程",
+        r16:"试卷",
+        r17:"提交人数"
 
 
     },
@@ -72,7 +90,8 @@ export const zh = {
         makep13:"题干",
         makep14:"参考答案",
         makep15:"分值",
-        makep16:"修改试卷信息"
+        makep16:"修改试卷信息",
+        makep17:"题目预览"
     },
     tableName:{
       name:"学生名称",
@@ -108,6 +127,7 @@ export const zh = {
      addnewusers:"新增用户",
      drag:"拖拽排序",
      role:"修改角色信息",
-     userInformation:"新增用户信息"
+     userInformation:"新增用户信息",
+     name:"姓名"
     }
   }

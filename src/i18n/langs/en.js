@@ -8,18 +8,6 @@ export const en = {
         content:"IT education with the most attitude, responsibility and conscience ",
         homeTitle:"ZXWY Education"
     },
-    btn: {
-      c: 'Compile',
-      d:'Delete',
-      r:'Reset',
-      a:'Added',
-      s:'Submit',
-      addclass:"AddClass",
-      addjs:"AddCharacter",
-      res:"Recel",
-      detail:"Detail",
-      modification:"Modification"
-    },
     mesTips:{
       loginSuccess:"Login Successfully!",
       loginEorr:"User name or password error, please re - enter!",
@@ -27,8 +15,35 @@ export const en = {
       deleteSuccess:"Delete Successfully",
       addSuccess:"New Successfully",
       systemError:"System Error",
-      dataChange:"The data hasn't changed"
+      dataChange:"The data hasn't changed",
+      fillIn:"Please Fill In The User Name And Password",
+      failed:"Fail to modify",
+      failure:"The new failure",
+      res:"Cancel the change",
+      resDelete:"Oops Undelete",
+      parameter:"Parameter error ",
+      Cancel:"Cancel the increase",
+      Move:"Move successful!",
+      oldCode:"Old password error",
+      empty:"Shanghai jitong Marine supplies co. LTD",
+      time:"Test time must not be less than 30 minutes!",
+      set:"successfully set",
+      undefindData:"The content cannot be empty!",
+      changeSroce:"The score doesn't change!"
     },
+    btn: {
+      addclass:"AddClass",
+      addjs:"AddCharacter",
+      res:"Recel",
+      detail:"Detail",
+      modification:"Modification",
+      c: 'Compile',
+      d:'Delete',
+      r:'Reset',
+      a:'Added',
+      s:'Submit',   
+    },
+
     base:{
       title:"Basic data",
         r1:"ClassManage",
@@ -44,7 +59,10 @@ export const en = {
         r11:"Derive",
         r12:"Print",
         r13:"List",
-        r14:"Chart"
+        r14:"Chart",
+        r15:"Course",
+        r16:"Test paper",
+        r17:"Submit the number"
     },
     test:{
       title:"On-line testing",
@@ -70,7 +88,8 @@ export const en = {
         makep13:"Question Stem",
         makep14:"Reference Version",
         makep15:"score",
-        makep16:"Modify test paper information"
+        makep16:"Modify test paper information",
+        makep17:"Topic preview"
     },
     tableName:{
       name:"Student Name",
@@ -106,6 +125,7 @@ export const en = {
       addnewusers:"Add New Users",
       drag:"Drag And Drop The Sorting",
       role:"Modify Role Information",
-      userInformation:"New User Information"
+      userInformation:"New User Information",
+      name:"name"
     }
   }

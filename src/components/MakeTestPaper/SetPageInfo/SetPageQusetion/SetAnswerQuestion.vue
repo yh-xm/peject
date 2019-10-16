@@ -35,27 +35,35 @@
               :rows="1"
               v-if="!odisabled"
             ></el-input>
-           
           </el-form-item>
           <!-- 答案 -->
           <el-form-item>
-            <el-tag type="info">参考答案</el-tag>
-        
+            <el-tag type="info">{{$t('test.makep14')}}</el-tag>
           </el-form-item>
           <el-form-item>
-             <Editor  v-if="!odisabled" v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer"/>
-              <p v-if="odisabled" v-html="nowOption.tpqQuestion.answerQuestion.aqAnswer"></p>
-               </el-form-item>
+            <Editor v-if="!odisabled" v-model="nowOption.tpqQuestion.answerQuestion.aqAnswer" />
+            <p v-if="odisabled" v-html="nowOption.tpqQuestion.answerQuestion.aqAnswer"></p>
+          </el-form-item>
           <el-form-item>
             <!-- 编辑 -->
             <el-button type="primary" plain @click.prevent="compile">{{$t('btn.c')}}</el-button>
             <transition name="slide-fade">
-            <el-row v-show="oshow">
-              <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
-              <el-button type="primary" plain @click.prevent="saveOption" size="small">{{$t('btn.s')}}</el-button>
-              <el-button type="danger" plain @click.prevent="removePageInfoItem" size="small">{{$t('btn.d')}}</el-button>
-            </el-row>
-              </transition>
+              <el-row v-show="oshow">
+                <el-button round @click.prevent="cancel" size="small">{{$t('btn.res')}}</el-button>
+                <el-button
+                  type="primary"
+                  plain
+                  @click.prevent="saveOption"
+                  size="small"
+                >{{$t('btn.s')}}</el-button>
+                <el-button
+                  type="danger"
+                  plain
+                  @click.prevent="removePageInfoItem"
+                  size="small"
+                >{{$t('btn.d')}}</el-button>
+              </el-row>
+            </transition>
           </el-form-item>
         </el-form>
       </div>
@@ -63,11 +71,11 @@
   </div>
 </template>
 <script>
- import Editor from '../TextEditor'
+import Editor from "../TextEditor";
 export default {
-      components: {
-      Editor
-    },
+  components: {
+    Editor
+  },
   data() {
     return {
       nowOption: [], //当前题目信息
@@ -107,22 +115,22 @@ export default {
       var _this = this;
       var nowOption = _this.nowOption;
       var value = _this.AddEssayQuestiontList.tpqId; //获取题目Id
-      _this.$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
-          questionId: nowOption.tpqQuestion.questionId, //题目Id
-          questionTitle: nowOption.tpqQuestion.questionTitle, //题目名称
-          questionTypeId: nowOption.tpqQuestion.questionTypeId, //题目类型
-          answerQuestion: {
-            aqAnswer: nowOption.tpqQuestion.answerQuestion.aqAnswer //答案
-          }
-        })
+      _this
+        .$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, 
+         nowOption.tpqQuestion
+        )
         .then(res => {
           if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
             _this.odisabled = !_this.odisabled;
             _this.oshow = !_this.oshow;
-            _this.$msg(_this, 1, res.message);
+            _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
           } else {
-            _this.$msg(_this, -1, res.message);
+            if (res.message == "数据没有变化") {
+              _this.$msg(_this, -1, _this.$t("mesTips.dataChange"));
+            } else {
+              _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+            }
           }
         });
     },
@@ -132,11 +140,12 @@ export default {
      */
     removePageInfoItem() {
       var _this = this;
-      _this.$post(
+      _this
+        .$post(
           `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddEssayQuestiontList.tpqId}`
         )
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.message == "删除成功") {
             var data = {
               index: _this.nowIndex2, //题号
@@ -144,19 +153,20 @@ export default {
               tpqScore: _this.AddEssayQuestiontList.tpqScore //题目分数
             };
             _this.$emit("setQuestion", data);
-            _this.$msg(_this, 1, res.message);
+            _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
           } else {
-            _this.$msg(_this, -1, res.message);
+            _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
           }
         });
     },
     /**
      * 修改题目分数
-     * 
+     *
      */
     changeScore(v) {
       var _this = this;
-      _this.$post(
+      _this
+        .$post(
           `/api/TestPaper/ModifyScore`,
           {
             tpqId: _this.nowOption.tpqId, //主键编号
@@ -164,7 +174,7 @@ export default {
           } //修改题目分值
         )
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             var data = {
@@ -172,10 +182,10 @@ export default {
               fqsScore: v, //题目分数
               fqIndex: _this.nowIndex2 //题号
             };
-            _this.$msg(_this, 1, "修改成功!");
+            _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
             _this.$emit("changeScore", data);
           } else {
-            _this.$msg(_this, -1, res.message);
+            _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
           }
         });
     },
@@ -214,15 +224,15 @@ export default {
     }
   }
   .slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(20px);
-  opacity: 0;
-}
+    transform: translateX(20px);
+    opacity: 0;
+  }
 }
 </style>

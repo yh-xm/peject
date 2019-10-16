@@ -39,7 +39,7 @@
           <el-input v-model="domain.value" :placeholder="'请输入第'+(index+1)+'个空的答案'"></el-input>
           <el-input-number v-model="domain.onum" :min="1" :max="10" :key="index"></el-input-number>
         </el-form-item>
-        <el-form-item label="题目预览" class="view-options">
+        <el-form-item :label="$t('test.makep17')" class="view-options">
           <el-row v-for="(item,index) in title" :key="index">
             <span v-if="item!='▁'">{{item}}</span>
 
@@ -89,7 +89,8 @@ export default {
       var _this = this;
       //提交表单
       _this.$refs[formName].validate(valid => {
-        if (valid) {
+        
+        if (_this.$refs[formName].model.domains.length!=0) {
           var tpqPaperId = sessionStorage.testPaperId; //试卷Id
           var tpqScore = 0; //分数
           var fillQuestion = []; //接口传递的参数数组
@@ -125,15 +126,15 @@ export default {
                   questionTypeId: 2 //题目类型Id
                 };
                 _this.$emit("addGapFilling", data); //改变父组件的值
-                _this.$msg(_this, 1, "添加成功!");
+                _this.$msg(_this, 1,_this.$t("mesTips.addSuccess"));
                 _this.resetForm("AddGapFillQuestion"); //重置表单
                 _this.title = ""; //重置题目
               } else {
-                _this.$msg(_this, -1, res.message);
+                _this.$msg(_this,-1,_this.$t("mesTips.systemError"))
               }
             });
         } else {
-          console.log("error submit!!");
+         _this.$msg(_this,-1,_this.$t("mesTips.undefindData"))
           return false;
         }
       });

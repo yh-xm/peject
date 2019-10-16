@@ -271,18 +271,21 @@ export default {
         center: true
       })
         .then(() => {
-          _this.$post("api/User/RemoveTeacher?uid=" + uid).then(function(res) {
-            if (res.code == 1) {
-              _this.$msg(_this, 1, "删除成功!");
-              _this.tableData.splice(index, 1);
-            } else if (res.code == -2) {
-              _this.$msg(_this, -1, "参数错误,删除失败!");
+          _this.$post("api/User/RemoveTeacher?uid=" + uid).then(
+            function(res) {
+              console.log(res);
+              if (res.code == 1) {
+                _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
+                _this.tableData.splice(index, 1);
+              }else if(res.code == -2){
+              _this.$msg(_this, 0, _this.$t("mesTips.parameter"));
+
+              }
             }
-          });
+          );
+        }).catch(() => {
+          _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
         })
-        .catch(() => {
-          _this.$msg(_this, -1, "系统异常,删除失败!");
-        });
     },
 
     /**
@@ -335,14 +338,11 @@ export default {
         if (valid) {
           _this.$post("api/User/AddTeacher", obj).then(function(res) {
             if (res.code == 1) {
-              var typeName = res.data;
-              typeName.userTypeTypeName = typName;
-              _this.tableData.unshift(typeName);
-              _this.$msg(_this, 1, "添加成功!");
+              _this.$msg(_this, 1, _this.$t("mesTips.addSuccess"));
             } else if (res.code == 0) {
-              _this.$msg(_this, 0, "内容没有变化");
+              _this.$msg(_this, 0,_this.$t("mesTips.dataChange"));
             } else {
-              _this.$msg(_this, -1, "添加失败！");
+              _this.$msg(_this, -1, _this.$t("mesTips.failure"));
             }
             _this.dialogFormVisible = false; //关闭对话框
           });
@@ -401,27 +401,25 @@ export default {
       _this.$refs[formName].validate(valid => {
         if (valid) {
           //调用添加接口
-          _this.$post("/api/User/ModifyTeacher", xmlObj).then(function(res) {
-            if (res.code == 1) {
-              var typNames = _this.roles.find(
-                res => res.userTypeId == _this.ruleForm.userTypeTypeName
-              );
-              var typName = typNames.userTypeTypeName;
-              var rows = _this.tableData[_this.oindex];
-              rows.userTypeTypeName = typName;
-              rows.userName = _this.ruleForm.userName;
-              rows.userMobile = _this.ruleForm.userMobile;
-              rows.userSex = _this.ruleForm.userSex;
-              rows.userPassword = _this.ruleForm.userPassword;
-              rows.userUserTypeId = _this.ruleForm.userTypeTypeName;
-              _this.$msg(_this, 1, "修改成功");
-            } else if (res.code == 0) {
-              _this.$msg(_this, 0, "内容没有变化");
-            } else {
-              _this.$msg(_this, -1, "修改失败！");
-            }
-            _this.dialogFormVisible = false; //关闭对话框
-          });
+          _this
+            .$post("/api/User/ModifyTeacher", {
+              userUid: _this.ruleForm.userUid, //要修改的用户标识符
+              userName: _this.ruleForm.userName, //用户名，不能为空
+              userMobile: _this.ruleForm.userMobile, //手机号
+              userSex: _this.ruleForm.userSex, //性别
+              userPassword: _this.ruleForm.userPassword, //密码
+              userUserTypeId: _this.ruleForm.userTypeTypeName //角色id
+            })
+            .then(function(res) {
+              if (res.code == 1) {
+                _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
+              } else if (res.code == 0) {
+                _this.$msg(_this, 0,_this.$t("mesTips.dataChange"));
+              } else {
+                _this.$msg(_this, -1, _this.$t("mesTips.failed"));
+              }
+              _this.dialogFormVisible = false; //关闭对话框
+            });
         } else {
           return false;
         }
@@ -437,7 +435,7 @@ export default {
     cancel(formName) {
       let _this = this;
       _this.$refs[formName].resetFields();
-      _this.$msg(_this, 0, "已取消");
+      
       _this.dialogFormVisible = false; //关闭对话框
     }
   },
