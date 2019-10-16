@@ -8,7 +8,7 @@
       ref="txtClass"
       @change="handleChange"
     >
-      <el-option :key="0" label="请选择班级" :value="0"></el-option>
+      <el-option :key="0" label="请选择班级" :value="0" disabled></el-option>
       <el-option
         v-for="item in options"
         :key="item.classId"
@@ -72,6 +72,9 @@ export default {
     handleChange() {
       var _this = this;
       var classes = _this.options.find(p => p.classId == _this.classId);
+      // console.log(classes)
+      console.log(_this.classSe);
+      
       if (!classes) {
         classes = { classes: 0, className: "请选择课程" };
       } else {

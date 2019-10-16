@@ -6,9 +6,12 @@
       <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{$t('test.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
-    时间：{{ruleForm.tiemObj}}
+    <!-- 时间：{{timeObj}}
     <br />
     试卷id：{{testObj}}
+    <br />
+
+    班级id：{{classObj}}-->
     <!-- Breadcrumb 面包屑 结束-->
     <el-card class="box-card">
       <div slot="header">
@@ -26,7 +29,6 @@
               <test-time v-model="timeObj"></test-time>
             </el-form-item>
           </el-form>
-
           <!-- 组件引用结束 -->
         </div>
         <el-row style="margin-left: 85px;">
@@ -78,10 +80,21 @@
     <!-- 添加对话框 -->
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+        <el-form-item label="试卷">
+          <test-drop-down-box v-model="testObj2"></test-drop-down-box>
+        </el-form-item>
+
+        <el-form-item label="班级">
+          <class-name-select v-model="classObj2"></class-name-select>
+        </el-form-item>
+        <el-form-item label="考试时间">
+          <test-time v-model="timeObj2"></test-time>
+        </el-form-item>
+      </el-form>
       <!-- 嵌套的表单结束 -->
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('btn.res')}}</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">{{$t('btn.c')}}</el-button>
+        <el-button type="primary" @click="changePageInfo">{{$t('btn.c')}}</el-button>
       </div>
     </el-dialog>
     <!-- 添加对话框结束 -->
@@ -94,11 +107,9 @@ import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 export default {
   data() {
     return {
-      ruleForm: { testObj: 0, classObj: null, timeObj: null }, //表单绑定的数据
+      ruleForm: {}, //表单绑定的数据
       rules: {
-        testObj:[
-          {}
-        ]
+        testObj: [{}]
       }, //表单验证
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
@@ -106,9 +117,14 @@ export default {
       pageSize: 10, //每页大小
       total: null, //总条目
       form: {},
-      testObj: 0, // 父传子 试卷
+      testObj: {}, // 父传子 试卷
+      testObj2:{},
       classObj: {}, // 父传子  班级
-      timeObj: [] //父传子  考试时间
+       classObj2: {}, // 父传子  班级
+      timeObj: [], //父传子  考试时间
+      timeObj2: [], //父传子  考试时间
+      taskId:"",
+      oindex:""
     };
   },
   //定义组件
@@ -126,72 +142,70 @@ export default {
      * */
     setAddInfo() {
       let _this = this;
-      console.log(_this.ruleForm.tiemObj);
-      // if (_this.logTime == null) {
-      //   _this.timeLimit = 0;
-      // } else {
-      //   let date1 = new Date(_this.logTime[0]); //转格式
-      //   let date2 = new Date(_this.logTime[1]); //转格式
-      //   var dates = date2.getTime() - date1.getTime(); //计算
-      //   _this.timeLimit = dates / (60 * 1000); //赋值
-      // }
-
       // 判断输入框是否有值  是否符合条件
-
-      // if (
-      //   _this.childRes1 == "" ||
-      //   _this.childRes2 == "" ||
-      //   _this.childRes3 == ""
-      // ) {
-      //   _this.$msg(_this, -1, "信息不能为空！");
-      //   return;
-      // } else if (_this.childRes3.a <= 30) {
-      //   _this.$msg(_this, -1, "考试时间不能少于30分钟！");
-      //   return;
-      // }
-      // let obj = {
-      //   // taskTestPaperId: _this.childRes1, //试卷编号
-      //   // taskClassId: _this.childRes2, //班级编号
-      //   // taskStartTime: _this.childRes3[0], //开始时间
-      //   // taskEndTime: _this.childRes3[1] //结束时间
-      // };
-      // let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
-      // // 调用接口
-      // _this.axios.post("/api/TestPaper/SetTest?uid=" + uId, obj).then(
-      //   res => {
-      //     let dataCu = res.data.data;
-      //     console.log(dataCu);
-      //     if (res.data.code == 1) {
-      //       _this.$message({
-      //         type: "success",
-      //         message: "设置成功!"
-      //       });
-      //       _this.SetTest.unshift(dataCu);
-      //       // _this.cancelTest();//调用清空表单方法
-      //     } else if (res.data.code == -2) {
-      //       _this.$message({
-      //         type: "error",
-      //         message: "参数错误!设置失败！"
-      //       });
-      //     }
-      //   },
-      //   () => {
-      //     _this.$message({
-      //       type: "error",
-      //       message: "系统错误!"
-      //     });
-      //   }
-      // );
+      console.log(_this.timeObj);
+      if (
+        !_this.testObj.hasOwnProperty("tpId") ||
+        !_this.classObj.hasOwnProperty("classId") ||
+        _this.timeObj.length == 0
+      ) {
+        _this.$msg(_this, 0, "选项不能为空请重新选择！");
+        return;
+      } else if (_this.timeObj.TimeDiff < 30) {
+        _this.$msg(_this, 0, "考试时间不能低于30分中！");
+        return;
+      }
+      let obj = {
+        taskTestPaperId: _this.testObj.tpId, //试卷编号
+        taskClassId: _this.classObj.classId, //班级编号
+        taskStartTime: _this.timeObj[0], //开始时间
+        taskEndTime: _this.timeObj[1] //结束时间
+      };
+      let uId = sessionStorage.getItem("userId"); //获取本地存储中登录的编号
+      console.log(obj);
+      _this.axios.post("/api/TestPaper/SetTest?uid=" + uId, obj).then(
+        res => {
+          let dataCu = res.data.data;
+          console.log(res.data);
+          if (res.data.code == 1) {
+            _this.$msg(_this, 1, "设置成功");
+            var tpId = dataCu.tpId;
+            dataCu.taskTestPaperId = tpId;
+            _this.SetTest.unshift(dataCu);
+            _this.cancelTest(); //调用清空表单方法
+          } else if (res.data.code == -2) {
+            _this.cancelTest(); //调用清空表单方法
+            _this.$message({
+              type: "error",
+              message: "参数错误!设置失败！"
+            });
+          }
+        },
+        () => {
+          _this.cancelTest(); //调用清空表单方法
+          _this.$message({
+            type: "error",
+            message: "系统错误!"
+          });
+        }
+      );
     },
     /**
      * 取消安排测试
      * 清空表单
      *
      * */
-
     cancelTest() {
       console.log("取消安排测试");
       let _this = this;
+      _this.testObj = {};
+      _this.classObj = {};
+      // _this.timeObj.splice(0,timeObj.length);
+      _this.timeObj = [];
+      console.log(_this.timeObj);
+      // _this.timeObj[0] = [];
+      // _this.timeObj[1] = [];
+      _this.timeObj.TimeDiff = 0;
     },
 
     /**
@@ -209,17 +223,17 @@ export default {
             "&pageSize=" +
             _this.pageSize
         )
-        .then(
-          function(res) {
-            // roles等于回调函数返回的res（值）
-            // console.log(res);
-            _this.SetTest = res.data.data; //表格数据
-            _this.total = res.data.items; //总条数
-          },
-          function() {
-            console.log("请求失败处理");
+        .then(function(res) {
+          // roles等于回调函数返回的res（值）
+          _this.SetTest = res.data.data; //表格数据
+          for (const key in _this.SetTest) {
+              _this.SetTest[key].taskEndTime =  _this.SetTest[key].taskEndTime.replace("T", " ");
+               _this.SetTest[key].taskStartTime =  _this.SetTest[key].taskStartTime.replace("T", " ");
+                 _this.SetTest[key].taskEndTime =  _this.SetTest[key].taskEndTime.replace(/-/g, "/");
+               _this.SetTest[key].taskStartTime =  _this.SetTest[key].taskStartTime.replace(/-/g, "/");
           }
-        );
+          _this.total = res.data.items; //总条数
+        });
     },
 
     /**
@@ -229,13 +243,55 @@ export default {
      * */
     handleEdit(index, row) {
       let _this = this;
-      console.log(row);
+      console.log(row)
+      _this.taskId = row.taskId;
+      _this.oindex = index;
       _this.dialogFormVisible = true;
-      // _this.pRes = row.taskTestPaperId; //试卷
-      // _this.cRes = row.classId; //班级
-      // _this.$set(_this.timeRes, "begin", row.taskStartTime);
-      // _this.$set(_this.timeRes, "end", row.taskEndTime);
-      // _this.$set(_this.timeRes, "escape", row.taskEscapeTime);
+      var taskEndTime = row.taskEndTime;
+      var taskStartTime = row.taskStartTime;
+      taskStartTime = taskStartTime.replace("T", " ");
+      taskEndTime = taskEndTime.replace("T", " ");
+      taskStartTime = taskStartTime.replace(/-/g, "/");
+      taskEndTime = taskEndTime.replace(/-/g, "/");
+      _this.timeObj2 = [taskStartTime, taskEndTime, row.taskEscapeTime];
+      _this.classObj2 = {
+        classId: row.classId,
+        className: row.className
+      };
+      _this.testObj2 = {
+        tpId: row.taskTestPaperId,
+        tpTitle: row.tpTitle
+      };
+      console.log( _this.testObj2);
+    },
+    changePageInfo() {
+      var _this = this;
+      // console.log()
+      _this.axios
+        .post("/api/TestPaper/ModifyTestTask", {
+          taskId: _this.taskId, //主键编号
+          taskTestPaperId: _this.testObj2.tpId, //试卷编号
+          taskClassId: _this.classObj2.classId, //班级编号，可修改
+          taskStartTime: _this.timeObj2[0], //测试开始时间，可修改
+          taskEndTime: _this.timeObj2[1] //测试结束时间，可修改
+        })
+        .then(res => {
+          
+          if(res.data.message =="修改成功。"){
+            _this.$msg(_this,1,"修改成功")
+            _this.dialogFormVisible = false;
+         _this.SetTest[_this.oindex].className = _this.classObj2.className;
+         _this.SetTest[_this.oindex].taskTestPaperId = _this.testObj2.tpId;
+         _this.SetTest[_this.oindex].classId = _this.classObj2.classId;
+         _this.SetTest[_this.oindex].tpTitle = _this.testObj2.tpTitle;
+         _this.SetTest[_this.oindex].taskStartTime = _this.timeObj2[0];
+         _this.SetTest[_this.oindex].taskEndTime = _this.timeObj2[1];
+         _this.SetTest[_this.oindex].taskEscapeTime = _this.timeObj2[2];
+            
+          }else{
+            _this.$msg(_this,-1,res.data.message)
+          }
+        });
     },
     /**
      * 删除当前行表格信息
@@ -259,18 +315,12 @@ export default {
             .then(res => {
               if (res.status === 200) {
                 _this.SetTest.splice(index, 1);
-                _this.message({
-                  type: "success",
-                  message: "删除成功!"
-                });
+                _this.$msg(_this, 1, "删除成功");
               }
             });
         })
         .catch(() => {
-          _this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          _this.$msg(_this, 0, "已取消删除");
         });
     },
 

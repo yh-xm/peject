@@ -1,6 +1,7 @@
 <template>
   <div id="testTime">
     <el-date-picker
+      ref="txtTime"
       value-format="yyyy/MM/dd HH:mm:ss"
       v-model="logTime"
       type="datetimerange"
@@ -16,72 +17,66 @@
 </template>
 <script>
 export default {
+  name: "TestTime",
   model: {
-    prop: "timeObj", //接受父级组件下发给子组件的值
-    event: "timeChange"
+    prop: "parentTimes", //班级对象，使用v-model，给这个属性赋值
+    event: "timeChange" //触发事件，名称可自定义，作用：触发这个事件，将事件的值传递给prop属性
   },
   props: {
-    required: true, //是否传值
-    timeObj: Array //声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
+    //组件的属性,在父组件里，可以使用v-bind赋值，如果在model有定义使用v-model赋值
+    parentTimes: {
+      required: true,
+      type: Array
+    }
   },
-
   data() {
     return {
-      logTime: [], // 表单绑定的值  时间 开始和结束
-      timeLimit: 0, //耗时（分钟)
+      logTime: [], //下拉框绑定的时间
+      timeLimit: 0, //耗时
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7; //设置选择今天以及今天之后的日//如果没有后面的-8.64e7就是不可以选择今天的
         }
-      },
-      parentRes: this.timeObj
+      }
     };
+  },
+  watch: {
+    "parentTimes": function(value, old) {
+      var _this = this ;
+      console.log(value)
+      if(value.length==0){
+       _this.logTime=[];
+       _this.timeLimit=0;
+      }else{
+        _this.logTime = value.slice(0,2)
+        this.timeLimit = value[2]
+      }
+       
+    }
   },
   methods: {
     /**
-     * 时间改变事件
-     * @param {Date} val input框值
+     * 选项框改变事件，改变之后传给v-model绑定的对象
      */
-    logTimeChange(val) {
-      let _this = this;
-      console.log(val);
-      console.log(_this.parentRes);
+    logTimeChange(v) {
+      var _this = this;
       if (_this.logTime == null) {
         _this.timeLimit = 0;
       } else {
         let date1 = new Date(_this.logTime[0]); //转格式
         let date2 = new Date(_this.logTime[1]); //转格式
-        var dates = date2.getTime() - date1.getTime(); //计算
-        _this.timeLimit = dates / (60 * 1000); //赋值
+        _this.timeLimit = (date2.getTime() - date1.getTime()) / (60 * 1000); //计算
       }
+      v.push(_this.timeLimit);
+      console.log(v);
 
-      //timeChange 定义在父组件on监听子组件传过去的值
-      // 第二参数val是子组件要传给父组件的值
-      val[2] = _this.timeLimit;
-      _this.$emit("timeChange", val); //把开始时间和结束时间传给父级组件
+      _this.$emit("timeChange", v);
     }
-    // espTime() {
-    //   let _this = this;
-    //   _this.timeSelectFrom.logTime = "";
-    //   _this.timeSelectFrom.timeLimit = 0;
-    // },
-    /**
-     * 把父组件传过来的时间格式转成子组件时间格式
-     * **/
-    // changeInfo() {
-    //   var _this = this;
-    //   _this.timeSelectFrom.timeLimit = _this.parentRes3.escape;
-    //   _this.parentRes3.begin = _this.parentRes3.begin.replace(/T/g, " ");
-    //   _this.parentRes3.begin = _this.parentRes3.begin.replace(/-/g, "/");
-    //   _this.parentRes3.end = _this.parentRes3.end.replace(/T/g, " ");
-    //   _this.parentRes3.end = _this.parentRes3.end.replace(/-/g, "/");
-    //   _this.$set(this.timeSelectFrom, "logTime", [
-    //     _this.parentRes3.begin,
-    //     _this.parentRes3.end
-    //   ]);
-    // }
+  },
+  created(){
+    this.logTime =this.parentTimes.slice(0,2);
+    console.log(this.logTime)
+    this.timeLimit = this.parentTimes[2]
   }
 };
 </script>
-<style lang="less" scoped>
-</style>

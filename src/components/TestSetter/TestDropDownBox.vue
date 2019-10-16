@@ -1,81 +1,89 @@
-<!-- 试卷下拉框组件 
-
-  显示视图： 在父级组件的 js部分写入 
-    import TestDropDownBox from "@/components/TestSetter/TestDropDownBox"; //试卷下拉框
-
-      export default{
-        components: {
-        TestDropDownBox,
-  },
-      }
-  在父级组件的 template 部分写入
-      <test-drop-down-box></test-drop-down-box>
-
-      传值:直接在标签中用v-model绑定要传的值
-      <test-drop-down-box v-model="testObj"></test-drop-down-box>
--->
 <template>
-  <!--  -->
   <div id="testDrownBox-testSetter">
-    <el-select v-model="tpId" placeholder="请选择试卷" @change="setInfo" size="small">
+    <el-select
+      size="small"
+      v-model="tpId"
+      filterable
+      placeholder="请选择"
+      ref="txtTest"
+      @change="setInfo"
+    >
       <el-option :key="0" label="请选择试卷" :value="0" disabled></el-option>
-      <el-option v-for="item in options" :key="item.tpId" :label="item.tpTitle" :value="item.tpId"></el-option>
+      <el-option
+        v-for="item in options"
+        :key="item.tpId"
+        :label="item.tpTitle"
+        :value="item.tpId"
+      ></el-option>
     </el-select>
   </div>
 </template>
 <script>
 export default {
+  name: "TestDropDownBox",
   model: {
-    prop: "testObj", //接受父级组件下发给子组件的值
-    event: "testChange"
+    prop: "testSele", //班级对象，使用v-model，给这个属性赋值
+    event: "change" //触发事件，名称可自定义，作用：触发这个事件，将事件的值传递给prop属性
   },
   props: {
-    required: true, //是否传值
-    testObj: Number //声明父级组件传过来的值 它是啥样的 类型是啥样的 默认值啊
+    //组件的属性,在父组件里，可以使用v-bind赋值，如果在model有定义使用v-model赋值
+    testSele: {
+      required: true,
+      type: Object
+    }
   },
   data() {
     return {
-      tpId: "", //下拉框 绑定的值
-      options: [], //下拉框数据
-      parentRes: this.testObj //父级组件传给子组件的值
+      options: [], //所有试卷
+      tpId: undefined, //试卷编号
     };
   },
-  //定义方法
+  watch: {
+    //监听tpId的变化，从而改变当前选项
+    "testSele.tpId": function(value, old) {
+      this.tpId = value;
+    }
+  },
   methods: {
-    /**
-     * 获取所有试卷
-     * 可复用
-     *
-     * */
-    getAllTestPaper() {
-      // 发送get请求
-      let _this = this; //保存this对象
-      _this.axios.get("/api/TestPaper/GetAllTestPaper").then(function(res) {
-        //tableData等于回调函数返回的res（值）
-        _this.options = res.data;
+    getTset() {
+      var _this = this;
+      _this.axios.get("/api/TestPaper/GetAllTestPaper").then(res => {
+        _this.options = res.data.map(value => {
+          return {
+            tpId: value.tpId,
+            tpTitle: value.tpTitle
+          };
+        });
+        //等待绑定的数据渲染后，重新改变当前选中的值
+        _this.$nextTick(() => {
+          //使用v-model传进来的值，表示当前选中的项
+          _this.tpId = _this.testSele.tpId;
+        });
       });
     },
     /**
-     *选择信息
-     * */
-    setInfo(v) {
-      console.log(v);
-      let _this = this;
-      console.log(_this.parentRes);
-      // testChange 是在父组件on监听的方法  第二个参数 v 是需要传的值
-      _this.$emit("testChange", v);
+     * 选项框改变事件，改变之后传给v-model绑定的对象
+     */
+    setInfo() {
+      var _this = this;
+      
+      var testChild = _this.options.find(p => p.tpId == _this.tpId);
+      if (!testChild) {
+        testChild = { testChild: 0, tpTitle: "请选择课程" };
+      } else {
+        //深度拷贝副本,目的防止被外界改变
+        testChild = JSON.parse(JSON.stringify(testChild));
+      }
+      _this.$emit("change",testChild);
     }
   },
   created() {
-    let _this = this;
-    _this.getAllTestPaper();
+    this.getTset();
   }
 };
 </script>
 <style lang="less" scoped>
-#testDrownBox-testSetter {
-  .el-select {
-    width: 100%;
-  }
+.el-select {
+  width: 100%;
 }
 </style>
