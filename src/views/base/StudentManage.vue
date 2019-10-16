@@ -21,7 +21,7 @@
           type="text"
           @click="addEquipment"
           class="el-icon-circle-plus-outline addStudent"
-        >新增学生</el-button>
+        >{{$t('tableName.students')}}</el-button>
         <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
           <el-form :model="form" :rules="addRules" ref="form">
             <el-form-item :label="$t('tableName.tcn')" :label-width="formLabelWidth" prop="classes.classId">
@@ -103,8 +103,8 @@
           </el-table-column>
           <el-table-column :label="$t('tableName.tm')" width="180">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" v-has @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">{{$t('btn.c')}}</el-button>
+              <el-button size="mini" type="danger" v-has @click="handleDelete(scope.$index,scope.row)">{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -213,7 +213,14 @@ export default {
   },
   methods: {
     addEquipment() {//新增学生
+      var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "The New Students";
+      }else{
+         var fText = "新增学生";
+      }
       var _this = this;
+      _this.titleMap.addEquipment=fText;
       _this.showBoth = true;//显示新增按钮
       _this.dialogFormVisible = true; //显示弹框
       _this.dialogStatus = "addEquipment"; //新增弹框标题
@@ -273,7 +280,14 @@ export default {
      * @param {String} row 点击行对应的数据
      */
     handleEdit(index, row) {
+       var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Modify The Students";
+      }else{
+         var fText = "修改学生";
+      }
       var _this = this;
+      _this.titleMap.editEquipment=fText
       _this.showBoth = false;//隐藏模态框
       _this.index = index;//传过来的值赋值重新赋值
       _this.show2 = true; //显示修改按钮
@@ -335,15 +349,27 @@ export default {
      */
     handleDelete(index1, row1) {
       //删除学生
+           var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
       var _this = this;
       // console.log(row1);
       _this.axios
         .get(`/api/Student/RemoveStudent?uid=${row1.stuUid}`)
         .then(res => {
           _this
-            .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-              confirmButtonText: "确定",
-              cancelButtonText: "取消",
+            .$confirm(title,flag, {
+              confirmButtonText:fText,
+              cancelButtonText:fText2,
               type: "warning",
               center: true
             })
