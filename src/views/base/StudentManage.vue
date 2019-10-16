@@ -96,7 +96,7 @@
               <span style="margin-left: 10px">{{ scope.row.stuBirthDay }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="年龄" width="100" style="padding-left: 60px;">
+          <el-table-column :label="$t('tableName.age')" width="100" style="padding-left: 60px;">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuAge }}</span>
             </template>
