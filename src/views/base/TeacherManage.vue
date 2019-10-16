@@ -295,7 +295,8 @@ export default {
      * */
     handleAdd() {
       const _this = this;
-      var typName = _this.ruleForm.userTypeTypeName;
+      
+
       var lang = localStorage.locale;
       if (lang == "en") {
         var fText = "Add User Information";
@@ -322,9 +323,8 @@ export default {
      * */
     addClose(formName) {
       const _this = this;
-      var typName = _this.roles.userTypeTypeName;
-      console.log(typName);
-
+      var typNames = _this.roles.find(res=> res.userTypeId == _this.ruleForm.userTypeTypeName);
+      var typName = typNames.userTypeTypeName;
       var obj = {
         userName: _this.ruleForm.userName, //用户名，不能为空
         userMobile: _this.ruleForm.userMobile, //手机号，长度11位
@@ -336,9 +336,10 @@ export default {
       _this.$refs[formName].validate(valid => {
         if (valid) {
           _this.$post("api/User/AddTeacher", obj).then(function(res) {
-            console.log(res);
             if (res.code == 1) {
-              _this.tableData.unshift(res.data);
+              var typeName = res.data;
+              typeName.userTypeTypeName = typName;
+              _this.tableData.unshift(typeName);
               _this.$msg(_this, 1, "添加成功!");
             } else if (res.code == 0) {
               _this.$msg(_this, 0, "内容没有变化");
@@ -402,6 +403,11 @@ export default {
             })
             .then(function(res) {
               if (res.code == 1) {
+
+
+
+
+                
                 _this.$msg(_this, 1, "修改成功");
               } else if (res.code == 0) {
                 _this.$msg(_this, 0, "内容没有变化");
