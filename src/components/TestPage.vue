@@ -129,7 +129,8 @@ export default {
       var _this = this;
       if (_this.AllPageInfo.length == 0) {
         _this.pageInfo = data;
-        console.log(111)
+         _this.pageInfo = [..._this.pageInfo];
+        _this.$emit("change",_this.pageInfo)
       }else{
      _this.pageInfo = _this.AllPageInfo  
       }

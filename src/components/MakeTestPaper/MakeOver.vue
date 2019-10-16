@@ -77,6 +77,7 @@ export default {
   methods: {
     getPageInfo() {
       var that = this;
+     console.log(that.AllPageInfo)
       that.title = that.testInfo.tpTitle
       that.tpCourseName =  that.testInfo.tpCourseName
       that.pageInfo = that.AllPageInfo

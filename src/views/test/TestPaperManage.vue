@@ -55,7 +55,7 @@
           ></el-pagination>
         </div>
         <!-- 弹出框 -->
-        <el-dialog center title="修改试卷信息" :visible.sync="dialogFormVisible">
+        <el-dialog center :title="$t('test.makep16')" :visible.sync="dialogFormVisible">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <el-form-item :label="$t('tableName.tt')" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
@@ -161,10 +161,22 @@ export default {
      */
     handleDelete(index, row) {
       var _this = this;
+      var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
       _this
-        .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
+        .$confirm(title, flag, {
+          confirmButtonText: fText,
+          cancelButtonText: fText2,
           type: "warning",
           center: true
         })
@@ -191,10 +203,6 @@ export default {
             });
         })
         .catch(() => {
-          _this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
         });
     },
     /**

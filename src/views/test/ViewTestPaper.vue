@@ -8,7 +8,7 @@
     </el-breadcrumb>
     <el-card class="box-card">
       <div>
-        <h6>试卷任务列表</h6>
+        <h6>{{$t('test.r4')}}</h6>
       </div>
       <div class="text item">
         <el-table :data="tableData" style="width: 100%">
@@ -17,7 +17,7 @@
             <span style="margin-left: 10px">{{scope.$index+(currentPage - 1)*currentPageSize + 1}}</span>
           </template>
         </el-table-column>
-          <el-table-column label="试卷名">
+          <el-table-column :label="$t('tableName.tt')">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.tpTitle }}</span>
             </template>
@@ -42,12 +42,12 @@
               <span style="margin-left: 10px">{{ scope.row.taskEndTime  | cutTimeT}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="耗时" width="80">
+          <el-table-column :label="$t('tableName.ths')" width="80">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.taskEscapeTime}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="交卷人数" width="80">
+          <el-table-column :label="$t('tableName.thp')" width="80">
             <template slot-scope="scope" >
               <span style="margin-left: 10px">{{ scope.row.counter }}</span>
             </template>
@@ -59,7 +59,7 @@
                 type="primary"
                 size="mini"
                 :disabled="scope.row.counter==0"
-              >批阅试卷</el-button>
+              >{{$t('test.r4')}}</el-button>
             </template>
           </el-table-column>
         </el-table>

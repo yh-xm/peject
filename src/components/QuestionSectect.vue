@@ -19,7 +19,7 @@ defaultSelect  需传入Number 选中第几个
 <template>
   <div class="question-select">
     <div class="radio-group" v-if="!select">
-      <span class="list-title">题目类型</span>
+      <span class="list-title">{{$t('test.makep4')}}</span>
       <el-radio-group v-model="radio" @change="changeQuestionType">
         <el-radio
           v-for="(item,index) in pageInfo"
@@ -29,7 +29,7 @@ defaultSelect  需传入Number 选中第几个
       </el-radio-group>
     </div>
     <div class="select-group" v-if="select">
-      <span class="list-title">题目类型</span>
+      <span class="list-title">{{$t('test.makep4')}}</span>
       <el-select v-model="value" clearable placeholder="请选择" @change="changeQuestionType">
         <el-option
           v-for="(item,index) in pageInfo"

@@ -51,7 +51,8 @@ export const zh = {
         makep12:"上一步",
         makep13:"题干",
         makep14:"参考答案",
-        makep15:"分值"
+        makep15:"分值",
+        makep16:"修改试卷信息"
     },
     tableName:{
       name:"学生名称",

@@ -232,10 +232,22 @@ export default {
     handleDelete(index, row) {
       let taskId = row.taskId;
       let _this = this;
+            var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
       _this
-        .$confirm("此操作将永久删除该数据,是否继续", "提示", {
-          congirmButtonText: "确定",
-          cancelButtonText: "取消",
+        .$confirm(title,flag, {
+          congirmButtonText: fText,
+          cancelButtonText: fText2,
           type: "warning",
           center: true
         })

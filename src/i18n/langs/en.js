@@ -50,7 +50,8 @@ export const en = {
         makep12:"Last Step ",
         makep13:"Question Stem",
         makep14:"Reference Version",
-        makep15:"score"
+        makep15:"score",
+        makep16:"Modify test paper information"
     },
     tableName:{
       name:"Student Name",
