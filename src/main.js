@@ -11,7 +11,7 @@ import {get,post} from "@/until/http.js"
 import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router'
 import i18n from './i18n/i18n';
-import {message} from './api/MessageTips.js'
+
 import echarts from 'echarts'
 import Print from 'vue-print-nb'//打印插件
 　　
@@ -23,7 +23,7 @@ import VueQuillEditor from 'vue-quill-editor' //富文本
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-
+import {message} from './api/MessageTips.js'
 import { createNamespacedHelpers } from 'vuex'
 
 const { mapState, mapActions } = createNamespacedHelpers('userModule')

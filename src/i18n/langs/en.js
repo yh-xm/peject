@@ -18,6 +18,10 @@ export const en = {
       addjs:"AddCharacter",
       res:"Recel",
       detail:"Detail",
+      modification:"Modification"
+    },
+    mesTips:{
+      s:"Modify Successfully"
     },
     base:{
       title:"Basic data",
@@ -25,7 +29,8 @@ export const en = {
         r2:"StudentManage",
         r3:"TeacherManage",
         r4:"ModifyPassword",
-        r5:"UserManage"
+        r5:"UserManage",
+        r6:"Please enter the class name"
     },
     test:{
       title:"on-line testing",
@@ -81,6 +86,12 @@ export const en = {
       seePage:"Teacter",
       chgpsw:"ModifyPassword",
       oldpsw:"Old Password",
-      repsw:"Confirm Password"
+      repsw:"Confirm Password",
+      students:"The New Students",
+      title:"Edit User Information",
+      addnewusers:"Add New Users",
+      drag:"Drag And Drop The Sorting",
+      role:"Modify Role Information",
+      userInformation:"New User Information"
     }
   }
