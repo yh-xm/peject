@@ -8,24 +8,40 @@
     <div class="StudentManage">
       
       <div class="StudentSelect">
-        <classNameSelect v-model="classes" ref="classNameSelect" @change="classInfo(classes)" style="display:inline"></classNameSelect>
+        <!-- <el-select v-model="classId" @change="getClassName(classId)" placeholder="请选择班级">
+          <el-option
+            v-for="item in options"
+            :key="item.classId"
+            :label="item.className"
+            :value="item.classId"
+          ></el-option>
+        </el-select> -->
+        <classNameSelect v-model="classes" ref="classNameSelect" @change="classInfo" style="display:inline"></classNameSelect>
         <el-button
           type="text"
           @click="addEquipment"
           class="el-icon-circle-plus-outline addStudent"
-        >新增学生</el-button>
+        >{{$t('tableName.students')}}</el-button>
         <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-          <el-form :model="form" :rules="addRules" ref="form" style="width:100%">
-            <el-form-item :label="$t('tableName.tcn')" :label-width="formLabelWidth" >
-              <classNameSelect v-model="classes2" style="display:inline"></classNameSelect>
+          <el-form :model="form" :rules="addRules" ref="form">
+            <el-form-item :label="$t('tableName.tcn')" :label-width="formLabelWidth" prop="classes.classId">
+              <!-- <el-select v-model.trim="classId2" placeholder="请选择" @change="resClassName(classId2)">
+                <el-option
+                  v-for="item in options"
+                  :key="item.classId"
+                  :label="item.className"
+                  :value="item.classId"
+                ></el-option>
+              </el-select> -->
+              <classNameSelect v-model="classes" ref="classNameSelect"  style="display:inline"></classNameSelect>
             </el-form-item>
             <el-form-item :label="$t('tableName.name')" :label-width="formLabelWidth" prop="stuName">
               <el-input v-model.trim="form.stuName" autocomplete="true"></el-input>
             </el-form-item>
             <el-form-item :label="$t('tableName.birth')" :label-width="formLabelWidth" prop="born">
-              <div class="block" style="width:100%">
+              <div class="block" style="width:160px">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="form.born" type="date" placeholder="选择日期" style="width:100%"></el-date-picker>
+                <el-date-picker v-model="form.born" type="date" placeholder="选择日期"></el-date-picker>
               </div>
             </el-form-item> 
             <el-form-item :label="$t('tableName.phone')" :label-width="formLabelWidth" prop="phone">
@@ -80,15 +96,15 @@
               <span style="margin-left: 10px">{{ scope.row.stuBirthDay }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="年龄" width="100" style="padding-left: 60px;">
+          <el-table-column :label="$t('tableName.age')" width="100" style="padding-left: 60px;">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.stuAge }}</span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tableName.tm')" width="180">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" v-has @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">{{$t('btn.c')}}</el-button>
+              <el-button size="mini" type="danger" v-has @click="handleDelete(scope.$index,scope.row)">{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -157,7 +173,6 @@ export default {
       }, 100);
     };
     return {
-      classes2:{},
       classes:'',
       showBoth: true, //判断新增还是修改
       dialogStatus: "", //判断标题
@@ -198,12 +213,18 @@ export default {
   },
   methods: {
     addEquipment() {//新增学生
+      var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "The New Students";
+      }else{
+         var fText = "新增学生";
+      }
       var _this = this;
+      _this.titleMap.addEquipment=fText;
       _this.showBoth = true;//显示新增按钮
       _this.dialogFormVisible = true; //显示弹框
       _this.dialogStatus = "addEquipment"; //新增弹框标题
       _this.form.stuName = "";//清空模态弹框的值
-      _this.classes2 = 0
       _this.form.class = "";
       _this.form.born = "";
       _this.form.phone = "";
@@ -217,7 +238,6 @@ export default {
     addStuName(ruleForm) {
       //新增
       var _this = this;
-    
       _this.$refs[ruleForm].validate(valid => {
         if (valid) {
           _this.dialogFormVisible = false;
@@ -232,22 +252,23 @@ export default {
             className: _this.classes.className,
           };
           console.log(params)
-          _this.axios.post("/api/Student/AddStudent", params).then(response => {
+          _this.$post("/api/Student/AddStudent", params).then(response => {
             // console.log(_this.tableData)
             //  console.log(_this.options)
              console.log(params)
-            if (response.data.code == 1) {
+            if (response.code == 1) {
               _this.$message({
                 type: "success",
                 message: "新增成功！"
               });
               _this.tableData.push(params);
-              _this.classInfo(_this.classes2); //跳转到所选班级，方便查看
+              _this.classInfo(); //跳转到所选班级，方便查看
             } else {
               _this.$message({
                 type: "warning",
                 message: "新增失败！"
               });
+              // _this.classInfo(); //跳转到所选班级，方便查看
             }
           });
         }
@@ -259,8 +280,14 @@ export default {
      * @param {String} row 点击行对应的数据
      */
     handleEdit(index, row) {
+       var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Modify The Students";
+      }else{
+         var fText = "修改学生";
+      }
       var _this = this;
-       _this.classes2 = row;
+      _this.titleMap.editEquipment=fText
       _this.showBoth = false;//隐藏模态框
       _this.index = index;//传过来的值赋值重新赋值
       _this.show2 = true; //显示修改按钮
@@ -274,6 +301,7 @@ export default {
       _this.form.phone = row.stuMobile; //电话赋值给输入框
       _this.form.password = row.stuPassword; //密码赋值给输入框
       _this.form.radio = row.stuSex; //性别赋值给输入框
+      // _this.form.classId = row.classId; //班级编号赋值给输入框
     },
     /**
      * @{argument} upDate()点击修改
@@ -282,21 +310,22 @@ export default {
      */
     upDate(ruleForm, index) {
       var _this = this;
+      console.log(_this.form)
       _this.$refs[ruleForm].validate(valid => {
         if (valid) {
           _this.dialogFormVisible = false;
-          _this.axios.post("/api/Student/ModifyStudent",
+          _this.$post("/api/Student/ModifyStudent",
              {
               stuUid: _this.form.stuUid, // 要修改学生的唯一标识符
               stuName: _this.form.stuName, //学生姓名
               stuBirthDay: new Date(_this.form.born), //生日
-              stuClassId: _this.classes2.classId, //班级编号
+              stuClassId: _this.classes.classId, //班级编号
               stuMobile: _this.form.phone, //手机号
               stuPassword: _this.form.password, //登录密码,
               stuSex: _this.form.radio //性别
             })
             .then(response => {
-              if (response.data.code == 1) {
+              if (response.code == 1) {
                 _this.classInfo(_this.classes2); //修改成功后跳转到所选班级，方便查看
                 _this.$message({
                   type: "success",
@@ -319,13 +348,23 @@ export default {
      */
     handleDelete(index1, row1) {
       //删除学生
+           var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
       var _this = this;
       // console.log(row1);
-      _this.axios
-        .get(`/api/Student/RemoveStudent?uid=${row1.stuUid}`)
+      _this.$get(`/api/Student/RemoveStudent?uid=${row1.stuUid}`)
         .then(res => {
-          _this
-            .$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+            _this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
               confirmButtonText: "确定",
               cancelButtonText: "取消",
               type: "warning",
@@ -350,17 +389,22 @@ export default {
      * @{argument} getClassName改变监听班级编号事件
      * @param {Num} res 班级编号
      */
-    classInfo(classes) {
+    classInfo() {
       //获取班级学生
       var _this = this;
-      _this.axios.get('/api/Student/GetClassStudent?classId='+classes.classId).then(r => {
-        //  console.log(r.data)//班级所有学生
-        _this.tableData = r.data;
+      _this.$get('/api/Student/GetClassStudent?classId='+classes.classId).then(r => {
+        _this.tableData = r;
         _this.classes=classes
       });
     }
-  }
+  },
+  created: function() {
+
+
+    // this.$refs["classNameSelect"].focus();
   
+    // this.public(); //调用班级数据
+  }
 };
 </script>
 <style lang="less" scoped>

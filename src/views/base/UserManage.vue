@@ -1,9 +1,9 @@
-  
+  <!--用户角色-->
 <template>
   <div id="RoleManage">
     <div slot="header" class="clearfix">
       <el-button icon="el-icon-circle-plus" type="primary" @click="addUsers"> {{$t('btn.addjs')}}</el-button>
-      <el-checkbox v-model="checked" @change="canDrag">拖拽排序</el-checkbox>
+      <el-checkbox v-model="checked" @change="canDrag">{{$t("tableName.drag")}}</el-checkbox>
     </div>
     <div class="text item">
       <el-table :data="tableData" stripe style="width: 100%" row-key="userTypeId">
@@ -38,32 +38,40 @@ export default {
     };
   },
   methods: {
+    
     apply() {
       //获取所有用
-      this.axios.get("api/UserType/GetUserRoles").then(res => {
-        // this.axios.get("api/Test/GetTest").then(res => {
-        this.tableData = res.data;
+      this.$get("api/UserType/GetUserRoles").then(res => {
+        // this.$get("api/Test/GetTest").then(res => {
+        this.tableData = res;
       });
     },
     handleEdit(index, row) {
       //修改信息
-      this.$prompt("角色名称", "修改角色信息", {
-        confirmButtonText: "修改",
-        cancelButtonText: "取消",
+      var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Modification";
+        var fText2 = "Cancel";
+      }else{
+         var fText = "修改";
+        var fText2 = "取消"; 
+      }
+      this.$prompt(this.$t('tableName.tjs'), this.$t('tableName.role'), {
+        confirmButtonText:fText,
+        cancelButtonText:fText2,
         inputPattern: /\S/,
         inputValue: row.userTypeTypeName, //输入框原值
         inputErrorMessage: "内容不能为空"
       })
         .then(({ value }) => {
-          this.axios
-            .post("/api/UserType/ModifyUserRole", null, {
+          this.$post("/api/UserType/ModifyUserRole", null, {
               params: {
                 userRoleName: value,
                 id: row.userTypeId
               }
             })
             .then(res => {
-              let code = res.data.code; //返回代码
+              let code = res.code; //返回代码
               if (code == 1) {
                 this.apply(); //更新后重新渲染
                 this.$message({
@@ -91,20 +99,31 @@ export default {
     },
     handleDelete(index, row) {
       //删除信息
-      this.$confirm("确定删除?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+           var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
+      this.$confirm(title, flag, {
+        confirmButtonText: fText,
+        cancelButtonText: fText2,
         type: "warning"
       })
         .then(() => {
-          this.axios
-            .post("/api/UserType/RemoveUserRole", null, {
+          this.$post("/api/UserType/RemoveUserRole", null, {
               params: {
                 userRoleId: row.userTypeId
               }
             })
             .then(res => {
-              let code = res.data.code; //返回代码
+              let code = res.code; //返回代码
               if (code == 1) {
                 this.tableData.splice(index, 1);
                 this.$message({
@@ -126,22 +145,29 @@ export default {
         });
     },
     addUsers() {
-      this.$prompt("新增用户", "新增用户信息", {
-        confirmButtonText: "添加",
-        cancelButtonText: "取消",
+       var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Add";
+        var fText2 = "Cancel";
+      }else{
+         var fText = "添加";
+        var fText2 = "取消"; 
+      }
+      this.$prompt(this.$t("tableName.addnewusers"), this.$t("tableName.userInformation"), {
+        confirmButtonText: fText,
+        cancelButtonText:fText,
         inputPattern: /\S/,
         inputErrorMessage: "内容不能为空"
       })
         .then(({ value }) => {
-          this.axios
-            .post("/api/UserType/AddUserRole", null, {
+          this.$post("/api/UserType/AddUserRole", null, {
               params: {
                 userRoleName: value
               }
             })
             .then(res => {
-              let code = res.data.code; //返回代码
-              let data = res.data.data; //操作成功后，返回给前端有用的数据
+              let code = res.code; //返回代码
+              let data = res.data; //操作成功后，返回给前端有用的数据
               if (code == 1) {
                 this.tableData.push(data);
                 this.$message({
@@ -202,15 +228,14 @@ export default {
               userTypeId: value.userTypeId
             };
           });
-          _this.axios
-            .post("/api/UserType/OrderUserRoleNo", newArr)
+          _this.$post("/api/UserType/OrderUserRoleNo", newArr)
             .then(function(res) {
               {
-                if (res.data.code == 1) {
+                if (res.code == 1) {
                   // _this.$msg(_this, 1, "移动成功！");
                _this.$msg(_this, 1, "移动成功！");
 
-                } else if (res.data.code == 0) {
+                } else if (res.code == 0) {
                   _this.$msg(_this, 0, "数据没有变化！");
                 }
               }

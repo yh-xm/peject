@@ -63,12 +63,11 @@ export default {
          fm.append("userImg",file)
        
     var userUid=JSON.parse(sessionStorage.getItem("NowLoginUser")).userUid //获取用户唯一标示
-        _this.axios.post("api/User/UploadHeader?userUid="+userUid,fm).then((data)=>{ //axios post请求更换图片
-            
-            var msg=data.data.message //获取返回的提示
-                        if(data.data.code==1){
-                        
-                  _this.user=data.data.data + '?t=' + new Date().getTime() //图片路径拼接最新的时间戳以达到更新
+        _this.$post("api/User/UploadHeader?userUid="+userUid,fm).then((data)=>{ //axios post请求更换图片
+        console.log(data.data)
+            var msg=data.message //获取返回的提示
+                        if(data.code==1){
+                  _this.user=data.data + '?t=' + new Date().getTime() //图片路径拼接最新的时间戳以达到更新
                         }
                   _this.$message({type:"success",message:msg}) //提示框
                   _this.dialogVisible=false //更换后关闭弹出框

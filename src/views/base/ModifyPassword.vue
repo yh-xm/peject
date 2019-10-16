@@ -87,19 +87,19 @@
       submitForm(formName) {
         let _this = this
         var userUid='5a847ecb0f14486fba9f65f63d8395a3'
-      this.axios.get("api/User/ModifyPassword?uid="+userUid+"&oldPassword="+_this.ruleForm.oldpass+"&newPassword="+_this.ruleForm.pass,
+      this.$get("api/User/ModifyPassword?uid="+userUid+"&oldPassword="+_this.ruleForm.oldpass+"&newPassword="+_this.ruleForm.pass,
       ).then((res)=> {
-        console.log(res.data)
-            if(res.data.code==-3){
+        // console.log(res)
+            if(res.code==-3){
 						  	_this.$message.error('旧密码错误');
 						}
-						if(res.data.code==-1){
+						if(res.code==-1){
 							_this.$message.error('系统异常');
 						}
-							if(res.data.code==-2){
+							if(res.code==-2){
 							_this.$message.error('参数错误');
 						}
-						if(res.data.code==1){	
+						if(res.code==1){	
               _this.$message.success('修改成功');
               sessionStorage.removeItem("token");
               sessionStorage.removeItem("uid");
