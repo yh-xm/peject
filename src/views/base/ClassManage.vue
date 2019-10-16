@@ -342,5 +342,7 @@ export default {
     text-align: center;
   }
 }
-
+/deep/.cell {
+  width:145px;
+}
 </style>
