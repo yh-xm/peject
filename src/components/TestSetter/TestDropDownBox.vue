@@ -47,8 +47,8 @@ export default {
   methods: {
     getTset() {
       var _this = this;
-      _this.axios.get("/api/TestPaper/GetAllTestPaper").then(res => {
-        _this.options = res.data.map(value => {
+      _this.$get("/api/TestPaper/GetAllTestPaper").then(res => {
+        _this.options = res.map(value => {
           return {
             tpId: value.tpId,
             tpTitle: value.tpTitle

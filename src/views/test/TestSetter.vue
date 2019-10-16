@@ -175,18 +175,12 @@ export default {
             _this.cancelTest(); //调用清空表单方法
           } else if (res.data.code == -2) {
             _this.cancelTest(); //调用清空表单方法
-            _this.$message({
-              type: "error",
-              message: "参数错误!设置失败！"
-            });
+            _this.$msg(_this,-1,"参数错误!设置失败！");
           }
         },
         () => {
           _this.cancelTest(); //调用清空表单方法
-          _this.$message({
-            type: "error",
-            message: "系统错误!"
-          });
+            _this.$msg(_this,-1,"系统错误");
         }
       );
     },
@@ -196,15 +190,10 @@ export default {
      *
      * */
     cancelTest() {
-      console.log("取消安排测试");
       let _this = this;
       _this.testObj = {};
       _this.classObj = {};
-      // _this.timeObj.splice(0,timeObj.length);
       _this.timeObj = [];
-      console.log(_this.timeObj);
-      // _this.timeObj[0] = [];
-      // _this.timeObj[1] = [];
       _this.timeObj.TimeDiff = 0;
     },
 
@@ -216,23 +205,22 @@ export default {
 
     getSetTest() {
       let _this = this;
-      _this.axios
-        .get(
+      _this.$get(
           "/api/TestPaper/GetTestTask?pageIndex=" +
             _this.currentPage +
             "&pageSize=" +
             _this.pageSize
         )
-        .then(function(res) {
+        .then(res => {
           // roles等于回调函数返回的res（值）
-          _this.SetTest = res.data.data; //表格数据
+          _this.SetTest = res.data; //表格数据
           for (const key in _this.SetTest) {
               _this.SetTest[key].taskEndTime =  _this.SetTest[key].taskEndTime.replace("T", " ");
                _this.SetTest[key].taskStartTime =  _this.SetTest[key].taskStartTime.replace("T", " ");
                  _this.SetTest[key].taskEndTime =  _this.SetTest[key].taskEndTime.replace(/-/g, "/");
                _this.SetTest[key].taskStartTime =  _this.SetTest[key].taskStartTime.replace(/-/g, "/");
           }
-          _this.total = res.data.items; //总条数
+          _this.total = res.items; //总条数
         });
     },
 
@@ -243,7 +231,6 @@ export default {
      * */
     handleEdit(index, row) {
       let _this = this;
-      console.log(row)
       _this.taskId = row.taskId;
       _this.oindex = index;
       _this.dialogFormVisible = true;
@@ -262,13 +249,11 @@ export default {
         tpId: row.taskTestPaperId,
         tpTitle: row.tpTitle
       };
-      console.log( _this.testObj2);
     },
     changePageInfo() {
       var _this = this;
       // console.log()
-      _this.axios
-        .post("/api/TestPaper/ModifyTestTask", {
+      _this.$post("/api/TestPaper/ModifyTestTask", {
           taskId: _this.taskId, //主键编号
           taskTestPaperId: _this.testObj2.tpId, //试卷编号
           taskClassId: _this.classObj2.classId, //班级编号，可修改
@@ -277,8 +262,8 @@ export default {
         })
         .then(res => {
           
-          if(res.data.message =="修改成功。"){
-            _this.$msg(_this,1,"修改成功")
+          if(res.message =="修改成功。"){
+            _this.$msg(_this,1,"修改成功");
             _this.dialogFormVisible = false;
          _this.SetTest[_this.oindex].className = _this.classObj2.className;
          _this.SetTest[_this.oindex].taskTestPaperId = _this.testObj2.tpId;
@@ -289,7 +274,7 @@ export default {
          _this.SetTest[_this.oindex].taskEscapeTime = _this.timeObj2[2];
             
           }else{
-            _this.$msg(_this,-1,res.data.message)
+            _this.$msg(_this,-1,res.message)
           }
         });
     },
@@ -322,10 +307,10 @@ export default {
           center: true
         })
         .then(() => {
-          _this.axios
-            .post("/api/TestPaper/RemoveTestTask?taskId=" + taskId)
+          _this.$post("/api/TestPaper/RemoveTestTask?taskId=" + taskId)
             .then(res => {
-              if (res.status === 200) {
+              console.log(res)
+              if (res.code === 1) {
                 _this.SetTest.splice(index, 1);
                 _this.$msg(_this, 1, "删除成功");
               }

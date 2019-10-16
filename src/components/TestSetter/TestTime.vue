@@ -43,7 +43,6 @@ export default {
   watch: {
     "parentTimes": function(value, old) {
       var _this = this ;
-      console.log(value)
       if(value.length==0){
        _this.logTime=[];
        _this.timeLimit=0;
@@ -67,15 +66,12 @@ export default {
         let date2 = new Date(_this.logTime[1]); //转格式
         _this.timeLimit = (date2.getTime() - date1.getTime()) / (60 * 1000); //计算
       }
-      v.push(_this.timeLimit);
-      console.log(v);
 
       _this.$emit("timeChange", v);
     }
   },
   created(){
     this.logTime =this.parentTimes.slice(0,2);
-    console.log(this.logTime)
     this.timeLimit = this.parentTimes[2]
   }
 };
