@@ -256,10 +256,8 @@ export default {
         var flag = "提示";
         var title = "此操作将永久删除该数据, 是否继续?";
       }
-      // console.log(index, row);
       let _this = this;
       let uid = (index, row.userUid);
-
       this.$confirm(title, flag, {
         confirmButtonText: fText,
         cancelButtonText: fText2,
@@ -274,7 +272,7 @@ export default {
                 _this.$msg(_this, 1, "删除成功!");
                 _this.tableData.splice(index, 1);
               }else if(res.code == -2){
-              _this.$msg(_this, 0, "参数错误,删除失败!");
+              _this.$msg(_this, -1, "参数错误,删除失败!");
 
               }
             }
