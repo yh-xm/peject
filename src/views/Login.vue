@@ -119,12 +119,12 @@ export default {
             _this.numberValidateForm.username.trim() != "" &&
             _this.numberValidateForm.passworld.trim() != ""
           ) {
-            _this.axios
-              .get(
+            _this.$get(
                 `/api/OAuth/authenticate?userMobile=${_this.numberValidateForm.username}&userPassword=${_this.numberValidateForm.passworld}`
               )
               .then(function(r) {
-                if (r.status == "200") {
+                console.log(r)
+                if (r.access_token) {
                   if (_this.rempsw == true) {
                     var obj = {
                       username: _this.numberValidateForm.username,
@@ -134,11 +134,11 @@ export default {
                   } else {
                     clearCookie();
                   }
-                  sessionStorage.token = "Bearer" + " " + r.data.access_token; //获取token
-                  sessionStorage.userId = r.data.profile.userUid;
-                  sessionStorage.NowLoginUser = JSON.stringify(r.data.profile); //获取用户信息
-                  _this.$parent.$parent.changeUserInfo(r.data.profile)
-                  _this.$parent.$parent.changeTkon("Bearer" + " " + r.data.access_token)
+                  sessionStorage.token = "Bearer" + " " + r.access_token; //获取token
+                  sessionStorage.userId = r.profile.userUid;
+                  sessionStorage.NowLoginUser = JSON.stringify(r.profile); //获取用户信息
+                  _this.$parent.$parent.changeUserInfo(r.profile)
+                  _this.$parent.$parent.changeTkon("Bearer" + " " + r.access_token)
                   if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);

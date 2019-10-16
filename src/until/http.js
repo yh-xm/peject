@@ -97,7 +97,7 @@ function reLogin(){
  */
 export function post(url, params) {
     return new Promise((resolve, reject) => {
-         axios.post(url, {params: params})
+         axios.post(url,params)
         .then(res => {
             resolve(res.data);
         })

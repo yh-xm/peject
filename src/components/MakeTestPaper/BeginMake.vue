@@ -27,6 +27,7 @@
 </template>
 <script>
 import CourseFrame from '@/components/CourseFrame.vue'
+import { reject } from 'q';
 export default {
    components:{CourseFrame},
   data() {
@@ -59,16 +60,18 @@ export default {
         var name = _this.$refs[formName].model.name; //试卷名称
         sessionStorage.token =""
         if (valid) {
-          _this.axios
-            .post(`/api/TestPaper/MakeTestPaper?uid=${userId}`, {
+          _this.$post(`/api/TestPaper/MakeTestPaper?uid=${userId}`, {
               //对应接口传递信息
               tpTitle: name, //要添加的试卷名称
               tpCourseId: tpCourseId //选中的课程Id
             })
             .then(res => {
-              if (res.data.message == "添加成功") {
+              // reject(function(res){
+              //     console.log(res)
+              // })
+              if (res.message == "添加成功") {
               _this.$emit("changeType",{tpTitle:name,tpCourseName:_this.bothWay.courseName,index:1})
-                sessionStorage.testPaperId = res.data.data.testPaperId; //临时存储试卷Id
+                sessionStorage.testPaperId = res.data.testPaperId; //临时存储试卷Id
               }
             });
         } else {
