@@ -6,8 +6,9 @@
       <el-breadcrumb-item>{{$t('base.r2')}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="StudentManage">
+      
       <div class="StudentSelect">
-        <classNameSelect v-model="classes" ref="classNameSelect" @change="classInfo(classes)" style="display:inline"></classNameSelect>
+<classNameSelect v-model="classes" ref="classNameSelect" @change="classInfo(classes)" style="width:12%;min-width:130px; display:inline-block"></classNameSelect>
         <el-button
           type="text"
           @click="addEquipment"
