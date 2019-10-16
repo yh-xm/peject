@@ -3,6 +3,7 @@
     <el-select
       v-model="classId"
       filterable
+      size="small"
       ref="txtClass"
       @change="handleChange"
     >
@@ -94,5 +95,7 @@
   }
 </script>
 <style lang="less" scoped>
-
+.el-select{
+  width: 100%;
+}
 </style>
