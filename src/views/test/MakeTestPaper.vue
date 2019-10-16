@@ -11,22 +11,22 @@
     <el-card class="box-card">
       <!-- 步骤条 -->
       <el-steps :active="active" align-center finish-status="success">
-        <el-step title="试卷信息"></el-step>
-        <el-step title="添加题目"></el-step>
-        <el-step title="完成制作"></el-step>
+        <el-step :title="$t('test.makep1')"></el-step>
+        <el-step :title="$t('test.makep2')"></el-step>
+        <el-step :title="$t('test.makep3')"></el-step>
       </el-steps>
         
       <begin-make v-if="active==0" @changeType="nextActive"></begin-make>
       <div id="TestInfo" v-if="active==1">
         <test-page v-model="AllPageInfo">
           <template slot="rightBtn">
-           <el-button type="primary" @click="active++">完成制卷</el-button>
+           <el-button type="primary" @click="active++">{{$t('test.makep3')}}</el-button>
         </template>
         </test-page>
       </div>
       <make-over v-if="active==2"  :testInfo="testInfo" :AllPageInfo="AllPageInfo">
       <template slot="preActive">
-        <el-button type="primary" @click="active--">上一步</el-button>
+        <el-button type="primary" @click="active--">{{$t('test.makep12')}}</el-button>
          </template>
       </make-over>
       

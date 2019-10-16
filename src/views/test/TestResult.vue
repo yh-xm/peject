@@ -37,7 +37,7 @@
         </el-card>
       </el-col>
       <el-col :span="13">
-        <el-card class="box-card" id="printTest">
+        <el-card class="box-card" >
           <!-- 单选切换 -->
           <div slot="header" class="clearfix" @change="switcher">
             <template>
@@ -55,6 +55,7 @@
             v-loading="tableLoading"
             height="300"
             style="width: 100%"
+            id="printTest"
           >
             <el-table-column prop="stuName" label="姓名"></el-table-column>
             <el-table-column prop="submitTime" width="180" label="提交时间"></el-table-column>

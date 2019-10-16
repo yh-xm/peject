@@ -4,17 +4,17 @@
 <template>
     <div class="Modify" >
         <div slot="header" class="clearfix">
-            <span><i class="el-icon-edit"></i> 修改密码</span>
+            <span><i class="el-icon-edit"></i> {{$t('tableName.chgpsw')}}</span>
         </div>
         <div class="text item">
-            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-               <el-form-item label="旧密码" prop="oldpass" required>
+            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="180px" class="demo-ruleForm">
+               <el-form-item :label="$t('tableName.oldpsw')" prop="oldpass" required>
                   <el-input type="password" v-model="ruleForm.oldpass" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('tableName.psw')" prop="pass" required>
                     <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="确认密码" prop="checkPass" required>
+                <el-form-item :label="$t('tableName.repsw')" prop="checkPass" required>
                     <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>

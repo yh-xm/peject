@@ -38,7 +38,7 @@
           </el-row>
           <!-- 题目预览/编辑  编辑状态-->
         </el-form-item>
-        <el-form-item label="题干" v-show="oshow">
+        <el-form-item :label="$t('test.makep13')" v-show="oshow">
           <el-button round icon="el-icon-document-checked" @click="addDomain" size="small">插入填空</el-button>
         </el-form-item>
         <el-form-item v-show="oshow">

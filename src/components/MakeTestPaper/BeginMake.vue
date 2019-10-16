@@ -19,7 +19,7 @@
       <course-frame v-model="bothWay" class="dropBlock"></course-frame>
         <!-- 进行下一步操作 -->
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">下一步</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">{{$t('tableName.makepn')}}</el-button>
         </el-form-item>
       </el-form>
     </div>

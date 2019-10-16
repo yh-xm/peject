@@ -20,16 +20,16 @@
         label-width="100px"
         class="demo-dynamic"
       >
-        <el-form-item prop="title" label="题干">
+        <el-form-item prop="title" :label="$t('test.makep13')">
           <!-- 填写题目 -->
           <el-input type="textarea" v-model="AddEssayQuestion.title" :rows="1"></el-input>
         </el-form-item>
         <!-- 参考答案 -->
-        <el-form-item label="参考答案">
+        <el-form-item :label="$t('test.makep14')">
             <editor  v-model="AddEssayQuestion.value" ref="editor"/>
         </el-form-item>
         <!-- 分值 -->
-        <el-form-item label="分值">
+        <el-form-item :label="$t('test.makep15')">
           <el-input-number v-model="AddEssayQuestion.onum" :min="1" :max="5" label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item>

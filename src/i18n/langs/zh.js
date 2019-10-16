@@ -36,7 +36,22 @@ export const zh = {
         r4:"批阅试卷",
         r5:"测试成绩",
         r6:"测试任务",
-        r7:"试卷详情"
+        r7:"试卷详情",
+        makep1:"试卷信息",
+        makep2:"添加题目",
+        makep3:"完成制卷",
+        makep4:"题目类型",
+        makep5:"选择题",
+        makep6:"填空题",
+        makep7:"问答题",
+        makep8:"一",
+        makep9:"二",
+        makep10:"三",
+        makepn:"下一步",
+        makep12:"上一步",
+        makep13:"题干",
+        makep14:"参考答案",
+        makep15:"分值"
     },
     tableName:{
       name:"学生名称",
@@ -63,6 +78,9 @@ export const zh = {
       time:"日期",
       adTime:"提交时间",
       scroe:"成绩",
-      seePage:"阅卷老师"
+      seePage:"阅卷老师",
+      chgpsw:"修改密码",
+      oldpsw:"旧密码",
+      repsw:"确认密码"
     }
   }

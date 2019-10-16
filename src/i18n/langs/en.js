@@ -35,7 +35,22 @@ export const en = {
         r4:"ViewTestPaper",
         r5:"TestResult",
         r6:"TestTask",
-        r7:"TestpageDetails"
+        r7:"TestpageDetails",
+        makep1:"The examination paper information",
+        makep2:"Add the title",
+        makep3:"To complete the system volume",
+        makep4:"Question Types ",
+        makep5:"Choice Question",
+        makep6:"Gap Filling",
+        makep7:"Essay Question ",
+        makep8:"One",
+        makep9:"Two",
+        makep10:"Three",
+        makepn:"Next Step",
+        makep12:"Last Step ",
+        makep13:"Question Stem",
+        makep14:"Reference Version",
+        makep15:"score"
     },
     tableName:{
       name:"Student Name",
@@ -62,6 +77,9 @@ export const en = {
       time:"Time",
       adTime:"AddTime",
       scroe:"Scroe",
-      seePage:"Teacter"
+      seePage:"Teacter",
+      chgpsw:"ModifyPassword",
+      oldpsw:"Old Password",
+      repsw:"Confirm Password"
     }
   }

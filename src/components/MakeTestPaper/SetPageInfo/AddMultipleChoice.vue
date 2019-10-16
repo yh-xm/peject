@@ -16,12 +16,12 @@
       <el-form
         :model="AddMultipleChoice"
         ref="AddMultipleChoice"
-        label-width="100px"
+        label-width="150px"
         class="demo-dynamic"
       >
         <el-form-item
           prop="title"
-          label="题干"
+          :label="$t('test.makep13')"
           :rules="[
       { required: true, message: '请输入题干', trigger: 'blur' }
     ]"
@@ -42,7 +42,7 @@
             @click.prevent="removeDomain(domain)"
           ></el-button>
         </el-form-item>
-        <el-form-item label="分值">
+        <el-form-item :label="$t('test.makep15')">
           <el-input-number v-model="AddMultipleChoice.onum" :min="1" :max="5" label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item>
