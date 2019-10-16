@@ -43,7 +43,6 @@ export default {
   watch: {
     "parentTimes": function(value, old) {
       var _this = this ;
-      console.log(value)
       if(value.length==0){
        _this.logTime=[];
        _this.timeLimit=0;
