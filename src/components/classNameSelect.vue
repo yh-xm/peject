@@ -7,7 +7,7 @@
       ref="txtClass"
       @change="handleChange"
     >
-    <el-option :key="0" label="请选择班级" v-model="ovalue"	></el-option>
+    <el-option :key="0" label="请选择班级"></el-option>
       <el-option
         v-for="item in options"
         :key="item.classId"
@@ -25,15 +25,12 @@
       event:'change',//触发事件，名称可自定义，作用：触发这个事件，将事件的值传递给prop属性 
     },
     props:{
-       bothWay:{
-        type:Object
-      },
       //组件的属性,在父组件里，可以使用v-bind赋值，如果在model有定义使用v-model赋值
       classSe:{
         required:true,
         // type:Object
       },
-     ovalue:0
+    //  ovalue:0
     },
     data() {
       return {
