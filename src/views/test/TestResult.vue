@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-刘小林 15:22:25
-=======
->>>>>>> tanYiDong
 /** 
 * 测试成绩
 */
@@ -9,7 +5,7 @@
   <div id="testResult">
     <el-row>
       <el-col :span="11">
-        <el-card class="box-card">
+        <el-card class="box-card" style="width:100%;height:100%">
           <!-- 班级下拉框 -->
           <div slot="header" class="clearfix">
             <el-select v-model="classId" placeholder="请选择" @change="elect($event)">
@@ -27,7 +23,7 @@
             v-loading="tableLoading"
             highlight-current-row
             @row-click="choose"
-            style="width: 100%"
+            style="width: 100%;height:100%;"
           >
             <el-table-column prop="courseName" label="课程"></el-table-column>
             <el-table-column prop="tpTitle" label="试卷"></el-table-column>
@@ -37,7 +33,7 @@
         </el-card>
       </el-col>
       <el-col :span="13">
-        <el-card class="box-card" >
+        <el-card class="box-card" style="width: 100%;height:100%;">
           <!-- 单选切换 -->
           <div slot="header" class="clearfix" @change="switcher">
             <template>
@@ -53,8 +49,7 @@
             :data="tableData2"
             v-show="show"
             v-loading="tableLoading"
-            height="300"
-            style="width: 100%"
+            style="width: 100%;height:100%;"
             id="printTest"
           >
             <el-table-column prop="stuName" label="姓名"></el-table-column>
@@ -63,7 +58,7 @@
             <el-table-column prop="userName" label="阅卷老师"></el-table-column>
           </el-table>
           <!-- 图表 -->
-          <div id="main" ref="barchart" v-show="!show" style="height:300px;" ><h4>{{tpTitle}}</h4></div>
+          <div id="main" ref="barchart" v-show="!show" style="height:300px"><h4>{{tpTitle}}</h4></div>
         </el-card>
       </el-col>
     </el-row>
@@ -81,6 +76,7 @@ export default {
       options: [], //班级下拉框
       classId: "", //班级下拉框值
       chart: "",
+      tpTitle:"",
       radio: "1", //单选按钮
       tableData1: [], //左列表
       tableData2: [], //右列表
@@ -138,7 +134,6 @@ export default {
      */
     choose(row) {
       // console.log(row.tpTitle);
-
       var _this = this;
       _this.tpTitle=row.tpTitle
       _this.tableLoading = true; //表格加载中
@@ -241,7 +236,6 @@ export default {
 }
 
 .box-card {
-  height: 400px;
   margin: 5px;
 }
 //试卷任务列表居中
