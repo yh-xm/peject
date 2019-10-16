@@ -59,8 +59,8 @@ export default {
         var contentText2 = "取消"; 
       }
       _this.$prompt(_this.$t('tableName.tjs'), _this.$t('tableName.role'), {
-        confirmButtonText:fText,
-        cancelButtonText:fText2,
+        confirmButtonText:contentText,
+        cancelButtonText:contentText2,
         inputPattern: /\S/,
         inputValue: row.userTypeTypeName, //输入框原值
         inputErrorMessage: "内容不能为空"
@@ -109,8 +109,8 @@ export default {
         var title = "此操作将永久删除该数据, 是否继续?"
       }
       _this.$confirm(title, flag, {
-        confirmButtonText: fText,
-        cancelButtonText: fText2,
+        confirmButtonText: contentText,
+        cancelButtonText: contentText2,
         type: "warning"
       })
         .then(() => {
@@ -146,8 +146,8 @@ export default {
         var contentText2 = "取消"; 
       }
       _this.$prompt(_this.$t("tableName.addnewusers"), _this.$t("tableName.userInformation"), {
-        confirmButtonText: fText,
-        cancelButtonText:fText,
+        confirmButtonText: contentText,
+        cancelButtonText:contentText,
         inputPattern: /\S/,
         inputErrorMessage: "内容不能为空"
       })
