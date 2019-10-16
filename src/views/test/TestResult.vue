@@ -12,7 +12,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.classId"
-                :label="item.courseName"
+                :label="item.className"
                 :value="item.classId"
               ></el-option>
             </el-select>
@@ -88,6 +88,7 @@ export default {
     var _this = this;
     //班级下拉框
     _this.axios.get("/api/Class/GetAllClass").then(res => {
+      console.log(res.data)
       _this.options = res.data;
     });
   },
