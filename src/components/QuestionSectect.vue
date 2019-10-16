@@ -65,9 +65,9 @@ export default {
      */
     questionInit() {
       var _this = this;
-      _this.axios.get(`/api/TestPaper/GetQuestionType`).then(res => {
+      _this.$get(`/api/TestPaper/GetQuestionType`).then(res => {
         //接口初始化获取问题类型
-        _this.pageInfo = res.data;
+        _this.pageInfo = res;
         for (let i in _this.pageInfo) {
           _this.pageInfo[i].bodys = [];
           _this.pageInfo[i].nowAdd = 0;

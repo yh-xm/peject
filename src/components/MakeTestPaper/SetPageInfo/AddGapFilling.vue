@@ -107,8 +107,7 @@ export default {
               ]
             });
           }
-          _this.axios
-            .post(`/api/TestPaper/AddQuestionToTestPaper`, {
+          _this.$post(`/api/TestPaper/AddQuestionToTestPaper`, {
               tpqPaperId: tpqPaperId, //试卷的编号
               tpqScore: tpqScore, //题目的分值
               tpqQuestion: {
@@ -119,10 +118,10 @@ export default {
             })
             .then(res => {
               console.log(res);
-              if (res.data.message == "添加成功") {
-                res.data.data.tpqQuestion.questionTypeId = 2;
+              if (res.message == "添加成功") {
+                res.data.tpqQuestion.questionTypeId = 2;
                 var data = {
-                  bodys: res.data.data, //传递题目信息
+                  bodys: res.data, //传递题目信息
                   questionTypeId: 2 //题目类型Id
                 };
                 _this.$emit("addGapFilling", data); //改变父组件的值
@@ -130,7 +129,7 @@ export default {
                 _this.resetForm("AddGapFillQuestion"); //重置表单
                 _this.title = ""; //重置题目
               } else {
-                _this.$msg(_this, -1, res.data.message);
+                _this.$msg(_this, -1, res.message);
               }
             });
         } else {

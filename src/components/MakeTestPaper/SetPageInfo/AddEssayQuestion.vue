@@ -82,8 +82,7 @@ export default {
       var aqAnswer = _this.$refs[formName].model.value;
       var tpqScore = _this.$refs[formName].model.onum;
       var title = _this.$refs[formName].model.title;
-      _this.axios
-        .post(`/api/TestPaper/AddQuestionToTestPaper`, {
+      _this.$post(`/api/TestPaper/AddQuestionToTestPaper`, {
           tpqPaperId: tpqPaperId, //试卷主键编号
           tpqScore: tpqScore, //分值
           tpqQuestion: {
@@ -95,9 +94,9 @@ export default {
           }
         })
         .then(res => {
-          if (res.data.message == "添加成功") {
+          if (res.message == "添加成功") {
             var data = {
-              bodys:res.data.data,
+              bodys:res.data,
               questionTypeId:3
             }
             _this.$emit('addEssayQuestion',data)
@@ -106,7 +105,7 @@ export default {
             _this.AddEssayQuestion.value = "";
             _this.$refs.editor.content ="";
           }else{
-                _this.$msg(_this,-1, res.data.message)
+                _this.$msg(_this,-1, res.message)
               }
         });
     }

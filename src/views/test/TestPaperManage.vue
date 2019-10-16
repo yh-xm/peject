@@ -128,23 +128,22 @@ export default {
       var _this = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          _this.axios
-            .post("api/TestPaper/ModifyTestPaper", {
+          _this.$post("api/TestPaper/ModifyTestPaper", {
               tpId: _this.tpId, //试卷编号
               tpCourseId: _this.bothWay.courseId, //课程编号
               tpTitle: _this.ruleForm.name //试卷标题
             })
             .then(function(data) {
-              if (data.data.code == 1) {
+              if (data.code == 1) {
                 _this.$msg(_this, 1, "修改成功"); //成功提示
 
                 var alter = _this.tableData[_this.usIndex]; //数据赋值以达到刷新
                 alter.tpTitle = _this.ruleForm.name;
                 alter.courseName = _this.bothWay.courseName;
                 alter.tpCourseId = _this.bothWay.courseId;
-              } else if (data.data.code == 0) {
+              } else if (data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
-              } else if (data.data.code == -1) {
+              } else if (data.code == -1) {
                 _this.$msg(_this, -1, "系统异常"); //错误提示
               }
             });
@@ -182,10 +181,9 @@ export default {
         })
         .then(() => {
           //删除axios
-          _this.axios
-            .post("api/TestPaper/RemoveTestPaper?id=" + row.tpId)
+          _this.$post("api/TestPaper/RemoveTestPaper?id=" + row.tpId)
             .then(function(data) {
-              if (data.data.code == 1) {
+              if (data.code == 1) {
                 _this.tableData.splice(index, 1); //用下标删除面板中单行的数据达到刷新
                 _this.$msg(_this, 1, "删除成功"); //成功提示
                 _this.pages=_this.pages-1 //总数量也减一
@@ -195,9 +193,9 @@ export default {
                   }
                 }
 
-              } else if (data.data.code == 0) {
+              } else if (data.code == 0) {
                 _this.$msg(_this, 0, "数据没做修改"); //警告提示
-              } else if (data.data.code == -1) {
+              } else if (data.code == -1) {
                 _this.$msg(_this, -1, "系统异常"); //错误提示
               }
             });
@@ -229,15 +227,14 @@ export default {
      */
     testPaper() {
       var _this = this;
-      _this
-        .axios(
+      _this.$get(
           "/api/TestPaper/GetTestPaperList?pageIndex=" +
             _this.fewPages +
             "&pageSize=" +
             _this.each
         )
         .then(function(data) {
-          var stu = data.data.data; //赋值给定义的变量用于渲染
+          var stu = data.data; //赋值给定义的变量用于渲染
           for (const key in stu) {
             //计算位置下标并赋值
             stu[key].index =
@@ -246,7 +243,7 @@ export default {
               1;
           }
           _this.tableData = stu;
-          _this.pages = data.data.items; //赋值给显示的条数
+          _this.pages = data.items; //赋值给显示的条数
         });
     },
     /**

@@ -126,10 +126,10 @@ export default {
      */
     testPaperMessage(pageIndex, pageSize) {
       var _this = this;
-      _this.axios.get("/api/TestPaper/GetTestTask?pageIndex=" +pageIndex +"&pageSize=" +pageSize)
+      _this.$get("/api/TestPaper/GetTestTask?pageIndex=" +pageIndex +"&pageSize=" +pageSize)
         .then(res => {
-          _this.tableData = res.data.data;
-          _this.items = res.data.items;
+          _this.tableData = res.data;
+          _this.items = res.items;
         });
     },
     /**

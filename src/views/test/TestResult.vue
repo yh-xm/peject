@@ -87,8 +87,8 @@ export default {
   created() {
     var _this = this;
     //班级下拉框
-    _this.axios.get("/api/Class/GetAllClass").then(res => {
-      _this.options = res.data;
+    _this.$get("/api/Class/GetAllClass").then(res => {
+      _this.options = res;
     });
   },
   methods: {
@@ -114,15 +114,14 @@ export default {
     elect(event) {
       var _this = this;
       _this.tableLoading = true; //表格加载中
-      _this.axios
-        .get("/api/TestResult/GetTestPaperByClassId", {
+      _this.$get("/api/TestResult/GetTestPaperByClassId", {
           params: {
             classId: event
           }
         })
         .then(res => {
           _this.tableLoading = false; //表格加载中
-          _this.tableData1 = res.data; //渲染左列表
+          _this.tableData1 = res; //渲染左列表
         })
         .catch(error => {
           console.log(error);
@@ -137,15 +136,14 @@ export default {
       var _this = this;
       _this.tpTitle=row.tpTitle
       _this.tableLoading = true; //表格加载中
-      _this.axios
-        .get("/api/TestResult/GetTestResultByTaskId", {
+      _this.$get("/api/TestResult/GetTestResultByTaskId", {
           params: {
             taskId: row.taskId
           }
         })
         .then(res => {
           _this.tableLoading = false; //表格加载中
-          _this.tableData2 = res.data; //渲染右列表
+          _this.tableData2 = res; //渲染右列表
           var stuName = []; //学生姓名
           var testScore = []; //学生成绩
           var myChart = document.getElementById("main"); //获取图表ID

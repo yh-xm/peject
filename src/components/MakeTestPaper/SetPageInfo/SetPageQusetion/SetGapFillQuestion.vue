@@ -156,17 +156,16 @@ export default {
 
           //是否添加填空
           var value = _this.AddGapFillQuestionList.tpqId; //获取题目Id
-          _this.axios
-            .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
+          _this.$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
               questionId: _this.nowOption.questionId, //题目Id
               questionTitle: _this.title, //题目
               questionTypeId: _this.nowOption.questionTypeId, //题目类型
               fillQuestion: changeQuestion //题目信息
             })
             .then(res => {
-              if (res.data.code == undefined) {
+              if (res.code == undefined) {
                 console.log(res);
-                var data = res.data + "}]}}";
+                var data = res + "}]}}";
                 data = eval("(" + data + ")");
                 console.log(data);
                 _this.nowOption.questionTitle = _this.title; //更新题目
@@ -176,7 +175,7 @@ export default {
                 _this.changeScore();
               } else {
                 console.log(666);
-                _this.$msg(_this, res.data.code, res.data.message);
+                _this.$msg(_this, res.code, res.message);
                 _this.nowOption.questionTitle = _this.title; //更新题目
                 _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
                 _this.oshow = !_this.oshow;
@@ -236,21 +235,20 @@ export default {
      */
     removeChoose() {
       var _this = this;
-      _this.axios
-        .post(
+      _this.$post(
           `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}` //获取题目Id
         )
         .then(res => {
-          if (res.data.message == "删除成功") {
+          if (res.message == "删除成功") {
             var data = {
               index: _this.nowIndex3,//题号
               questionTypeId: 2,//题目类型
               tpqScore: _this.AddGapFillQuestionList.tpqScore//题目分数
             };
-            _this.$msg(_this, 1, res.data.message);
+            _this.$msg(_this, 1, res.message);
             _this.$emit("setQuestion", data);
           } else {
-            _this.$msg(_this, -1, res.data.message);
+            _this.$msg(_this, -1, res.message);
           }
         });
     },
@@ -269,8 +267,7 @@ export default {
           fillQuestion[key].fillQuestionScore[0].fqsScore;
         fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0]);
       }
-      _this.axios
-        .post(
+      _this.$post(
           `/api/TestPaper/ModifyScore`,
           {
             tpqId: _this.AddGapFillQuestionList.tpqId, //主键编号
@@ -279,7 +276,7 @@ export default {
           } //修改题目分值
         )
         .then(res => {
-          if (res.data.message == "修改成功") {
+          if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新题目信息
             var data = {
               index: 1, //问题所在下标

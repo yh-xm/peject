@@ -164,8 +164,7 @@ export default {
               }
             );
 
-            _this.axios
-              .post(`/api/TestPaper/AddQuestionToTestPaper`, {
+            _this.$post(`/api/TestPaper/AddQuestionToTestPaper`, {
                 tpqPaperId: tpqPaperId, //试卷主键编号
                 tpqScore: tpqScore, //分值
                 tpqQuestion: {
@@ -175,9 +174,9 @@ export default {
                 }
               })
               .then(res => {
-                if (res.data.message == "添加成功") {
+                if (res.message == "添加成功") {
                   var data = {
-                    bodys: res.data.data,
+                    bodys: res.data,
                     questionTypeId: 1
                   };
                   _this.$emit("addMultipleChoice", data); //通知父组件
@@ -185,7 +184,7 @@ export default {
                   _this.init(); //初始化
                   _this.resetForm("AddMultipleChoice");
                 } else {
-                  _this.$msg(_this, -1, res.data.message);
+                  _this.$msg(_this, -1, res.message);
                 }
               });
           } else {

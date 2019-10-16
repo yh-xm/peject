@@ -107,8 +107,7 @@ export default {
       var _this = this;
       var nowOption = _this.nowOption;
       var value = _this.AddEssayQuestiontList.tpqId; //获取题目Id
-      _this.axios
-        .post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
+      _this.$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
           questionId: nowOption.tpqQuestion.questionId, //题目Id
           questionTitle: nowOption.tpqQuestion.questionTitle, //题目名称
           questionTypeId: nowOption.tpqQuestion.questionTypeId, //题目类型
@@ -117,13 +116,13 @@ export default {
           }
         })
         .then(res => {
-          if (res.data.message == "修改成功") {
+          if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新旧信息
             _this.odisabled = !_this.odisabled;
             _this.oshow = !_this.oshow;
-            _this.$msg(_this, 1, res.data.message);
+            _this.$msg(_this, 1, res.message);
           } else {
-            _this.$msg(_this, -1, res.data.message);
+            _this.$msg(_this, -1, res.message);
           }
         });
     },
@@ -133,21 +132,21 @@ export default {
      */
     removePageInfoItem() {
       var _this = this;
-      _this.axios
-        .post(
+      _this.$post(
           `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddEssayQuestiontList.tpqId}`
         )
         .then(res => {
-          if (res.data.message == "删除成功") {
+          console.log(res)
+          if (res.message == "删除成功") {
             var data = {
               index: _this.nowIndex2, //题号
               questionTypeId: 3, //题目类型
               tpqScore: _this.AddEssayQuestiontList.tpqScore //题目分数
             };
             _this.$emit("setQuestion", data);
-            _this.$msg(_this, 1, res.data.message);
+            _this.$msg(_this, 1, res.message);
           } else {
-            _this.$msg(_this, -1, res.data.message);
+            _this.$msg(_this, -1, res.message);
           }
         });
     },
@@ -157,8 +156,7 @@ export default {
      */
     changeScore(v) {
       var _this = this;
-      _this.axios
-        .post(
+      _this.$post(
           `/api/TestPaper/ModifyScore`,
           {
             tpqId: _this.nowOption.tpqId, //主键编号
@@ -166,7 +164,8 @@ export default {
           } //修改题目分值
         )
         .then(res => {
-          if (res.data.message == "修改成功") {
+          console.log(res)
+          if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption));
             var data = {
               index: 2, //题目下标
@@ -176,7 +175,7 @@ export default {
             _this.$msg(_this, 1, "修改成功!");
             _this.$emit("changeScore", data);
           } else {
-            _this.$msg(_this, -1, res.data.message);
+            _this.$msg(_this, -1, res.message);
           }
         });
     },
