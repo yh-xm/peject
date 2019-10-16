@@ -66,6 +66,7 @@ export default {
         let date2 = new Date(_this.logTime[1]); //转格式
         _this.timeLimit = (date2.getTime() - date1.getTime()) / (60 * 1000); //计算
       }
+      v.push(_this.timeLimit);
 
       _this.$emit("timeChange", v);
     }
