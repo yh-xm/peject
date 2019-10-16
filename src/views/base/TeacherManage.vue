@@ -265,18 +265,15 @@ export default {
         center: true
       })
         .then(() => {
-          _this.$post("api/User/RemoveTeacher?uid=" + uid).then(
-            function(res) {
-              console.log(res);
-              if (res.code == 1) {
-                _this.$msg(_this, 1, "删除成功!");
-                _this.tableData.splice(index, 1);
-              }else if(res.code == -2){
+          _this.$post("api/User/RemoveTeacher?uid=" + uid).then(function(res) {
+            console.log(res);
+            if (res.code == 1) {
+              _this.$msg(_this, 1, "删除成功!");
+              _this.tableData.splice(index, 1);
+            } else if (res.code == -2) {
               _this.$msg(_this, -1, "参数错误,删除失败!");
-
-              }
             }
-          );
+          });
         })
         .catch(() => {
           _this.$msg(_this, -1, "系统异常,删除失败!");
