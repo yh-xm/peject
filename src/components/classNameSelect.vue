@@ -7,7 +7,7 @@
       ref="txtClass"
       @change="handleChange"
     >
-    <el-option :key="0" label="请选择班级"></el-option>
+    <el-option :key="0" label="请选择班级" value="ovalue"></el-option>
       <el-option
         v-for="item in options"
         :key="item.classId"
