@@ -1,9 +1,9 @@
-  
+  <!--用户角色-->
 <template>
   <div id="RoleManage">
     <div slot="header" class="clearfix">
       <el-button icon="el-icon-circle-plus" type="primary" @click="addUsers"> {{$t('btn.addjs')}}</el-button>
-      <el-checkbox v-model="checked" @change="canDrag">拖拽排序</el-checkbox>
+      <el-checkbox v-model="checked" @change="canDrag">{{$t("tableName.drag")}}</el-checkbox>
     </div>
     <div class="text item">
       <el-table :data="tableData" stripe style="width: 100%" row-key="userTypeId">
@@ -38,6 +38,7 @@ export default {
     };
   },
   methods: {
+    
     apply() {
       //获取所有用
       this.axios.get("api/UserType/GetUserRoles").then(res => {
@@ -47,9 +48,17 @@ export default {
     },
     handleEdit(index, row) {
       //修改信息
-      this.$prompt("角色名称", "修改角色信息", {
-        confirmButtonText: "修改",
-        cancelButtonText: "取消",
+      var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Modification";
+        var fText2 = "Cancel";
+      }else{
+         var fText = "修改";
+        var fText2 = "取消"; 
+      }
+      this.$prompt(this.$t('tableName.tjs'), this.$t('tableName.role'), {
+        confirmButtonText:fText,
+        cancelButtonText:fText2,
         inputPattern: /\S/,
         inputValue: row.userTypeTypeName, //输入框原值
         inputErrorMessage: "内容不能为空"
@@ -91,9 +100,21 @@ export default {
     },
     handleDelete(index, row) {
       //删除信息
-      this.$confirm("确定删除?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+           var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
+      this.$confirm(title, flag, {
+        confirmButtonText: fText,
+        cancelButtonText: fText2,
         type: "warning"
       })
         .then(() => {
@@ -126,9 +147,17 @@ export default {
         });
     },
     addUsers() {
-      this.$prompt("新增用户", "新增用户信息", {
-        confirmButtonText: "添加",
-        cancelButtonText: "取消",
+       var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Add";
+        var fText2 = "Cancel";
+      }else{
+         var fText = "添加";
+        var fText2 = "取消"; 
+      }
+      this.$prompt(this.$t("tableName.addnewusers"), this.$t("tableName.userInformation"), {
+        confirmButtonText: fText,
+        cancelButtonText:fText,
         inputPattern: /\S/,
         inputErrorMessage: "内容不能为空"
       })

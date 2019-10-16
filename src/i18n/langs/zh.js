@@ -17,16 +17,20 @@ export const zh = {
       addclass:"添加班级",
       addjs:"新增",
       res:"取消",
-      detail:"详情"
+      detail:"详情",
+      modification:"修改"
     },
-   
+   mesTips:{
+     s:"修改成功"
+   },
     base:{
       title:"基础数据 ",
         r1:"班级管理",
         r2:"学生管理",
         r3:"用户管理",
         r4:"修改密码",
-        r5:"用户角色"
+        r5:"用户角色",
+        r6:"请输入班级名称"
     },
     test:{
       title:"在线测试",
@@ -81,6 +85,12 @@ export const zh = {
       seePage:"阅卷老师",
       chgpsw:"修改密码",
       oldpsw:"旧密码",
-      repsw:"确认密码"
+      repsw:"确认密码",
+     students:"新增学生",
+     title:"编辑用户信息",
+     addnewusers:"新增用户",
+     drag:"拖拽排序",
+     role:"修改角色信息",
+     userInformation:"新增用户信息"
     }
   }

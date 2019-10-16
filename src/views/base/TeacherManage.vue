@@ -1,3 +1,4 @@
+<!--用户管理-->
 <template>
   <div id="TeacherManage">
     <!-- Breadcrumb 面包屑 -->
@@ -11,7 +12,7 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <!-- 新增用户按钮 -->
-            <el-button type="text" @click="handleAdd()" class="el-icon-circle-plus-outline">新增用户</el-button>
+            <el-button type="text" @click="handleAdd()" class="el-icon-circle-plus-outline">{{$t("tableName.addnewusers")}}</el-button>
             <!-- 新增用户按钮 -->
             <!-- 角色导航 -->
             <el-radio v-model="filtRadio" label="0">全部</el-radio>
@@ -92,8 +93,8 @@
           <!-- 嵌套的表单结束 -->
           <div slot="footer" class="dialog-footer">
             <el-button @click="cancel('ruleForm')">{{$t('btn.res')}}</el-button>
-            <el-button type="primary" @click="addClose('ruleForm')" v-show="flag ==! true ">添 加</el-button>
-            <el-button type="primary" @click="editColse('ruleForm')" v-show="flag == true">修 改</el-button>
+            <el-button type="primary" @click="addClose('ruleForm')" v-show="flag ==! true ">{{$t('btn.a')}}</el-button>
+            <el-button type="primary" @click="editColse('ruleForm')" v-show="flag == true">{{$t('btn.modification')}}</el-button>
           </div>
         </el-dialog>
         <!-- 添加对话框结束 -->
@@ -231,13 +232,25 @@ export default {
      *
      * */
     handleDelete(index, row) {
+            var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
       // console.log(index, row);
       let _this = this;
       let uid = (index, row.userUid);
 
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm(title, flag, {
+        confirmButtonText: fText,
+        cancelButtonText: fText2,
         type: "warning",
         center: true
       })
@@ -275,9 +288,15 @@ export default {
      *
      * */
     handleAdd() {
+       var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Add User Information";
+      }else{
+         var fText = "添加用户信息";
+      }
       let _this = this;
       _this.dialogFormVisible = true; //打开对话框
-      _this.title = "添加用户信息"; //改变对话框标题
+      _this.title = fText; //改变对话框标题
       _this.flag = !true; //显示添加按钮
       // 清空表单的赋值
       _this.ruleForm.userTypeTypeName = "";
@@ -351,10 +370,16 @@ export default {
      */
 
     handleEdit(index, row) {
+        var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Edit User Information";
+      }else{
+         var fText = "编辑用户信息";
+      }
       // console.log(row);
       let _this = this;
       _this.dialogFormVisible = true; //打开对话框
-      _this.title = "编辑用户信息"; //改变对话框标题
+      _this.title = fText; //改变对话框标题
       _this.flag = true; //显示编辑按钮
       _this.ruleForm = Object.assign({}, row); //将当前行的数据赋值给表单
       _this.ruleForm.userTypeTypeName = _this.ruleForm.userUserTypeId;
