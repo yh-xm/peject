@@ -40,14 +40,16 @@ export default {
   methods: {
     
     apply() {
+      var _this= this
       //获取所有用
-      this.$get("api/UserType/GetUserRoles").then(res => {
-        // this.$get("api/Test/GetTest").then(res => {
-        this.tableData = res;
+      _this.$get("api/UserType/GetUserRoles").then(res => {
+        // _this.$get("api/Test/GetTest").then(res => {
+        _this.tableData = res;
       });
     },
     handleEdit(index, row) {
       //修改信息
+      var _this=this
       var lang = localStorage.locale;
       if(lang=="en"){
         var fText = "Modification";
@@ -56,7 +58,7 @@ export default {
          var fText = "修改";
         var fText2 = "取消"; 
       }
-      this.$prompt(this.$t('tableName.tjs'), this.$t('tableName.role'), {
+      _this.$prompt(_this.$t('tableName.tjs'), _this.$t('tableName.role'), {
         confirmButtonText:fText,
         cancelButtonText:fText2,
         inputPattern: /\S/,
@@ -64,7 +66,7 @@ export default {
         inputErrorMessage: "内容不能为空"
       })
         .then(({ value }) => {
-          this.$post("/api/UserType/ModifyUserRole", null, {
+          _this.$post("/api/UserType/ModifyUserRole", null, {
               params: {
                 userRoleName: value,
                 id: row.userTypeId
@@ -73,17 +75,14 @@ export default {
             .then(res => {
               let code = res.code; //返回代码
               if (code == 1) {
-                this.apply(); //更新后重新渲染
-                this.$message({
-                  message: "修改成功",
-                  type: "success"
-                });
+                _this.apply(); //更新后重新渲染
+                _this.$msg(_this,1,'修改成功') //成功提示
               }
               if (code == -1) {
-                this.$message.error("系统异常");
+                 _this.$msg(_this,0,'修改异常') 
               }
               if (code == -2) {
-                this.$message.error("参数错误");
+                 _this.$msg(_this,-1,'修改失败') 
               }
             })
             .catch(error => {
@@ -91,15 +90,13 @@ export default {
             });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消修改"
-          });
+           _this.$msg(_this,-1,'取消修改') 
         });
     },
     handleDelete(index, row) {
       //删除信息
-           var lang = localStorage.locale;
+      var _this=this
+        var lang = localStorage.locale;
       if(lang=="en"){
         var fText = "Confirm";
         var fText2 = "Cancel";
@@ -111,13 +108,13 @@ export default {
         var flag ="提示"
         var title = "此操作将永久删除该数据, 是否继续?"
       }
-      this.$confirm(title, flag, {
+      _this.$confirm(title, flag, {
         confirmButtonText: fText,
         cancelButtonText: fText2,
         type: "warning"
       })
         .then(() => {
-          this.$post("/api/UserType/RemoveUserRole", null, {
+          _this.$post("/api/UserType/RemoveUserRole", null, {
               params: {
                 userRoleId: row.userTypeId
               }
@@ -125,11 +122,8 @@ export default {
             .then(res => {
               let code = res.code; //返回代码
               if (code == 1) {
-                this.tableData.splice(index, 1);
-                this.$message({
-                  message: "删除成功",
-                  type: "success"
-                });
+                _this.tableData.splice(index, 1);
+                  _this.$msg(_this,1,'删除成功') 
               }
             })
             .catch(error => {
@@ -138,13 +132,11 @@ export default {
         })
         .catch(() => {
           console.log(index);
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+           _this.$msg(_this,-1,'取消删除') 
         });
     },
     addUsers() {
+      var _this=this
        var lang = localStorage.locale;
       if(lang=="en"){
         var fText = "Add";
@@ -153,14 +145,14 @@ export default {
          var fText = "添加";
         var fText2 = "取消"; 
       }
-      this.$prompt(this.$t("tableName.addnewusers"), this.$t("tableName.userInformation"), {
+      _this.$prompt(_this.$t("tableName.addnewusers"), _this.$t("tableName.userInformation"), {
         confirmButtonText: fText,
         cancelButtonText:fText,
         inputPattern: /\S/,
         inputErrorMessage: "内容不能为空"
       })
         .then(({ value }) => {
-          this.$post("/api/UserType/AddUserRole", null, {
+          _this.$post("/api/UserType/AddUserRole", null, {
               params: {
                 userRoleName: value
               }
@@ -169,17 +161,14 @@ export default {
               let code = res.code; //返回代码
               let data = res.data; //操作成功后，返回给前端有用的数据
               if (code == 1) {
-                this.tableData.push(data);
-                this.$message({
-                  message: "增加成功",
-                  type: "success"
-                });
+                _this.tableData.push(data);
+                _this.$msg(_this,1,'增加成功')
               }
               if (code == -1) {
-                this.$message.error("系统异常");
+                _this.$msg(_this,0,'系统异常');
               }
               if (code == -2) {
-                this.$message.error("参数错误");
+                 _this.$msg(_this,-1,'参数错误');
               }
             })
             .catch(error => {
@@ -187,10 +176,7 @@ export default {
             });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消增加"
-          });
+         _this.$msg(_this,-1,'取消增加');
         });
     },
     /**
@@ -250,10 +236,12 @@ export default {
     }
   },
   created() {
-    this.apply();
+    var _this=this
+    _this.apply();
   },
   mounted() {
-    this.rowDrop();
+    var _this=this
+    _this.rowDrop();
   }
 };
 </script>

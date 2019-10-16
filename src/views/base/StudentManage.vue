@@ -13,7 +13,7 @@
           type="text"
           @click="addEquipment"
           class="el-icon-circle-plus-outline addStudent"
-        >新增学生</el-button>
+        >{{$t("tableName.students")}}</el-button>
         <el-dialog :title="titleMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
           <el-form :model="form" :rules="addRules" ref="form" style="width:100%">
             <el-form-item :label="$t('tableName.tcn')" :label-width="formLabelWidth" >
@@ -87,8 +87,8 @@
           </el-table-column>
           <el-table-column :label="$t('tableName.tm')" width="180">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" v-has @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index,scope.row)">{{$t('btn.c')}}</el-button>
+              <el-button size="mini" type="danger" v-has @click="handleDelete(scope.$index,scope.row)">{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -163,8 +163,8 @@ export default {
       dialogStatus: "", //判断标题
       index: "", //表格行的下标
       titleMap: {
-        addEquipment: "新增学生",
-        editEquipment: "修改学生"
+        addEquipment: "",
+        editEquipment: ""
       },
       dialogFormVisible: false, //判断是否取消
       centerDialogVisible: false, //判断标题
@@ -198,10 +198,16 @@ export default {
   },
   methods: {
     addEquipment() {//新增学生
+      var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "The New Students";
+      }else{
+         var fText = "新增学生";
+      }
       var _this = this;
+      _this.titleMap.addEquipment=fText //新增弹框标题
       _this.showBoth = true;//显示新增按钮
-      _this.dialogFormVisible = true; //显示弹框
-      _this.dialogStatus = "addEquipment"; //新增弹框标题
+      _this.dialogFormVisible = true; //显示弹框 
       _this.form.stuName = "";//清空模态弹框的值
       _this.classes2 = 0
       _this.form.class = "";
@@ -231,23 +237,17 @@ export default {
             stuSex: _this.form.radio, //性别
             className: _this.classes.className,
           };
-          console.log(params)
+         
           _this.$post("/api/Student/AddStudent", params).then(response => {
             // console.log(_this.tableData)
             //  console.log(_this.options)
-             console.log(params)
+             console.log(response)
             if (response.code == 1) {
-              _this.$message({
-                type: "success",
-                message: "新增成功！"
-              });
+               _this.$msg(_this,1,'新增成功！') //成功提示
               _this.tableData.push(params);
               _this.classInfo(_this.classes2); //跳转到所选班级，方便查看
             } else {
-              _this.$message({
-                type: "warning",
-                message: "新增失败！"
-              });
+              _this.$msg(_this,-1,'新增失败！') //错误提示
             }
           });
         }
@@ -259,14 +259,20 @@ export default {
      * @param {String} row 点击行对应的数据
      */
     handleEdit(index, row) {
+      var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Modify The Students";
+      }else{
+         var fText = "修改学生";
+      }
       var _this = this;
+       _this.titleMap.editEquipment=fText //编辑弹框标题
        _this.classes2 = row;
       _this.showBoth = false;//隐藏模态框
       _this.index = index;//传过来的值赋值重新赋值
       _this.show2 = true; //显示修改按钮
       _this.show1 = false; //隐藏新增按钮
       _this.dialogFormVisible = true; //显示弹框
-      _this.dialogStatus = "editEquipment"; //编辑弹框标题
       _this.form.stuUid = row.stuUid; //学生ID赋值给输入框
       _this.form.stuName = row.stuName; //学生名字赋值给输入框
       _this.form.class = row.className; //班级名字赋值给输入框
@@ -298,15 +304,9 @@ export default {
             .then(response => {
               if (response.code == 1) {
                 _this.classInfo(_this.classes2); //修改成功后跳转到所选班级，方便查看
-                _this.$message({
-                  type: "success",
-                  message: "修改成功！"
-                });
+                _this.$msg(_this,1,'修改成功！')
               } else {
-                _this.$message({
-                  type: "warning",
-                  message: "修改失败！"
-                });
+                _this.$msg(_this,-1,'修改失败！')
               }
             });
         }
@@ -319,28 +319,34 @@ export default {
      */
     handleDelete(index1, row1) {
       //删除学生
+        var lang = localStorage.locale;
+      if(lang=="en"){
+        var fText = "Confirm";
+        var fText2 = "Cancel";
+        var flag ="Hint"
+        var title = "This operation will permanently delete the data. Do you want to continue?"
+      }else{
+         var fText = "确定";
+        var fText2 = "取消";
+        var flag ="提示"
+        var title = "此操作将永久删除该数据, 是否继续?"
+      }
       var _this = this;
       // console.log(row1);
       _this.$get(`/api/Student/RemoveStudent?uid=${row1.stuUid}`)
         .then(res => {
-            _this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-              confirmButtonText: "确定",
-              cancelButtonText: "取消",
+            _this.$confirm(title,flag, {
+              confirmButtonText: fText,
+              cancelButtonText: fText2,
               type: "warning",
               center: true
             })
             .then(() => {
               _this.tableData.splice(index1, 1);
-              _this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
+             _this.$msg(_this,1,' 删除成功') //成功提示
             })
             .catch(() => {
-              _this.$message({
-                type: "info",
-                message: "已取消删除"
-              });
+            _this.$msg(_this,-1,' 已取消删除') 
             });
         });
     },
