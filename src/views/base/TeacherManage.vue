@@ -245,14 +245,14 @@ export default {
     handleDelete(index, row) {
       var lang = localStorage.locale;
       if (lang == "en") {
-        var fText = "Confirm";
-        var fText2 = "Cancel";
+        var contentText = "Confirm";
+        var contentText2 = "Cancel";
         var flag = "Hint";
         var title =
           "This operation will permanently delete the data. Do you want to continue?";
       } else {
-        var fText = "确定";
-        var fText2 = "取消";
+        var contentText = "确定";
+        var contentText2 = "取消";
         var flag = "提示";
         var title = "此操作将永久删除该数据, 是否继续?";
       }
@@ -261,8 +261,8 @@ export default {
       let uid = (index, row.userUid);
 
       this.$confirm(title, flag, {
-        confirmButtonText: fText,
-        cancelButtonText: fText2,
+        confirmButtonText: contentText,
+        cancelButtonText: contentText2,
         type: "warning",
         center: true
       })
@@ -293,13 +293,13 @@ export default {
     handleAdd() {
       var lang = localStorage.locale;
       if (lang == "en") {
-        var fText = "Add User Information";
+        var contentText = "Add User Information";
       } else {
-        var fText = "添加用户信息";
+        var contentText = "添加用户信息";
       }
       let _this = this;
       _this.dialogFormVisible = true; //打开对话框
-      _this.title = fText; //改变对话框标题
+      _this.title = contentText; //改变对话框标题
       _this.flag = !true; //显示添加按钮
       // 清空表单的赋值
       _this.ruleForm.userTypeTypeName = "";
@@ -363,13 +363,13 @@ export default {
     handleEdit(index, row) {
       var lang = localStorage.locale;
       if (lang == "en") {
-        var fText = "Edit User Information";
+        var contentText = "Edit User Information";
       } else {
-        var fText = "编辑用户信息";
+        var contentText = "编辑用户信息";
       }
       let _this = this;
       _this.dialogFormVisible = true; //打开对话框
-      _this.title = fText; //改变对话框标题
+      _this.title = contentText; //改变对话框标题
       _this.flag = true; //显示编辑按钮
       _this.ruleForm = Object.assign({}, row); //将当前行的数据赋值给表单
       _this.ruleForm.userTypeTypeName = _this.ruleForm.userUserTypeId;

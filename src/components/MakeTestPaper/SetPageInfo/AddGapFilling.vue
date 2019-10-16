@@ -302,7 +302,7 @@ export default {
       _this.optionsIndexArr = narr; // 获取最新的分割题目数组
     },
     AddGapFillQuestion: {
-      handler(n, o) {
+      handler(n) {
         var that = this;
         for (let i = 0; i < that.AddGapFillQuestion.domains.length; i++) {
           that.AddGapFillQuestion.domains[i].olength =

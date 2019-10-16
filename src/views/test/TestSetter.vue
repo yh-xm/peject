@@ -293,21 +293,21 @@ export default {
       let _this = this;
       var lang = localStorage.locale;
       if (lang == "en") {
-        var fText = "Confirm";
-        var fText2 = "Cancel";
+        var contentText = "Confirm";
+        var contentText2 = "Cancel";
         var flag = "Hint";
         var title =
           "This operation will permanently delete the data. Do you want to continue?";
       } else {
-        var fText = "确定";
-        var fText2 = "取消";
+        var contentText = "确定";
+        var contentText2 = "取消";
         var flag = "提示";
         var title = "此操作将永久删除该数据, 是否继续?";
       }
       _this
         .$confirm(title, flag, {
-          congirmButtonText: fText,
-          cancelButtonText: fText2,
+          congirmButtonText: contentText,
+          cancelButtonText: contentText2,
           type: "warning",
           center: true
         })

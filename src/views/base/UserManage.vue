@@ -50,15 +50,15 @@ export default {
       //修改信息
       var lang = localStorage.locale;
       if(lang=="en"){
-        var fText = "Modification";
-        var fText2 = "Cancel";
+        var contentText = "Modification";
+        var contentText2 = "Cancel";
       }else{
-         var fText = "修改";
-        var fText2 = "取消"; 
+         var contentText = "修改";
+        var contentText2 = "取消"; 
       }
       this.$prompt(this.$t('tableName.tjs'), this.$t('tableName.role'), {
-        confirmButtonText:fText,
-        cancelButtonText:fText2,
+        confirmButtonText:contentText,
+        cancelButtonText:contentText2,
         inputPattern: /\S/,
         inputValue: row.userTypeTypeName, //输入框原值
         inputErrorMessage: "内容不能为空"
@@ -101,19 +101,19 @@ export default {
       //删除信息
            var lang = localStorage.locale;
       if(lang=="en"){
-        var fText = "Confirm";
-        var fText2 = "Cancel";
+        var contentText = "Confirm";
+        var contentText2 = "Cancel";
         var flag ="Hint"
         var title = "This operation will permanently delete the data. Do you want to continue?"
       }else{
-         var fText = "确定";
-        var fText2 = "取消";
+         var contentText = "确定";
+        var contentText2 = "取消";
         var flag ="提示"
         var title = "此操作将永久删除该数据, 是否继续?"
       }
       this.$confirm(title, flag, {
-        confirmButtonText: fText,
-        cancelButtonText: fText2,
+        confirmButtonText: contentText,
+        cancelButtonText: contentText2,
         type: "warning"
       })
         .then(() => {
@@ -147,15 +147,15 @@ export default {
     addUsers() {
        var lang = localStorage.locale;
       if(lang=="en"){
-        var fText = "Add";
-        var fText2 = "Cancel";
+        var contentText = "Add";
+        var contentText2 = "Cancel";
       }else{
-         var fText = "添加";
-        var fText2 = "取消"; 
+         var contentText = "添加";
+        var contentText2 = "取消"; 
       }
       this.$prompt(this.$t("tableName.addnewusers"), this.$t("tableName.userInformation"), {
-        confirmButtonText: fText,
-        cancelButtonText:fText,
+        confirmButtonText: contentText,
+        cancelButtonText:contentText,
         inputPattern: /\S/,
         inputErrorMessage: "内容不能为空"
       })

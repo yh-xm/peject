@@ -105,7 +105,6 @@ export default {
      * @param value 需要过滤的数据
      */
     formatId: function(value) {
-      var _this = this;
       var result = ["A", "B", "C", "D","E","F","G"];
       var ChooseAnswer = "";
       for (let i in value.questions) {
