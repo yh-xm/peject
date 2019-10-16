@@ -91,16 +91,16 @@
       ).then((res)=> {
         // console.log(res)
             if(res.code==-3){
-						  	_this.$message.error('旧密码错误');
+						  _this.$msg(_this,-1,'旧密码错误');
 						}
 						if(res.code==-1){
-							_this.$message.error('系统异常');
+							_this.$msg(_this,0,'系统异常');
 						}
 							if(res.code==-2){
-							_this.$message.error('参数错误');
+							_this.$msg(_this,-1,'参数错误');;
 						}
 						if(res.code==1){	
-              _this.$message.success('修改成功');
+              	_this.$msg(_this,1,'修改成功');
               sessionStorage.removeItem("token");
               sessionStorage.removeItem("uid");
               _this.$router.push("login")
@@ -108,7 +108,7 @@
               
 					}).catch((err) => {
 						console.log(err)
-						_this.$message.error('修改失败');
+							_this.$msg(_this,0,'修改失败');
           })
       },
       resetForm(formName) {

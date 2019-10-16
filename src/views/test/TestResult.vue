@@ -37,11 +37,11 @@
           <!-- 单选切换 -->
           <div slot="header" class="clearfix" @change="switcher">
             <template>
-              <el-radio v-model="radio" label="1">列表</el-radio>
-              <el-radio v-model="radio" label="2">图表</el-radio>
+              <el-radio v-model="radio" label="1">{{$t('base.r13')}}</el-radio>
+              <el-radio v-model="radio" label="2">{{$t('base.r14')}}</el-radio>
             </template>
-            <el-button type="primary" @click="exportToExcel()">导出</el-button>
-            <el-button type="primary" v-print="'#printTest'">打印</el-button>
+            <el-button type="primary" @click="exportToExcel()">{{$t('base.r11')}}</el-button>
+            <el-button type="primary" v-print="'#printTest'">{{$t('base.r12')}}</el-button>
           </div>
           <h4 style="text-align:center" v-show="show">{{tpTitle}}</h4>
           <!-- 右列表 -->
