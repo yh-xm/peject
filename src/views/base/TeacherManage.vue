@@ -12,17 +12,21 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <!-- 新增用户按钮 -->
-            <el-button type="text" @click="handleAdd()" class="el-icon-circle-plus-outline">{{$t("tableName.addnewusers")}}</el-button>
-            <!-- 新增用户按钮 -->
-            <!-- 角色导航 -->
-            <el-radio v-model="filtRadio" label="0">全部</el-radio>
-            <el-radio
-              v-for="item in roles"
-              :key="item.userTypeTypeName"
-              v-model="filtRadio"
-              :label="item.userTypeTypeName"
-            >{{item.userTypeTypeName}}</el-radio>
-            <!-- 角色导航结束 -->
+        <el-button
+          type="text"
+          @click="handleAdd()"
+          class="el-icon-circle-plus-outline"
+        >{{$t("tableName.addnewusers")}}</el-button>
+        <!-- 新增用户按钮 -->
+        <!-- 角色导航 -->
+        <el-radio v-model="filtRadio" label="0">全部</el-radio>
+        <el-radio
+          v-for="item in roles"
+          :key="item.userTypeTypeName"
+          v-model="filtRadio"
+          :label="item.userTypeTypeName"
+        >{{item.userTypeTypeName}}</el-radio>
+        <!-- 角色导航结束 -->
       </div>
       <div>
         <!-- 表格 -->
@@ -35,8 +39,13 @@
           <el-table-column :label="$t('tableName.tjs')" prop="userTypeTypeName"></el-table-column>
           <el-table-column :label="$t('tableName.tm')">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"  >{{$t('btn.c')}}</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)" v-has>{{$t('btn.d')}}</el-button>
+              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">{{$t('btn.c')}}</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+                v-has
+              >{{$t('btn.d')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -93,8 +102,16 @@
           <!-- 嵌套的表单结束 -->
           <div slot="footer" class="dialog-footer">
             <el-button @click="cancel('ruleForm')">{{$t('btn.res')}}</el-button>
-            <el-button type="primary" @click="addClose('ruleForm')" v-show="flag ==! true ">{{$t('btn.a')}}</el-button>
-            <el-button type="primary" @click="editColse('ruleForm')" v-show="flag == true">{{$t('btn.modification')}}</el-button>
+            <el-button
+              type="primary"
+              @click="addClose('ruleForm')"
+              v-show="flag ==! true "
+            >{{$t('btn.a')}}</el-button>
+            <el-button
+              type="primary"
+              @click="editColse('ruleForm')"
+              v-show="flag == true"
+            >{{$t('btn.modification')}}</el-button>
           </div>
         </el-dialog>
         <!-- 添加对话框结束 -->
@@ -212,16 +229,10 @@ export default {
     getUserInfo() {
       // 发送get请求
       let _this = this; //保存this对象
-      _this.$get("/api/User/GetTeachers").then(
-        function(res) {
-          //tableData等于回调函数返回的res（值）
-          // console.log(res);
-          _this.tableData = res;
-        },
-        function() {
-          console.log("数据请求失败处理");
-        }
-      );
+      _this.$get("/api/User/GetTeachers").then(function(res) {
+        //tableData等于回调函数返回的res（值）
+        _this.tableData = res;
+      });
     },
 
     /**
@@ -232,17 +243,18 @@ export default {
      *
      * */
     handleDelete(index, row) {
-            var lang = localStorage.locale;
-      if(lang=="en"){
+      var lang = localStorage.locale;
+      if (lang == "en") {
         var fText = "Confirm";
         var fText2 = "Cancel";
-        var flag ="Hint"
-        var title = "This operation will permanently delete the data. Do you want to continue?"
-      }else{
-         var fText = "确定";
+        var flag = "Hint";
+        var title =
+          "This operation will permanently delete the data. Do you want to continue?";
+      } else {
+        var fText = "确定";
         var fText2 = "取消";
-        var flag ="提示"
-        var title = "此操作将永久删除该数据, 是否继续?"
+        var flag = "提示";
+        var title = "此操作将永久删除该数据, 是否继续?";
       }
       // console.log(index, row);
       let _this = this;
@@ -257,29 +269,19 @@ export default {
         .then(() => {
           _this.$post("api/User/RemoveTeacher?uid=" + uid).then(
             function(res) {
-              // console.log(res)
-              if (res.status === 200) {
-                _this.$message({
-                  type: "success",
-                  message: "删除成功!"
-                });
+              console.log(res);
+              if (res.code == 1) {
+                _this.$msg(_this, 1, "删除成功!");
                 _this.tableData.splice(index, 1);
+              }else if(res.code == -2){
+              _this.$msg(_this, 0, "参数错误,删除失败!");
+
               }
-            },
-            function() {
-              console.log("删除请求失败处理");
-              _this.$message({
-                type: "error",
-                message: "删除失败!"
-              });
             }
           );
         })
         .catch(() => {
-          _this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          _this.$msg(_this, -1, "系统异常,删除失败!");
         });
     },
 
@@ -289,11 +291,11 @@ export default {
      *
      * */
     handleAdd() {
-       var lang = localStorage.locale;
-      if(lang=="en"){
+      var lang = localStorage.locale;
+      if (lang == "en") {
         var fText = "Add User Information";
-      }else{
-         var fText = "添加用户信息";
+      } else {
+        var fText = "添加用户信息";
       }
       let _this = this;
       _this.dialogFormVisible = true; //打开对话框
@@ -316,7 +318,6 @@ export default {
      * */
     addClose(formName) {
       let _this = this;
-      // console.log(_this.ruleForm.userName);
 
       var obj = {
         userName: _this.ruleForm.userName, //用户名，不能为空
@@ -329,27 +330,16 @@ export default {
       _this.$refs[formName].validate(valid => {
         if (valid) {
           _this.$post("api/User/AddTeacher", obj).then(function(res) {
-            // console.log(res);
             if (res.code == 1) {
-              _this.$message({
-                type: "success",
-                message: "添加成功!"
-              });
+              _this.$msg(_this, 1, "添加成功!");
             } else if (res.code == 0) {
-              _this.$message({
-                type: "info",
-                message: "内容没有变化"
-              });
+              _this.$msg(_this, 0, "内容没有变化");
             } else {
-              _this.$message({
-                type: "error",
-                message: "添加失败！"
-              });
+              _this.$msg(_this, -1, "添加失败！");
             }
             _this.dialogFormVisible = false; //关闭对话框
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -371,13 +361,12 @@ export default {
      */
 
     handleEdit(index, row) {
-        var lang = localStorage.locale;
-      if(lang=="en"){
+      var lang = localStorage.locale;
+      if (lang == "en") {
         var fText = "Edit User Information";
-      }else{
-         var fText = "编辑用户信息";
+      } else {
+        var fText = "编辑用户信息";
       }
-      // console.log(row);
       let _this = this;
       _this.dialogFormVisible = true; //打开对话框
       _this.title = fText; //改变对话框标题
@@ -391,13 +380,11 @@ export default {
      * */
     editColse(formName) {
       let _this = this;
-      // console.log(_this.ruleForm.userTypeTypeName);
-      // console.log(_this.ruleForm.userUserTypeId);
       _this.$refs[formName].validate(valid => {
         if (valid) {
           //调用添加接口
-          _this.$post("/api/User/ModifyTeacher",
-            {
+          _this
+            .$post("/api/User/ModifyTeacher", {
               userUid: _this.ruleForm.userUid, //要修改的用户标识符
               userName: _this.ruleForm.userName, //用户名，不能为空
               userMobile: _this.ruleForm.userMobile, //手机号
@@ -407,25 +394,15 @@ export default {
             })
             .then(function(res) {
               if (res.code == 1) {
-                _this.$message({
-                  type: "success",
-                  message: "修改成功!"
-                });
+                _this.$msg(_this, 1, "修改成功");
               } else if (res.code == 0) {
-                _this.$message({
-                  type: "info",
-                  message: "内容没有变化"
-                });
+                _this.$msg(_this, 0, "内容没有变化");
               } else {
-                _this.$message({
-                  type: "error",
-                  message: "修改失败！"
-                });
+                _this.$msg(_this, -1, "修改失败！");
               }
               _this.dialogFormVisible = false; //关闭对话框
             });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -440,14 +417,11 @@ export default {
     cancel(formName) {
       let _this = this;
       _this.$refs[formName].resetFields();
-      _this.$message({
-        type: "info",
-        message: "已取消"
-      });
+      _this.$msg(_this, 0, "已取消");
       _this.dialogFormVisible = false; //关闭对话框
     }
   },
-    //定义计算属性
+  //定义计算属性
   computed: {
     /**
      * 导航角色过滤
@@ -462,7 +436,7 @@ export default {
      * 这是计算属性
      * 所以直接把这个方法名(也就是filtData)像data值一样绑定到显示结果的表格中;
      * */
-    filtData(){
+    filtData() {
       let _this = this;
       if (_this.filtRadio == "0") {
         return _this.tableData;
@@ -502,10 +476,10 @@ li {
         margin-left: 30px;
         overflow: hidden;
 
-        .el-radio{
+        .el-radio {
           flex: none;
         }
-        
+
         .el-icon-circle-plus-outline {
           color: #409eff;
           margin-right: 30px;

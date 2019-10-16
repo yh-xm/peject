@@ -68,14 +68,12 @@ export default {
         _this.timeLimit = (date2.getTime() - date1.getTime()) / (60 * 1000); //计算
       }
       v.push(_this.timeLimit);
-      console.log(v);
 
       _this.$emit("timeChange", v);
     }
   },
   created(){
     this.logTime =this.parentTimes.slice(0,2);
-    console.log(this.logTime)
     this.timeLimit = this.parentTimes[2]
   }
 };
