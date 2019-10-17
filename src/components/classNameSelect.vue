@@ -44,7 +44,7 @@
     },
     watch:{
       //监听classId的变化，从而改变当前选项
-      'classSe.classId':function(value,old) {
+      'classSe.classId':function(value) {
         this.classId=value
       },
 

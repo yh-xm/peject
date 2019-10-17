@@ -27,7 +27,6 @@
 </template>
 <script>
 import CourseFrame from '@/components/CourseFrame.vue'
-import { reject } from 'q';
 export default {
    components:{CourseFrame},
   data() {

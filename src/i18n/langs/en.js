@@ -30,7 +30,15 @@ export const en = {
         r3:"TeacherManage",
         r4:"ModifyPassword",
         r5:"UserManage",
-        r6:"Please enter the class name"
+        r6:"Please enter the class name",
+        r7:"Test Paper",
+        r8:"Class And Grade",
+        r9:"test time",
+        r10:"Modify Test Information",
+        r11:"derive",
+        r12:"print",
+        r13:"list",
+        r14:"chart"
     },
     test:{
       title:"on-line testing",

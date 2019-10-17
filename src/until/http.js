@@ -43,10 +43,7 @@ axios.interceptors.request.use(config=>{
  */
 
  async function reGetTkoen(userInfo,error){
-     var res = await get("/api/OAuth/authenticate",{
-        userMobile:userInfo.username,
-        userPassword:userInfo.password
-     })
+     var res = await get(`/api/OAuth/authenticate?userMobile=${userInfo.username}&userPassword=${userInfo.password}`)
      .catch(()=>{
          console.log(666)
          reLogin();
@@ -94,9 +91,9 @@ function reLogin(){
  * @param {String} url 请求的url地址
  * @param {Object} params 请求时携带的参数
  */
-export function post(url, params) {
+export function post(url, data ,params) {
     return new Promise((resolve, reject) => {
-         axios.post(url,params)
+         axios.post(url,data,params)
         .then(res => {
             resolve(res.data);
         })
