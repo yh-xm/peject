@@ -35,13 +35,13 @@ export const en = {
         r8:"Class And Grade",
         r9:"test time",
         r10:"Modify Test Information",
-        r11:"derive",
-        r12:"print",
-        r13:"list",
-        r14:"chart"
+        r11:"Derive",
+        r12:"Print",
+        r13:"List",
+        r14:"Chart"
     },
     test:{
-      title:"on-line testing",
+      title:"On-line testing",
         r1:"MakeTestPaper",
         r2:"TestPaperManage",
         r3:"TestSetter",
