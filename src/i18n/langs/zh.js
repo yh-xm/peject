@@ -28,9 +28,6 @@ export const zh = {
     addSuccess:"新增成功！",
     systemError:"系统错误！",
     dataChange:"数据没有变化！",
-<<<<<<< HEAD
-    undefindData:"内容不能为空！"
-=======
     fillIn:"请填写用户名和密码",
     failed:"修改失败",
     failure:"新增失败",
@@ -43,7 +40,6 @@ export const zh = {
     empty:"选项不能为空请重新选择！",
     time:"考试时间不能低于30分钟！",
     set:"设置成功",
->>>>>>> 010ce1c5c6438ad4aa47a74dadf30b9467e59d7d
    },
     base:{
       title:"基础数据 ",

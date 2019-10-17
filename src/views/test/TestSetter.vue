@@ -18,11 +18,7 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-<<<<<<< HEAD
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px">
-=======
           <el-form>
->>>>>>> 010ce1c5c6438ad4aa47a74dadf30b9467e59d7d
             <el-form-item :label="$t('base.r7')">
               <test-drop-down-box v-model="testObj"></test-drop-down-box>
             </el-form-item>
@@ -85,11 +81,7 @@
     <!-- 添加对话框 -->
     <el-dialog :title="$t('base.r10')" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
-<<<<<<< HEAD
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  >
-=======
       <el-form>
->>>>>>> 010ce1c5c6438ad4aa47a74dadf30b9467e59d7d
         <el-form-item :label="$t('base.r7')">
           <test-drop-down-box v-model="testObj2"></test-drop-down-box>
         </el-form-item>

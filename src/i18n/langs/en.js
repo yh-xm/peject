@@ -29,9 +29,6 @@ export const en = {
       addSuccess:"New Successfully",
       systemError:"System Error",
       dataChange:"The data hasn't changed",
-<<<<<<< HEAD
-      undefindData:"Content cannot be empty!"
-=======
       fillIn:"Please Fill In The User Name And Password",
       failed:"Fail to modify",
       failure:"The new failure",
@@ -44,7 +41,6 @@ export const en = {
       empty:"Shanghai jitong Marine supplies co. LTD",
       time:"Test time must not be less than 30 minutes!",
       set:"successfully set",
->>>>>>> 010ce1c5c6438ad4aa47a74dadf30b9467e59d7d
     },
     base:{
       title:"Basic data",
