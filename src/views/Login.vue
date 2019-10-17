@@ -137,8 +137,8 @@ export default {
                   sessionStorage.token = "Bearer" + " " + r.access_token; //获取token
                   sessionStorage.userId = r.profile.userUid;
                   sessionStorage.NowLoginUser = JSON.stringify(r.profile); //获取用户信息
-                  _this.$parent.$parent.changeUserInfo(r.profile)
-                  _this.$parent.$parent.changeTkon("Bearer" + " " + r.access_token)
+               _this.$root.changeUserInfo(r.profile)
+                  _this.$root.changeTkon("Bearer" + " " + r.access_token)
                   if (_this.$route.query.redirect) {
                     //是否返回之前路由
                     //     let redirect = decodeURIComponent(this.$route.query.redirect);
