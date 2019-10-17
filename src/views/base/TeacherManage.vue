@@ -389,39 +389,40 @@ export default {
      * */
     editColse(formName) {
       let _this = this;
+
+      const xmlObj = {
+        userUid: _this.ruleForm.userUid, //要修改的用户标识符
+        userName: _this.ruleForm.userName, //用户名，不能为空
+        userMobile: _this.ruleForm.userMobile, //手机号
+        userSex: _this.ruleForm.userSex, //性别
+        userPassword: _this.ruleForm.userPassword, //密码
+        userUserTypeId: _this.ruleForm.userTypeTypeName //角色id
+      };
+
       _this.$refs[formName].validate(valid => {
         if (valid) {
           //调用添加接口
-          _this
-            .$post("/api/User/ModifyTeacher", {
-              userUid: _this.ruleForm.userUid, //要修改的用户标识符
-              userName: _this.ruleForm.userName, //用户名，不能为空
-              userMobile: _this.ruleForm.userMobile, //手机号
-              userSex: _this.ruleForm.userSex, //性别
-              userPassword: _this.ruleForm.userPassword, //密码
-              userUserTypeId: _this.ruleForm.userTypeTypeName //角色id
-            })
-            .then(function(res) {
-              if (res.code == 1) {
-                var typNames = _this.roles.find(
-                  res => res.userTypeId == _this.ruleForm.userTypeTypeName
-                );
-                var typName = typNames.userTypeTypeName;
-                var rows = _this.tableData[_this.oindex];
-                rows.userName = _this.ruleForm.userName;
-                rows.userMobile = _this.ruleForm.userMobile;
-                rows.userSex = _this.ruleForm.userSex;
-                rows.userPassword = _this.ruleForm.userPassword;
-                rows.userTypeTypeName = typName;
-                rows.userUserTypeId = _this.ruleForm.userTypeTypeName;
-                _this.$msg(_this, 1, "修改成功");
-              } else if (res.code == 0) {
-                _this.$msg(_this, 0, "内容没有变化");
-              } else {
-                _this.$msg(_this, -1, "修改失败！");
-              }
-              _this.dialogFormVisible = false; //关闭对话框
-            });
+          _this.$post("/api/User/ModifyTeacher", xmlObj).then(function(res) {
+            if (res.code == 1) {
+              var typNames = _this.roles.find(
+                res => res.userTypeId == _this.ruleForm.userTypeTypeName
+              );
+              var typName = typNames.userTypeTypeName;
+              var rows = _this.tableData[_this.oindex];
+              rows.userName = _this.ruleForm.userName;
+              rows.userMobile = _this.ruleForm.userMobile;
+              rows.userSex = _this.ruleForm.userSex;
+              rows.userPassword = _this.ruleForm.userPassword;
+              rows.userTypeTypeName = typName;
+              rows.userUserTypeId = _this.ruleForm.userTypeTypeName;
+              _this.$msg(_this, 1, "修改成功");
+            } else if (res.code == 0) {
+              _this.$msg(_this, 0, "内容没有变化");
+            } else {
+              _this.$msg(_this, -1, "修改失败！");
+            }
+            _this.dialogFormVisible = false; //关闭对话框
+          });
         } else {
           return false;
         }
