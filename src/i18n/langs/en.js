@@ -57,7 +57,10 @@ export const en = {
         r11:"Derive",
         r12:"Print",
         r13:"List",
-        r14:"Chart"
+        r14:"Chart",
+        r15:"Course",
+        r16:"Test paper",
+        r17:"Submit the number"
     },
     test:{
       title:"On-line testing",
@@ -120,6 +123,7 @@ export const en = {
       addnewusers:"Add New Users",
       drag:"Drag And Drop The Sorting",
       role:"Modify Role Information",
-      userInformation:"New User Information"
+      userInformation:"New User Information",
+      name:"name"
     }
   }
