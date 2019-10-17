@@ -338,6 +338,9 @@ export default {
               var typeName = res.data;
               typeName.userTypeTypeName = typName;
               _this.tableData.unshift(typeName);
+
+
+              
               _this.$msg(_this, 1, "添加成功!");
             } else if (res.code == 0) {
               _this.$msg(_this, 0, "内容没有变化");
@@ -414,6 +417,7 @@ export default {
               rows.userSex = _this.ruleForm.userSex;
               rows.userPassword = _this.ruleForm.userPassword;
               rows.userUserTypeId = _this.ruleForm.userTypeTypeName;
+
               _this.$msg(_this, 1, "修改成功");
             } else if (res.code == 0) {
               _this.$msg(_this, 0, "内容没有变化");
