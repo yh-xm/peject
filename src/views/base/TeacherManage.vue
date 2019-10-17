@@ -209,7 +209,7 @@ export default {
      * @method getRole
      * */
     getRole() {
-      let _this = this; //保存this对象
+      const _this = this; //保存this对象
       _this.$get("/api/UserType/GetUserRoles").then(
         function(res) {
           //roles等于回调函数返回的res（值）
@@ -228,7 +228,7 @@ export default {
      */
     getUserInfo() {
       // 发送get请求
-      let _this = this; //保存this对象
+      const _this = this; //保存this对象
       _this.$get("/api/User/GetTeachers").then(function(res) {
         //tableData等于回调函数返回的res（值）
         _this.tableData = res;
@@ -271,7 +271,7 @@ export default {
         center: true
       })
         .then(() => {
-          _this.$post("api/User/RemoveTeacher?uid=" + uid).then(function(res) {
+          _this.$post("api/User/RemoveTeacher?uid=" + uid).then(res => {
             if (res.code == 1) {
               _this.$msg(_this, 1, "删除成功!");
               _this.tableData.splice(index, 1);
@@ -368,7 +368,7 @@ export default {
      */
 
     handleEdit(index, row) {
-      let _this = this;
+      const _this = this;
       _this.oindex = index;
       var lang = localStorage.locale;
       if (lang == "en") {
@@ -387,7 +387,7 @@ export default {
      * @param {string} formName 传过来的内容
      * */
     editColse(formName) {
-      let _this = this;
+      const _this = this;
 
       const xmlObj = {
         userUid: _this.ruleForm.userUid, //要修改的用户标识符
@@ -435,7 +435,7 @@ export default {
      *
      * */
     cancel(formName) {
-      let _this = this;
+      const _this = this;
       _this.$refs[formName].resetFields();
       _this.$msg(_this, 0, "已取消");
       _this.dialogFormVisible = false; //关闭对话框
@@ -457,7 +457,7 @@ export default {
      * 所以直接把这个方法名(也就是filtData)像data值一样绑定到显示结果的表格中;
      * */
     filtData() {
-      let _this = this;
+      const _this = this;
       if (_this.filtRadio == "0") {
         return _this.tableData;
       } else {
@@ -472,7 +472,7 @@ export default {
    * 定义钩子函数
    * */
   mounted() {
-    let _this = this; //保存this对象
+    const _this = this; //保存this对象
     _this.getUserInfo(); //用户信息
     _this.getRole(); //用户角色
   }
