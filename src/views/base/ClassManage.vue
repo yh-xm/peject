@@ -177,7 +177,7 @@ export default {
             .then(function(data) {
               //deta 接收的值为 1 时修改成功， -1 为异常，0 为没有改变
               if (data.data.code == 1) {
-                  _this.$msg(_this, 1, "修改成功");//成功提示
+                  _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));//成功提示
                 var banJi = _this.tableData[_this.index]; //获取要修改的那组数据并赋值了一个变量
                 banJi.courseName =_this.lovingVue.courseName; //课程名字
                 banJi.classCourseId =_this.lovingVue.courseId
@@ -185,9 +185,9 @@ export default {
                 banJi.className = _this.ruleForm.name; //班级名字
                 banJi.classTeacherId = _this.ruleForm.usName; //授课老师编码
               } else if (data.data.code == -1) {
-                 _this.$msg(_this, -1, "系统异常"); //错误提示 
+                 _this.$msg(_this, -1, _this.$t("mesTips.systemError")); //错误提示 
               } else if (data.data.code == 0) {
-              _this.$msg(_this, 0, "数据没做修改"); //警告提示 
+              _this.$msg(_this, 0, _this.$t("mesTips.dataChange")); //警告提示 
               }
             });
           _this.dialogFormVisible = false; //关闭弹出框
@@ -232,16 +232,16 @@ export default {
               //deta 接收的值为 1 时删除成功， -1 为异常表示不能删除，0 为没有改变
               if (data.data.code == 1) {
                 _this.tableData.splice(index, 1);
-               _this.$msg(_this, 1, "删除成功");//成功提示
+               _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));//成功提示
               } else if (data.data.code == -1) {
-               _this.$msg(_this, -1, "系统异常"); //错误提示 
+               _this.$msg(_this, -1, _this.$t("mesTips.systemError")); //错误提示 
               } else if (data.data.code == 0) {
-                 _this.$msg(_this, 0, "数据没做修改"); //警告提示 
+                 _this.$msg(_this, 0,_this.$t("mesTips.dataChange")); //警告提示 
               }
             });
         })
         .catch(() => {
-          _this.$msg(_this, 2, "已取消删除");//成功提示
+          _this.$msg(_this, 2, _this.$t("mesTips.resDelete"));//成功提示
         });
     },
     /**
@@ -288,11 +288,11 @@ export default {
                 quanBu.courseName =_this.lovingVue.courseName; //获取的课程名字
                 quanBu.userName = _this.laoShi; //获取的老师名字
                 _this.tableData.unshift(quanBu); // 把后台的数据从渲染的数组第一个位置插入
-                 _this.$msg(_this, 1, "新增成功");//成功提示
+                 _this.$msg(_this, 1, _this.$t("mesTips.addSuccess"));//成功提示
               } else if (data.data.code == -1) {
-                  _this.$msg(_this, -1, "系统异常"); //错误提示 
+                  _this.$msg(_this, -1, _this.$t("mesTips.systemError")); //错误提示 
               } else if (data.data.code == 0) {
-                _this.$msg(_this, 0, "数据没做修改"); //警告提示 
+                _this.$msg(_this, 0, _this.$t("mesTips.dataChange")); //警告提示 
               }
             });
           _this.dialogFormVisible = false;

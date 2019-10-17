@@ -271,17 +271,17 @@ export default {
             function(res) {
               console.log(res);
               if (res.code == 1) {
-                _this.$msg(_this, 1, "删除成功!");
+                _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
                 _this.tableData.splice(index, 1);
               }else if(res.code == -2){
-              _this.$msg(_this, 0, "参数错误,删除失败!");
+              _this.$msg(_this, 0, _this.$t("mesTips.parameter"));
 
               }
             }
           );
         })
         .catch(() => {
-          _this.$msg(_this, -1, "系统异常,删除失败!");
+          _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
         });
     },
 
@@ -331,11 +331,11 @@ export default {
         if (valid) {
           _this.$post("api/User/AddTeacher", obj).then(function(res) {
             if (res.code == 1) {
-              _this.$msg(_this, 1, "添加成功!");
+              _this.$msg(_this, 1, _this.$t("mesTips.addSuccess"));
             } else if (res.code == 0) {
-              _this.$msg(_this, 0, "内容没有变化");
+              _this.$msg(_this, 0,_this.$t("mesTips.dataChange"));
             } else {
-              _this.$msg(_this, -1, "添加失败！");
+              _this.$msg(_this, -1, _this.$t("mesTips.failure"));
             }
             _this.dialogFormVisible = false; //关闭对话框
           });
@@ -394,11 +394,11 @@ export default {
             })
             .then(function(res) {
               if (res.code == 1) {
-                _this.$msg(_this, 1, "修改成功");
+                _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
               } else if (res.code == 0) {
-                _this.$msg(_this, 0, "内容没有变化");
+                _this.$msg(_this, 0,_this.$t("mesTips.dataChange"));
               } else {
-                _this.$msg(_this, -1, "修改失败！");
+                _this.$msg(_this, -1, _this.$t("mesTips.failed"));
               }
               _this.dialogFormVisible = false; //关闭对话框
             });
@@ -417,7 +417,7 @@ export default {
     cancel(formName) {
       let _this = this;
       _this.$refs[formName].resetFields();
-      _this.$msg(_this, 0, "已取消");
+      
       _this.dialogFormVisible = false; //关闭对话框
     }
   },
