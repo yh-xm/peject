@@ -8,19 +8,6 @@ export const en = {
         content:"IT education with the most attitude, responsibility and conscience ",
         homeTitle:"ZXWY Education"
     },
-    btn: {
-      c: 'Compile',
-      d:'Delete',
-      r:'Reset',
-      a:'Added',
-      s:'Submit',
-      addclass:"AddClass",
-      addjs:"AddCharacter",
-      res:"Recel",
-      detail:"Detail",
-      modification:"Modification",
-     
-    },
     mesTips:{
       loginSuccess:"Login Successfully!",
       loginEorr:"User name or password error, please re - enter!",
@@ -42,6 +29,19 @@ export const en = {
       time:"Test time must not be less than 30 minutes!",
       set:"successfully set",
     },
+    btn: {
+      addclass:"AddClass",
+      addjs:"AddCharacter",
+      res:"Recel",
+      detail:"Detail",
+      modification:"Modification",
+      c: 'Compile',
+      d:'Delete',
+      r:'Reset',
+      a:'Added',
+      s:'Submit',   
+    },
+
     base:{
       title:"Basic data",
         r1:"ClassManage",

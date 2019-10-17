@@ -152,7 +152,7 @@ export default {
                       name: "home"
                     });
                   }
-                  _this.$msg(_this, 1,_this.$t('message.home'));
+                  _this.$msg(_this, 1,_this.$t('mesTips.loginSuccess'));
                 }
               })
               .catch(function(error) {
