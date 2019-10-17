@@ -1,4 +1,4 @@
-<!--批阅试卷-->
+<!--批阅试卷 谭益东-->
 <template>
   <div id="ViewTestPaper">
     <el-breadcrumb separator-class="el-icon-arrow-right" style="margin:20px">
@@ -99,23 +99,6 @@ export default {
      */
     cutTimeT: function(value){
       return value.replace('T',' ')
-    },
-    /**
-     * 管道过滤选择题答案
-     * @param formatId 过滤后的数据
-     * @param value 需要过滤的数据
-     */
-    formatId: function(value) {
-      var result = ["A", "B", "C", "D","E","F","G"];
-      var ChooseAnswer = "";
-      for (let i in value.questions) {
-        for (let j in value.myChoose) {
-          if (value.questions[i].cqId == value.myChoose[j]) {
-            ChooseAnswer += result[i];//防止有多选题出现
-          }
-        }
-      }
-      return  "【" + ChooseAnswer + "】";
     }
   },
   methods: {
@@ -147,14 +130,9 @@ export default {
      */
     handleCurrentChange(val) {
       var _this=this
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       _this.currentPage = val;
       _this.testPaperMessage(_this.currentPage, _this.currentPageSize);
-    },
-    
-    
-    handleChange(value) {
-      console.log(value);
     },
     /**
      * 获取指定的考试信息
@@ -169,17 +147,6 @@ export default {
               taskId:row.taskId
             }
           })
-      // _this.axios
-      //   .get("/api/TestResult/GetStudentTest?taskId=" + row.taskId)
-      //   .then(res => {
-      //     _this.$router.push({
-      //       path:'/piYueTestPaper',
-      //       query:{
-      //         dataInfo:res.data,
-      //         taskId:row.taskId
-      //       }
-      //     })
-      //   });
      }
   },
   created:function() {

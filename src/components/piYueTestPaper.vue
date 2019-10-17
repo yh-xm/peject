@@ -1,3 +1,4 @@
+ <!-- 批阅情况 谭益东 -->
 <template>
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right" style="margin:20px">
@@ -192,14 +193,6 @@ export default {
   },
   filters: {
     /**
-     * 过滤时间里面的T
-     * @param cutTimeT 过滤后的数据
-     * @param value 需要过滤的数据
-     */
-    cutTimeT: function(value){
-      return value.replace('T',' ')
-    },
-    /**
      * 管道过滤选择题答案
      * @param formatId 过滤后的数据
      * @param value 需要过滤的数据
@@ -379,10 +372,9 @@ export default {
                 })
           }else if(hasDone.filter(item => item.testUid == _this.testUid)[0]!= undefined){
             _this.piYue()
-            // console.log("重新批阅成功！")
             _this.$message({
                   type: "success",
-                  message: "批阅成功！"
+                  message: "重新批阅成功！"
                 })
           }else{
              _this.$message({
