@@ -144,10 +144,10 @@ export default {
         !_this.classObj.hasOwnProperty("classId") ||
         _this.timeObj.length == 0
       ) {
-        _this.$msg(_this, 0, "选项不能为空请重新选择！");
+        _this.$msg(_this, 0, _this.$t("mesTips.empty"));
         return;
       } else if (_this.timeObj.TimeDiff < 30) {
-        _this.$msg(_this, 0, "考试时间不能低于30分中！");
+        _this.$msg(_this, 0, _this.$t("mesTips.time"));
         return;
       }
       let obj = {
@@ -161,19 +161,19 @@ export default {
         res => {
           let dataCu = res.data;
           if (res.code == 1) {
-            _this.$msg(_this, 1, "设置成功");
+            _this.$msg(_this, 1, _this.$t("mesTips.set"));
             var tpId = dataCu.tpId;
             dataCu.taskTestPaperId = tpId;
             _this.SetTest.unshift(dataCu);
             _this.cancelTest(); //调用清空表单方法
           } else if (res.code == -2) {
             _this.cancelTest(); //调用清空表单方法
-            _this.$msg(_this, -1, "参数错误!设置失败！");
+            _this.$msg(_this, -1, _this.$t("mesTips.parameter"));
           }
         },
         () => {
           _this.cancelTest(); //调用清空表单方法
-          _this.$msg(_this, -1, "系统错误");
+          _this.$msg(_this, -1,  _this.$t("mesTips.systemError"));
         }
       );
     },
@@ -264,7 +264,7 @@ export default {
         })
         .then(res => {
           if (res.message == "修改成功。") {
-            _this.$msg(_this, 1, "修改成功");
+            _this.$msg(_this, 1,_this.$t("systemError.modifySuccess"));
             _this.dialogFormVisible = false;
             _this.SetTest[_this.oindex].className = _this.classObj2.className;
             _this.SetTest[_this.oindex].taskTestPaperId = _this.testObj2.tpId;
@@ -274,7 +274,7 @@ export default {
             _this.SetTest[_this.oindex].taskEndTime = _this.timeObj2[1];
             _this.SetTest[_this.oindex].taskEscapeTime = _this.timeObj2[2];
           } else {
-            _this.$msg(_this, -1, res.message);
+            _this.$msg(_this, -1, _this.$t("systemError.failed"));
           }
         });
     },
@@ -315,12 +315,12 @@ export default {
               console.log(res);
               if (res.code === 1) {
                 _this.SetTest.splice(index, 1);
-                _this.$msg(_this, 1, "删除成功");
+                _this.$msg(_this, 1, _this.$t("systemError.deleteSuccess"));
               }
             });
         })
         .catch(() => {
-          _this.$msg(_this, 0, "已取消删除");
+          _this.$msg(_this, 0, _this.$t("systemError.resDelete"));
         });
     },
 
