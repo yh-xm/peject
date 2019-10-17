@@ -28,6 +28,8 @@ export const zh = {
       empty:"选项不能为空请重新选择！",
       time:"考试时间不能低于30分钟！",
       set:"设置成功",
+      undefindData:"请正确填写内容！",
+      changeSroce:"分数没有变化!"
      },
     btn: {
       addclass:"添加班级",

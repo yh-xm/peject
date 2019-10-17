@@ -252,10 +252,10 @@ export default {
               questionTypeId: 2, //题目类型
               tpqScore: _this.AddGapFillQuestionList.tpqScore //题目分数
             };
-            _this.$msg(_this, 1, res.message);
+            _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
             _this.$emit("setQuestion", data);
           } else {
-            _this.$msg(_this, -1, res.message);
+              _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
           }
         });
     },
@@ -284,6 +284,7 @@ export default {
           } //修改题目分值
         )
         .then(res => {
+        
           if (res.message == "修改成功") {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新题目信息
             var data = {
@@ -291,10 +292,14 @@ export default {
               fqsScore: _this.AddGapFillQuestionList.fqsScore, //问题分数
               fqIndex: _this.nowIndex3 //问题题号
             };
-            _this.$msg(_this, 1, "修改成功!");
+            _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
             _this.$emit("changeScore", data); //修改父组件的分数信息
           } else {
-            _this.$msg(_this, -1, "分数没有变化");
+             if (res.message == "数据没有变化") {
+                  _this.$msg(_this, -1, _this.$t("mesTips.changeSroce"));
+                } else {
+                  _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
+             }
           }
         });
     },

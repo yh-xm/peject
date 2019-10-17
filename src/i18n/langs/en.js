@@ -28,6 +28,8 @@ export const en = {
       empty:"Shanghai jitong Marine supplies co. LTD",
       time:"Test time must not be less than 30 minutes!",
       set:"successfully set",
+      undefindData:"The content cannot be empty!",
+      changeSroce:"The score doesn't change!"
     },
     btn: {
       addclass:"AddClass",
