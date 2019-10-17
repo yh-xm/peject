@@ -22,7 +22,6 @@
             <el-form-item :label="$t('base.r7')">
               <test-drop-down-box v-model="testObj"></test-drop-down-box>
             </el-form-item>
-
             <el-form-item :label="$t('base.r8')">
               <class-name-select v-model="classObj"></class-name-select>
             </el-form-item>
