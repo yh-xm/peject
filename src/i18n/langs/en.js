@@ -1,9 +1,9 @@
 export const en = {
     message: {
-        home:"home",
+        home:"Home",
         login:"Login",
         exit:"Exit",
-        repsw:"remember your password",
+        repsw:"Remember Your Password",
         title:" ZXWY background system",
         content:"IT education with the most attitude, responsibility and conscience ",
         homeTitle:"ZXWY Education"
@@ -21,7 +21,13 @@ export const en = {
       modification:"Modification"
     },
     mesTips:{
-      s:"Modify Successfully"
+      loginSuccess:"Login Successfully!",
+      loginEorr:"User name or password error, please re - enter!",
+      modifySuccess:"Modify Successfully",
+      deleteSuccess:"Delete Successfully",
+      addSuccess:"New Successfully",
+      systemError:"System Error",
+      dataChange:"The data hasn't changed"
     },
     base:{
       title:"Basic data",

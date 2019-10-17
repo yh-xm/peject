@@ -152,7 +152,7 @@ export default {
                       name: "home"
                     });
                   }
-                  _this.$msg(_this, 1, "登录成功!");
+                  _this.$msg(_this, 1,_this.$t('message.home'));
                 }
               })
               .catch(function(error) {

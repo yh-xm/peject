@@ -21,7 +21,13 @@ export const zh = {
       modification:"修改"
     },
    mesTips:{
-     s:"修改成功"
+    loginSuccess:"登录成功!",
+    loginEorr:"用户名或密码错误，请重新输入!",
+    modifySuccess:"修改成功！",
+    deleteSuccess:"删除成功！",
+    addSuccess:"新增成功！",
+    systemError:"系统错误！",
+    dataChange:"数据没有变化！"
    },
     base:{
       title:"基础数据 ",
