@@ -17,7 +17,7 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+          <el-form>
             <el-form-item label="试卷">
               <test-drop-down-box v-model="testObj"></test-drop-down-box>
             </el-form-item>
@@ -80,7 +80,7 @@
     <!-- 添加对话框 -->
     <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+      <el-form>
         <el-form-item label="试卷">
           <test-drop-down-box v-model="testObj2"></test-drop-down-box>
         </el-form-item>
@@ -107,24 +107,19 @@ import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 export default {
   data() {
     return {
-      ruleForm: {}, //表单绑定的数据
-      rules: {
-        testObj: [{}]
-      }, //表单验证
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
       total: null, //总条目
-      form: {},
       testObj: {}, // 父传子 试卷
       testObj2: {},
       classObj: {}, // 父传子  班级
       classObj2: {}, // 父传子  班级
       timeObj: [], //父传子  考试时间
       timeObj2: [], //父传子  考试时间
-      taskId: "",
-      oindex: ""
+      taskId: "",//试卷id
+      oindex: ""//下标
     };
   },
   //定义组件

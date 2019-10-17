@@ -89,7 +89,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('tableName.tjs')" prop="userTypeTypeName">
-              <el-select v-model="ruleForm.userTypeTypeName" placeholder="请选择" @change="getTypName">
+              <el-select v-model="ruleForm.userTypeTypeName" placeholder="请选择">
                 <el-option
                   v-for="item in roles"
                   :key="item.userTypeId"
@@ -239,7 +239,6 @@ export default {
      * @method typName
      * @param v 下拉框的id
      */
-    getTypName(v) {},
 
     /**
      * 删除所在行的数
