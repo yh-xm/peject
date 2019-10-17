@@ -27,7 +27,8 @@ export const zh = {
     deleteSuccess:"删除成功！",
     addSuccess:"新增成功！",
     systemError:"系统错误！",
-    dataChange:"数据没有变化！"
+    dataChange:"数据没有变化！",
+    undefindData:"内容不能为空！"
    },
     base:{
       title:"基础数据 ",
@@ -72,7 +73,8 @@ export const zh = {
         makep13:"题干",
         makep14:"参考答案",
         makep15:"分值",
-        makep16:"修改试卷信息"
+        makep16:"修改试卷信息",
+        makep17:"题目预览"
     },
     tableName:{
       name:"学生名称",

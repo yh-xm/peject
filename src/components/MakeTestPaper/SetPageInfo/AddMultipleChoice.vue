@@ -121,8 +121,6 @@ export default {
               _this.AddMultipleChoice.domains.length
             ]
         });
-      } else {
-        _this.$msg(_this, -1, "不能添加选项了！");
       }
     },
     /**
@@ -136,8 +134,15 @@ export default {
       var _this = this;
       _this.$nextTick(function() {
         _this.$refs[formName].validate(valid => {
-          console.log(_this.$refs[formName].model.domains);
-          if (valid) {
+          var hasValue=0;
+         _this.$refs[formName].model.domains.map(v=>{
+            if(v.value!=""){
+              return hasValue++;
+            }else{
+              return null;
+            }
+          })
+          if (hasValue== _this.$refs[formName].model.domains.length&&_this.AddMultipleChoice.checked.length!=0) {
             var tpqPaperId = sessionStorage.testPaperId; //获取试卷ID
             var tpqScore = _this.$refs[formName].model.onum; //获取表单的分数
             var title = _this.$refs[formName].model.title; //获取题目
@@ -179,15 +184,15 @@ export default {
                     questionTypeId: 1
                   };
                   _this.$emit("addMultipleChoice", data); //通知父组件
-                  _this.$msg(_this, 1, "添加成功!");
+                      _this.$msg(_this, 1,_this.$t("mesTips.addSuccess"));
                   _this.init(); //初始化
                   _this.resetForm("AddMultipleChoice");
                 } else {
-                  _this.$msg(_this, -1, res.message);
+                  _this.$msg(_this,-1,_this.$t("mesTips.systemError"))
                 }
               });
           } else {
-            console.log("error submit!!");
+ _this.$msg(_this,-1,_this.$t("mesTips.undefindData"))
             return false;
           }
         });

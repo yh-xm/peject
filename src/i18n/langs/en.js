@@ -27,7 +27,8 @@ export const en = {
       deleteSuccess:"Delete Successfully",
       addSuccess:"New Successfully",
       systemError:"System Error",
-      dataChange:"The data hasn't changed"
+      dataChange:"The data hasn't changed",
+      undefindData:"Content cannot be empty!"
     },
     base:{
       title:"Basic data",
@@ -70,7 +71,8 @@ export const en = {
         makep13:"Question Stem",
         makep14:"Reference Version",
         makep15:"score",
-        makep16:"Modify test paper information"
+        makep16:"Modify test paper information",
+        makep17:"Topic preview"
     },
     tableName:{
       name:"Student Name",
