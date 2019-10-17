@@ -136,16 +136,16 @@ export default {
             })
             .then(function(data) {
               if (data.code == 1) {
-                _this.$msg(_this, 1, "修改成功"); //成功提示
+                _this.$msg(_this, 1,_this.$t("mesTips.modifySuccess")); //成功提示
 
                 var alter = _this.tableData[_this.usIndex]; //数据赋值以达到刷新
                 alter.tpTitle = _this.ruleForm.name;
                 alter.courseName = _this.bothWay.courseName;
                 alter.tpCourseId = _this.bothWay.courseId;
               } else if (data.code == 0) {
-                _this.$msg(_this, 0, "数据没做修改"); //警告提示
+                _this.$msg(_this, 0, _this.$t("mesTips.dataChange")); //警告提示
               } else if (data.code == -1) {
-                _this.$msg(_this, -1, "系统异常"); //错误提示
+                _this.$msg(_this, -1,  _this.$t("mesTips.systemError")); //错误提示
               }
             });
           _this.dialogFormVisible = false;
@@ -186,7 +186,7 @@ export default {
             .then(function(data) {
               if (data.code == 1) {
                 _this.tableData.splice(index, 1); //用下标删除面板中单行的数据达到刷新
-                _this.$msg(_this, 1, "删除成功"); //成功提示
+                _this.$msg(_this, 1,  _this.$t("mesTips.deleteSuccess")); //成功提示
                 _this.pages=_this.pages-1 //总数量也减一
                 for (let key in _this.tableData) {
                   if (index < _this.tableData[key].index) { //删除时会自动排序
@@ -195,9 +195,9 @@ export default {
                 }
 
               } else if (data.code == 0) {
-                _this.$msg(_this, 0, "数据没做修改"); //警告提示
+                _this.$msg(_this, 0,_this.$t("mesTips.dataChange")); //警告提示
               } else if (data.code == -1) {
-                _this.$msg(_this, -1, "系统异常"); //错误提示
+                _this.$msg(_this, -1,_this.$t("mesTips.systemError")); //错误提示
               }
             });
         })

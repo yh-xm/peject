@@ -12,7 +12,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.classId"
-                :label="item.courseName"
+                :label="item.className"
                 :value="item.classId"
               ></el-option>
             </el-select>

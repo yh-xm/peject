@@ -18,7 +18,11 @@
       <div slot="header">
         <div class="impComp">
           <!-- 组件引用 -->
+<<<<<<< HEAD
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px">
+=======
+          <el-form>
+>>>>>>> 010ce1c5c6438ad4aa47a74dadf30b9467e59d7d
             <el-form-item :label="$t('base.r7')">
               <test-drop-down-box v-model="testObj"></test-drop-down-box>
             </el-form-item>
@@ -81,7 +85,11 @@
     <!-- 添加对话框 -->
     <el-dialog :title="$t('base.r10')" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
+<<<<<<< HEAD
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  >
+=======
+      <el-form>
+>>>>>>> 010ce1c5c6438ad4aa47a74dadf30b9467e59d7d
         <el-form-item :label="$t('base.r7')">
           <test-drop-down-box v-model="testObj2"></test-drop-down-box>
         </el-form-item>
@@ -108,24 +116,19 @@ import TestTime from "@/components/TestSetter/TestTime"; //考试时间
 export default {
   data() {
     return {
-      ruleForm: {}, //表单绑定的数据
-      rules: {
-        testObj: [{}]
-      }, //表单验证
       SetTest: [], //初始化分页数据
       dialogFormVisible: false, //对话框隐藏
       currentPage: 1, //当前页码
       pageSize: 10, //每页大小
       total: null, //总条目
-      form: {},
       testObj: {}, // 父传子 试卷
       testObj2: {},
       classObj: {}, // 父传子  班级
       classObj2: {}, // 父传子  班级
       timeObj: [], //父传子  考试时间
       timeObj2: [], //父传子  考试时间
-      taskId: "",
-      oindex: ""
+      taskId: "",//试卷id
+      oindex: ""//下标
     };
   },
   //定义组件
@@ -149,10 +152,10 @@ export default {
         !_this.classObj.hasOwnProperty("classId") ||
         _this.timeObj.length == 0
       ) {
-        _this.$msg(_this, 0, "选项不能为空请重新选择！");
+        _this.$msg(_this, 0, _this.$t("mesTips.empty"));
         return;
       } else if (_this.timeObj.TimeDiff < 30) {
-        _this.$msg(_this, 0, "考试时间不能低于30分中！");
+        _this.$msg(_this, 0, _this.$t("mesTips.time"));
         return;
       }
       let obj = {
@@ -166,19 +169,19 @@ export default {
         res => {
           let dataCu = res.data;
           if (res.code == 1) {
-            _this.$msg(_this, 1, "设置成功");
+            _this.$msg(_this, 1, _this.$t("mesTips.set"));
             var tpId = dataCu.tpId;
             dataCu.taskTestPaperId = tpId;
             _this.SetTest.unshift(dataCu);
             _this.cancelTest(); //调用清空表单方法
           } else if (res.code == -2) {
             _this.cancelTest(); //调用清空表单方法
-            _this.$msg(_this, -1, "参数错误!设置失败！");
+            _this.$msg(_this, -1, _this.$t("mesTips.parameter"));
           }
         },
         () => {
           _this.cancelTest(); //调用清空表单方法
-          _this.$msg(_this, -1, "系统错误");
+          _this.$msg(_this, -1,  _this.$t("mesTips.systemError"));
         }
       );
     },
@@ -269,7 +272,7 @@ export default {
         })
         .then(res => {
           if (res.message == "修改成功。") {
-            _this.$msg(_this, 1, "修改成功");
+            _this.$msg(_this, 1,_this.$t("systemError.modifySuccess"));
             _this.dialogFormVisible = false;
             _this.SetTest[_this.oindex].className = _this.classObj2.className;
             _this.SetTest[_this.oindex].taskTestPaperId = _this.testObj2.tpId;
@@ -279,7 +282,7 @@ export default {
             _this.SetTest[_this.oindex].taskEndTime = _this.timeObj2[1];
             _this.SetTest[_this.oindex].taskEscapeTime = _this.timeObj2[2];
           } else {
-            _this.$msg(_this, -1, res.message);
+            _this.$msg(_this, -1, _this.$t("systemError.failed"));
           }
         });
     },
@@ -290,6 +293,7 @@ export default {
      * */
 
     handleDelete(index, row) {
+      console.log(row)
       let taskId = row.taskId;
       let _this = this;
       var lang = localStorage.locale;
@@ -319,12 +323,12 @@ export default {
               console.log(res);
               if (res.code === 1) {
                 _this.SetTest.splice(index, 1);
-                _this.$msg(_this, 1, "删除成功");
+                _this.$msg(_this, 1, _this.$t("systemError.deleteSuccess"));
               }
             });
         })
         .catch(() => {
-          _this.$msg(_this, 0, "已取消删除");
+          _this.$msg(_this, 0, _this.$t("systemError.resDelete"));
         });
     },
 

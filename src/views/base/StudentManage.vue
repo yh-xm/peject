@@ -1,3 +1,4 @@
+<!--学生管理-->
 <template>
   <div id="StudentManage">
     <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -243,11 +244,11 @@ export default {
             //  console.log(_this.options)
              console.log(response)
             if (response.code == 1) {
-               _this.$msg(_this,1,'新增成功！') //成功提示
+               _this.$msg(_this,1,_this.$t("mesTips.mesTips")) //成功提示
               _this.tableData.push(params);
               _this.classInfo(_this.classes2); //跳转到所选班级，方便查看
             } else {
-              _this.$msg(_this,-1,'新增失败！') //错误提示
+              _this.$msg(_this,-1,_this.$t("mesTips.failure")) //错误提示
             }
           });
         }
@@ -304,9 +305,9 @@ export default {
             .then(response => {
               if (response.code == 1) {
                 _this.classInfo(_this.classes2); //修改成功后跳转到所选班级，方便查看
-                _this.$msg(_this,1,'修改成功！')
+                _this.$msg(_this,1,_this.$t("mesTips.modifySuccess"))
               } else {
-                _this.$msg(_this,-1,'修改失败！')
+                _this.$msg(_this,-1,_this.$t("mesTips.failed"))
               }
             });
         }
@@ -343,10 +344,10 @@ export default {
             })
             .then(() => {
               _this.tableData.splice(index1, 1);
-             _this.$msg(_this,1,' 删除成功') //成功提示
+             _this.$msg(_this,1,_this.$t("mesTips.deleteSuccess")) //成功提示
             })
             .catch(() => {
-            _this.$msg(_this,-1,' 已取消删除') 
+            _this.$msg(_this,-1,_this.$t("mesTips.res")) 
             });
         });
     },

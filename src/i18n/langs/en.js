@@ -18,7 +18,8 @@ export const en = {
       addjs:"AddCharacter",
       res:"Recel",
       detail:"Detail",
-      modification:"Modification"
+      modification:"Modification",
+     
     },
     mesTips:{
       loginSuccess:"Login Successfully!",
@@ -28,7 +29,22 @@ export const en = {
       addSuccess:"New Successfully",
       systemError:"System Error",
       dataChange:"The data hasn't changed",
+<<<<<<< HEAD
       undefindData:"Content cannot be empty!"
+=======
+      fillIn:"Please Fill In The User Name And Password",
+      failed:"Fail to modify",
+      failure:"The new failure",
+      res:"Cancel the change",
+      resDelete:"Oops Undelete",
+      parameter:"Parameter error ",
+      Cancel:"Cancel the increase",
+      Move:"Move successful!",
+      oldCode:"Old password error",
+      empty:"Shanghai jitong Marine supplies co. LTD",
+      time:"Test time must not be less than 30 minutes!",
+      set:"successfully set",
+>>>>>>> 010ce1c5c6438ad4aa47a74dadf30b9467e59d7d
     },
     base:{
       title:"Basic data",

@@ -76,13 +76,13 @@ export default {
               let code = res.code; //返回代码
               if (code == 1) {
                 _this.apply(); //更新后重新渲染
-                _this.$msg(_this,1,'修改成功') //成功提示
+                _this.$msg(_this,1,_this.$t("mesTips.modifySuccess")) //成功提示
               }
               if (code == -1) {
-                 _this.$msg(_this,0,'修改异常') 
+                 _this.$msg(_this,0,_this.$t("mesTips.systemError")) 
               }
               if (code == -2) {
-                 _this.$msg(_this,-1,'修改失败') 
+                 _this.$msg(_this,-1,_this.$t("mesTips.failed")) 
               }
             })
             .catch(error => {
@@ -90,7 +90,7 @@ export default {
             });
         })
         .catch(() => {
-           _this.$msg(_this,-1,'取消修改') 
+           _this.$msg(_this,-1,_this.$t("mesTips.res")) 
         });
     },
     handleDelete(index, row) {
@@ -123,7 +123,7 @@ export default {
               let code = res.code; //返回代码
               if (code == 1) {
                 _this.tableData.splice(index, 1);
-                  _this.$msg(_this,1,'删除成功') 
+                  _this.$msg(_this,1,_this.$t("mesTips.deleteSuccess")) 
               }
             })
             .catch(error => {
@@ -132,7 +132,7 @@ export default {
         })
         .catch(() => {
           console.log(index);
-           _this.$msg(_this,-1,'取消删除') 
+           _this.$msg(_this,-1,_this.$t("mesTips.resDelete")) 
         });
     },
     addUsers() {
@@ -147,7 +147,7 @@ export default {
       }
       _this.$prompt(_this.$t("tableName.addnewusers"), _this.$t("tableName.userInformation"), {
         confirmButtonText: contentText,
-        cancelButtonText:contentText,
+        cancelButtonText:contentText2,
         inputPattern: /\S/,
         inputErrorMessage: "内容不能为空"
       })
@@ -162,13 +162,13 @@ export default {
               let data = res.data; //操作成功后，返回给前端有用的数据
               if (code == 1) {
                 _this.tableData.push(data);
-                _this.$msg(_this,1,'增加成功')
+                _this.$msg(_this,1,_this.$t("mesTips.addSuccess"))
               }
               if (code == -1) {
-                _this.$msg(_this,0,'系统异常');
+                _this.$msg(_this,0,_this.$t("mesTips.systemError"));
               }
               if (code == -2) {
-                 _this.$msg(_this,-1,'参数错误');
+                 _this.$msg(_this,-1,_this.$t("mesTips.parameter"));
               }
             })
             .catch(error => {
@@ -176,7 +176,7 @@ export default {
             });
         })
         .catch(() => {
-         _this.$msg(_this,-1,'取消增加');
+         _this.$msg(_this,-1,_this.$t("mesTips.Cancel"));
         });
     },
     /**
@@ -209,8 +209,7 @@ export default {
             0,
             _this.tableData.splice(oldIndex, 1)[0]
           );
-          console.log(_this.tableData);
-          var newArray = _this.tableData.slice(0);
+          var newArray = _this.tableData;
           let newArr = newArray.map((value,i) => {
             return {
               userTypeSortNo: i++,
@@ -221,15 +220,14 @@ export default {
             .then(function(res) {
               {
                 if (res.code == 1) {
-                  // _this.$msg(_this, 1, "移动成功！");
-               _this.$msg(_this, 1, "移动成功！");
+               _this.$msg(_this, 1, _this.$t("mesTips.Move"));
 
                 } else if (res.code == 0) {
-                  _this.$msg(_this, 0, "数据没有变化！");
+                  _this.$msg(_this, 0, _this.$t("mesTips.dataChange"));
                 }
               }
             },() => {
-               _this.$msg(_this, -1, "系统错误！");
+               _this.$msg(_this, -1,_this.$t("mesTips.systemError"));
             });
         }
       });

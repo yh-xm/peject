@@ -156,9 +156,9 @@ export default {
       title: "", //对话框标题
       flag: false, //对话框确认按钮隐藏显示
       dialogFormVisible: false, //对话框隐藏显示
+      oindex: "",
       // 获取表单信息
       ruleForm: {
-        // userUid: "", //id
         userName: "", //用户名称
         userMobile: "", //手机号
         userPassword: "", //密码
@@ -234,6 +234,11 @@ export default {
         _this.tableData = res;
       });
     },
+    /**
+     * 渲染---获下拉框角色名称 可
+     * @method typName
+     * @param v 下拉框的id
+     */
 
     /**
      * 删除所在行的数
@@ -256,8 +261,7 @@ export default {
         var flag = "提示";
         var title = "此操作将永久删除该数据, 是否继续?";
       }
-      // console.log(index, row);
-      let _this = this;
+      const _this = this;
       let uid = (index, row.userUid);
 
       this.$confirm(title, flag, {
@@ -271,18 +275,17 @@ export default {
             function(res) {
               console.log(res);
               if (res.code == 1) {
-                _this.$msg(_this, 1, "删除成功!");
+                _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
                 _this.tableData.splice(index, 1);
               }else if(res.code == -2){
-              _this.$msg(_this, 0, "参数错误,删除失败!");
+              _this.$msg(_this, 0, _this.$t("mesTips.parameter"));
 
               }
             }
           );
+        }).catch(() => {
+          _this.$msg(_this, -1, _this.$t("mesTips.systemError"));
         })
-        .catch(() => {
-          _this.$msg(_this, -1, "系统异常,删除失败!");
-        });
     },
 
     /**
@@ -291,13 +294,14 @@ export default {
      *
      * */
     handleAdd() {
+      const _this = this;
+
       var lang = localStorage.locale;
       if (lang == "en") {
         var contentText = "Add User Information";
       } else {
         var contentText = "添加用户信息";
       }
-      let _this = this;
       _this.dialogFormVisible = true; //打开对话框
       _this.title = contentText; //改变对话框标题
       _this.flag = !true; //显示添加按钮
@@ -317,8 +321,11 @@ export default {
      *
      * */
     addClose(formName) {
-      let _this = this;
-
+      const _this = this;
+      var typNames = _this.roles.find(
+        res => res.userTypeId == _this.ruleForm.userTypeTypeName
+      );
+      var typName = typNames.userTypeTypeName;
       var obj = {
         userName: _this.ruleForm.userName, //用户名，不能为空
         userMobile: _this.ruleForm.userMobile, //手机号，长度11位
@@ -331,11 +338,11 @@ export default {
         if (valid) {
           _this.$post("api/User/AddTeacher", obj).then(function(res) {
             if (res.code == 1) {
-              _this.$msg(_this, 1, "添加成功!");
+              _this.$msg(_this, 1, _this.$t("mesTips.addSuccess"));
             } else if (res.code == 0) {
-              _this.$msg(_this, 0, "内容没有变化");
+              _this.$msg(_this, 0,_this.$t("mesTips.dataChange"));
             } else {
-              _this.$msg(_this, -1, "添加失败！");
+              _this.$msg(_this, -1, _this.$t("mesTips.failure"));
             }
             _this.dialogFormVisible = false; //关闭对话框
           });
@@ -361,13 +368,14 @@ export default {
      */
 
     handleEdit(index, row) {
+      let _this = this;
+      _this.oindex = index;
       var lang = localStorage.locale;
       if (lang == "en") {
         var contentText = "Edit User Information";
       } else {
         var contentText = "编辑用户信息";
       }
-      let _this = this;
       _this.dialogFormVisible = true; //打开对话框
       _this.title = contentText; //改变对话框标题
       _this.flag = true; //显示编辑按钮
@@ -380,6 +388,16 @@ export default {
      * */
     editColse(formName) {
       let _this = this;
+
+      const xmlObj = {
+        userUid: _this.ruleForm.userUid, //要修改的用户标识符
+        userName: _this.ruleForm.userName, //用户名，不能为空
+        userMobile: _this.ruleForm.userMobile, //手机号
+        userSex: _this.ruleForm.userSex, //性别
+        userPassword: _this.ruleForm.userPassword, //密码
+        userUserTypeId: _this.ruleForm.userTypeTypeName //角色id
+      };
+
       _this.$refs[formName].validate(valid => {
         if (valid) {
           //调用添加接口
@@ -394,11 +412,11 @@ export default {
             })
             .then(function(res) {
               if (res.code == 1) {
-                _this.$msg(_this, 1, "修改成功");
+                _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
               } else if (res.code == 0) {
-                _this.$msg(_this, 0, "内容没有变化");
+                _this.$msg(_this, 0,_this.$t("mesTips.dataChange"));
               } else {
-                _this.$msg(_this, -1, "修改失败！");
+                _this.$msg(_this, -1, _this.$t("mesTips.failed"));
               }
               _this.dialogFormVisible = false; //关闭对话框
             });
@@ -417,7 +435,7 @@ export default {
     cancel(formName) {
       let _this = this;
       _this.$refs[formName].resetFields();
-      _this.$msg(_this, 0, "已取消");
+      
       _this.dialogFormVisible = false; //关闭对话框
     }
   },

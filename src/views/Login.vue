@@ -156,10 +156,10 @@ export default {
                 }
               })
               .catch(function(error) {
-                _this.$msg(_this, -1, "用户名或密码错误，请重新输入!");
+                _this.$msg(_this, -1, _this.$t("mesTips.loginEorr"));
               });
           } else {
-            _this.$msg(_this, -1, "请填写用户名和密码");
+            _this.$msg(_this, -1, _this.$t("mesTips.fillIn"));
           }
         } else {
           return false;

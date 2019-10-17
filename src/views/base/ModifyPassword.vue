@@ -91,16 +91,16 @@
       ).then((res)=> {
         // console.log(res)
             if(res.code==-3){
-						  _this.$msg(_this,-1,'旧密码错误');
+						  _this.$msg(_this,-1,_this.$t("mesTips.oldCode"));
 						}
 						if(res.code==-1){
-							_this.$msg(_this,0,'系统异常');
+							_this.$msg(_this,0,_this.$t("mesTips.systemError"));
 						}
 							if(res.code==-2){
-							_this.$msg(_this,-1,'参数错误');;
+							_this.$msg(_this,-1,_this.$t("mesTips.parameter"));;
 						}
 						if(res.code==1){	
-              	_this.$msg(_this,1,'修改成功');
+              	_this.$msg(_this,1,_this.$t("mesTips.modifySuccess"));
               sessionStorage.removeItem("token");
               sessionStorage.removeItem("uid");
               _this.$router.push("login")
@@ -108,7 +108,7 @@
               
 					}).catch((err) => {
 						console.log(err)
-							_this.$msg(_this,0,'修改失败');
+							_this.$msg(_this,0,_this.$t("mesTips.failed"));
           })
       },
       resetForm(formName) {
