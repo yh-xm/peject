@@ -36,21 +36,21 @@
           <div v-for="(items,indexs) in item.bodys" :key="indexs" class="text item">
             <SetChooseQuestion
               v-if="items.tpqQuestion.questionTypeId=='1'?true:false"
-              :AddChooseQuestionList="items"
+              :addChooseQuestionList="items"
               :nowIndex="indexs"
               @setQuestion="setQuestion"
               @changeScore="changeScore"
             ></SetChooseQuestion>
             <SetGapFillQuestion
               v-if="items.tpqQuestion.questionTypeId=='2'?true:false"
-              :AddGapFillQuestionList="items"
+              :addGapFillQuestionList="items"
               :nowIndex3="indexs"
               @setQuestion="setQuestion"
               @changeScore="changeScore"
             ></SetGapFillQuestion>
             <SetAnswerQuestion
               v-if="items.tpqQuestion.questionTypeId=='3'?true:false"
-              :AddEssayQuestiontList="items"
+              :addEssayQuestiontList="items"
               :nowIndex2="indexs"
               @setQuestion="setQuestion"
               @changeScore="changeScore"

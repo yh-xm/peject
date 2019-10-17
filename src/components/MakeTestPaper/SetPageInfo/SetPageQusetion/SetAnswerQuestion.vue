@@ -5,7 +5,7 @@
   "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetAnswerQuestion"; 
    注册    components:{SetAnswerQuestion},
      当标签使用    
- :AddChooseQuestionList="items" 传入题目信息
+ :addChooseQuestionList="items" 传入题目信息
 :nowIndex="indexs" 传入题号
 @setQuestion="setQuestion" 进行维护时触发的方法
  @changeScore="changeScore" 修改分数时触发的方法
@@ -85,7 +85,7 @@ export default {
     };
   },
   props: {
-    AddEssayQuestiontList: Object, //父组件传递的题目信息
+    addEssayQuestiontList: Object, //父组件传递的题目信息
     nowIndex2: Number //题目编号
   },
   methods: {
@@ -114,7 +114,7 @@ export default {
     saveOption() {
       var _this = this;
       var nowOption = _this.nowOption;
-      var value = _this.AddEssayQuestiontList.tpqId; //获取题目Id
+      var value = _this.addEssayQuestiontList.tpqId; //获取题目Id
       _this
         .$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, 
          nowOption.tpqQuestion
@@ -136,13 +136,13 @@ export default {
     },
     /**
      * 删除题目
-     *  {Number} this.AddEssayQuestiontList.tpqId 题目Id
+     *  {Number} this.addEssayQuestiontList.tpqId 题目Id
      */
     removePageInfoItem() {
       var _this = this;
       _this
         .$post(
-          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddEssayQuestiontList.tpqId}`
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.addEssayQuestiontList.tpqId}`
         )
         .then(res => {
           console.log(res);
@@ -150,7 +150,7 @@ export default {
             var data = {
               index: _this.nowIndex2, //题号
               questionTypeId: 3, //题目类型
-              tpqScore: _this.AddEssayQuestiontList.tpqScore //题目分数
+              tpqScore: _this.addEssayQuestiontList.tpqScore //题目分数
             };
             _this.$emit("setQuestion", data);
             _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
@@ -194,8 +194,8 @@ export default {
      */
     init() {
       var _this = this;
-      _this.oldOption = JSON.parse(JSON.stringify(_this.AddEssayQuestiontList)); //获取题目信息
-      _this.nowOption = _this.AddEssayQuestiontList; //获取题目信息
+      _this.oldOption = JSON.parse(JSON.stringify(_this.addEssayQuestiontList)); //获取题目信息
+      _this.nowOption = _this.addEssayQuestiontList; //获取题目信息
     }
   },
   created() {

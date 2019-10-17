@@ -17,8 +17,8 @@
   <div class="GapFilling">
     <div class="gapContent">
       <el-form
-        :model="AddGapFillQuestion"
-        ref="AddGapFillQuestion"
+        :model="addGapFillQuestion"
+        ref="addGapFillQuestion"
         label-width="100px"
         class="demo-dynamic"
       >
@@ -30,7 +30,7 @@
           <el-input type="textarea" v-model="title" :rows="1" id="textarea"></el-input>
         </el-form-item>
         <el-form-item
-          v-for="(domain, index) in AddGapFillQuestion.domains"
+          v-for="(domain, index) in addGapFillQuestion.domains"
           :key="domain.key"
           :prop="'domains.' + index + '.value'"
         >
@@ -46,20 +46,20 @@
             <el-input
               v-if="item=='▁'"
               :key="index"
-              v-model="AddGapFillQuestion.domains[optionsIndexArr[index]].value"
+              v-model="addGapFillQuestion.domains[optionsIndexArr[index]].value"
               class="ShowDaAn"
-              :style="{width:`${AddGapFillQuestion.domains[optionsIndexArr[index]].olength}`}"
+              :style="{width:`${addGapFillQuestion.domains[optionsIndexArr[index]].olength}`}"
             ></el-input>
-            <span v-if="item=='▁'">({{AddGapFillQuestion.domains[optionsIndexArr[index]].onum}}分)</span>
+            <span v-if="item=='▁'">({{addGapFillQuestion.domains[optionsIndexArr[index]].onum}}分)</span>
           </el-row>
         </el-form-item>
         <el-form-item>
-          <el-button round @click="resetForm('AddGapFillQuestion')" size="small">{{$t('btn.r')}}</el-button>
+          <el-button round @click="resetForm('addGapFillQuestion')" size="small">{{$t('btn.r')}}</el-button>
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
-            @click="submitForm('AddGapFillQuestion')"
+            @click="submitForm('addGapFillQuestion')"
             size="small"
           >{{$t('btn.s')}}</el-button>
         </el-form-item>
@@ -72,7 +72,7 @@ export default {
   data() {
     return {
       title: "", //题目
-      AddGapFillQuestion: {
+      addGapFillQuestion: {
         domains: [] //填空
       },
       optionsIndexArr: [] //填空下标位置
@@ -127,7 +127,7 @@ export default {
                 };
                 _this.$emit("addGapFilling", data); //改变父组件的值
                 _this.$msg(_this, 1,_this.$t("mesTips.addSuccess"));
-                _this.resetForm("AddGapFillQuestion"); //重置表单
+                _this.resetForm("addGapFillQuestion"); //重置表单
                 _this.title = ""; //重置题目
               } else {
                 _this.$msg(_this,-1,_this.$t("mesTips.systemError"))
@@ -194,7 +194,7 @@ export default {
    * nindexArr 新空格下标数组
    * oarr 旧题目分割数组
    * narr 新题目分割数组
-   * AddGapFillQuestion.domains 添加的空格数组
+   * addGapFillQuestion.domains 添加的空格数组
    */
   watch: {
     //监听题目变化
@@ -243,7 +243,7 @@ export default {
                 parseInt(oindexArr[x])
               ) {
                 //在哪个位置插入
-                this.AddGapFillQuestion.domains.splice(
+                this.addGapFillQuestion.domains.splice(
                   oarr[parseInt(oindexArr[x])],
                   0,
                   JSON.parse(JSON.stringify(nowAddOption))
@@ -256,7 +256,7 @@ export default {
             if (max == oindexArr.length) {
               //大于所有旧填空下标，则是往后插入。
               //往后添加空格
-              _this.AddGapFillQuestion.domains.push(JSON.parse(JSON.stringify(nowAddOption)));
+              _this.addGapFillQuestion.domains.push(JSON.parse(JSON.stringify(nowAddOption)));
               max = 0; //清空
             }
           }
@@ -266,12 +266,12 @@ export default {
           if (narr.length - oarr.length > 1) {
             for (let i in oindexArr) {
               if (textindex < oindexArr[i]) {
-                _this.AddGapFillQuestion.domains.splice(i, 0, JSON.parse(JSON.stringify(nowAddOption))); // 粘贴多个文字一个填空
+                _this.addGapFillQuestion.domains.splice(i, 0, JSON.parse(JSON.stringify(nowAddOption))); // 粘贴多个文字一个填空
                 break;
               }
             }
           } else {
-            _this.AddGapFillQuestion.domains.splice(
+            _this.addGapFillQuestion.domains.splice(
               narr[textindex],
               0,
               JSON.parse(JSON.stringify(nowAddOption))
@@ -288,7 +288,7 @@ export default {
             parseInt(oindexArr[i]) >= textindex &&
             parseInt(oindexArr[i]) <= textindex + oarr.length - narr.length
           ) {
-            _this.AddGapFillQuestion.domains.splice(
+            _this.addGapFillQuestion.domains.splice(
               i,
               oindexArr.length - nindexArr.length
             );
@@ -298,16 +298,16 @@ export default {
       }
       if (nindexArr.length == 0) {
         //填空为0
-        _this.AddGapFillQuestion.domains = [];
+        _this.addGapFillQuestion.domains = [];
       }
       _this.optionsIndexArr = narr; // 获取最新的分割题目数组
     },
-    AddGapFillQuestion: {
+    addGapFillQuestion: {
       handler(n) {
         var that = this;
-        for (let i = 0; i < that.AddGapFillQuestion.domains.length; i++) {
-          that.AddGapFillQuestion.domains[i].olength =
-            parseInt(that.AddGapFillQuestion.domains[i].value.length) * 12 +
+        for (let i = 0; i < that.addGapFillQuestion.domains.length; i++) {
+          that.addGapFillQuestion.domains[i].olength =
+            parseInt(that.addGapFillQuestion.domains[i].value.length) * 12 +
             35 +
             "px";
         }

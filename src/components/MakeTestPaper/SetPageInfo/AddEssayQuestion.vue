@@ -1,7 +1,7 @@
 <!--
 添加问答题组件
 
-  引用 import AddEssayQuestion 
+  引用 import addEssayQuestion 
   from "@/components/MakeTestPaper/SetPageInfo/AddEssayQuestion"; //添加选择题组件
 
    注册    components:{AddEssayQuestion},
@@ -15,32 +15,33 @@
     <div class="essat-content">
       <!-- 表单 -->
       <el-form
-        :model="AddEssayQuestion"
-        ref="AddEssayQuestion"
+        :model="addEssayQuestion"
+        ref="addEssayQuestion"
         label-width="100px"
         class="demo-dynamic"
       >
         <el-form-item prop="title" :label="$t('test.makep13')">
           <!-- 填写题目 -->
-          <el-input type="textarea" v-model="AddEssayQuestion.title" :rows="1"></el-input>
+          <el-input type="textarea" v-model="addEssayQuestion.title" :rows="1"></el-input>
         </el-form-item>
         <!-- 参考答案 -->
         <el-form-item :label="$t('test.makep14')">
-          <editor v-model="AddEssayQuestion.value" ref="editor" />
+          <editor v-model="addEssayQuestion.value" ref="editor" />
+
         </el-form-item>
         <!-- 分值 -->
         <el-form-item :label="$t('test.makep15')">
-          <el-input-number v-model="AddEssayQuestion.onum" :min="1" :max="5" label="描述文字"></el-input-number>
+          <el-input-number v-model="addEssayQuestion.onum" :min="1" :max="5" label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item>
           <!-- 重置 -->
-          <el-button round @click="resetForm('AddEssayQuestion')">{{$t('btn.r')}}</el-button>
+          <el-button round @click="resetForm('addEssayQuestion')">{{$t('btn.r')}}</el-button>
           <!-- 新增题目 -->
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
-            @click="submitForm('AddEssayQuestion')"
+            @click="submitForm('addEssayQuestion')"
           >{{$t('btn.s')}}</el-button>
         </el-form-item>
       </el-form>
@@ -55,7 +56,7 @@ export default {
   },
   data() {
     return {
-      AddEssayQuestion: {
+      addEssayQuestion: {
         onum: 5, //默认分数
         value: "", //答案
         title: "" //题目
@@ -103,8 +104,8 @@ export default {
               };
               _this.$emit("addEssayQuestion", data);
               _this.$msg(_this, 1, _this.$t("mesTips.addSuccess"));
-              _this.resetForm("AddEssayQuestion"); //重置表单
-              _this.AddEssayQuestion.value = "";
+              _this.resetForm("addEssayQuestion"); //重置表单
+              _this.addEssayQuestion.value = "";
               _this.$refs.editor.content = "";
             } else {
               _this.$msg(_this, -1, _this.$t("mesTips.systemError"));

@@ -5,7 +5,7 @@
   "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetChooseQuestion"; 
    注册    components:{SetChooseQuestion},
      当标签使用    
- :AddChooseQuestionList="items" 传入题目信息
+ :addChooseQuestionList="items" 传入题目信息
 :nowIndex="indexs" 传入题号
 @setQuestion="setQuestion" 进行维护时触发的方法
  @changeScore="changeScore" 修改分数时触发的方法
@@ -108,7 +108,7 @@ export default {
     };
   },
   props: {
-    AddChooseQuestionList: Object, //父组件传递的题目信息
+    addChooseQuestionList: Object, //父组件传递的题目信息
     nowIndex: Number //题目编号
   },
   methods: {
@@ -159,7 +159,7 @@ export default {
     saveOption() {
       var nowOption = this.nowOption;
       var _this = this;
-      var value = _this.AddChooseQuestionList.tpqId; //获取题目Id
+      var value = _this.addChooseQuestionList.tpqId; //获取题目Id
       _this
         .$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, nowOption.tpqQuestion)
         .then(res => {
@@ -194,14 +194,14 @@ export default {
       var _this = this;
       _this
         .$post(
-          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddChooseQuestionList.tpqId}` //删除题目
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.addChooseQuestionList.tpqId}` //删除题目
         )
         .then(res => {
           if (res.message == "删除成功") {
             var data = {
               index: _this.nowIndex, //题号
               questionTypeId: 1, //题目类型
-              tpqScore: _this.AddChooseQuestionList.tpqScore //题目分数
+              tpqScore: _this.addChooseQuestionList.tpqScore //题目分数
             };
             _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
             _this.$emit("setQuestion", data); //改变父组件的分数
@@ -268,8 +268,8 @@ export default {
      */
     init() {
       var _this = this;
-      _this.oldOption = JSON.parse(JSON.stringify(_this.AddChooseQuestionList)); //克隆信息
-      _this.nowOption = _this.AddChooseQuestionList;
+      _this.oldOption = JSON.parse(JSON.stringify(_this.addChooseQuestionList)); //克隆信息
+      _this.nowOption = _this.addChooseQuestionList;
     }
   },
   created() {

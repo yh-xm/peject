@@ -5,7 +5,7 @@
   "@/components/MakeTestPaper/SetPageInfo/SetPageQusetion/SetGapFillQuestion"; 
    注册    components:{SetGapFillQuestion},
      当标签使用    
- :AddChooseQuestionList="items" 传入题目信息
+ :addChooseQuestionList="items" 传入题目信息
 :nowIndex="indexs" 传入题号
 @setQuestion="setQuestion" 进行维护时触发的方法
  @changeScore="changeScore" 修改分数时触发的方法
@@ -109,7 +109,7 @@ export default {
     };
   },
   props: {
-    AddGapFillQuestionList: Object, //传入的题目信息
+    addGapFillQuestionList: Object, //传入的题目信息
     nowIndex3: Number //传入的题号
   },
   methods: {
@@ -160,7 +160,7 @@ export default {
           }
 
           //是否添加填空
-          var value = _this.AddGapFillQuestionList.tpqId; //获取题目Id
+          var value = _this.addGapFillQuestionList.tpqId; //获取题目Id
           _this
             .$post(`/api/TestPaper/ModifyQuestion?paperQuestionId=` + value, {
               questionId: _this.nowOption.questionId, //题目Id
@@ -243,14 +243,14 @@ export default {
       var _this = this;
       _this
         .$post(
-          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.AddGapFillQuestionList.tpqId}` //获取题目Id
+          `/api/TestPaper/RemoveQuestionFromTestPaper?paperQuestionId=${_this.addGapFillQuestionList.tpqId}` //获取题目Id
         )
         .then(res => {
           if (res.message == "删除成功") {
             var data = {
               index: _this.nowIndex3, //题号
               questionTypeId: 2, //题目类型
-              tpqScore: _this.AddGapFillQuestionList.tpqScore //题目分数
+              tpqScore: _this.addGapFillQuestionList.tpqScore //题目分数
             };
             _this.$msg(_this, 1, _this.$t("mesTips.deleteSuccess"));
             _this.$emit("setQuestion", data);
@@ -266,11 +266,11 @@ export default {
     changeScore(v) {
       var _this = this;
       var fillQuestion = _this.nowOption.fillQuestion;
-      _this.AddGapFillQuestionList.fqsScore = 0; //清空分数
+      _this.addGapFillQuestionList.fqsScore = 0; //清空分数
       var fillQuestionScore = [];
       for (const key in fillQuestion) {
         //算出所有填空的总分
-        _this.AddGapFillQuestionList.fqsScore += //累加填空的分数
+        _this.addGapFillQuestionList.fqsScore += //累加填空的分数
           fillQuestion[key].fillQuestionScore[0].fqsScore;
         fillQuestionScore.push(fillQuestion[key].fillQuestionScore[0]);
       }
@@ -278,8 +278,8 @@ export default {
         .$post(
           `/api/TestPaper/ModifyScore`,
           {
-            tpqId: _this.AddGapFillQuestionList.tpqId, //主键编号
-            tpqScore: _this.AddGapFillQuestionList.fqsScore, //填空题分值
+            tpqId: _this.addGapFillQuestionList.tpqId, //主键编号
+            tpqScore: _this.addGapFillQuestionList.fqsScore, //填空题分值
             fillQuestionScore: fillQuestionScore
           } //修改题目分值
         )
@@ -289,7 +289,7 @@ export default {
             _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //更新题目信息
             var data = {
               index: 1, //问题所在下标
-              fqsScore: _this.AddGapFillQuestionList.fqsScore, //问题分数
+              fqsScore: _this.addGapFillQuestionList.fqsScore, //问题分数
               fqIndex: _this.nowIndex3 //问题题号
             };
             _this.$msg(_this, 1, _this.$t("mesTips.modifySuccess"));
@@ -308,7 +308,7 @@ export default {
      */
     init() {
       var _this = this;
-      _this.nowOption = _this.AddGapFillQuestionList.tpqQuestion; //获取题目信息
+      _this.nowOption = _this.addGapFillQuestionList.tpqQuestion; //获取题目信息
       _this.oldOption = JSON.parse(JSON.stringify(_this.nowOption)); //克隆题目信息
       _this.title = _this.nowOption.questionTitle; //获取题目
     }

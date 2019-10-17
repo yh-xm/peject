@@ -4,7 +4,7 @@
   引用 import AddMultipleChoice 
   from "@/components/MakeTestPaper/SetPageInfo/AddMultipleChoice"; //添加选择题组件
 
-   注册    components:{AddMultipleChoice},
+   注册    components:{addMultipleChoice},
      当标签使用    
           <add-multiple-choice 
           @addMultipleChoice="addQuestion" 添加题目时触发的事件
@@ -12,11 +12,10 @@
 -->
 <template>
   <div id="MultipleChoice">
-    <div class="Mult-Content">
+    <div class="mult-content">
       <el-form
-        :model="AddMultipleChoice"
-        ref="AddMultipleChoice"
-        label-width="150px"
+        :model="addMultipleChoice"
+        ref="addMultipleChoice"
         class="demo-dynamic"
       >
         <el-form-item
@@ -26,11 +25,11 @@
       { required: true, message: '请输入题干', trigger: 'blur' }
     ]"
         >
-          <el-input type="textarea" v-model="AddMultipleChoice.title" :rows="1"></el-input>
+          <el-input type="textarea" v-model="addMultipleChoice.title" :rows="1"></el-input>
         </el-form-item>
 
-        <el-form-item v-for="(domain, index) in AddMultipleChoice.domains" :key="domain.key">
-          <el-checkbox-group v-model="AddMultipleChoice.checked" :min="0" :max="2" @change="change">
+        <el-form-item v-for="(domain, index) in addMultipleChoice.domains" :key="domain.key">
+          <el-checkbox-group v-model="addMultipleChoice.checked" :min="0" :max="2" @change="change">
             <el-checkbox :label="domain.options" :key="index" :checked="domain.cqIsRight"></el-checkbox>
           </el-checkbox-group>
 
@@ -43,16 +42,16 @@
           ></el-button>
         </el-form-item>
         <el-form-item :label="$t('test.makep15')">
-          <el-input-number v-model="AddMultipleChoice.onum" :min="1" :max="5" label="描述文字"></el-input-number>
+          <el-input-number v-model="addMultipleChoice.onum" :min="1" :max="5" label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item>
-          <el-button round @click="resetForm('AddMultipleChoice')">{{$t('btn.r')}}</el-button>
+          <el-button round @click="resetForm('addMultipleChoice')">{{$t('btn.r')}}</el-button>
           <el-button type="info" round @click="addDomain">{{$t('btn.addjs')}}</el-button>
           <el-button
             type="primary"
             round
             icon="el-icon-document-checked"
-            @click="submitForm('AddMultipleChoice')"
+            @click="submitForm('addMultipleChoice')"
           >{{$t('btn.s')}}</el-button>
         </el-form-item>
       </el-form>
@@ -63,7 +62,7 @@
 export default {
   data() {
     return {
-      AddMultipleChoice: {
+      addMultipleChoice: {
         //表单
         checked: [], //选中的多选按钮
         onum: 2, //默认分数
@@ -90,15 +89,15 @@ export default {
      */
     removeDomain(item) {
       var _this = this;
-      var index = _this.AddMultipleChoice.domains.indexOf(item);
-      if (_this.AddMultipleChoice.domains.length > 2) {
+      var index = _this.addMultipleChoice.domains.indexOf(item);
+      if (_this.addMultipleChoice.domains.length > 2) {
         //选项个数大于2才执行删除
         if (index !== -1) {
-          _this.AddMultipleChoice.domains.splice(index, 1); //删除选项
-          _this.AddMultipleChoice.nowAdd--; //选项个数减少
-          for (let i in _this.AddMultipleChoice.domains) {
-            _this.AddMultipleChoice.domains[i].options =
-              _this.AddMultipleChoice.optionsActive[i];
+          _this.addMultipleChoice.domains.splice(index, 1); //删除选项
+          _this.addMultipleChoice.nowAdd--; //选项个数减少
+          for (let i in _this.addMultipleChoice.domains) {
+            _this.addMultipleChoice.domains[i].options =
+              _this.addMultipleChoice.optionsActive[i];
             //重定义选项
           }
         }
@@ -111,14 +110,14 @@ export default {
     addDomain() {
       var _this = this;
       if (
-        _this.AddMultipleChoice.domains.length <
-        _this.AddMultipleChoice.optionsActive.length
+        _this.addMultipleChoice.domains.length <
+        _this.addMultipleChoice.optionsActive.length
       ) {
-        _this.AddMultipleChoice.domains.push({
+        _this.addMultipleChoice.domains.push({
           value: "",
           options:
-            _this.AddMultipleChoice.optionsActive[
-              _this.AddMultipleChoice.domains.length
+            _this.addMultipleChoice.optionsActive[
+              _this.addMultipleChoice.domains.length
             ]
         });
       }
@@ -126,7 +125,7 @@ export default {
     /**
      * 提交表单，添加题目
      * @param {object} formName 点击当前表单对象
-     *  {Array} AddMultipleChoice.checked 当前选中的选项数组
+     *  {Array} addMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
      */
     submitForm(formName) {
@@ -142,18 +141,18 @@ export default {
               return null;
             }
           })
-          if (hasValue== _this.$refs[formName].model.domains.length&&_this.AddMultipleChoice.checked.length!=0) {
+          if (hasValue== _this.$refs[formName].model.domains.length&&_this.addMultipleChoice.checked.length!=0) {
             var tpqPaperId = sessionStorage.testPaperId; //获取试卷ID
             var tpqScore = _this.$refs[formName].model.onum; //获取表单的分数
             var title = _this.$refs[formName].model.title; //获取题目
-            var newAddMultipleChoice = _this.$refs[formName].model.domains.map(
+            var newaddMultipleChoice = _this.$refs[formName].model.domains.map(
               v => {
                 if (
                   v.options ==
-                    _this.AddMultipleChoice.checked[ //判断选中项 是不是多选中的其中之一
-                      _this.AddMultipleChoice.checked.length - 1
+                    _this.addMultipleChoice.checked[ //判断选中项 是不是多选中的其中之一
+                      _this.addMultipleChoice.checked.length - 1
                     ] ||
-                  v.options == _this.AddMultipleChoice.checked[0]
+                  v.options == _this.addMultipleChoice.checked[0]
                 ) {
                   return {
                     cqOption: v.value, //选项的值
@@ -174,7 +173,7 @@ export default {
                 tpqQuestion: {
                   questionTitle: title, //题目的标题
                   questionTypeId: 1, //题目的类型 1=选择题 2=填空题 3=问答题
-                  chooseQuestion: newAddMultipleChoice
+                  chooseQuestion: newaddMultipleChoice
                 }
               })
               .then(res => {
@@ -186,7 +185,7 @@ export default {
                   _this.$emit("addMultipleChoice", data); //通知父组件
                       _this.$msg(_this, 1,_this.$t("mesTips.addSuccess"));
                   _this.init(); //初始化
-                  _this.resetForm("AddMultipleChoice");
+                  _this.resetForm("addMultipleChoice");
                 } else {
                   _this.$msg(_this,-1,_this.$t("mesTips.systemError"))
                 }
@@ -200,18 +199,18 @@ export default {
     },
     /**
      * 初始化表单
-     *  {Array} AddMultipleChoice.checked 当前选中的选项数组
+     *  {Array} addMultipleChoice.checked 当前选中的选项数组
      *  {Array} this.$refs[formName].model.domains 当前的选项数组
      */
     init() {
       var _this = this;
-      _this.AddMultipleChoice.checked = []; //初始化多选
-      _this.AddMultipleChoice.domains = [];
+      _this.addMultipleChoice.checked = []; //初始化多选
+      _this.addMultipleChoice.domains = [];
       for (let i = 0; i < 4; i++) {
         //初始化4个选项
-        _this.AddMultipleChoice.domains.push({
+        _this.addMultipleChoice.domains.push({
           value: "",
-          options: _this.AddMultipleChoice.optionsActive[i],
+          options: _this.addMultipleChoice.optionsActive[i],
           cqIsRight: false
         });
       }
@@ -224,8 +223,8 @@ export default {
     change(v) {
       var _this = this;
       //多选变化
-      _this.AddMultipleChoice.checked = v;
-      _this.AddMultipleChoice.checked = [..._this.AddMultipleChoice.checked];
+      _this.addMultipleChoice.checked = v;
+      _this.addMultipleChoice.checked = [..._this.addMultipleChoice.checked];
     }
   },
   created() {
@@ -238,7 +237,7 @@ export default {
 #MultipleChoice {
   display: flex;
   margin-top: 20px;
-  .Mult-Content {
+  .mult-content {
     width: 95%;
     margin: auto;
     .el-form-item {

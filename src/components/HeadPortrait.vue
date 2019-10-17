@@ -5,7 +5,7 @@
 -->
 
 <template>
-  <div>
+  <div id="HeadPortrait">
       <!-- 显示图片 -->
     <el-avatar
       size="medium"
