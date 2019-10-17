@@ -23,10 +23,10 @@
               <test-drop-down-box v-model="testObj"></test-drop-down-box>
             </el-form-item>
 
-            <el-form-item :label="$t('base.r8')" label-width="80px">
+            <el-form-item :label="$t('base.r8')" >
               <class-name-select v-model="classObj"></class-name-select>
             </el-form-item>
-            <el-form-item :label="$t('base.r9')" label-width="80px">
+            <el-form-item :label="$t('base.r9')" >
               <test-time v-model="timeObj"></test-time>
             </el-form-item>
           </el-form>
