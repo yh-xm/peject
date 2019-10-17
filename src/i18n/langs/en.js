@@ -1,9 +1,9 @@
 export const en = {
     message: {
-        home:"home",
+        home:"Home",
         login:"Login",
         exit:"Exit",
-        repsw:"remember your password",
+        repsw:"Remember Your Password",
         title:" ZXWY background system",
         content:"IT education with the most attitude, responsibility and conscience ",
         homeTitle:"ZXWY Education"
@@ -21,7 +21,13 @@ export const en = {
       modification:"Modification"
     },
     mesTips:{
-      s:"Modify Successfully"
+      loginSuccess:"Login Successfully!",
+      loginEorr:"User name or password error, please re - enter!",
+      modifySuccess:"Modify Successfully",
+      deleteSuccess:"Delete Successfully",
+      addSuccess:"New Successfully",
+      systemError:"System Error",
+      dataChange:"The data hasn't changed"
     },
     base:{
       title:"Basic data",
@@ -30,10 +36,18 @@ export const en = {
         r3:"TeacherManage",
         r4:"ModifyPassword",
         r5:"UserManage",
-        r6:"Please enter the class name"
+        r6:"Please enter the class name",
+        r7:"Test Paper",
+        r8:"Class And Grade",
+        r9:"test time",
+        r10:"Modify Test Information",
+        r11:"Derive",
+        r12:"Print",
+        r13:"List",
+        r14:"Chart"
     },
     test:{
-      title:"on-line testing",
+      title:"On-line testing",
         r1:"MakeTestPaper",
         r2:"TestPaperManage",
         r3:"TestSetter",

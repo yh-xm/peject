@@ -1,3 +1,4 @@
+<!--按排测试-->
 <template>
   <div id="TestSetter">
     <!-- Breadcrumb 面包屑 -->
@@ -18,14 +19,14 @@
         <div class="impComp">
           <!-- 组件引用 -->
           <el-form>
-            <el-form-item label="试卷">
+            <el-form-item :label="$t('base.r7')">
               <test-drop-down-box v-model="testObj"></test-drop-down-box>
             </el-form-item>
 
-            <el-form-item label="班级">
+            <el-form-item :label="$t('base.r8')">
               <class-name-select v-model="classObj"></class-name-select>
             </el-form-item>
-            <el-form-item label="考试时间">
+            <el-form-item :label="$t('base.r9')">
               <test-time v-model="timeObj"></test-time>
             </el-form-item>
           </el-form>
@@ -78,17 +79,17 @@
     </div>
     <!-- 分页结束 -->
     <!-- 添加对话框 -->
-    <el-dialog title="修改测试信息" :visible.sync="dialogFormVisible" center width="50%">
+    <el-dialog :title="$t('base.r10')" :visible.sync="dialogFormVisible" center width="50%">
       <!-- 嵌套的表单 -->
       <el-form>
-        <el-form-item label="试卷">
+        <el-form-item :label="$t('base.r7')">
           <test-drop-down-box v-model="testObj2"></test-drop-down-box>
         </el-form-item>
 
-        <el-form-item label="班级">
+        <el-form-item :label="$t('base.r8')">
           <class-name-select v-model="classObj2"></class-name-select>
         </el-form-item>
-        <el-form-item label="考试时间">
+        <el-form-item :label="$t('base.r9')">
           <test-time v-model="timeObj2"></test-time>
         </el-form-item>
       </el-form>
@@ -289,21 +290,21 @@ export default {
       let _this = this;
       var lang = localStorage.locale;
       if (lang == "en") {
-        var fText = "Confirm";
-        var fText2 = "Cancel";
+        var contentText = "Confirm";
+        var contentText2 = "Cancel";
         var flag = "Hint";
         var title =
           "This operation will permanently delete the data. Do you want to continue?";
       } else {
-        var fText = "确定";
-        var fText2 = "取消";
+        var contentText = "确定";
+        var contentText2 = "取消";
         var flag = "提示";
         var title = "此操作将永久删除该数据, 是否继续?";
       }
       _this
         .$confirm(title, flag, {
-          congirmButtonText: fText,
-          cancelButtonText: fText2,
+          congirmButtonText: contentText,
+          cancelButtonText: contentText2,
           type: "warning",
           center: true
         })

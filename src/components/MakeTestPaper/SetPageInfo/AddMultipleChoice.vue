@@ -141,7 +141,6 @@ export default {
             var tpqPaperId = sessionStorage.testPaperId; //获取试卷ID
             var tpqScore = _this.$refs[formName].model.onum; //获取表单的分数
             var title = _this.$refs[formName].model.title; //获取题目
-            var arrs = [];
             var newAddMultipleChoice = _this.$refs[formName].model.domains.map(
               v => {
                 if (

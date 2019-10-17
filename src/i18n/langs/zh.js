@@ -21,7 +21,13 @@ export const zh = {
       modification:"修改"
     },
    mesTips:{
-     s:"修改成功"
+    loginSuccess:"登录成功!",
+    loginEorr:"用户名或密码错误，请重新输入!",
+    modifySuccess:"修改成功！",
+    deleteSuccess:"删除成功！",
+    addSuccess:"新增成功！",
+    systemError:"系统错误！",
+    dataChange:"数据没有变化！"
    },
     base:{
       title:"基础数据 ",
@@ -30,7 +36,17 @@ export const zh = {
         r3:"用户管理",
         r4:"修改密码",
         r5:"用户角色",
-        r6:"请输入班级名称"
+        r6:"请输入班级名称",
+        r7:"试卷",
+        r8:"班级",
+        r9:"考试时间",
+        r10:"修改测试信息",
+        r11:"导出",
+        r12:"打印",
+        r13:"列表",
+        r14:"图表"
+
+
     },
     test:{
       title:"在线测试",

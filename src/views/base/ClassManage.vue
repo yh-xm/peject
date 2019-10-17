@@ -137,9 +137,9 @@ export default {
     handleEdit(index, row) {
          var lang = localStorage.locale;
       if(lang=="en"){
-        var fText = "Modify Class Information";
+        var contentText = "Modify Class Information";
       }else{
-         var fText = "修改班级信息";
+         var contentText = "修改班级信息";
       }
       var _this = this;
       _this.index = index;
@@ -153,7 +153,7 @@ export default {
       }; 
       _this.ruleForm.usName = row.classTeacherId; //获取的授课老师编码赋值给原授课老师编码 就能默认选中
       
-      _this.title = fText;
+      _this.title = contentText;
      
       
     },
@@ -205,13 +205,13 @@ export default {
     handleDelete(index, row) {
        var lang = localStorage.locale;
       if(lang=="en"){
-        var fText = "Confirm";
-        var fText2 = "Cancel";
+        var contentText = "Confirm";
+        var contentText2 = "Cancel";
         var flag ="Hint"
         var title = "This operation will permanently delete the data. Do you want to continue?"
       }else{
-         var fText = "确定";
-        var fText2 = "取消";
+         var contentText = "确定";
+        var contentText2 = "取消";
         var flag ="提示"
         var title = "此操作将永久删除该数据, 是否继续?"
       }
@@ -219,8 +219,8 @@ export default {
      
       _this
         .$confirm(title, flag, {
-          confirmButtonText: fText,
-          cancelButtonText: fText2,
+          confirmButtonText: contentText,
+          cancelButtonText: contentText2,
           type: "warning",
           center: true
         })
@@ -250,16 +250,16 @@ export default {
     newly() {
           var lang = localStorage.locale;
       if(lang=="en"){
-        var fText = "New Class Information";
+        var contentText = "New Class Information";
       }else{
-         var fText = "新增班级信息";
+         var contentText = "新增班级信息";
       }
       var _this = this;
       _this.dialogFormVisible = true; //当为true时弹出弹出框
       _this.stuNewly = false; //弹出框的新增按钮为false
       _this.ruleForm.name = ""; //点击获取的班级名字赋值给输入
       _this.ruleForm.usName = ""; //清除修改时赋的值
-      _this.title =fText;
+      _this.title =contentText;
       _this.lovingVue = {
         courseId:"",//获取的课程编码赋值给原课程编码 就能默认选中
         courseName:""
