@@ -263,13 +263,13 @@ export default {
       }
       const _this = this;
       let uid = (index, row.userUid);
-      _this
-        .$confirm(title, flag, {
-          confirmButtonText: fText,
-          cancelButtonText: fText2,
-          type: "warning",
-          center: true
-        })
+
+      this.$confirm(title, flag, {
+        confirmButtonText: contentText,
+        cancelButtonText: contentText2,
+        type: "warning",
+        center: true
+      })
         .then(() => {
           _this.$post("api/User/RemoveTeacher?uid=" + uid).then(function(res) {
             if (res.code == 1) {
