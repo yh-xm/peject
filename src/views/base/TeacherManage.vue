@@ -402,7 +402,6 @@ export default {
               userUserTypeId: _this.ruleForm.userTypeTypeName //角色id
             })
             .then(function(res) {
-              console.log(res);
               if (res.code == 1) {
                 var typNames = _this.roles.find(
                   res => res.userTypeId == _this.ruleForm.userTypeTypeName
