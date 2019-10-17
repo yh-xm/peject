@@ -408,11 +408,11 @@ export default {
               );
               var typName = typNames.userTypeTypeName;
               var rows = _this.tableData[_this.oindex];
+              rows.userTypeTypeName = typName;
               rows.userName = _this.ruleForm.userName;
               rows.userMobile = _this.ruleForm.userMobile;
               rows.userSex = _this.ruleForm.userSex;
               rows.userPassword = _this.ruleForm.userPassword;
-              rows.userTypeTypeName = typName;
               rows.userUserTypeId = _this.ruleForm.userTypeTypeName;
               _this.$msg(_this, 1, "修改成功");
             } else if (res.code == 0) {
