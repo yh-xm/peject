@@ -56,7 +56,10 @@ export const zh = {
         r11:"导出",
         r12:"打印",
         r13:"列表",
-        r14:"图表"
+        r14:"图表",
+        r15:"课程",
+        r16:"试卷",
+        r17:"提交人数"
 
 
     },
@@ -120,6 +123,7 @@ export const zh = {
      addnewusers:"新增用户",
      drag:"拖拽排序",
      role:"修改角色信息",
-     userInformation:"新增用户信息"
+     userInformation:"新增用户信息",
+     name:"姓名"
     }
   }
