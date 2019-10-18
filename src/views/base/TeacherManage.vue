@@ -155,7 +155,7 @@ export default {
       roles: [], //初始化获取的所有的角色
       title: "", //对话框标题
       flag: false, //对话框确认按钮隐藏显示
-      dialogFormVisible: false, //对话框隐藏显示
+      dialogFormVisible: false, //对话框隐
       oindex: "",
       // 获取表单信息
       ruleForm: {
