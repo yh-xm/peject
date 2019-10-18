@@ -7,12 +7,6 @@
       <el-breadcrumb-item>{{$t('test.title')}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{$t('test.r3')}}</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- 时间：{{timeObj}}
-    <br />
-    试卷id：{{testObj}}
-    <br />
-
-    班级id：{{classObj}}-->
     <!-- Breadcrumb 面包屑 结束-->
     <el-card class="box-card">
       <div slot="header">
@@ -114,7 +108,7 @@ export default {
       pageSize: 10, //每页大小
       total: null, //总条目
       testObj: {}, // 父传子 试卷
-      testObj2: {},
+      testObj2: {},// 父传子 试卷
       classObj: {}, // 父传子  班级
       classObj2: {}, // 父传子  班级
       timeObj: [], //父传子  考试时间
@@ -137,7 +131,7 @@ export default {
      *
      * */
     setAddInfo() {
-      let _this = this;
+      const _this = this;
       // 判断输入框是否有值  是否符合条件
       if (
         !_this.testObj.hasOwnProperty("tpId") ||
@@ -183,7 +177,7 @@ export default {
      *
      * */
     cancelTest() {
-      let _this = this;
+      const _this = this;
       _this.testObj = {};
       _this.classObj = {};
       _this.timeObj = [];
@@ -197,7 +191,7 @@ export default {
      * */
 
     getSetTest() {
-      let _this = this;
+      const _this = this;
       _this
         .$get(
           "/api/TestPaper/GetTestTask?pageIndex=" +
@@ -232,7 +226,7 @@ export default {
      * @param {String} row 当前行所有数据
      * */
     handleEdit(index, row) {
-      let _this = this;
+      const _this = this;
       _this.taskId = row.taskId;
       _this.oindex = index;
       _this.dialogFormVisible = true;
@@ -253,7 +247,7 @@ export default {
       };
     },
     changePageInfo() {
-      var _this = this;
+      const _this = this;
       _this
         .$post("/api/TestPaper/ModifyTestTask", {
           taskId: _this.taskId, //主键编号
@@ -285,9 +279,8 @@ export default {
      * */
 
     handleDelete(index, row) {
-      console.log(row)
       let taskId = row.taskId;
-      let _this = this;
+      const _this = this;
       var lang = localStorage.locale;
       if (lang == "en") {
         var contentText = "Confirm";
@@ -330,7 +323,7 @@ export default {
      * @param {Number} val 显示多少条数据
      * */
     handleSizeChange(val) {
-      let _this = this;
+      const _this = this;
       _this.pageSize = val;
       _this.getSetTest();
     },
@@ -341,13 +334,13 @@ export default {
      * */
 
     handleCurrentChange(val) {
-      let _this = this;
+      const _this = this;
       _this.currentPage = val;
       _this.getSetTest();
     }
   },
   created() {
-    let _this = this;
+    const _this = this;
     _this.getSetTest();
   }
 };
