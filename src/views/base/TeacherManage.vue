@@ -322,10 +322,7 @@ export default {
      * */
     addClose(formName) {
       const _this = this;
-      var typNames = _this.roles.find(
-        res => res.userTypeId == _this.ruleForm.userTypeTypeName
-      );
-      var typName = typNames.userTypeTypeName;
+      // console.log(typName);
       var obj = {
         userName: _this.ruleForm.userName, //用户名，不能为空
         userMobile: _this.ruleForm.userMobile, //手机号，长度11位
@@ -333,12 +330,20 @@ export default {
         userPassword: _this.ruleForm.userPassword, //密码，长度6~18
         userUserTypeId: _this.ruleForm.userTypeTypeName //用户角色编号
       };
+      var typNames = _this.roles.find(
+        res => res.userTypeId == _this.ruleForm.userTypeTypeName
+      );
+      var typName = typNames.userTypeTypeName;
+      console.log(obj);
       //调用添加接口
       _this.$refs[formName].validate(valid => {
         if (valid) {
           _this.$post("api/User/AddTeacher", obj).then(function(res) {
             if (res.code == 1) {
-              _this.$msg(_this, 1, _this.$t("mesTips.addSuccess"));
+              let typeName = res.data;
+              typeName.userTypeTypeName = typName;
+              _this.tableData.unshift(typeName);
+              _this.$msg(_this, 1, "添加成功!");
             } else if (res.code == 0) {
               _this.$msg(_this, 0,_this.$t("mesTips.dataChange"));
             } else {
@@ -491,11 +496,11 @@ li {
   .box-card {
     margin-top: 20px;
     /deep/.el-card__header {
-      height: 65px;
       .clearfix {
         text-align: left;
         margin-left: 30px;
         overflow: hidden;
+        margin-top: 20px;
 
         .el-radio {
           flex: none;
